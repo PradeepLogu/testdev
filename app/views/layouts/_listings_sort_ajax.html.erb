@@ -1,0 +1,67 @@
+<div class="sort">
+    <div style="display: inline;">Sort by:</div>
+    <div style="display: inline;">
+      <select id="sort-order" class="users" onchange="OnSortChange()">
+        <option>Select a sort order</option>
+        <option id="quantity" value="quantity">Quantity</option>
+        <option id="type" value="type">Type</option>
+        <option id="treadlife" value="treadlife">Treadlife</option>
+        <option id="priceasc" value="priceasc">Price - Low to High</option>
+        <option id="pricedesc" value="pricedesc">Price - High to Low</option>
+        <% if include_distance %>
+          <option id="distance" value="distance" selected="selected">Distance</option>
+        <% end %>
+        <% if date_sort %>
+          <option id="date" value="date" selected="selected">Recently Modified</option>
+        <% end %>
+      </select>
+      <noscript><input type="submit" value="Go" name="sort"></noscript>
+    </div>
+</div>
+<% if date_sort %>
+  <script>
+    function OnSortChange() {            
+      if(typeof deleteCompressedNodes == 'function')
+          deleteCompressedNodes();
+      if ($('select#sort-order').attr('value') == 'quantity')
+        sort_results('qty');
+      else if ($('select#sort-order').attr('value') == 'type')
+        sort_results('type');
+      else if ($('select#sort-order').attr('value') == 'treadlife')
+        sort_results('treadd');
+      else if ($('select#sort-order').attr('value') == 'distance') {
+        sort_results('distance');
+        if(typeof createCompressedNodes == 'function')
+          createCompressedNodes(last_known_result);
+      }
+      else if ($('select#sort-order').attr('value') == 'priceasc')
+        sort_results('cost');
+      else if ($('select#sort-order').attr('value') == 'pricedesc') 
+        sort_results('costd');
+      else if ($('select#sort-order').attr('value') == 'date') 
+        $('#tirelistings_list>a').tsort('.hidden-updated', {order:'desc'});
+    };
+  </script>
+<% else %>
+  <script>
+    function OnSortChange() {      
+      if(typeof deleteCompressedNodes == 'function')
+          deleteCompressedNodes();
+      if ($('select#sort-order').attr('value') == 'quantity')
+        sort_results('qty');
+      else if ($('select#sort-order').attr('value') == 'type')
+        sort_results('type');
+      else if ($('select#sort-order').attr('value') == 'treadlife')
+        sort_results('treadd');
+      else if ($('select#sort-order').attr('value') == 'distance') {
+        sort_results('distance');
+        if(typeof createCompressedNodes == 'function')
+          createCompressedNodes(last_known_result);
+      }
+      else if ($('select#sort-order').attr('value') == 'priceasc')
+        sort_results('cost');
+      else if ($('select#sort-order').attr('value') == 'pricedesc') 
+        sort_results('costd');
+    };
+  </script>
+<% end %>

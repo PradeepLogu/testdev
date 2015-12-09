@@ -1,0 +1,12 @@
+17cbc6c0202fc7b55cdbf6f1fe211a5e6e7396db		branch 'log_dir' of https://github.com/jamoes/scheduler_daemon
+53d1062ed6a07ca25308cdec42ed9063e0f55df9		branch 'master' of https://github.com/jamoes/scheduler_daemon
+8b6b645273924742cea540ec1372b8e71face1d5		branch 'rails2-2' of https://github.com/jamoes/scheduler_daemon
+4d7d94ec5a2adf48f2c3507ac5263b33724cb4f3		branch 'rails2-3' of https://github.com/jamoes/scheduler_daemon
+966a6fa4ae740196609315225e85fc2a0200d295		branch 'rails3' of https://github.com/jamoes/scheduler_daemon
+4d7f2331747ff184b12f423e0eb0fb3e6e56d80d	not-for-merge	tag 'v0.2.0' of https://github.com/jamoes/scheduler_daemon
+ef04ffe0666b5359250eb4011c322ac54ed2cb39	not-for-merge	tag 'v0.3.0' of https://github.com/jamoes/scheduler_daemon
+25b61fd8d1a6be859f3803ce55b276c3f70f965f	not-for-merge	tag 'v0.3.1' of https://github.com/jamoes/scheduler_daemon
+a92137eea8c76ddb6028c2d03d6ab6fb71ca04cb	not-for-merge	tag 'v0.4.0' of https://github.com/jamoes/scheduler_daemon
+dae5ae923a5c80fad58759ddc63be5b150fc2c8e	not-for-merge	tag 'v0.4.1' of https://github.com/jamoes/scheduler_daemon
+fb446c90d403366ae59825d9091f761bae845bc3	not-for-merge	tag 'v1.1.0' of https://github.com/jamoes/scheduler_daemon
+966a6fa4ae740196609315225e85fc2a0200d295	not-for-merge	tag 'v1.1.1' of https://github.com/jamoes/scheduler_daemon

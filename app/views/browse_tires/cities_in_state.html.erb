@@ -1,0 +1,63 @@
+<% provide(:title, "Cities in #{@state_name}") %>
+<% provide(:visfire, "true") %>
+
+<style>
+#fluid-title h1 {
+	min-width: 30%;
+	white-space: nowrap;
+}
+#fluid-title p {
+	padding-left: 30px;
+}
+</style>
+
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="top-search-section">
+			<div id="tire-search-outer">
+				<h2>SHOP BY:</h2>
+				<%= render :partial => 'layouts/search_panel',
+						   :locals => {:id => "tire-search2"} %>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-outer">
+	<div id="search-by-state" class="container-inner">
+		<hr/>
+		
+		<div id="fluid-title">
+			<h1 class="orange"><%= @state_name %> Tire Stores</h1>
+			<p>Find <%= @state_name %> Tire Store by City.</p>
+			
+			<div id="change-params"><span>CHANGE</span>	<a href="/states">STATE</a></div>
+			<div class="clear"></div>
+		</div>
+
+		<% if @cities.length > 0 %>
+			<div id="results" class="row-fluid">
+				<ul class="span3">
+			
+			<%	i = 0
+				remain = @cities.length
+				@cities.each do |c| %>
+					<li><%= link_to c.city, tire_stores_path(Location: "#{c.city}, #{@state}"), class: "city" %></li>
+				<%	i += 1
+					remain -= 1
+					if i == 15 && remain > 0
+						i = 0 %>
+				</ul>
+				<ul class="span3">
+				<%	end %>
+			<%	end %>
+			
+				</ul>
+			</div>
+		<% else %>
+			<p class="no-results">No Tire Stores found in <%= @state_name %>.</p>
+		<% end %>
+	</div>
+</div>

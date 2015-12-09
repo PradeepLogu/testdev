@@ -1,0 +1,67 @@
+<% provide(:title, 'Frequently Asked Questions') %>
+
+<% provide(:visfire, "true") %>
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<style>
+  .faq p {
+    font: 20px/30px proxima_nova_rgregular;
+  }
+  .faq h2 {
+    font: 26px/36px proxima_nova_rgregular;
+    color: red;
+  }
+</style>
+
+<div id="searc-header">
+  <%= render 'layouts/header_visfire' %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+    <div id="search-main2">
+      <h2>Frequently Asked Questions</h2>
+      <ul>
+        <li>Home /</li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+    <div id="registration-mid-part" class="clearfix divider faq">
+      <h2>What if I want to contact TreadHunter.com?</h2>
+      <p>
+        Please call and leave a message at: (858) 848-7323<br />
+        Send us an email at: <%= mail_to 'support@treadhunter.com' %><br />
+        Or use our online form at: <%= link_to('Contact Us', 
+        {:controller => "contact_us", :action => "new"}) %>
+      </p>
+    </div>
+    <div id="registration-mid-part" class="clearfix divider faq">
+      <h2>What if I want to make suggestions about TreadHunter.com?</h2>
+      <p>Use any of the contact paths above, especially our 
+      <%= link_to('Contact Us', {:controller => "contact_us", :action => "new"}) %>
+      page.
+      </p>
+    </div>
+    <div id="registration-mid-part" class="clearfix divider faq">
+      <h2>My car or tire isn't listed on TreadHunter.com, can it be added?</h2>
+      <p>Please use our 
+      <%= link_to('Contact Us', {:controller => "contact_us", :action => "new"}) %>
+      page.
+      </p>
+    </div>
+    <div id="registration-mid-part" class="clearfix divider faq">
+      <h2>How much does it cost to sell tires on TreadHunter.com?</h2>
+      <p>See our pricing page at <%= link_to('TreadHunter pricing', {:controller => "pages", :action => "pricing"}) %><br />
+        We are currently running an introductory special - act fast!
+      </p>
+    </div>
+    <div id="registration-mid-part" class="clearfix divider faq">
+      <h2>I am a tire shop interested in signing up on TreadHunter.com, where do I begin?</h2>
+      <p>Selling tires on TreadHunter is easy!  Just click on our
+        <a href='/th_landing'>registration page</a>.  
+      </p>
+    </div>
+  </div>
+</div>

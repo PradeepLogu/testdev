@@ -1,0 +1,72 @@
+<div style="background-color: lightgray; padding: 10px;">
+	<p><b>Highlighted rows indicate listings have already been created for this size, changes will update the existing values.</b></p>
+</div>
+<script>
+	function checkByParent(aId, aChecked) {
+	    var collection = document.getElementById(aId).getElementsByTagName('INPUT');
+	    for (var x=0; x<collection.length; x++) {
+	        if (collection[x].type.toUpperCase()=='CHECKBOX')
+	            collection[x].checked = aChecked;
+	    }
+	}
+</script>
+<br />
+<input type="button" value="Check All" onclick="checkByParent('tire_sizes', true);">
+<input type="button" value="Uncheck All" onclick="checkByParent('tire_sizes', false);">
+<div id="tire_sizes">
+	<br />
+	<table>
+		<% colcount = 0 %>
+		<% maxcols = 1 %>
+		<% maxcols = 2 if @tire_sizes.count > 5 %>
+		<% maxcols = 3 if @tire_sizes.count > 10 %>
+		<% maxcols = 4 if @tire_sizes.count > 15 %>
+		<% if false %>
+			<% maxcols = 5 if @tire_sizes.count > 20 %>
+			<% maxcols = 6 if @tire_sizes.count > 25 %>
+		<% end %>
+		<tr>
+			<% (1..maxcols).each do |i| %>
+				<th><p>Add?</p></th>
+				<th><p>Size</p></th>
+				<th></th>
+			<% end %>
+		</tr>
+		<% @tire_sizes.each do |s| %>
+			<%
+				@existing_listing = (@tire_listings.select {|a| a.tire_size.sizestr == s.sizestr }).first
+				if @existing_listing.nil?
+					@bg_color = ""
+					@price_color = ""
+					@price_value = ''
+					@checked = false
+				else
+					@bg_color = "background-color: lightgray;"
+					@price_color = "color: red;"
+					@price_value = @existing_listing.price.to_s
+					@checked = true
+				end
+			%>
+			<% if colcount >= maxcols %>
+				<tr>
+			<% end %>
+				<% if maxcols > 1 %>
+					<td style='padding-left: 10px; border-left: black solid; border-left-width: thin;<%= @bg_color %>'>
+						<%= check_box_tag('tire_sizes[]', value = s.id, checked = @checked) %>
+					</td>
+				<% else %>
+					<td style='<%= @bg_color %>'>
+						<%= check_box_tag('tire_sizes[]', value = s.id, checked = @checked) %>
+					</td>
+				<% end %>
+				<td style='<%= @bg_color %>'><p><%= s.sizestr %></p></td>
+				<td style='<%= @bg_color %>' width="15px"></td>
+			<% colcount += 1 %>
+			<% if colcount >= maxcols %>
+				</tr>
+				<% colcount = 0 %>
+			<% end %>
+		<% end %>
+	</table>
+</div>
+<br />

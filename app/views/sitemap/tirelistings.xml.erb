@@ -1,0 +1,10 @@
+<?xml version="1.0" ?> 
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<% @tire_listings.each do |tire_listing| %>
+  <url>
+    <loc><%= @base_url %><%= url_for tire_listing %></loc>
+    <lastmod><%=  tire_listing.updated_at.to_s(:w3c) %></lastmod>
+    <priority>0.5</priority>
+  </url>
+<% end %>
+</urlset>

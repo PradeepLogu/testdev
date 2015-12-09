@@ -1,0 +1,103 @@
+<% provide(:title, 'Edit Installation Prices') %>
+
+<% provide(:visfire, "true") %>
+
+<style>
+	th {
+    	text-align: left;
+    	color: white;
+	}
+	.txt {
+		text-align: left;
+	}
+	.num {
+		text-align: right;
+	}
+	.ctr {
+		text-align: center;
+	}
+</style>
+
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<div id="serach-content2" class="clearfix">
+	<div id="search-content-inner2" class="clearfix">
+		<div id="search-main2">
+        	<h2>Edit Installation Prices</h2>
+			<div id="edit-mid-part" class="clearfix">
+				<div id="edit-mid-part-left">
+					<div class="form-part">
+						<form action="<%= url_for(:controller => 'installation_costs', 
+												:action => 'update_prices') %>" method="post">
+							<%= hidden_field_tag :account_id, @account_id %>
+							<%= hidden_field_tag :tire_store_id, @tire_store_id %>
+				        	<table id="price-table">
+				        		<thead>
+				        			<tr>
+				        				<% if false %>
+				        					<th class="txt"><p>Action</p></th>
+				        					<th class="num"><p>Min. Wheel Size</p></th>
+				        					<th class="num"><p>Max. Wheel Size</p></th>
+				        				<% else %>
+				        					<th class="num"><p>Wheel Size</p></th>
+				        				<% end %>
+				        				<th class="num"><p>Install Price Ea.</p></th>
+				        			</tr>
+				        		</thead>
+				        		<tbody>
+				        			<% @size_choices.each do |i| %>
+				        				<tr>
+				        					<% if false %>
+					        					<td class="deleteLink">
+					        						<p>
+					        							<a href="#" style="color: white;">Delete</a>
+					        						</p>
+					        					</td>
+					        					<td class="min num">
+					        						<p>
+					        							<%= select_tag 'min', 
+					        								options_for_select(@size_choices, i), {} %>
+					        						</p>
+					        					</td>
+					        					<td class="max num">
+					        						<p>
+					        							<%= select_tag 'min', 
+					        								options_for_select(@size_choices, i), {} %>
+					        						</p>
+					        					</td>
+					        				<% else %>
+					        					<td class="max ctr">
+					        						<p>
+					        							<%= i %>&quot;
+					        						</p>
+					        					</td>
+					        				<% end %>
+				        					<td class="num">
+				        						<input id="price_<%= i %>" 
+				        								name="price_<%= i %>" 
+				        								type="text" 
+				        								class="num" 
+				        								value="<%= @default_cost[@size_choices.find_index(i)].to_money %>"></input>
+				        					</td>
+				        				</tr>
+				        			<% end %>
+				        		</tbody>
+				        	</table>
+				        	<center><%= submit_tag "Update", :class => 'btn btn-large' %> </center>
+				        </form>
+			        </div>
+		        </div>
+		        <div id="edit-mid-part-right">
+		        	<h3>Enter Installation Prices</h3>
+		        	<p>
+		        		TreadHunter bills the tire buyer for installation up front, so it is important that
+		        		you keep your installation prices current.<br /><br />
+		        		By default, your prices will be $15/tire for a <%= @size_choices.first.to_s %>" tire, and $1 per inch larger than that.  But you should enter prices for your store(s) here.
+		        	</p>
+		        </div>
+	        </div>
+		</div>
+	</div>
+</div>

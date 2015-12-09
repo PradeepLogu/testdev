@@ -1,0 +1,2 @@
+<%= image_tag("reserved.png") if !Reservation.find_by_user_id_and_tire_listing_id(user_id, tire_listing_id).nil? %>
+<%= image_tag("reserved.png") if !Reservation.find_by_tire_listing_id(tire_listing_id).nil? if user_id == -1 %>

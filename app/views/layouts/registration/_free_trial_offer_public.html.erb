@@ -1,0 +1,21 @@
+<% if allow_ecomm() %>
+	<div id="free-trial-offer" class="clearfix">
+		<h5>Why TreadHunter?</h5>
+		TreadHunter allows tire stores and individuals to list their new and used tires for free.
+		For new tires, we collect credit card payment from consumers and transfer the funds
+		immediately into your bank account or to your debit card account (minus a 
+		<font color="red"><%= $th_processing_fee_percent %>%</font>
+		credit card processing and marketing charge).  We also gather the consumer's preferred
+		appointment times to have the tires installed, and allow you to confirm the appointment
+		with the consumer through our application.  If you prefer, you can do all this, as well
+		as ordering tires from your distributors, from your smart phone or tablet.
+	</div>
+<% else %>
+	<div id="free-trial-offer" class="clearfix">
+		<h5>Free Trial Offer - No Credit Card Required</h5>
+		You can try our Gold service for <%= free_trial_verbiage %> risk-free. 
+		We want to prove that TreadHunter drives customers right to your door. If, after 
+		<%= free_trial_verbiage %>, you don't wish to continue the Gold service, 
+		you will be automatically switched to a free lifetime of Silver service.
+	</div>
+<% end %>

@@ -1,0 +1,366 @@
+<% provide(:title, "#{@model_info.tire_manufacturer.name} #{@model_info.tire_model_name}") %>
+<% provide(:visfire, "true") %>
+
+<style type="text/css">
+
+@media screen and (max-width: 767px) {
+	/* Transform from tabs to accordions */
+	#page-tabs {
+		display: none;
+	}
+}
+</style>
+
+<script>
+$(function() {
+  $("#page-tabs a").click(function (e) {
+	e.preventDefault();
+	var $this = $(this);
+	var id = $this.attr("id");
+	$this.siblings().removeClass("activeLink");
+	$this.addClass("activeLink");
+    var cont = $("#"+id+"-1");
+	cont.siblings().addClass("hide");
+	cont.removeClass("hide");
+  });
+
+  $(".reviews-links a").click(function (e) {
+ 	$("#cont-4, #panel4").click();     //open Reviews tab
+  });
+  
+  $(".buy-form").submit(function () {
+  	var $this = $(this);
+  	if ($this.find("#tire_search_locationstr").val() != "") {
+  		return true;
+  	}
+  	else {
+  	  $("#dialog-zipcode").dialog({
+        modal: true
+	  });
+	  $("#zipcode-dialog-form").submit(function (e) {
+	  	e.preventDefault();
+	  	var zip = $(this).find("#dialog-locationstr").val();
+	  	if (/^\d{5}$/.test(zip)) {
+	  	  $("#zipcode-dialog-form .error-msg").hide();
+	  	  $("#dialog-zipcode").dialog("close");
+	  	  $this.find("#tire_search_locationstr").val(zip);
+	  	  $this.submit();
+	  	} else {
+	  		$("#zipcode-dialog-form .error-msg").show();
+	  	}
+	  	return false;
+	  });
+	  return false;
+	}
+  });
+});
+
+//Restructure the DOM when switching between desktop and mobile size
+addMobileLayoutConverter(function () {
+	//Convert tabs to accordions
+	$("#tire-model-content").addClass("panel-group");
+	$("#page-tabs a").each(function (i) {
+		var $tab = $(this);
+		var id = $tab.attr("id");
+		var $content = $("#"+id+"-1");
+		//This is really terrible.
+		$content.removeClass("hide").addClass("panel-body").wrap(
+			'<div class="panel panel-default"></div>'
+		)
+		.before(
+			'<div class="panel-heading">	\
+				<a class="panel-title collapsed" data-toggle="collapse" data-parent="#tire-model-content" href="#collapse' + (i+1) + '" id="panel' + (i+1) + '">' + $tab.text() + ' <span class="arrow"></span></a>	\
+			</div>'
+		)
+		.wrap(
+			'<div id="collapse' + (i+1) + '" class="panel-collapse collapse"></div>'
+		);
+	});
+	  
+	//$("#sizes .buy-section .price").each(function (i, e) {
+	//  $(e).next().after(e);
+	//});
+}, function () {
+	//Convert accordions back to tabs
+	$("#tire-model-content").removeClass("panel-group");
+	$("#tire-model-content .tabcontent-1").removeClass("panel-body").addClass("hide").unwrap().unwrap().prev().remove();
+	$("#page-tabs #cont-1").click();
+});
+</script>
+
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="model-info" class="row-fluid">
+			<div class="left span7">
+				<div class="logo">
+					<%= image_tag "brand_logos/#{@model_info.tire_manufacturer.name.upcase}.png" %>
+				</div>
+				<h1><%= @model_info.tire_manufacturer.name %> <%= @model_info.tire_model_name %></h1>
+				<div class="ratings" style="visibility: hidden;">
+				  <%= render :partial => 'layouts/fivestar_rating',
+	                         :locals => {:stars_only => true, :stars => 4} %>
+				  <span class="reviews-links">
+					<a href="#reviews" id="go-to-reviews">23 Customer Reviews</a> | <a href="#review-form" id="write-review-link">Write a Review</a>
+				  </span>
+				</div>
+				<div class="price">
+					<% if !@model_info.starting_cost.blank? && @model_info.starting_cost.to_f > 0 %>
+						<div class="starting-at">starting at</div>
+						<div class="cost"><span>$</span><%= @model_info.starting_cost %></div>
+					<% end %>
+				</div>
+				<div class="special-links">
+					<a id="find-in-store" href="#">FIND IN A LOCAL STORE<%= image_tag "icon-location-orange.png", alt: "" %></a>
+					<a id="car-fit" href="#">DOES THIS FIT MY VEHICLE?<%= image_tag "icon-car-orange.png", alt: "" %></a>
+				</div>
+				<label class="error-msg">
+					<% flash.each do |key, value| %>
+						<%= value %><br/>
+					<% end %>              
+				</label>
+			</div>
+			<div class="right span5">
+				<div class="photo-wrapper">
+					<div class="inner">
+						<%= image_tag(@stock_photo, alt: "No stock photo", id: "stock-photo") %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="container-outer">
+	<div class="container-inner">
+
+		<div id="page-tabs" class="page-tabs tabs3 clearfix">
+			<a href="javascript:void(0);" class="tabLink first activeLink" id="cont-1">OVERVIEW</a>
+			<a href="javascript:void(0);" class="tabLink middle" id="cont-2">SIZE</a>
+			<a href="javascript:void(0);" class="tabLink middle" id="cont-3">WARRANTY</a>
+			<% if @show_tire_reviews %>
+				<a href="javascript:void(0);" class="tabLink" id="cont-4">REVIEW</a>
+			<% end %>
+		</div>
+
+
+		<div id="tire-model-content">
+		
+			<div class="tabcontent-1" id="cont-1-1">
+				<h1><%= @model_info.tire_manufacturer.name %> <%= @model_info.tire_model_name %></h1>
+				<%  if !@model_info.description.blank? %>
+					<p class="description"><%= @model_info.description %></p>
+				<% end %>
+				
+				<% if @model_info.get_tgp_features.present? %>				
+					<h4 class="subtitle orange">FEATURES</h4>
+					<ul class="features orange-bullets">
+						<% @model_info.get_tgp_features.each do |str| %>
+							<li><span><%= str %></span></li>
+						<% end %>
+					</ul>
+				<% end %>
+
+				<% if @model_info.get_tgp_benefits.present? %>						
+					<h4 class="subtitle orange">BENEFITS</h4>
+					<ul class="features orange-bullets">
+						<% @model_info.get_tgp_benefits.each do |str| %>
+							<li><span><%= str %></span></li>
+						<% end %>
+					</ul>
+				<% end %>
+				
+				<% if @model_info.get_tgp_other_attributes.present? %>
+					<% if @model_info.get_tgp_features.blank? && @model_info.get_tgp_benefits.blank? %>
+						<h4 class="subtitle orange">FEATURES</h4>
+					<% else %>
+						<h4 class="subtitle orange">OTHER ATTRIBUTES</h4>
+					<% end %>
+					<ul class="features orange-bullets">
+						<% @model_info.get_tgp_other_attributes.each do |str| %>
+							<li><span><%= str %></span></li>
+						<% end %>
+					</ul>
+				<% end %>
+			</div>
+			
+			<div class="tabcontent-1 hide" id="cont-2-1">
+				<div id="sizes">
+				<% @models.each do |m| %>
+					<div class="size-row">
+						<div class="cell heading">
+							<label class="size">SIZE:</label>
+							<div class="sizestr"><%= m.tire_size.sizestr %></div>
+							<% if false %>
+								<label class="more">More Details &gt;</label>
+							<% end %>
+						</div>
+						<div class="cell tire-data">
+							<ul>
+								<li>UTQGL:					<strong><%= "#{m.utqg_treadwear} #{m.utqg_traction} #{m.utqg_temp}" %></strong></li>
+								<li>Load/Speed Rating:		<strong><%= m.load_index %><%= m.speed_rating %></strong></li>
+								<li>Run Flat:				<strong><%= m.is_run_flat? ? 'Y' : 'N' %></strong></li>
+								<li>Sidewall Color:			<strong><%= m.sidewall %></strong></li>
+								<li>Overall Tire Diameter:	<strong><%= m.diameter %></strong></li>
+								<li>Tread Life Warranty:	<strong><%= m.warranty_miles || "N/A" %></strong></li>
+							</ul>
+						</div>
+						<div class="cell tire-data">
+							<ul>
+								<li>Approved Rim Width:		<strong><%= m.min_rim_width.to_s + (m.min_rim_width.blank? || m.max_rim_width.blank? ? '' : ' - ') + m.max_rim_width.to_s %></strong></li>
+								<li>Max Tire Pressure:		<strong><%= m.single_max_psi %></strong></li>
+								<li>Max Load:				<strong><%= m.single_max_load_pounds %><%= "@#{m.single_max_psi}" unless m.single_max_load_pounds.blank? || m.single_max_psi.blank? %></strong></li>
+								<li>Tread Depth:			<strong><%= m.tread_depth %></strong></li>
+								<li>Rim Diameter:			<strong><%= m.tire_size.wheeldiameter %></strong></li>
+							</ul>
+						</div>
+						<div class="cell buy-section">
+							<%= form_for @tire_search,
+								:html => { :class => "buy-form" },
+								:url => { :action => "storeresults", 
+							              :controller => "tire_searches"} do |f| %>
+				              <%= f.hidden_field :tire_model_id, value: m.id %>
+						      <!--<%= f.hidden_field :new_or_used, value: 'n' %>-->
+						      <%= f.hidden_field :locationstr, value: '' %>
+						      <%= hidden_field_tag :model_search, 'true' %>
+						      <% if @default_locationstr.blank? %>
+				              	<div class="price"><span>$</span><%= m.orig_cost %></div>
+				              <% else %>
+				              	<div class="price"><span>$</span>
+				              		<%= m.starting_cost(@default_locationstr).to_money %>
+				              	</div>
+				              <% end %>
+				              <input type="submit" class="btn buy-btn" value="BUY NOW"/>
+				              <div class="quantity">
+				                <label for="tire_search[quantity]">Qty</label>
+				                <%= f.select :quantity, options_for_select(TireSearch::QUANTITY_CHOICES), {}, {:class => "qty"} %>
+				              </div>
+				              <div class="clear"></div>
+				            <% end %>
+						</div>
+					</div>
+				<% end %>
+				</div>
+			</div>
+			
+			<div class="tabcontent-1 hide" id="cont-3-1">
+				<ul id="warranty-info">
+		          <li class="even"><strong>Warranty for replacement tires purchased on or after 05/01/14</strong></li>
+		          <li class="odd"><strong>Treadlife Warranty:</strong> None</li>
+		          <li class="even"><strong>Uniformity Warranty:</strong> First 1/32" of wear and tear (1)</li>
+		          <li class="odd"><strong>Workmanship &amp; Materials Warranty:</strong> 5 Years / Free replacement first 3 years, then prorated until 2/32" remaining depth (2)</li>
+		          <li class="even"><strong>Manufacturer's Road Hazard Warranty:</strong> None</li>
+		          <li class="odd"><strong>Manufacturer Warranty Brochure:</strong> Download PDF</li>
+		          <li class="even"><strong>Manufacturer Special Warranty:</strong> None</li>
+		          <li class="odd"><strong>Additional Information:</strong> (1) N/A on shaved tires (2) May be voided if caused by abuse, competition, race/track application.</li>
+				</ul>
+			</div>
+			
+			<% if @show_tire_reviews %>
+			<div class="tabcontent-1 hide" id="cont-4-1">
+		          <div id="other-reviews">
+		            <h3 class="title">OTHER TIRE BRANDS</h3>
+		            <div class="review">
+		              <h3 class="store-name">Michelin Tires</h3>
+		              <%= render :partial => 'layouts/fivestar_rating',
+			                     :locals => {:extra_class => "smaller", :stars => 4,
+			                                 :reviews_link => "#", :reviews_count => 1} %>
+		              <div class="content">Blah blah blah blah blah blah blah blah blah blah blah blah blah blah</div>
+		              <div class="see-more">
+						<a href="#">See More</a>
+		              </div>
+		            </div>
+		            <div class="review">
+		              <h3 class="store-name">General Tires</h3>
+		              <%= render :partial => 'layouts/fivestar_rating',
+			                     :locals => {:extra_class => "smaller", :stars => 5,
+			                                 :reviews_link => "#", :reviews_count => 36} %>
+		              <div class="content">Blah blah blah blah blah blah blah blah blah blah blah blah blah blah</div>
+		              <div class="see-more">
+						<a href="#">See More</a>
+		              </div>
+		            </div>
+		            <div class="review">
+		              <h3 class="store-name">Fuzion Tires</h3>
+		              <%= render :partial => 'layouts/fivestar_rating',
+			                     :locals => {:extra_class => "smaller", :stars => 0,
+			                                 :reviews_link => "#", :reviews_count => 118} %>
+		              <div class="content">Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah</div>
+		              <div class="see-more">
+						<a href="#">See More</a>
+		              </div>
+		            </div>
+		          </div>
+		          
+		          <div id="main-reviews">
+		            <div id="review-form">
+		              <h3>YOUR REVIEW AWAITS</h3>
+		              <div class="para">Here are some suggestions to get you started.</div>
+		              <form id="review-submission">
+		                <h3><%= @model_info.tire_manufacturer.name %> <%= @model_info.tire_model_name %></h3>
+		                <%= render :partial => 'layouts/fivestar_rating_control' %>
+		                <div class="clear"></div>
+		                
+		                <textarea id="review-content" name="content" placeholder="Start your review..."></textarea>
+		                <div class="submit-btn">
+		                  <input type="submit" class="btn submit-review" value="SUBMIT" />
+		                </div>
+		              </form>
+		            </div>
+		            
+		            <hr/>
+		            
+		            <div id="reviews">
+		              <div class="review new">
+		                <h3>"A Tough Tire"</h3>
+		                <div class="new-alert">NEW</div>
+		                <%= render :partial => 'layouts/fivestar_rating',
+			                       :locals => {:extra_class => "smaller-mobile", :stars => 5,
+			                                   :review_time => "Reviewed April 29, 2015"} %>
+						<div class="clear"></div>
+		                <div class="content">
+		                  <p>Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah</p>
+		                </div>
+		                <div class="helpful">
+		                  <span>Was this review helpful?</span>
+		                  <button class="btn yes-btn">YES</button>
+		                </div>
+		                <div class="flag">
+		                  <a href="#"><%= image_tag "flag.png", alt: "Flag", title: "Flag this review" %></a>
+		                </div>
+		                <div class="clear"></div>
+		              </div>
+		              
+		              <div class="review">
+		                <h3>"Just What I Needed!"</h3>
+		                <%= render :partial => 'layouts/fivestar_rating',
+			                       :locals => {:extra_class => "smaller-mobile", :stars => 3,
+			                                   :review_time => "Reviewed April 27, 2015"} %>
+						<div class="clear"></div>
+		                <div class="content">
+		                  <p>Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah</p>
+		                </div>
+		                <div class="helpful">
+		                  <span>Was this review helpful?</span>
+		                  <button class="btn yes-btn">YES</button>
+		                </div>
+		                <div class="flag">
+		                  <a href="#"><%= image_tag "flag.png", alt: "Flag", title: "Flag this review" %></a>
+		                </div>
+		                <div class="clear"></div>
+		              </div>
+		              
+		            </div>
+		          </div>
+		          <div class="clear"></div>
+			</div>
+			<% end %>
+		
+		</div>
+
+	</div>
+</div>
+
+<%= render :partial => 'layouts/modal_enter_zipcode',
+           :locals => {:@default_locationstr => ''} %>

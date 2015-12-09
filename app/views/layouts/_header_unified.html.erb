@@ -1,0 +1,63 @@
+<%= yield :head %>
+
+<%= javascript_include_tag "gritter" %>
+<%= stylesheet_link_tag "gritter" %>
+<%= stylesheet_link_tag "gritter_override" %>
+
+<script>
+  $.extend($.gritter.options, {
+      position: 'bottom-right',
+    fade_in_speed: 1000,
+    fade_out_speed: 1000
+  });
+  <% if !@notifications.nil? %>
+        <% @notifications.each do |n| %>
+          <%= add_gritter(n.formatted_message, :title => n.title, :sticky => n.sticky, 
+              :image => n.image, :time => n.visible_time) %>
+        <% end %>
+  <% end %>
+</script>
+
+<div id="container">
+  <div class="top">
+    <div class="name-tab" style="width: 340px;">
+      <a href="/">
+        <%= image_tag("tire-logo-opt01-small.png", alt: "TreadHunter.com", id: "header-logo",
+            :size => "29x35", :style => "float: left; margin-top: 12px; text-align: right;") %>
+        <span class="orange">Tread</span><span class="offwhite">Hunter</span>
+      </a>
+    </div>
+    <div style="float: left; width: 195px;">
+      <% if signed_in? %>
+        <% if super_user? %>
+          <span style="float: right; color: white; padding-top: 20px; font-size: 0.85em;">
+            <%= current_user.email %> (Super User)<p />
+            <%= current_user.account.name unless current_user.account.nil? %>
+            <%= link_to("(No account selected)", accounts_url) if current_user.account.nil? %>
+          </span>
+        <% else %>
+          <span style="float: right; color: white; padding-top: 32px; font-size: 0.8em;">
+            <%= current_user.email %>
+          </span>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="top-nav" style="width: 390px; padding-left: 0px;">
+      <ul class="topnav">
+        <% if signed_in? %>
+          <li><%= link_to "profile", current_user %></li>
+          <li><%= link_to "sign out", signout_path, method: "delete" %></li>
+          <li><%= link_to "search by store", '/tire-stores' %></li>
+          <% if super_user? || current_user.is_tireseller? %>
+            <li><%= link_to "my treadhunter", '/myTreadHunter' %></li>
+          <% end %>
+        <% else %>
+          <li><%= link_to "sign in", signin_path %></li>
+          <li><%= link_to "search by store", '/tire-stores' %></li>
+          <li><%= link_to "sell tires", "/tireseller_registration" %></li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="clear">
+    </div>
+  </div>

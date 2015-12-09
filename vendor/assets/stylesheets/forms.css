@@ -1,0 +1,132 @@
+/* CSS Document */
+
+input.submit{font-size: 15px; font-weight: bold; padding: 5px; border-radius: 5px;}
+
+
+
+input.user
+{   
+    border: 1px solid #122;
+	-ms-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+    padding: 5px;
+	-webkit-padding: 1px;
+	-moz-paddding: 3px;
+	font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+	font-weight: normal;
+    color: #223;
+}
+
+select.users
+{   
+    border: 1px solid #122;
+	-ms-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+    padding: 5px;
+	font-family: "Arial Narrow", "Arial Narrow Bold", Arial, Helvetica, sans-serif;
+    font-size: 15px;
+	font-weight: normal;
+	
+}
+
+select.tires
+{   
+    border: 1px solid #122;
+	-ms-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+    padding: 5px;
+	font-family: "Arial Narrow", "Arial Narrow Bold", Arial, Helvetica, sans-serif;
+    font-size: 15px;
+	font-weight: normal;
+	width: 165px;
+	
+}
+
+select.cars
+{   
+    border: 1px solid #122;
+	-ms-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+    padding: 5px;
+	font-family: "Arial Narrow", "Arial Narrow Bold", Arial, Helvetica, sans-serif;
+    font-size: 15px;
+	font-weight: normal;
+	width: 114px;
+	
+}
+
+select option
+{
+	padding: 5px;
+	font-family: "Arial Narrow", "Arial Narrow Bold", Arial, Helvetica, sans-serif;
+    font-size: 15px;
+	font-weight: normal;
+    color: #223;
+} 
+
+input.user:focus{border: 1px solid #123;}
+
+textarea#textuser
+{   
+   	border: 1px solid #122;
+	-ms-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+    padding: 3px;
+	font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+	font-weight: normal;
+    color: #223;
+	background-color: #EEE;
+}
+
+textarea#textuser:focus{border: 1px solid #123;}
+
+input.error, textarea.error
+{
+	border: 2px solid #D00;
+	-ms-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	padding: 3px;
+	background-color: #AAA;
+	font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+	font-weight: normal;
+    color: #FFF;
+}
+
+label{padding-bottom: 3px; color: #223; font-family: "Arial Narrow", "Arial Narrow Bold", Arial, Helvetica, sans-serif; text-transform: uppercase; font-weight: bold;}
+.errors{color: #F00;}
+.labelerror{color: #F00; padding-bottom: 2px;}
+
+/* ======== FORM CONTAINERS ============ */
+
+.field-caption{font-family: "Arial Narrow", "Arial Narrow Bold", , Arial, Helvetica, sans-serif; font-size: 11px; text-transform:uppercase; padding-top: 2px;}
+.home-form-containers{width: 100%;}
+.inputs{padding: 3px 0px 13px 2px; margin-bottom: 7px;}
+
+/* ======== HOME SELECTION MENUS SET AS INLINE LIST ITEMS ============ */
+
+ul.selectcar, ul.selecttire{list-style-type: none;}
+.selectcar li{display: inline; width: 126px; margin-right: 20px;}
+.selectcar li:last-child{margin-right: 0px;}
+.selecttire li{display: inline; width: 175px; margin-right: 20px;}
+.selecttire li:last-child{margin-right: 0px;}

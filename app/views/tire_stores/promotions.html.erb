@@ -1,0 +1,63 @@
+<% provide(:title, "Current Promotions for " + @tire_store.visible_name) %>
+<% provide(:metadescription, "Tire stores sellers used tires") %>
+
+<% provide(:visfire, "true") %>
+<div class="main-slideshow-3">
+  <!--banner slider-->
+</div>
+
+<style>
+	.store-search .pro-clm div + div p {
+		width: 100%;
+		overflow: hidden;
+		height: 37px;
+	}
+	.store-search .pro-clm div + div {
+		width: 50%;
+	}
+</style>
+	
+<div id="searc-header">
+  <%= render :partial => 'layouts/header_visfire_storefront', 
+          :locals => {:@store_logo => (@tire_store.branding.nil? ? nil : @tire_store.branding.logo)} %>
+</div>
+
+<div id="searc-header">
+  <%= render 'layouts/header_visfire' %>
+</div>
+
+<div id="serach-content" class="clearfix">
+  <div id="search-content-inner" class="clearfix">
+    <div id="search-main">
+      <div class="search-main-left2">
+        <div class="heading">
+          <h2>Current Promotions By Store</h2>
+          <ul>
+            <li>Home /</li>
+            <li>Promotions</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+	<div class="store-search">
+	  <% @promotions.each do |p| %>
+        <div class="pro-clm">
+          <div>
+            <% if p.promo_image.exists? %>
+              <%= image_tag(p.promo_image.url) %>
+            <% end %>
+          </div>
+          <div>
+            <h3><%= p.promo_name %></h3>
+			<p><%= p.description %></p>
+		  </div>
+          <div>
+            <%= link_to "Learn More", "/promotions/#{p.id}" %>
+          </div>
+        </div>
+	  <% end %>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>

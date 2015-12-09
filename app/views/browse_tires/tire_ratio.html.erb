@@ -1,0 +1,133 @@
+<% provide(:title, "Select Tire Aspect Ratio") %>
+<% provide(:visfire, "true") %>
+
+<style>
+#fluid-title h1 {
+	min-width: 350px;
+}
+
+#size-form {
+	display: none;
+}
+</style>
+
+<script>
+$(function () {
+  $("a.size-submit").click(function (e) {
+  	e.preventDefault();
+  	$("#size-form #ratio").val($(this).attr("id"))
+    $("#size-form").submit();
+  });
+  
+  $("#size-form").submit(function () {
+  	var $this = $(this);
+  	if ($this.find("#locationstr").val() != "") {
+  	  return true;
+  	}
+  	else {
+  	  $("#dialog-zipcode").dialog({
+  	  	modal: true
+  	  });
+	  $("#zipcode-dialog-form").submit(function (e) {
+	  	e.preventDefault();
+	  	var zip = $(this).find("#dialog-locationstr").val();
+	  	if (/^\d{5}$/.test(zip)) {
+	  	  $("#zipcode-dialog-form .error-msg").hide();
+	  	  $("#dialog-zipcode").dialog("close");
+	  	  $this.find("#locationstr").val(zip);
+	  	  $this.submit();
+	  	} else {
+	  	  $("#zipcode-dialog-form .error-msg").show();
+	  	}
+	  	return false;
+	  });
+	  return false;
+	}
+  });
+});
+</script>
+
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="top-search-section">
+			<div id="tire-search-outer">
+				<h2>SHOP BY:</h2>
+				<%= render :partial => 'layouts/search_panel',
+						   :locals => {:id => "tire-search2"} %>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-outer">
+	<div id="search-by-tire-size" class="container-inner">
+		<hr/>
+		
+		<div id="fluid-title">
+			<h1 class="orange"><%= @diameter %>mm with <%= @wheeldiameter %>" Tires</h1>
+			<p>TreadHunter has found a large selection of stores which carry <%= @diameter %>mm with <%= @wheeldiameter %>" tires. Please tell us your zip code and we'll show you nearby tire shops with your tires in-stock now!</p>
+			<div class="clear"></div>
+		</div>
+		
+		<div class="instructions">Select the <span class="orange">Aspect Ratio</span> as highlighted below.</div>
+		<div id="change-params"><span>CHANGE</span> <a href="/tire_size">RIM DIAMETER</a> | <a href="/tire_size/<%= @wheeldiameter %>">SECTION WIDTH</a></div>
+		<div class="clear"></div>
+		
+		<hr/>
+
+		<div id="tire-sections">
+			<div class="tire-section" style="opacity: 0.25;">
+				<div class="title">High-Flotation Tires</div>
+				<%= image_tag "aspect-ratio-high-flot.jpg" %>
+			</div>
+			
+			<div id="big-or">
+				<span class="line1"></span>
+				<span class="line2"></span>
+				<div class="or">OR</div>
+			</div>
+			
+			<div class="tire-section">
+				<div class="title">Passenger Tires</div>
+				<%= image_tag "aspect-ratio-passenger.jpg" %>
+				
+				<%= form_for @tire_search,
+	              :html => { :id => "size-form" },
+	              :url => { :action => "storeresults", 
+	                        :controller => "tire_searches"} do |f| %>
+	              <%= hidden_field_tag :size_search, 'true' %>
+	              <%= hidden_field_tag :locationstr, "" %>
+	              <%= hidden_field_tag :wheeldiameter, @wheeldiameter %>
+	              <%= hidden_field_tag :diameter, @diameter %>
+	              <%= hidden_field_tag :ratio %>
+				<% end %>
+				
+				<div id="results" class="row-fluid">
+					<ul class="span3 first">
+					
+					<%	i = 0
+						limit = ((@sizes.length + 3) / 4)
+						remain = @sizes.length
+						@sizes.each do |x| %>
+							<li><a href="#" class="size-submit" id="<%= x.ratio %>"><%= x.sizestr %></a></li>
+						<%	i += 1
+							remain -= 1
+							if i == limit && remain > 0
+								i = 0 %>
+						</ul>
+						<ul class="span3">
+						<%	end %>
+					<%	end %>
+					
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+<%= render :partial => 'layouts/modal_enter_zipcode',
+           :locals => {:@default_locationstr => @default_locationstr} %>

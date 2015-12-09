@@ -1,0 +1,223 @@
+<% provide(:title, "My Account") %>
+<% provide(:visfire, "true") %>
+<% provide(:nofooter, "") %>
+
+<%= javascript_include_tag "jquery.dataTables.min" %>
+<%= javascript_include_tag "dataTables.responsive" %>
+<%= javascript_include_tag "ddaccordian.js" %>
+<%= stylesheet_link_tag "http://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css" %>
+<%= stylesheet_link_tag "dataTables.responsive" %>
+<%= stylesheet_link_tag "jquery.dataTables.min" %>
+
+<style>
+	#cont-1-1, #cont-2-1, #cont-7-1 {
+		min-height: 400px;
+	}
+
+	.dataTables_filter, table.display thead th, table.display tbody tr td, #appointments-table_wrapper {
+		font-family: 'proxima_novasemibold';
+		color: black;
+	}
+
+    .ecomm-image {
+        vertical-align: middle;
+        max-width: 25px;
+        max-height: 25px;
+    }
+
+    .dbl-height {
+        line-height: 26px!important;
+    }
+
+    hr { border-top: 1px solid #000000; }
+
+    div.order-tires, div.order-date {font-size: 0.90em;}
+
+    @media screen and (max-width: 480px) {
+        .dataTable { max-width: 320px;}
+        #dialog-order { font-size: 0.70em;}
+    }
+</style>
+
+<script type="text/javascript">
+    var ddaccordionsetting = {
+        headerclass: "promo-header",
+        contentclass: "content",
+        revealtype: "click",
+        mouseoverdelay: 200,
+        collapseprev: true,
+        defaultexpanded: [1],
+        onemustopen: false,
+        animatedefault: false,
+        persiststate: true,
+        toggleclass: ["", "openheader"],
+        togglehtml: ["prefix", "", ""],
+        animatespeed: "fast",
+        oninit:function(headers, expandedindices){
+            //do nothing
+        },
+        onopenclose:function(header, index, state, isuseractivated) {
+            //do nothing
+        }
+    }
+</script>
+
+<script>
+$(function() {
+	/*$("#page-tabs a").click(function (e) {
+		e.preventDefault();
+		var $this = $(this);
+		var id = $this.attr('id');
+		$("#page-tabs a").removeClass("activeLink");
+		$this.addClass("activeLink");
+		$(".tabcontent-1").addClass("hide");
+		$("#"+id+"-1").removeClass("hide");
+	});*/
+
+	$(".tabLink").each(function() {
+		$(this).click(function() {
+			tabeId = $(this).attr('id');
+			$(".tabLink").removeClass("activeLink");
+			$(this).addClass("activeLink");
+			$(".tabcontent-1").addClass("hide");
+			$("#"+tabeId+"-1").removeClass("hide");
+
+			fn = $(this).attr('data-fn');
+
+			load_data(fn, tabeId);
+
+      		return false;
+		});
+	});
+
+	load_data("appointments", "cont-1");
+});
+
+function reload_current_tab() {
+    fn = $(".activeLink").attr("data-fn");
+    tabID = $(".activeLink").attr("id");
+    load_data(fn, tabID);
+}
+
+function load_data(fn, tabID) {
+    $("#" + tabID + "-1").html(
+        '<center><br /><img src="/assets/loading.gif"><br /><p>Loading...</p></center>'
+        );
+	$.ajax({
+		type: "GET",
+		dataType: "html",
+        data: {tire_store_id: $("#tire_store_id").val()},
+		url: "/ajax/" + fn + "_table",
+		success:function(result){
+			$("#" + tabID + "-1").html(result);
+			search_enabled = (fn == "appointments" || fn == "listings");
+            if (fn == "stores" || fn == "listings" || fn == "users")
+                sorting_disabled_columns = [0];
+            else
+                sorting_disabled_columns = [];
+			$("#" + fn + "-table").DataTable( {
+				paging: false,
+				info: false,
+                responsive: true,
+                aoColumnDefs: [{ "bSortable": false, "aTargets": sorting_disabled_columns }],
+				searching: search_enabled,
+			});
+		},
+        error:function(result){
+            $("#" + tabID + "-1").html("<p>Error loading data...</p>");
+        }
+	});
+}
+</script>
+
+
+
+<div class="container-outer">
+	<div class="container-inner">
+		<h1 class="orange header">My Account</h1>
+		
+		<div id="search-main">
+        	<div id="header-inner-tab-1">
+          		<div class="tab-box-1" onclick="getBindData();">
+            		<a href="javascript:void(0);" class="tabLink activeLink dbl-height" 
+            				id="cont-1" data-fn="appointments">
+            			Appointments &amp;<br /> Orders
+            		</a>
+            		<a href="javascript:void(0);" class="tabLink" 
+            				id="cont-3" data-fn="stores">
+            			My Stores
+            		</a>
+            		<a href="javascript:void(0);" class="tabLink" 
+            				id="cont-4" data-fn="listings">
+            			My Listings
+            		</a>
+            		<a href="javascript:void(0);" class="tabLink" 
+            				id="cont-5" data-fn="promotions">
+            			Promotions
+            		</a>
+            		<a href="javascript:void(0);" class="tabLink" 
+            				id="cont-6" data-fn="users">
+            			Users
+            		</a>
+            		<a href="javascript:void(0);" class="tabLink" 
+            				id="cont-7" data-fn="searches">
+            			Searches
+            		</a>
+	            </div>
+            </div>
+            <% if @account.tire_stores.size > 1 %>
+                <p>
+                    <b>Current Store:</b>
+                    <%= select_tag :tire_store_id, 
+                        options_for_select(["All"] | @account.tire_stores.map{|t| [t.name, t.id]}) %>
+                    <script>
+                        $( "#tire_store_id" ).change(function() {
+                            reload_current_tab();
+                        });
+                    </script>
+                </p>
+            <% end %>
+            <% if super_user? %>
+                <br />
+                <p>
+                    <b>Current Account:</b>
+                    <%= current_user.account.name %>&nbsp;&nbsp;
+                    <button class="btn btn-primary" onclick="window.location.href = '<%= accounts_path %>';">
+                    Select Another
+                    </button>
+                    <hr />
+                </p>
+            <% end %>
+            <div class="tabcontent-1" id="cont-1-1">
+            	<span>
+            		<p>Appointments</p>
+            	</span>
+            </div>
+            <div class="tabcontent-1 hide" id="cont-3-1">
+            	<span>
+            		<p>Stores</p>
+            	</span>
+        	</div>
+            <div class="tabcontent-1 hide" id="cont-4-1">
+            	<span>
+            		<p>Listings</p>
+            	</span>
+        	</div>
+            <div class="tabcontent-1 hide" id="cont-5-1">
+            	<span>
+            		<p>Promotions</p>
+            	</span>
+        	</div>
+            <div class="tabcontent-1 hide" id="cont-6-1">
+            	<span>
+            		<p>Users</p>
+            	</span>
+        	</div>
+            <div class="tabcontent-1 hide" id="cont-7-1">
+            	<span>
+            		<p>Searches</p>
+            	</span>
+        	</div>
+        </div>
+	</div>
+</div>

@@ -1,0 +1,129 @@
+<% provide(:visfire, "true") %>
+<% provide(:title, "TreadHunter Consumer Mobile App Help Page") %>
+<%= javascript_include_tag "video_page" %>
+<%= stylesheet_link_tag "video_page" %>
+<%= javascript_include_tag "jquery.fancybox" %>
+<%= stylesheet_link_tag "jquery.fancybox" %>
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<script>
+  $(document).ready(function() {
+    $(".various").fancybox({
+      maxWidth  : 800,
+      maxHeight : 600,
+      fitToView : false,
+      width   : '90%',
+      height    : '90%',
+      autoSize  : false,
+      closeClick  : false,
+      openEffect  : 'none',
+      closeEffect : 'none',
+      closeBtn : true
+    });
+
+    $("#registration-mid-part-left h3").css("font", $("#registration-mid-part-right h3").css("font") );
+    $("#registration-mid-part-left h3").css("background", $("#registration-mid-part-right h3").css("background") );      
+    $("#registration-mid-part-left h3").css("padding", $("#registration-mid-part-right h3").css("padding") );       
+    $("#registration-mid-part-left p").css("padding", $("#registration-mid-part-right p").css("padding") );      
+    $("#registration-mid-part-left p").css("font", $("#registration-mid-part-right p").css("font") );    
+  });
+</script>
+
+<div id="searc-header">
+  <%= render 'layouts/header_visfire' %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+    <div id="search-main2">
+      <h2>TreadHunter Mobile App Support Page</h2>
+    </div>
+
+    <div id="registration-mid-part" class="clearfix">
+      <div id="heading-part">
+        <h1>Using the <span>TreadHunter</span> mobile tire store finder app</h1>
+        <h5>
+          If you don't have the app installed yet, just go to the Apple App Store and
+          search for TreadHunter.  Then install the Tire Finder app.
+        </h5>
+        <p>
+          This page is designed to help you navigate the simple but powerful TreadHunter
+          tire Store Finder app.  The app will allow you to search for stores near you
+          or in a specified area, view all specials and promotions being run by the store,
+          and even view the tires and their prices for your car!
+        </p>
+      </div>
+      <div id="registration-mid-part-left">
+        <h3>Home Screen</h3>
+        <a class="various fancybox.iframe" 
+          href="https://s3.amazonaws.com/THImages/iPhone+Home+Screen.png">
+          <img src="https://s3.amazonaws.com/THImages/iPhone+Home+Screen.png" 
+              style="width:160px; height: 284px;" />
+        </a>
+        <p>
+          When the app starts, you can enter an address, a zip code, or a city and state
+          to search for tire stores in the vicinity of the provided address, or click the Use GPS button to use your device's GPS function to find tire stores in the immediate vicinity.
+        </p>
+        <hr />
+        <h3>Stores List</h3>
+        <a class="various fancybox.iframe" 
+          href="https://s3.amazonaws.com/THImages/iPhone+Store+List.png">
+          <img src="https://s3.amazonaws.com/THImages/iPhone+Store+List.png" 
+              style="width:160px; height: 284px;" />
+        </a>
+        <p>
+          Once the location is provided, you should see a list of tire stores near that
+          location.  If there are more stores than can fit on one page, you can scroll
+          down to see more.  They are provided in order of distance from the provided 
+          location, but TreadHunter stores are always on top!<br /><br />
+          If you'd rather see the stores plotted on a map, you can use the View In Map
+          function in the top right.
+        </p>
+        <hr />
+        <h3>Store Details</h3>
+        <a class="various fancybox.iframe" 
+          href="https://s3.amazonaws.com/THImages/iPhone+Store+Details.png">
+          <img src="https://s3.amazonaws.com/THImages/iPhone+Store+Details.png" 
+              style="width:160px; height: 284px;" />
+        </a>
+        <p>
+          If a displayed tire store is a TreadHunter store, you can click on it.  These
+          have the blue Information icon and the right arrow next to them.  At this point
+          the Store Details screen is shown.  The Store Details screen has two parts.  The
+          first tab shows any Promotions being run by the store.  These might be store-specific, or might be national promotions (such as rebates) being run by certain
+          tire brands that the store is participating in.  
+        </p>
+        <hr />
+      </div>
+      <div id="registration-mid-part-right">
+        <h3>Promotion Details</h3>
+        <a class="various fancybox.iframe" 
+          href="https://s3.amazonaws.com/THImages/iPhone+Promotion+Details.png">
+          <img src="https://s3.amazonaws.com/THImages/iPhone+Promotion+Details.png" 
+              style="width:160px; height: 284px;" />
+        </a>
+        <p>
+          Clicking on one of the promotions on the Store Details screen shows more information about the promotion, such as expiration dates, limitations, and qualifying tire models.  There also may be a Website link or Attachment link that will bring up a browser showing more information about the promotion.
+        </p>
+        <hr />
+        <h3>Tires</h3>
+        <a class="various fancybox.iframe" 
+          href="https://s3.amazonaws.com/THImages/iPad+Tires+Screen.png">
+          <img src="https://s3.amazonaws.com/THImages/iPad+Tires+Screen.png" 
+              style="width:160px; height: 284px;" />
+        </a>
+        <p>
+          At the bottom of the Store Details page is a Tires tab.  The first time you click it, you will be asked if you want to add a car to your list.  This will allow you to view the tires carried by the selected tire store that fit your car.  You can add cars/vehicles either by year/make/model/options, or by entering a specific size if you know that information.
+        </p>
+        <hr />
+        <h3>Still have questions?</h3>
+        <p>Feel free to contact our support paths listed below:</p>
+        <p> - Call our support mailbox and leave a message at (858) 848-7323</p>
+        <p> - Send us an email at support@treadhunter.com</p>
+        <p> - Use our online form at <a href="http://www.treadhunter.com/contact_us/new">our Contact Us page</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>

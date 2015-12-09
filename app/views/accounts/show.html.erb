@@ -1,0 +1,69 @@
+<% provide(:title, @account.name) %>
+<p id="notice"><%= notice %></p>
+
+<%= form_for(@account) do |f| %>
+	<% if @account.errors.any? %>
+		<div id="error_explanation">
+			<h2>
+				<%= pluralize(@account.errors.count, "error") %> prohibited this account from being saved:
+			</h2>
+
+			<ul>
+				<% @account.errors.full_messages.each do |msg| %>
+					<li><%= msg %></li>
+				<% end %>
+			</ul>
+		</div>
+	<% end %>
+
+	<div class="actions span6">
+		Account Name: <%= @account.name %><br />
+		Address: <%= @account.address1 %><br />
+		<% if !@account.address2.nil? && @account.address2.length > 0 %>
+			<%= @account.address2 %><br />
+		<% end %>
+		<%= @account.city %>, <%= @account.state %> <%= @account.zipcode %></br>
+		Phone: <%= @account.formatted_phone %><br />
+	</div>
+
+<% end %>
+<div class="row-fluid">
+	<% if current_user.account_id == @account.id || super_user? %>
+		<%= link_to 'Edit', edit_account_path(@account), style: "margin-left: 20px;" %> 
+	<% end %>
+</div>
+<% unless @account.tire_stores.count == 0 %>
+	<style>
+		table
+			{
+			border-collapse:separate;
+			border-spacing:12px 1px;
+		};
+	</style>
+	<h3>Stores for this account:</h3>
+	<div class="row-fluid">
+		<table>
+			<tr>
+				<th>Name</th>
+				<th>Address</th>
+				<th>Phone</th>
+				<th># Tire Listings</th>
+			<tr>
+			<% @account.tire_stores.each do |tire_store| %>
+				<tr>
+					<td><%= link_to tire_store.visible_name, tire_store_path(tire_store) %></td>
+					<td><%= tire_store.full_address %></td>
+					<td><%= tire_store.visible_phone %></td>
+					<td align="right"><%= tire_store.tire_listings.count %>
+				</tr>
+			<% end %>
+		</table>
+	</div>
+<% end %>
+<% unless !@account.tire_stores.first.nil? && @account.tire_stores.first.private_seller? %>
+	<div>
+		<%= link_to 'Create a Storefront', {:controller => "tire_stores", :action => "new",
+											:account => @account.id},
+					class: "btn btn-small btn-primary", style: "margin: 20px;" %>
+	</div>
+<% end %>

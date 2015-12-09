@@ -1,0 +1,17 @@
+<%= form_for(@auto_option) do |f| %>
+  <% if @auto_option.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@auto_option.errors.count, "error") %> prohibited this auto_option from being saved:</h2>
+
+      <ul>
+      <% @auto_option.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

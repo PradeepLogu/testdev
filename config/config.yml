@@ -1,0 +1,130 @@
+development:
+  perform_authentication: false
+  username: guest
+  password: SellinTires
+  username2: guest
+  password2: SellinTires
+  collect_cc_upfront: false
+  create_contracts: true
+  secure_cc: false
+  backtrace_log: true
+  beta_users: ['beta@irick.net', 'demo@treadhunter.com']
+  free_trial_days: -1
+  free_trial_months: 6
+  stripe_livemode: false
+  visfire_storemode: true
+  show_partners: false
+  stripe_connect_test_client_id: ca_12M4XH8F3XGC0qfEdKbH9WOA7adk4g2b
+  allow_ecomm: true
+  allow_realtime_notifications: true
+  realtime_polling_frequence_ms: 5000
+  google_places_api_key: AIzaSyBIHrpZe5MdJM-gO5qqHarfOetZPlhCfJg
+  google_docs_username: treadhunter.mailer@gmail.com
+  google_docs_password: +1r3sRu5
+  google_docs_survey_doc_id: 1jQF3siHqwebMnVkLzOArdOcVxOA_0kVoz5sqLBwE5t8
+  google_docs_survey_form_id: 1jbAZWyBkBMiyAfr2PQz-xuomG5lpvDGieSkeu9xiEUY
+  contact_us_support_email_address: cbkirick@gmail.com
+  system_problem_email_address: kirick@treadhunter.com
+  system_problem_cc_email_address: cbkirick@gmail.com
+  system_problem_bcc_email_address: cbkirick@gmail.com
+  customer_issue_email_address: kirick@treadhunter.com
+  customer_issue_cc_email_address: kirick@treadhunter.com
+  customer_issue_bcc_email_address: cbkirick@gmail.com
+  system_process_completion_email_address: cbkirick@gmail.com
+  system_process_completion_bcc_email_address: cbkirick@gmail.com
+
+test:
+  perform_authentication: false
+  collect_cc_upfront: false
+  create_contracts: true
+  secure_cc: false
+  backtrace_log: true
+  free_trial_days: -1
+  free_trial_months: 6
+  stripe_livemode: false
+  visfire_storemode: true
+  show_partners: false
+  stripe_connect_test_client_id: 
+  allow_ecomm: true
+  allow_realtime_notifications: false
+  realtime_polling_frequence_ms: 30000
+  contact_us_support_email_address: cbkirick@gmail.com
+  system_problem_email_address: kirick@treadhunter.com
+  system_problem_cc_email_address: cbkirick@gmail.com
+  system_problem_bcc_email_address: cbkirick@gmail.com
+  customer_issue_email_address: kirick@treadhunter.com
+  customer_issue_cc_email_address: kirick@treadhunter.com
+  customer_issue_bcc_email_address: cbkirick@gmail.com
+  system_process_completion_email_address: cbkirick@gmail.com
+  system_process_completion_bcc_email_address: cbkirick@gmail.com
+
+production:
+  perform_authentication: true
+  username: guest
+  password: SellinTires
+  username2: tiredepot
+  password2: TireDepot2015
+  collect_cc_upfront: false
+  create_contracts: false
+  secure_cc: true
+  backtrace_log: true
+  beta_users: ['beta@irick.net', 'demo@treadhunter.com', 'joe@joestireshack.com', 'chamilton_beta@novarata.com', 'kevin_butler@irick.net']
+  free_trial_days: -1
+  free_trial_months: 6
+  stripe_livemode: true
+  visfire_storemode: true
+  show_partners: false
+  stripe_connect_test_client_id: 
+  allow_ecomm: true
+  allow_realtime_notifications: false
+  realtime_polling_frequence_ms: 30000
+  google_places_api_key: AIzaSyBIHrpZe5MdJM-gO5qqHarfOetZPlhCfJg
+  google_docs_username: treadhunter.mailer@gmail.com
+  google_docs_password: +1r3sRu5
+  google_docs_survey_doc_id: 1jQF3siHqwebMnVkLzOArdOcVxOA_0kVoz5sqLBwE5t8
+  google_docs_survey_form_id: 1jbAZWyBkBMiyAfr2PQz-xuomG5lpvDGieSkeu9xiEUY
+  contact_us_support_email_address: cbkirick@gmail.com
+  system_problem_email_address: kirick@treadhunter.com
+  system_problem_cc_email_address: cbkirick@gmail.com
+  system_problem_bcc_email_address: cbkirick@gmail.com
+  customer_issue_email_address: kirick@treadhunter.com
+  customer_issue_cc_email_address: jbarker@treadhunter.com
+  customer_issue_bcc_email_address: cbkirick@gmail.com
+  system_process_completion_email_address: cbkirick@gmail.com
+  system_process_completion_bcc_email_address: cbkirick@gmail.com
+
+staging:
+  perform_authentication: false
+  username: guest
+  password: SellinTires
+  username2: guest
+  password2: SellinTires
+  collect_cc_upfront: false
+  create_contracts: false
+  secure_cc: true
+  backtrace_log: false
+  cl_blocked_users: ['demo@treadhunter.com', 'joe@joestireshack.com']
+  free_trial_days: -1
+  free_trial_months: 6
+  stripe_livemode: false
+  visfire_storemode: true
+  show_partners: false
+  stripe_connect_test_client_id: ca_12M4XH8F3XGC0qfEdKbH9WOA7adk4g2b
+  allow_ecomm: true  
+  allow_realtime_notifications: true
+  realtime_polling_frequence_ms: 5000
+  google_places_api_key: AIzaSyBIHrpZe5MdJM-gO5qqHarfOetZPlhCfJg
+  google_docs_username: treadhunter.mailer@gmail.com
+  google_docs_password: +1r3sRu5
+  google_docs_survey_doc_id: 1jQF3siHqwebMnVkLzOArdOcVxOA_0kVoz5sqLBwE5t8
+  google_docs_survey_form_id: 1jbAZWyBkBMiyAfr2PQz-xuomG5lpvDGieSkeu9xiEUY
+  contact_us_support_email_address: cbkirick@gmail.com
+  system_problem_email_address: kirick@treadhunter.com
+  system_problem_cc_email_address: cbkirick@gmail.com
+  system_problem_bcc_email_address: cbkirick@gmail.com
+  customer_issue_email_address: kirick@treadhunter.com
+  customer_issue_cc_email_address: kirick@treadhunter.com
+  customer_issue_bcc_email_address: cbkirick@gmail.com
+  system_process_completion_email_address: cbkirick@gmail.com
+  system_process_completion_bcc_email_address: cbkirick@gmail.com
+  

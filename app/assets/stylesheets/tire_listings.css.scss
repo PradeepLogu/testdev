@@ -1,0 +1,166 @@
+/*$gray: #424242;
+
+.storename {
+	font-size: 0.9em;
+	color: lighten($gray, 10%);
+};
+
+.tireinfo {
+	font-size: 1.1em;
+	color: $gray;
+	b { color: darken($gray, 10%); }
+  margin-bottom: 1.0em;
+}
+
+.tireinfo1 {
+	font-size: 1.1em;
+	color: $gray;
+	b { color: darken($gray, 50%); }
+}
+
+.distance {
+  /*font-size: 0.8em;* /
+  color: $gray;
+  right: 1px;
+  b { color: darken($gray, 50%); }
+}
+
+.highlighted {
+	background:#F4FA58;
+}
+
+.reserved {
+	background: lighten(green, 70%)	;
+}
+
+.lightgray {
+	color: lighten($gray, 50%);
+}
+
+.tire-model-info {
+  display: inline;
+  font-size: 0.75em;
+}
+
+.subcat {
+  color: lighten($gray, 50%);
+}
+
+.tirestore {
+  font-size: 1.2em;
+}
+
+.tirelisting {
+  color: white;
+}
+
+.teaser {
+  font-size: 0.8em;
+}
+
+#tirepreviewinner {
+  background-color: lighten($gray, 30%);
+  z-index: 20;
+  width: 225px; 
+  position: fixed;
+  margin-top: -100px;
+  box-shadow: 0 30px 35px -30px black;
+  border-bottom: 1px dotted #333;
+  border-radius: 0.5em;
+  border: 2px solid;
+}
+
+.resultpreviewtab {
+  display: block;
+  width: 45px;
+  height: 100%;
+  right: 0px;
+  top: 0px;
+  position: absolute;
+  cursor: pointer;
+}
+
+.resultpreviewtab.selected {
+  display: block;
+  background: white;
+  border-top-left-radius: 0.7em;
+  border-bottom-left-radius: 0.7em;
+  border-top: 2px solid #E0E0E0;
+  border-left: 2px solid #E0E0E0;
+  border-bottom: 2px solid #E0E0E0;
+  top: -2px;
+  right: -14px;
+  width: 59px;
+  z-index: 15;
+  box-shadow: 0 30px 35px -25px black;
+}
+
+.savings span, .savings{
+  font-size: 1.2em;
+  color: #00FF00;
+  font-style:italic;
+}
+
+.borderbox {
+  border-radius: 0.5em;
+  border: 2px solid;
+  background: #FAFAFA;
+}
+
+.dropshadow {
+  display: block;
+  margin: 0.5em;
+  padding-bottom: 0.5em;
+  box-shadow: 0 9px 16px -13px black;
+}
+
+.category {
+  background: white;
+  width: 97%;
+  border-top-left-radius: 0.2em;
+  border-top-right-radius: 0.2em;
+  margin: 0.2em auto;
+  text-align: left;
+}
+
+.facet-title {
+  color: #2F5882;
+  font: bold 0.8em Arial;
+  padding: 0.5em 0.5em 0.3em;
+  position: relative;
+  cursor: pointer;
+}
+
+.facet-items{
+  font-size: 0.8em; 
+  cursor: pointer;
+  border-left: 1px solid #EEE;
+  border-right: 1px solid #EEE;
+  position: relative;
+}
+
+.facet-item{
+  display: block;
+  margin-right: 0.5em;
+  min-height: 17px;
+  vertical-align: middle;
+  font: bold 0.9em Arial;  
+}
+
+.more-info{
+    width: 17px;
+    height: 17px;
+    display: inline-block;
+    background: url("preview_arrows.png") no-repeat;
+    background-position: -17px 0px;
+    top: 50%;
+    left: 50%;
+    font-size: 0.8em;
+    margin-top: 15px;
+    margin-right: -15px;
+}
+
+.more-info:hover {
+    background-position: 0px -152px;
+}
+*/

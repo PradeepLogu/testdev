@@ -1,0 +1,120 @@
+#deals {
+  padding-left: 10px;
+  padding-right: 10px;
+  h1 {
+    text-transform: uppercase;
+    font-family: HelveticaLTStd-BoldCond;
+    padding-top: 8px;
+    color: #ef5a29;
+  }
+  .deals-container {
+    position: relative;
+    h2 {
+      display: inline;
+      font-size: 18px;
+      text-transform: uppercase;
+      font-family: HelveticaLTStd-BoldCond;
+    }
+    span.view-all {
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      display: inline;
+      text-align: right;
+      color: #ef5a29;
+      font-size: 18px;
+      line-height: 36px;
+      text-transform: uppercase;
+      text-decoration: underline;
+      font-family: HelveticaLTStd-BoldCond;
+    }
+    .chevron-left {
+      background: url("/assets/chevron-left-orange.png") no-repeat center left;
+    }
+    .chevron-right {
+      background: url("/assets/chevron-right-orange.png") no-repeat center right;
+    }
+  }
+  // slider
+  #slider-wrapper {
+    display: table;
+    width: 100%;
+    margin: 20px 0;
+    .feature-right {
+      display: table-cell;
+    }
+    .feature-right ul li {
+      display: inline-block;  /* default display until the javascript overrides */
+    }
+    #previmg, #nextimg {
+      display: table-cell;
+      vertical-align: middle;
+      height: 50px;
+      width: 34px;
+      a {
+        display: block;
+        font-size: 44px;
+        font-weight: bold;
+        vertical-align: top;
+        font-size: 0;
+        color: #fff;
+        opacity: 0;
+        height: 52px;
+        width: 34px;      
+      }
+      a:hover {
+        text-decoration: none;
+        background-color: none;
+      }
+    } 
+    #previmg {
+      padding-right: 10px;
+    }
+    #nextimg {
+      padding-left: 10px;
+    }
+  }
+  }
+.promotion-display {
+  display: inline-block;
+  vertical-align: top;
+  .image-container {
+    height: 150px;
+    width: 200px;
+    img {
+      max-width: 200px;
+      max-height: 150px;
+    }
+  }
+  h3 {
+    font-size: 20px;
+    line-height: 30px;
+  }
+  h4 {
+    font-size: 18px;
+    line-height: 32px;
+  }
+}
+.promotion-detail {
+  padding: 20px;
+  img {
+    max-width: 600px;
+    max-height: 400px;
+  }
+  .promotion-info {
+    float: left;
+    vertical-align: top;
+  }
+  .external-link {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  .store-info {
+    float: right;
+    padding: 10px;
+    width: 300px;
+    max-width: 90%;
+    max-width: calc(100% - 20px);
+    background-color: #ccc;
+  }
+}

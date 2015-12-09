@@ -1,0 +1,53 @@
+<% provide(:title, "Select Car Make") %>
+<% provide(:visfire, "true") %>
+
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="top-search-section">
+			<div id="tire-search-outer">
+				<h2>SHOP BY:</h2>
+				<%= render :partial => 'layouts/search_panel',
+						   :locals => {:id => "tire-search2"} %>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-outer">
+	<div id="search-by-car-type" class="container-inner">
+		<hr/>
+		
+		<div id="fluid-title">
+			<h1 class="orange"><%= @car_type %> Tires</h1>
+			<p>Select your vehicle's make below to find the right <%= @car_type %> tires for you.</p>
+			
+			<div id="change-params">
+				<span>CHANGE</span> <a href="/car_type">CAR TYPE</a>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<div id="results" class="row-fluid">
+			<div class="span1 hide-mobile"></div>
+			<ul class="span2">
+			
+			<%	i = 0
+				limit = ((@makes.length + 4) / 5)
+				remain = @makes.length
+				@makes.each do |x| %>
+					<li><a href="/car_model/<%= x.id %>"><%= x.name %></a></li>
+				<%	i += 1
+					remain -= 1
+					if i == limit && remain > 0
+						i = 0 %>
+				</ul>
+				<ul class="span2">
+				<%	end %>
+			<%	end %>
+			
+			</ul>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,34 @@
+<select class="tires" 
+        id="width" 
+        name="width" >
+  <option value="">Width</option>
+  <% @diameters.each do |d| %>
+    <% if d.diameter == session[:diameter] %>
+      <option selected="selected" value="<%= d.diameter %>"><%= d.diameter %></option>
+    <% else %>
+      <option value="<%= d.diameter %>"><%= d.diameter %></option>
+    <% end %>
+  <% end %>
+</select>
+<script>
+  $('select#width').change(function() {
+    document.getElementById('tire_ratios').innerHTML = '<select class="tires" id="ratio" name="ratio"><option value="" selected="selected">Loading...</option></select>';
+    document.getElementById('tire_wheeldiameters').innerHTML = '<select class="tires" id="wheeldiameters" name="wheeldiameter"><option value="" selected="selected">Loading...</option></select>';
+    $.ajax({
+      type: "GET",
+      dataType: "html",
+      url: "/ajax/update_tire_ratios",
+      data: {width: $(this).attr('value')},
+      success:function(result){
+        $("div#tire_ratios").html(result);} 
+    });
+    $.ajax({
+      type: "GET",
+      dataType: "html",
+      url: "/ajax/update_tire_wheeldiameters",
+      data: {ratio: 0},
+      success:function(result){
+        $("div#tire_wheeldiameters").html(result);} 
+    });
+  });
+</script>

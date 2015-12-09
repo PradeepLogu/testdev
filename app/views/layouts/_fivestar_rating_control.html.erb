@@ -1,0 +1,20 @@
+<script>
+$(function () {
+	$(".fivestar-control a").click(function (e) {
+		e.preventDefault();
+		var $this = $(this);
+		$this.parent().children("a").removeClass("on");
+		$this.prevAll("a").andSelf().addClass("on");
+		$this.parent().find("input#fivestar-rating").val($this.attr("number"));
+	});
+});
+</script>
+
+<div class="fivestar-control">
+  <input type="hidden" name="rating" id="fivestar-rating" value="0"/>
+  <a href="#" class="star-btn" number="1" title="1 / 5 stars"></a>
+  <a href="#" class="star-btn" number="2" title="2 / 5 stars"></a>
+  <a href="#" class="star-btn" number="3" title="3 / 5 stars"></a>
+  <a href="#" class="star-btn" number="4" title="4 / 5 stars"></a>
+  <a href="#" class="star-btn" number="5" title="5 / 5 stars"></a>
+</div>

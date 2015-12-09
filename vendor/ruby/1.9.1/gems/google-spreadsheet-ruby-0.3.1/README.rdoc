@@ -1,0 +1,19 @@
+This library is now part of google_drive gem: https://github.com/gimite/google-drive-ruby
+
+<b>For new code</b>: I suggest to use google_drive gem directly.
+
+<b>For existing code</b>: You can keep using google-spreadsheet-ruby gem. Now google-spreadsheet-ruby is a library which simply does:
+
+  require "google_drive"
+  GoogleSpreadsheet = GoogleDrive
+
+and it provides the same API as before.
+
+Note that gimite-google-spreadsheet-ruby at gems.github.com is no longer updated, because github stopped hosting it.
+
+API document: http://gimite.net/doc/google-drive-ruby/
+
+
+= Author
+
+Hiroshi Ichikawa - http://gimite.net/en/index.php?Contact

@@ -1,0 +1,4 @@
+<%= collection_select(f, :option_id, @options, :id, :name,
+                     {:prompt   => "Option",
+                   	 :selected  => session[:option_id]},
+						:class => "cars") %>

@@ -1,0 +1,118 @@
+<% @show_pricing = false %>
+
+<div id="pricing-title">
+    <h3>
+        <% if !free_trial_verbiage.nil? %>
+            <strong>Get <%= free_trial_verbiage %> of our Gold package for free.</strong> 
+        <% end %>
+        <% if !collect_cc_upfront %>
+            <strong style="font-size: 1.25em;">No Credit Card Required.</strong>
+        <% end %>
+    </h3>
+</div>
+<br /><br />
+<div id="pricing">
+    <div id="gold" class="plan-highlight-mid">
+        <!--
+        <div id="popular">Most Popular</div>
+        -->
+        <div class="title">
+            Gold
+        </div>
+        <% if @show_pricing %>
+            <div class="price">
+                <% if (!params[:ref].nil? &&
+                    params[:ref].downcase == "sands") ||
+                  (!current_user.nil? && current_user.affiliate_referrer && 
+                      current_user.affiliate_referrer.downcase == "sands") %>
+                    <del>$99/mo</del><br />$59/mo for S and S customers!
+                <% elsif (!params[:ref].nil? &&
+                    params[:ref].downcase == "promo") ||
+                  (!current_user.nil? && current_user.affiliate_referrer && 
+                      current_user.affiliate_referrer.downcase == "promo") %>
+                    <del>$99/mo</del><br />$59/mo special promotion!
+                <% else %>
+                    $99/mo
+                <% end %>
+            </div>
+        <% end %>
+        <ul>
+            <li>Storefront presence - your own website!</li>
+            <li>Customize your website with information about your store, location, hours, etc.</li>
+            <li>Mobile application usage</li>
+        </ul>
+        <div class="signup">
+            <%= link_to (!free_trial_verbiage.nil? ? 
+                    "Get The First " + free_trial_verbiage + " Free" : 
+                        "Sign up today"), 
+                    new_account_path + "?type=gold" %>
+        </div>
+    </div>
+    <div id="platinum">
+        <div class="title">
+            Platinum
+        </div>
+
+        <% if @show_pricing %>
+            <div class="price">
+                $149/mo
+            </div>
+        <% end %>
+        <ul>
+            <li>All the benefits of Gold, plus:</li>
+            <li>Enhanced storefront - choose your look and feel - even colors!</li>
+            <li>
+                Your own website domain - <i>yourstore. treadhunter. com</i> or 
+                <i>www. yoursite. com</i>
+            </li>
+        </ul>
+        <div class="signup">
+            <%= link_to 'Coming Soon', '#', 
+                class: "btn-gray" %>
+        </div>
+    </div>
+    <div id="private" >
+        <div class="title">
+            Private
+        </div>
+        <div class="price">
+            TreadHunter Special - Free listings for private sellers!
+        </div>
+        <ul>
+            <li>For individuals wanting to sell a set of tires.</li>
+            <li>Your address and phone number (optional) are hidden from buyers.</li>
+        </ul>
+        <div class="signup">
+            <%= link_to 'List My Tires', new_account_path + "/?type=private", class: "btn-gray" %>
+        </div>
+    </div>
+    <div id="silver" >
+        <div class="title">
+            Silver
+        </div>
+        <div class="price">
+            Always free to list your tire store on TreadHunter.com!
+        </div>
+        <ul>
+            <li>Your store can be found on our Search by Store function</li>
+            <li>Easily upgrade to the Gold or Platinum package to list your tires and have them searchable on TreadHunter.com</li>
+        </ul>
+        <div class="signup">
+            <%= link_to 'Get Started', new_account_path + "/?type=silver", class: "btn-gray" %>
+        </div>
+    </div>
+</div>
+<div class="clear">
+	<center>
+    	<p>
+            <h3>
+                <% if !free_trial_verbiage.nil? %>
+                    <%= free_trial_verbiage %> Free Trial. Sign up now!
+                <% else %>
+                    Sign up now!
+                <% end %>
+            </h3>
+        </p>
+    </center>
+    <br />
+</div>

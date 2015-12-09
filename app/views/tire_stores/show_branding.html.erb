@@ -1,0 +1,11 @@
+<%= stylesheet_link_tag "bootstrap", media: "all" %>
+<%= stylesheet_link_tag "primary.css", :media => 'screen' %>
+<% content_for :page_specific_footer do %>
+	<% if signed_in? and (super_user? or current_user.account_id == @tire_store.account_id) then %>
+	    <a class="btn btn-primary btn-large" 
+	      href="/tire_listings/new?tire_store_id=<%= @tire_store.id %>">Create a new listing</a>
+	<% end %>
+<% end %>
+<% provide(:title, @tire_store.visible_name) %>
+<% provide(:metadescription, "#{@tire_store.visible_name}, Category: used tires #{@tire_store.city} #{@tire_store.state} #{@tire_store.zipcode}") %>
+<%= ERB.new(@tire_store.branding.store_html).result(binding).html_safe %>

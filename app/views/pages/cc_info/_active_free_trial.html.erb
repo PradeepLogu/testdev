@@ -1,0 +1,6 @@
+You have <%= ((@account.current_contract.expiration_datetime - Time.now)/(60*60*24)).round %>
+days remaining on your <%= free_trial_verbiage %> trial period.  You will not be
+billed until <%= @account.current_contract.expiration_date %>, but entering your card
+now will ensure uninterrupted service.
+<br /><br />
+<% @button = 'Enter Credit Card' %>

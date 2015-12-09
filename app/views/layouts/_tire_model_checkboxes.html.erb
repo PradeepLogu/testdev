@@ -1,0 +1,35 @@
+<div class="tire-models">
+  <br />
+  <table>
+    <% colcount = 0 %>
+    <% maxcols = 1 %>
+    <% maxcols = 2 if @tire_models.count > 5 %>
+    <% maxcols = 3 if @tire_models.count > 10 %>
+    <% maxcols = 4 if @tire_models.count > 15 %>
+    <% maxcols = 5 if @tire_models.count > 20 %>
+
+    <% @tire_models.each do |m| %>
+      <% if colcount >= maxcols %>
+        <tr>
+      <% end %>
+        <% puts m.id.to_s %>
+        <% if maxcols > 1 %>
+          <td style='padding-top: 0px; padding-left: 12px; border-left: black solid; border-left-width: thin;'>
+            <input type="checkbox" name="tire_manufacturer[](tire_model)" value="<%= m.name %>" />
+          </td>
+        <% else %>
+          <td style="padding-top: 0px;">
+            <input type="checkbox" name="tire_manufacturer[](tire_model)" value="<%= m.name %>" />
+          </td>
+        <% end %>
+        <td style="padding-top: 0px; font-size: 12px; padding-left: 2px;"><b><%= m.name %></b></td>
+        <td width="50px" style="padding-top: 0px;"></td>
+      <% colcount += 1 %>
+      <% if colcount >= maxcols %>
+        </tr>
+        <% colcount = 0 %>
+      <% end %>
+    <% end %>
+  </table>
+</div>
+<br />

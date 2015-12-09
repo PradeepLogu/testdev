@@ -1,0 +1,465 @@
+// Place all the styles related to the LearningCenter controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+$accent: #ef5a29;
+$border: #c2c2c2;
+
+@media screen and (max-width: 650px) {
+  div.learning-center-page {
+    .about-glossary {
+      background-image: none;
+      height: auto;
+      .about-glossary-text {
+        background-color: $accent;
+        position: relative;
+        left: auto;
+        top: auto;
+        bottom: auto;
+        max-width: 100%;
+      }
+    }
+    .topic-container .glossary-entries {
+      padding: 20px;
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  div.learning-center-page {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+@media screen and (max-width: 570px) {
+  div.learning-center-page {
+    .learning-categories {
+      width: 100%;
+      h4.learning-category-title {
+        font-weight: normal;
+        font-family: HelveticaLTStd-Cond;
+      }
+    }
+    .topic-container {
+      .topics-list {
+        clear: both;
+        width: 100%;
+        display: inherit;
+        border-right: 0;
+        li {
+          padding-left: 4px;
+          padding-right: 4px;
+          display: inline;
+        }
+      }
+      .topic-content {
+        width: calc(100% - 40px);
+        margin-left: 0;
+        display: inherit;
+        h5 {
+          text-align: center;
+        }
+      }
+      .tire-size-container {
+        padding-top: 0;
+        display: block;
+        .tire-type {
+          display: block;
+          width: 100%;
+          border-bottom: 2px solid $border;
+        }
+        .high-flotation {
+          padding-right: 0;
+        }
+        .passenger {
+          padding-left: 0;
+          border-left: 0;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 930px) {
+  div#learning-center .categories-container {
+    .post-showcase{
+      float: none;
+      display: block;
+      clear: both;
+    }
+    .learning-categories {
+      padding-left: 0;
+      margin-left: 0;
+      width: 100%;
+      display: block;
+      clear: both;
+    }
+  }
+  div.learning-center-page {
+    .learning-categories {
+      h4.learning-category-title {
+        float: none;
+        border-bottom: 0px;
+        width: 100%;
+      }
+    }
+  }
+}
+
+.learning-categories {
+  .learning-category-title {
+    height: 43px;
+    line-height: 43px;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: HelveticaLTStd-BoldCond;
+    a {
+      color: $accent;
+      display: block;
+      line-height: 43px;
+    }
+    .chevron {
+      padding-left: 14px;
+      padding-bottom: 4px;
+    }
+  }
+}
+#learning-center {
+  .bx-next, .bx-prev {
+    color: #fff;
+    // opacity: 0;
+    height: 50px;
+    width: 34px;
+    z-index: 1;
+  }
+  h1 {
+    text-transform: uppercase;
+    font-family: HelveticaLTStd-BoldCond;
+    padding-top: 8px;
+    color: $accent;
+  }
+  .categories-container {
+    width: 100%;
+    display: block;
+    .post-showcase{
+      position: relative;
+      background-color: black;
+      background-image: url('http://lorempixel.com/g/600/250/');
+      width: 600px;
+      height: 250px;
+      float: left;
+    }
+    .learning-categories {
+      padding-top: 20px;
+      padding-left: 13px;
+      margin-left: 600px;
+      .learning-category-title {
+
+      }
+    }
+  }
+  .learning-container {
+    clear: both;
+    width: 100%;
+    h2 {
+      display: inline;
+      font-size: 18px;
+      text-transform: uppercase;
+      font-family: HelveticaLTStd-BoldCond;
+    }
+    span.view-all {
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      display: inline;
+      text-align: right;
+      color: $accent;
+      font-size: 18px;
+      line-height: 36px;
+      text-transform: uppercase;
+      text-decoration: underline;
+      font-family: HelveticaLTStd-BoldCond;
+    }
+    .film-strip {
+      width: 100%;
+      position: relative;
+      .film-strip-items {
+        position: relative;
+      }
+    }
+  }
+  // slider
+  #slider-wrapper {
+    display: table;
+    width: 100%;
+    margin: 20px 0;
+  }
+  .feature-right {
+    display: table-cell;
+  }
+  .feature-right ul li {
+    display: inline-block;  /* default display until the javascript overrides */
+  }
+  #nextimg, #previmg {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  #previmg {
+    padding-right: 6px;
+  }
+  #nextimg {
+    padding-left: 6px;
+  }
+  #nextimg a, #previmg a {
+    font-size: 44px;
+    font-weight: bold;
+    color: #F05A29;
+  }
+  #nextimg a:hover, #previmg a:hover {
+    text-decoration: none;
+    background-color: none;
+  }
+  // most recent post
+  .xouter{
+  width:80%;
+  margin-left:9%;
+  }
+  .xleftcol
+  {
+  float: left;
+  width: 33%;
+  }
+  .xmiddlecol
+  {
+  float: left;
+  width: 34%;
+  }
+  .xrightcol
+  {
+  float:left;
+  width: 33%;
+  }
+  .rtcorner-bg {
+    padding-right: 12px;
+    padding-left: 12px;
+    padding-bottom: 6px;
+    padding-top: 12px;
+    margin: auto;
+    border-radius: 0px 24px 0px 0px;
+    background: #f05a29;
+    color: white;
+    position:absolute; bottom:0;
+  }
+  .showcase{
+
+  }
+}
+.learning-center-page {
+  h1 {
+    font-weight: normal;
+    color: $accent;
+    span.title {
+      font-weight: bold;
+    }
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .learning-categories {
+    // display: table;
+    width: 100%;
+    h4.learning-category-title {
+      padding-top: 10px;
+      float: left;
+      width: calc(100% / 3);
+      border-top: 2px solid $border;
+      border-bottom: 2px solid $border;
+      margin-top: 2px;
+      &.active {
+        border-top: 3px solid $accent;
+        margin-top: 1px;
+      }
+    }
+  }
+  .topic-container {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    clear: both;
+    display: table;
+    text-align: center;
+    .topics-list {
+      padding-top: 10px;
+      border-right: 2px solid $border;
+      width: 200px;
+      text-align: center;
+      display: table-cell;
+      li {
+        font-size: 12pt;
+        text-decoration: underline;
+        line-height: 22pt;
+        color: $accent;
+      }
+    }
+    .alphabet {
+      text-align: center;
+      li {
+        font-size: 14pt;
+        display: inline;
+        padding-left: 4px;
+        padding-right: 4px;
+        a {
+          color: $accent;
+        }
+      }
+    }
+    .topic-content {
+      text-align: left;
+      width: calc(100% - 240px);
+      margin-left: 202px;
+      padding-left: 20px;
+      display: table-cell;
+      h5 {
+        font-size: 14pt;
+        font-family: HelveticaLTStd-BoldCond;
+        text-transform: uppercase;
+        padding-bottom: 10px;
+        padding-top: 10px;
+      }
+      .qa-container {
+        .question {
+          // round corners
+          border-radius: 4px;
+          font-family: HelveticaLTStd-Cond;
+          font-style: italic;
+          padding: 10px;
+          width: calc(100% - 20px);
+          background-color: #ebebeb;
+          &:before {
+            font-family: HelveticaLTStd-BoldCond;
+            content: 'Q:';
+            color: $accent;
+            font-style: normal;
+          }
+        }
+        .answer {
+          padding: 10px 50px;
+          line-height: 26px;
+        }
+      }
+    }
+    .glossary-entries {
+      text-align: left;
+      padding: 20px 60px;
+      h1 {
+        font-family: HelveticaLTStd-BoldCond;
+      }
+      .glossary-entry {
+        h2 {
+          font-size: 16pt;
+          text-transform: uppercase;
+        }
+        p {
+          color: #565656;
+          line-height: 26px;
+        }
+      }
+    }
+    .topic-info {
+      text-align: center;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 14px;
+    }
+    .tire-size-container {
+      border-top: 2px solid $border;
+      padding: 20px;
+      width: calc(100% - 40px);
+      display: table;
+      text-align: left;
+      .tire-type {
+        padding-top: 10px;
+        width: 50%;
+        display: table-cell;
+        h2 {
+          font-family: HelveticaLTStd-BoldCond;
+          text-align: center;
+          font-size: 12pt;
+          text-transform: uppercase;
+        }
+        p {
+          padding-top: 10px;
+        }
+        li {
+          line-height: 25px;
+          vertical-align: top;
+        }
+        li:before {
+          content: "";
+          display: inline-block;
+          height: 20px;
+          width: 20px;
+          background-size: contain;
+          margin-right: 5px;
+        }
+        li.first:before {
+          background-image: url("orange-circle-1.png")
+        }
+        li.second:before {
+          background-image: url("orange-circle-2.png")
+        }
+        li.third:before {
+          background-image: url("orange-circle-3.png")
+        }
+      }
+      .high-flotation {
+        padding-right: 20px;
+      }
+      .passenger {
+        padding-left: 20px;
+        border-left: 2px solid $border;
+      }
+    }
+    button {
+      text-align: center;
+      border-radius: 4px;
+      padding: 11px 14px 6px 14px;
+      border: 0;
+      background-color: $accent;
+      text-transform: uppercase;
+      font-size: 12pt;
+      line-height: 12pt;
+      font-weight: normal;
+      font-family: HelveticaLTStd-Cond;
+      color: #fff;
+      a {
+        color: #fff;
+      }
+    }
+  }
+  .about-glossary {
+    clear: both;
+    background-image: url("tire-pile-with-gradient.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 230px;
+    position: relative;
+    .about-glossary-text {
+      position: absolute;
+      left: 40px;
+      top: 40px;
+      bottom: 40px;
+      background-color: rgba(239, 90, 41, 0.89);
+      color: #fff;
+      max-width: 510px;
+      border-radius: 12px;
+      padding: 12px;
+      line-height: 30px;
+    }
+  }
+}
+.promotion-display {
+  display: inline-block;
+  vertical-align: top;
+  img {
+    background-color: #555;
+    max-width: 200px;
+    max-height: 150px;
+  }
+}

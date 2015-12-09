@@ -1,0 +1,52 @@
+
+<% provide(:visfire, "true") %>
+<%= stylesheet_link_tag "style-wide-form" %>
+
+<script>
+  $(function() {
+    $('form').jqTransform();
+  });
+</script>
+
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<div id="searc-header">
+  <%= render :partial => 'layouts/header_visfire', :locals => {:@error_object => @user} %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+    <div id="search-main2">
+      <h2>Reset Your Password</h2>
+      <ul>
+        <li>Home /</li>
+        <li><a href="#">Password Reset</a></li>
+      </ul>
+    </div>
+
+    <div id="edit-mid-part" class="clearfix">
+      <div id="edit-mid-part-left">
+        <div class="form-part">
+          <div class="form-heading">
+            <h3>Enter your new password</h3>
+          </div>
+          <%= form_for @user, :url => password_reset_path(params[:id]) do |f| %>
+            <%= f.label :password %>
+            <%= f.password_field :password %>
+            <%= f.label :password_confirmation %>
+            <%= f.password_field :password_confirmation %>
+            <%= f.submit "Update Password" %>
+          <% end %>
+        </div>
+      </div>
+      <div id="edit-mid-part-right">
+        <h3>Resetting your password</h3>
+        <p>
+          Enter and confirm your new password.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

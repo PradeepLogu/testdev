@@ -1,0 +1,152 @@
+<% provide(:title, 'TreadHunter.com') %>
+<%= javascript_include_tag "video_page" %>
+<%= stylesheet_link_tag "video_page" %>
+<%= javascript_include_tag "jquery.fancybox" %>
+<%= stylesheet_link_tag "jquery.fancybox" %>
+<%= stylesheet_link_tag "style-wide-form" %>
+
+<% @show_price = false %>
+
+  <% provide(:visfire, "true") %>
+  <div class="main-slideshow-2">
+    <!--banner slider-->
+  </div>
+
+  <style>
+  div.checklist ul li {
+	  list-style-position: inside!important;
+	  list-style-image: url("/assets/check.png")!important;
+  }
+  </style>
+  
+  <script>
+    $(document).ready(function() {
+      $(".various").fancybox({
+        maxWidth  : 800,
+        maxHeight : 600,
+        fitToView : false,
+        width   : '90%',
+        height    : '90%',
+        autoSize  : false,
+        closeClick  : false,
+        openEffect  : 'none',
+        closeEffect : 'none',
+        closeBtn : true
+      });
+    });
+  </script>
+
+  <%= render :partial => 'layouts/choose_new_or_used' %>
+  
+  <div id="serach-content2" class="clearfix">
+    <div id="search-content-inner2" class="clearfix">
+      <div id="search-main2">
+        <h2>Welcome to TreadHunter!</h2>
+      </div>
+
+      <div id="registration-mid-part" class="clearfix">
+        <% if !@affiliate.nil? && @affiliate.affiliate_tag.downcase == "sands" %>
+          <div id="heading-part">
+            <h1>Welcome Valued <span>S and S</span> customer</h1>
+            <% if @show_price %>
+              <h5>
+                As an S and S customer, you can take advantage of special pricing.  For
+                a limited time only, your price will be $59/month, which is $40 off our 
+                regular price of $99/month. Price will be valid for your first 12 months as a
+                TreadHunter customer then will revert to the normal price.  Register now to 
+                have the discount automatically applied or use the coupon code "SandS" when 
+                entering your credit card information.
+              </h5>
+            <% end %>
+          </div>
+        <% elsif !@affiliate.nil? && @affiliate.affiliate_tag.downcase == "promo" %>
+          <div id="heading-part">
+            <h1><span>Special</span> Promotion</h1>
+            <% if @show_price %>
+              <h5>
+                For a limited time only, your price will be $59/month, which is $40 off our 
+                regular price of $99/month. Price will be valid for your first 12 months as a
+                TreadHunter customer then will revert to the normal price.  Register now to 
+                have the discount automatically applied or use the coupon code "40off" when 
+                entering your credit card information.
+              </h5>
+            <% else %>
+              <h5>
+                For a limited time only, you will receive <%= free_trial_verbiage %> of
+                free service.  Thank you for letting us prove the value of TreadHunter!
+              </h5>
+            <% end %>
+          </div>          
+        <% end %>
+        <div id="registration-mid-part-left">
+			<div class="form-part">
+				<div class="form-heading">
+					<h3>New Tire Dealers</h3>
+					<p>Benefits of registering with TreadHunter</p>
+				</div>
+				<form class="new_user" style="font: 14px/22px proxima_nova_rgregular;">
+					<br />
+					<h3><u>Why use TreadHunter to help sell your new tires?</u></h3>
+					<div class="checklist">				
+						<ul>
+							<li>Gives you an Internet presence</li>
+							<li>Easily promote sales and specials</li>
+							<li>Very cost effective storefront</li>
+							<li>Targeted search engine experience</li>
+							<li>Customers can make reservations online to schedule an appointment</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			<br />
+			<a href="/ut_landing?direct=true"><h3>Mostly sell Used Tires?</h3>
+			<p>
+				Click here to see the benefits of TreadHunter for
+				used tire retailers.
+			</a></p>
+        </div>
+        <div id="registration-mid-part-right">
+          <div id="free-trial-offer" class="clearfix">
+            <h5>Free Trial Offer</h5>
+            You can try our Gold service for <%= free_trial_verbiage %> risk-free. We want to prove 
+			that TreadHunter drives customers right to your door. If, after <%= free_trial_verbiage %>, 
+			you don't wish to continue the Gold service, you will be automatically switched to a free 
+			lifetime of Silver service.
+          </div>
+
+          <h3>What is TreadHunter?</h3>
+          <p>
+            TreadHunter is a new service that connects tire buyers in your area to your tire
+            store. By allowing you to easily advertise your new (and used) tire inventory, potential 
+            customers can find your store and find the tires they need.<br />
+          </p>
+
+          <a href="/tireseller_registration"><h3>Ready to Try It?</h3></a>
+          <% if !free_trial_verbiage.nil? %>
+            <% if !collect_cc_upfront %>
+              <p><a href="/tireseller_registration">
+                Would you like to try our <%= free_trial_verbiage %> free offer, with no credit card 
+				required?  Just take a minute to register at 
+                tireseller registration.
+              </a></p>
+            <% else %>
+              <p><a href="/tireseller_registration">
+                Would you like to try our <%= free_trial_verbiage %> free offer?  Just take a minute to register at 
+                tireseller registration.
+              </a></p>
+            <% end %>
+          <% else %>
+            <p><a href="/tireseller_registration">
+              To sign up today, just take a minute to register at 
+              tireseller registration.
+            </a></p>
+          <% end %>
+
+          <h3>Our Other Videos</h3>
+          <p>
+            <%= link_to "See Our Help Videos", {:action => "ut_help" } %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>

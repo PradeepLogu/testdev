@@ -1,0 +1,66 @@
+
+<div class="container-outer">
+	<div id="storeheading" class="container-inner">
+	  <div class="row-fluid">
+	    <div id="storeheading-1" class="span8">
+		      <div class="left-section">
+		        <h1><%= @tire_store.visible_name.upcase %></h1>
+		        
+		        <div class="store-info-wrapper">
+			        <div class="address store-info">
+			          <div class="left">
+			            <%= image_tag("icon-location-orange.png", alt: "") %>
+			          </div>
+			          <div class="right">
+			            <%= @tire_store.address1 %>
+			            <span>
+			              <%= @tire_store.address2 if not @tire_store.address2.blank? %>
+			              <%= @tire_store.city %>, <%= @tire_store.state %> <%= @tire_store.zipcode %>
+			            </span>
+			          </div>
+			        </div>
+			        <div class="phone store-info">
+			          <div class="left">
+			            <%= image_tag("icon-phone-orange.png", alt: "") %>
+			          </div>
+			          <div class="right">
+			            Phone: <%= @tire_store.visible_phone %>
+			          </div>
+			        </div>
+			    </div>
+		      </div>
+		      
+		      <div class="right-section">
+		        <div class="inner">
+		        	<% if !@tire_store.consumer_rating.nil? %>
+						<%= render :partial => 'layouts/fivestar_rating',
+	                         :locals => {:stars => @tire_store.consumer_rating} %>
+                    <% end %>
+                    <% if @tire_store.consumer_rating_count && @tire_store.consumer_rating_count.to_i > 0 %>
+						<div class="reviews-count">
+							<a href="#reviews"><%= pluralize(@tire_store.consumer_rating_count, "Review") %></a>
+						</div>
+					<% end %>
+					<div class="contact-btn-container">
+						<a href="#" onclick="$('#dialog-contactseller').dialog('open');"
+							class="btn" id="contact-btn">CONTACT SELLER</a>
+					</div>
+				</div>
+		      </div>
+	    </div>
+	    
+	    <div id="store-image" class="span4">
+	      <div class="photo-wrapper">
+	        <div class="inner">
+	          <% if !@store_logo.nil? && @store_logo.exists? %>
+	            <%= image_tag(@store_logo.url, alt: "No photo") %>
+	          <% else %>
+	            <span class="no-photo">No photo</span>
+	          <% end %>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div class="clear"></div>
+</div>

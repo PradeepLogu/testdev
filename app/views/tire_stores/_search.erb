@@ -1,0 +1,29 @@
+<%= form_tag(request.path, :method => "get") do %>
+	<table>
+		<tr>
+			<th colspan="2" align="left">Location:</th>
+			<th width="20" />
+			<th align="left">Keywords</th>
+			<th />
+		</tr>
+		<tr>
+			<td><%= text_field_tag 'Location', 
+				params[:location], 
+				:id => 'location', 
+				:value => params["Location"],
+				:class => 'user', 
+				:placeholder => "City/State, zip, or street address" %></td>
+			<td><%= select_tag 'Radius', options_for_select(TireSearch::RADIUS_CHOICES, 
+											params["Radius"].to_i > 0 ? params["Radius"] : 20), 
+											{:style => 'width: 75px;', :class=>'users'} %> miles</td>
+			<td />
+			<td>
+				<%= text_field_tag 'Keywords', params[:keywords], :id => 'keywords', 
+									:value => params["Keywords"], 
+									:class => 'user', 
+									:placeholder => "Tire Kingz, Firestone, etc." %>
+				<%= submit_tag "Search", :class => 'btn btn-medium' %> 
+			<td>
+		</tr>
+	</table>
+<% end %> 

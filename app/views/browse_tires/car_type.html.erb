@@ -1,0 +1,117 @@
+<% provide(:title, "Search by Car Type") %>
+
+<style>
+#search-by-car-type #fluid-title h1 {
+	min-width: 280px;
+	vertical-align: middle;
+}
+#search-by-car-type #fluid-title p {
+    vertical-align: middle;
+}
+</style>
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="top-search-section">
+			<div id="tire-search-outer">
+				<h2>SHOP BY:</h2>
+				<%= render :partial => 'layouts/search_panel',
+						   :locals => {:id => "tire-search2"} %>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-outer">
+	<div id="search-by-car-type" class="container-inner">
+		<div id="fluid-title">
+			<h1 class="orange">Browse By Car Type</h1>
+			<p>
+				<%= @lc.find_post_by_title_in_posts_array(@page_seo, "Header Text") || "" %>
+			</p>
+			<div class="clear"></div>
+		</div>
+		
+		<div id="car-types">
+			<div class="row-fluid">
+				<div class="span6">
+					<div class="card">
+						<div class="text">
+							<h4>CAR/MINIVAN</h4>
+							<p>
+								<%= @lc.find_post_by_title_in_posts_array(@page_seo, "CAR/MINIVAN") || "" %>
+							</p>
+						</div>
+						<div class="car-icon">
+							<%= image_tag "car-type-minivan.png" %>
+						</div>
+						<div class="arrow-link">
+							<a href="/car_make/car_minivan">
+								<%= image_tag "tall-arrow-right.png", alt: ">" %>
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="span6">
+					<div class="card">
+						<div class="text">
+							<h4>CROSSOVER/CUV</h4>
+							<p>
+								<%= @lc.find_post_by_title_in_posts_array(@page_seo, "CROSSOVER/CUV") || "" %>
+							</p>
+						</div>
+						<div class="car-icon">
+							<%= image_tag "car-type-crossover.png" %>
+						</div>
+						<div class="arrow-link">
+							<a href="/car_make/crossover">
+								<%= image_tag "tall-arrow-right.png", alt: ">" %>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row-fluid">
+				<div class="span6">
+					<div class="card">
+						<div class="text">
+							<h4>SUV</h4>
+							<p>
+								<%= @lc.find_post_by_title_in_posts_array(@page_seo, "SUV") || "" %>
+							</p>
+						</div>
+						<div class="car-icon">
+							<%= image_tag "car-type-suv.png" %>
+						</div>
+						<div class="arrow-link">
+							<a href="/car_make/suv">
+								<%= image_tag "tall-arrow-right.png", alt: ">" %>
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="span6">
+					<div class="card">
+						<div class="text">
+							<h4>TRUCK/PICKUP</h4>
+							<p>
+								<%= @lc.find_post_by_title_in_posts_array(@page_seo, "TRUCK/PICKUP") || "" %>
+							</p>
+						</div>
+						<div class="car-icon">
+							<%= image_tag "car-type-truck.png" %>
+						</div>
+						<div class="arrow-link">
+							<a href="/car_make/truck">
+								<%= image_tag "tall-arrow-right.png", alt: ">" %>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>

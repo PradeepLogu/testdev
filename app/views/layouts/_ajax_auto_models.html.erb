@@ -1,0 +1,42 @@
+<% c = 'cars' if c.nil? %>
+<select class="<%= c %>" 
+        id="auto_models" 
+        name="auto_model_id" 
+        select_model_path="/ajax/update_auto_years" %>">
+  <option value="">Model</option>
+  <% @models.each do |m| %>
+    <% if m.id == session[:auto_model_id] %>
+      <option selected="selected" value="<%= m.id %>"><%= m.name %></option>
+    <% else %>
+      <option value="<%= m.id %>"><%= m.name %></option>
+    <% end %>
+  <% end %>
+</select>
+<script>
+  $('select#auto_models').change(function() {
+    document.getElementById('auto_years').innerHTML = '<select class="<%= c %>" id="auto_years" name="auto_year_id"><option value="" selected="selected">Loading...</option></select>';
+    document.getElementById('auto_options').innerHTML = '<select class="<%= c %>" id="auto_options" name="option_id"><option value="" selected="selected">Loading...</option></select>';
+    v = $(this).attr('value');
+    if(typeof v == 'undefined') {
+      v = $('select#auto_models').val(); 
+    }
+    $.ajax({
+      type: "GET",
+      dataType: "html",
+      url: $(this).attr('select_model_path'),
+      data: {model_id: v, c: $(this).attr('class')},
+      success:function(result){
+        $("div#auto_years").html(result);
+      } 
+    });
+    $.ajax({
+      type: "GET",
+      dataType: "html",
+      url: "/ajax/update_auto_options",
+      data: {auto_year_id: 0, c: $(this).attr('class')},
+      success:function(result){
+        $("div#auto_options").html(result);
+      } 
+    });
+  });
+</script>

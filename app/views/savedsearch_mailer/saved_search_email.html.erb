@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+	</head>
+	<body>
+	<h1>Thank you for using TreadHunter.com, <%= @tire_search.user.name %></h1>
+	<p>Dear <%= @tire_search.user.name %>,<p />
+
+	We have found new tires that match your search criteria.<p/>
+
+	<h2>New Tire Listings</h2>
+	<hr />
+	<table>
+	<% @tire_search.tirelistings.each do |l| %>
+		<tr>
+			<td align="right"><b>$<%= l.formatted_price %></b></td>
+			<td><%= link_to l.short_description, tire_listing_url(l.id) %></td>
+			<td>
+				<font size="1">Posted: <%= l.created_at.strftime("%m/%d/%Y") %></font>
+			</td>
+		</tr>
+	<% end %>
+	</table>
+	</body>
+</html>

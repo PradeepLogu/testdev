@@ -1,0 +1,107 @@
+<% provide(:title, 'TreadHunter.com') %>
+
+<%= javascript_include_tag "video_page" %>
+<%= stylesheet_link_tag "video_page" %>
+<%= javascript_include_tag "jquery.fancybox" %>
+<%= stylesheet_link_tag "jquery.fancybox" %>
+<%= stylesheet_link_tag "style-wide-form" %>
+
+
+<% provide(:visfire, "true") %>
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<script>
+  $(document).ready(function() {
+    $(".various").fancybox({
+      maxWidth  : 800,
+      maxHeight : 600,
+      fitToView : false,
+      width   : '90%',
+      height    : '90%',
+      autoSize  : false,
+      closeClick  : false,
+      openEffect  : 'none',
+      closeEffect : 'none',
+      closeBtn : true
+    });
+  });
+</script>
+
+<div id="searc-header">
+  <%= render 'layouts/header_visfire' %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+    <div id="search-main2">
+      <h2>Welcome to TreadHunter!</h2>
+    </div>
+
+    <div id="registration-mid-part" class="clearfix divider">
+      <div id="registration-mid-part-left">
+        <a class="various fancybox.iframe" 
+            href="http://www.youtube.com/embed/OM0v8Eo_x7g?autoplay=1">
+            <img src="/assets/9ZhOmsHVrLY.png" style="width: 320px; height: 180px;">
+              <div id="banner-overlay">Click to View</div>
+            </img>
+        </a>
+      </div>
+      <div id="registration-mid-part-right">
+        <h3>TreadHunter How-To #1 | Signing up to Sell Tires</h3>
+        <p>
+          Would you like to see how to sign up with TreadHunter?  View this video to the left.
+        </p>
+      </div>
+    </div>
+    <div id="registration-mid-part" class="clearfix divider">
+      <div id="registration-mid-part-left">
+        <a class="various fancybox.iframe" 
+            href="http://www.youtube.com/embed/tFVMagNTPZQ?autoplay=1">
+            <img src="/assets/KPTzg1u13xY.png" style="width: 320px; height: 180px;">
+              <div id="banner-overlay">Click to View</div>
+            </img>
+        </a>
+      </div>
+      <div id="registration-mid-part-right">
+        <h3>TreadHunter How-To #3 | How To Create A Tire Listing</h3>
+        <p>
+          Watch this video to learn the basics of creating a listing on TreadHunter.
+        </p>
+      </div>
+    </div>
+    <div id="registration-mid-part" class="clearfix divider">
+      <div id="registration-mid-part-left">
+        <a class="various fancybox.iframe" 
+            href="http://www.youtube.com/embed/3-3ZXgSW7ks?autoplay=1">
+            <img src="/assets/2mo2e-UvWxQ.png" style="width: 320px; height: 180px;">
+              <div id="banner-overlay">Click to View</div>
+            </img>
+        </a>
+      </div>
+      <div id="registration-mid-part-right">
+        <h3>TreadHunter How-To #4 | Creating a Generic Tire Listing</h3>
+        <p>
+          Watch this video to learn the basics of creating a generic tire listing on TreadHunter for common tires.
+        </p>
+      </div>
+    </div>
+    <div id="registration-mid-part" class="clearfix divider">
+      <div id="registration-mid-part-left">
+        <a class="various fancybox.iframe" 
+            href="http://www.youtube.com/embed/vd1GofWa7gM?autoplay=1">
+            <img src="/assets/vd1GofWa7gM.png" style="width: 320px; height: 180px;">
+              <div id="banner-overlay">Click to View</div>
+            </img>
+        </a>
+      </div>
+      <div id="registration-mid-part-right">
+        <h3>TreadHunter How-To #5 | Using the TreadHunter Mobile App</h3>
+        <p>
+          How to use the TreadHunter Mobile app. This app allows you to quickly upload your used tire inventory on TreadHunter.com and manage it on the fly.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<div id="tirepreviewpane">
+  <div id="tirepreviewinner">
+    <div id="tirepreviewtop">
+      <div class="tirestore">
+        <%= @tire_listing.tire_store.visible_name %><p />
+        <%= @tire_listing.tire_store.full_address %><p />
+        <hr />
+      </div>
+      <div class="tirelisting">
+        <div class="section">
+          <div class="detailrow">
+            <span class="subcat">Quantity: </span><%= @tire_listing.quantity %>
+          </div>
+          <div class="detailrow">
+            <span class="subcat">Manufacturer: </span><%= @tire_listing.tire_manufacturer.name %>
+          </div>
+          <div class="detailrow">
+            <span class="subcat">Model: </span><%= @tire_listing.tire_model.name %>
+          </div>
+          <div class="detailrow">
+            <span class="subcat">Price: </span>$<%= @tire_listing.price %>
+          </div>
+          <div class="detailrow">
+            <span class="subcat">Tread life: </span><%= @tire_listing.treadlife %>
+          </div>
+          <% unless @tire_listing.tire_model.nil? %>
+            <div class="detailrow">
+              <span class="subcat">Orig. tread: </span><%= @tire_listing.tire_model.tread_depth %>
+            </div>
+          <% end %>
+          <div class="detailrow">
+            <span class="subcat">Remaining tread: </span><%= @tire_listing.remaining_tread %>
+          </div>
+        </div>
+        <% unless @tire_listing.computed_savings <= 0 %>
+          <div class="savings">
+            <span class="subcat">Your Savings: </span><%= @tire_listing.computed_savings %>%
+          </div>
+        <% end %>
+        <div class="photos">
+          <%= image_tag @tire_listing.photo1.url(:medium) if @tire_listing.photo1.exists? %>
+          <%= image_tag @tire_listing.photo2.url(:medium) if @tire_listing.photo2.exists? %>
+          <%= image_tag @tire_listing.photo3.url(:medium) if @tire_listing.photo3.exists? %>
+          <%= image_tag @tire_listing.photo4.url(:medium) if @tire_listing.photo4.exists? %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

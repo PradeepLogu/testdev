@@ -1,0 +1,128 @@
+<% provide(:title, "Edit Seller Information") %>
+<% provide(:visfire, "true") %>
+
+<style>
+  #website {
+    display: inline-block;
+  }
+  #submit button {
+    margin: auto;
+    margin-bottom: 20px;
+  }
+  @media screen and (max-width: 768px) {
+    .jqTransformInputInner div input {
+      width: 100%;
+    }
+  }
+</style>
+<script>
+  $(document).ready(function() {
+    window.scrollTo(0, 0);
+    show_or_hide_text_phone();
+    $('.form-part').jqTransform();
+    $('#submit').jqTransform();
+  });
+  function show_or_hide_text_phone() {
+    if ($("#tire_store_send_text").attr('checked') == 'checked')
+    {
+      $(".textphone").removeClass("hide");
+    }
+    else
+    {
+      $(".textphone").addClass("hide");
+    }
+  };
+</script>
+
+<%= stylesheet_link_tag "style-wide-form" %>
+
+<div class="container-outer">
+  <div class="container-inner">
+    <div id="search-main2">
+      <h2>Add A Tire Store</h2>
+    </div>
+
+    <%= form_for(@tire_store, :html => {:multipart => true}, :validate => true) do |f| %>
+      <div id="edit-mid-part" class="clearfix">
+        <div id="edit-mid-part-left">
+          <div class="form-part">
+            <%= f.hidden_field :account_id %>
+            <%= f.label :name, "Store Name" %>
+            <%= f.text_field :name %>
+            <%= f.label :address1, "Address Line 1" %>
+            <%= f.text_field :address1 %>
+            <%= f.label :address2, "Address Line 2" %>
+            <%= f.text_field :address2 %>
+            <%= f.label "City" %>
+            <%= f.text_field :city %>
+            <%= f.label "State" %>
+            <%= f.select(:state, us_states, {}) %>
+            <%= f.label :zipcode %>
+            <%= f.text_field :zipcode %>
+            <%= f.label :phone, "Telephone number" %>
+            <%= f.text_field :phone %>
+            <% if !f.object.new_record? && f.object.private_seller %>
+                <%= f.check_box :hide_phone %>
+                <%= f.label :check_box_tag, "Hide phone from buyers?"  %>
+            <% end %>
+            <%= f.label :contact_email, 'Contact email' %>
+            <%= f.text_field :contact_email %>
+            <label>&nbsp</label>
+          </div>
+        </div>
+        <div id="edit-mid-part-right">
+          <h3>Receive Text Messages For Reservations</h3>
+          <p>
+            <%= f.label :send_text, 'Send text instead of email?' %>
+            <%= f.check_box :send_text %>
+          </p>
+          <div class="textphone">
+            <p>
+              <%= f.label :text_phone, 'Text phone #' %>
+              <%= f.text_field :text_phone, 
+                              :validate => { :minimum => 10, :maximum => 12 } %><br />
+              <%= f.label :text_phone, 
+                  'New reservations will be sent to this number via textmessage' %>
+            </p>
+          </div>
+          <script>
+            $('#tire_store_send_text').change(function() {
+              show_or_hide_text_phone();
+            });
+          </script>
+          <br /><br />
+          <h3>Store Logo</h3>
+          <p>
+            <% if @tire_store.account.can_use_logo? && !@branding.nil? && 
+                  !@tire_store.private_seller? %>
+              <hr />
+              <%= fields_for @branding do |b| %>
+                <%= b.label 'Logo' %>
+                <%= b.file_field :logo %>
+                <%= image_tag(b.object.logo.url(:medium)) if !b.object.logo.nil? && b.object.logo.exists? %>
+              <% end %>
+            <% end %>
+          </p>
+
+          <div id="submit">
+            <% if @tire_store.private_seller? %>
+              <%= f.submit (@tire_store.new_record? ? "Create Listing Record" : "Update Information") %>
+            <% else %>
+              <%= f.submit (@tire_store.new_record? ? "Create Storefront" : "Update Storefront") %>
+            <% end %>
+            <% if !@tire_store.new_record?  %>
+              <button class="">
+                <%= link_to 'Cancel', @tire_store %>
+              </button>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <!--
+      <div id="submit">
+        <%= f.submit "Update" %>
+      </div>
+      -->
+    <% end %>
+  </div>
+</div>

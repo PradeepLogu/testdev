@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+		</head>
+		<body>
+			<p>Dear <%= @user.name %>,<p />
+				Thank you for registering with TreadHunter to help sell your tires.  We've noticed you have
+				not filled out your customer survey.  This survey is a few questions that will help us tailor
+				your experience with TreadHunter appropriately, so it is important to us.
+				<br /><br />
+				<a href="<%= @survey_url %>">Use this link to complete the survey.</a>
+				<br /><br />
+				<a href="<%= @decline_survey_url %>">Use this link to have a TreadHunter representative contact you instead.</a>
+				<br /><br />
+			</p>
+			<p>
+				Once again, thank you for choosing TreadHunter to help sell your tires!
+			</p>
+		</body>
+	</html>

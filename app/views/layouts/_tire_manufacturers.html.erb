@@ -1,0 +1,9 @@
+<div id="tire_manufacturers">
+	<%= collection_select(f, :tire_manufacturer_id, @tire_manufacturers, :id, :name,
+	           {:prompt   => "Select a Tire Manufacturer",
+	           	:selected => (f.nil? || f.object.nil? || f.object.tire_manufacturer_id.nil? ? '' : f.object.tire_manufacturer_id.to_i)},
+	       {:onchange => remote_function(:url  => {:action => "tire_manufacturer_selected", 
+	       	 										  :controller => "tire_listings"},
+	         :with => "'tire_size_id='+document.getElementById('tire_sizes').children[0].value+'&tire_manufacturer_id='+value")}) %>
+	<br/>
+</div>

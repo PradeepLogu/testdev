@@ -1,0 +1,58 @@
+		<% if @drivingDistance %>
+			<div id="curLocation">
+				<table>
+					<tr>
+						<td width="10%">
+							<div style="font-size: 0.9em;">
+								Distance: 
+							</div>
+						</td>
+						<td width="18%">
+							<span style="font-size: 1.25em;">
+								<%= '%.2f' % @drivingDistance %> miles
+							</span>
+						<td>
+						<td width="14%" align="left">
+							<a style="font-size: 0.75em;" href="#" 
+								onclick="$('#directions_dialog').dialog('open');">
+								show directions
+							</a>
+						</td>
+						<td width="1%"></td>
+						<td width="51%" align="right">
+							<i><%= session[:location] %></i>
+						</td>
+						<td width="1%"></td>
+						<td width="5%">
+							<a style="font-size: 0.75em;" href="#"
+								onclick="$('#curLocation').addClass('hidden'); $('#newLocation').removeClass('hidden');">Change</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div id="newLocation" class="hidden">
+				<form style="margin-bottom: 0px; display: inline;">
+					<input id="myAddress" placeholder="Enter different address">
+					</input>
+					<button class="btn-small btn-primary" data-toggle="modal" 
+							onclick="getDirections();" >
+						Get Directions
+					</button>
+				</form>
+			</div>
+		<% else %>
+			<form style="margin-bottom: 0px;">
+				<b>Get Directions:</b> 
+				<input id="myAddress" placeholder="Enter your address" style="display: inline; width:300px;">
+				</input>
+				<button class="btn-small btn-primary" data-toggle="modal" onclick="getDirections();" >
+					Get Directions
+				</button>
+			</form>
+		<% end %>
+		<div id="myMap">
+		</div>
+		<div id="directions_dialog" title="Directions">
+			<div id='itineraryDiv' style="position:relative; width:400px;">
+			</div>
+		</div>

@@ -1,0 +1,47 @@
+<% provide(:title, "Search by State") %>
+<% provide(:visfire, "true") %>
+
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="top-search-section">
+			<div id="tire-search-outer">
+				<h2>SHOP BY:</h2>
+				<%= render :partial => 'layouts/search_panel',
+						   :locals => {:id => "tire-search2"} %>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-outer">
+	<div id="search-by-state" class="container-inner">
+		<hr/>
+		
+		<div id="fluid-title">
+			<h1 class="orange">Find a Tire Store</h1>
+			<p>Find the Right Tire and Service at the Right Place. <span class="break">Find a Tire Store by State.</span></p>
+			<div class="clear"></div>
+		</div>
+				
+		<div id="results" class="row-fluid">
+			<ul class="span3">
+		
+		<%	i = 0
+			remain = @states.count
+			@states.each do |s| %>
+				<li><a class="state" href="/states/<%= s[1] %>"><%= s[0] %></a></li>
+			<%	i += 1
+				remain -= 1
+				if i == 13 && remain > 0
+					i = 0 %>
+			</ul>
+			<ul class="span3">
+			<% end %>
+		<% end %>
+		
+			</ul>
+		</div>
+	</div>
+</div>

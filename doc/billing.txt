@@ -1,0 +1,27 @@
+Customer sign up:
+
+free trial?
+credit card up front?
+
+-----------------------------------
+create stripe customer record (delay)
+
+if free trial?
+	subscribe to free trial with expiration date
+	create contract for free trial
+end
+
+create contract
+	- begins after free trial
+end
+
+if credit card up front?
+	go to cc_info
+	- should update existing stripe customer record with CC info
+end
+
+------------------------------------
+
+Create invoice on contract creation
+	If monthly, subscribe
+	If special, 

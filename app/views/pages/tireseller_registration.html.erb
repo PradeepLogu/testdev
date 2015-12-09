@@ -1,0 +1,122 @@
+<% provide(:title, 'Sign up') %>
+<% provide(:visfire, "true") %>
+<% @show_pricing = false %>
+
+<style>
+#registration-mid-part > div {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}	
+</style>
+
+<%= javascript_include_tag "video_page" %>
+<%= stylesheet_link_tag "video_page" %>
+<%= javascript_include_tag "jquery.fancybox" %>
+<%= stylesheet_link_tag "jquery.fancybox" %>
+<script>
+  $(document).ready(function() {
+    $(".various").fancybox({
+      maxWidth  : 800,
+      maxHeight : 600,
+      fitToView : false,
+      width   : '90%',
+      height    : '90%',
+      autoSize  : false,
+      closeClick  : false,
+      openEffect  : 'none',
+      closeEffect : 'none',
+      closeBtn : true
+    });
+  });
+</script>
+
+<div class="container-outer">
+  <div class="container-inner">
+
+    <div id="registration-mid-part">
+      <div id="heading-part">
+        <h1>Registration with <span>TreadHunter</span></h1>
+        <h5>To get started listing tires with TreadHunter, simply create a new login using your email address. Then you will be asked to select which plan to register for.</h5>
+      </div>
+
+      <div id="registration-mid-part-left">
+        <div class="form-part">
+          <div class="form-heading">
+            <h3>Free Membership</h3>
+            <p>To get started listing tires with TreadHunter</p>
+          </div>
+          <%= form_for @user, :url => { :action => "tireseller_create" }, 
+                              :html => { :method => :post },
+                              :validate => true do |f| %>
+
+            <%= f.label "First name" %>
+            <%= f.text_field :first_name %>
+
+            <%= f.label "Last name" %>
+            <%= f.text_field :last_name %>
+
+            <%= f.label :email %>
+            <%= f.text_field :email %>
+
+            <%= f.label :phone %>
+            <%= f.text_field :phone %>
+
+            <%= f.label :password %>
+            <%= f.password_field :password %>
+
+            <%= f.label :password_confirmation, "Re-enter password" %>
+            <%= f.password_field :password_confirmation %>
+
+            <%= label_tag "Do you have a referral code?" %>
+            <%= text_field_tag :referral_code %>
+
+            <%= f.submit "Sign up", :class => "btn" %>
+          <% end %>
+        </div>
+      </div>
+
+      <div id="registration-mid-part-right">
+        <div id="free-trial-offer" class="clearfix">
+          <h5>Free Trial Offer</h5>
+          You can try our Gold service for <%= free_trial_verbiage %> risk-free. We want to 
+		prove that TreadHunter drives customers right to your door. If, after 
+		<%= free_trial_verbiage %>, you don't wish to continue the Gold service, you will be 
+		automatically switched to a lifetime of FREE Silver service.
+        </div>
+
+        <h3>How it works </h3>
+        <p>To get started listing tires with TreadHunter, simply create a new login using 
+		  your email address. Then you will be asked to select which plan to register for.</p>
+        
+        <p>Still unsure about how or why to register?  This short video might help!  Just click 
+          <a class="various fancybox.iframe" 
+              href="http://www.youtube.com/embed/OM0v8Eo_x7g?autoplay=1"><u>this link</u></a> or the picture below to show the video.<br /> 
+          <a class="various fancybox.iframe" 
+              href="http://www.youtube.com/embed/OM0v8Eo_x7g?autoplay=1">
+              <img src="/assets/9ZhOmsHVrLY.png" style="width: 180px; height: 100px;"/>
+          </a>
+        </p>
+        <p>The rest of our help videos can be found at <u><%= link_to "this link", "/ut_help"%></u>.</p>
+
+        <h3>Private Seller - Now Completely Free! </h3>
+        <p>Private Sellers are individuals that may just a have one or two sets of tires to sell. Your name, address, email, and phone will be hidden from buyers. When a buyer is interested in placing a reservation for your tire(s), you will receive an email with the buyer's information.</p>
+
+        <h3>Public Seller </h3>
+        <p>Public Sellers have a storefront selling multiple sets of tires per month. We offer 2 service packages for public sellers: </p>
+
+        <h3>Silver - Free</h3>
+        <p>The TreadHunter Silver service is always free. Your store will be included when tire buyers search for stores in their area, and you will be able to enter information about your store to help your customers make an informed choice when finding tire service.</p>
+
+        <h3>Gold<% if @show_pricing %> - $99/month<% end %></h3>
+        <p><% if @show_pricing %>The Gold level of service costs $99 per month, and <% else %>The Gold Service<% end %> allows you an unlimited number
+          of tire listings. In addition, you will get your own website landing page, where your tires are available for viewing by buyers in your area, and you can customize with your own logo, and your own personal content and description of your store.</p>
+        <h3>Platinum<% if @show_pricing %> - $149/month<% end %> - 
+          <font style="font-size: 1.5em; color: red">Coming Soon!</font>
+        </h3>
+        <p>The Platinum level of service gives you a customizable storefront presence to let
+          you stand out from your competitors.  We are currently working on creating new
+          designs and the Platinum service will be available then.</p>
+      </div>
+    </div>
+  </div>
+</div>

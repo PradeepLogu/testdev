@@ -1,0 +1,21 @@
+<h1>Listing auto_years</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @auto_years.each do |auto_year| %>
+  <tr>
+    <td><%= link_to 'Show', auto_year %></td>
+    <td><%= link_to 'Edit', edit_auto_year_path(auto_year) %></td>
+    <td><%= link_to 'Destroy', auto_year, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Auto year', new_auto_year_path %>

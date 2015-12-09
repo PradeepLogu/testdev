@@ -1,0 +1,94 @@
+<% @title = "Edit Distributor Import (#{@distributor.distributor_name})" %>
+<% provide(:title, @title) %>
+
+<% provide(:visfire, "true") %>
+
+<%= stylesheet_link_tag "style-wide-form" %> 
+
+<style>
+	label.message {
+		display:inline!important;
+		padding-left: 5px!important;
+		color: red!important;
+		margin: 5px 0 0 10px!important;
+		font: 12px/22px 'proxima_nova_rgregular'!important;
+	}
+</style>
+
+	<script>
+	$(function() {
+		$('form').jqTransform();
+	});
+</script>
+
+<div class="main-slideshow-2">
+	<!--banner slider-->
+</div>
+
+<div id="searc-header">
+	<%= render 'layouts/header_visfire' %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+	<div id="search-content-inner2" class="clearfix">
+		<div id="search-main2">
+			<h2>Edit Distributor Info</h2>
+			<ul>
+				<li style="color: black;">Home /</li>
+				<li><a href="#">Edit Distributor Info</a></li>
+			</ul>
+		</div>
+		<%= form_for(@xref_rec, 
+					:url => {:action => :update, :controller => :tire_stores_distributors},
+					:validate => true) do |f| %>
+			<div id="edit-mid-part" class="clearfix">
+		        <div id="heading-part">
+		          <h1><span><%= @distributor.distributor_name %></span> Data Import</h1>
+		          <h5>If you are a customer of <b><%= @distributor.distributor_name %></b>, you can
+		          		request access credentials for their API.  Once you have these credentials, 
+		          		you may enter them on this page and set the frequency to import data, and we 
+		          		will automatically create listings for the manufacturers you specify here at 
+		          		the price set by your margins specified with 
+		          		<b><%= @distributor.distributor_name %></h5>
+		        </div>
+				<div id="edit-mid-part-left">
+					<div class="form-part">
+						<div class="form-heading">
+							<h3>Edit Distributor Info</h3>
+							<p>Modify your Distributor Login Info</p>
+						</div>
+		  				<%= f.hidden_field :tire_store_id %>
+		  				<%= f.hidden_field :distributor_id %>
+			  			<%= f.label :frequency_days, :style => "display: inline;" %>
+			  			<%= f.select(:frequency_days, valid_import_frequency, {}) %>
+						<%= f.label "API Username" %>
+						<%= f.text_field :username %>
+						<%= f.label "API Password" %>
+						<%= f.password_field :password %>
+						<%= f.label :password_confirmation %>
+						<%= f.password_field :password_confirmation %>
+					</div>
+				</div>
+				<div id="edit-mid-part-right">
+					<h3>Frequency</h3>
+					<p>
+						If you set a frequency of 30 days, 60 days, or 90 days, then this process 
+						will automatically <b>create or update</b> tire listings for all the sizes 
+						and tire models of the selected manufacturers.  If you have multiple
+						distributors and you have selected the same tire manufacturers for them, 
+						then the lowest price will be used for the tire listing.
+					</p>
+					<h3>Select which tire manufacturers to import</h3>
+					<% @distributor.tire_manufacturers_list.each do |manu| %>
+						<p>
+							<%= check_box_tag 'tire_manufacturers[]', manu.id, 
+									@xref_rec.tire_manufacturers.include?(manu.id.to_s),
+									:style => 'margin-left: 20px;' %><%= manu.name %>
+						</p>
+					<% end %>
+				</div>
+			</div>
+			<%= f.submit "Update" %>
+		<% end %>
+	</div>
+</div>

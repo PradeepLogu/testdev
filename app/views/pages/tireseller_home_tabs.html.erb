@@ -1,0 +1,398 @@
+<% provide(:title, "My Account") %>
+<% provide(:visfire, "true") %>
+<% provide(:nofooter, "") %>
+
+<%= javascript_include_tag "jquery.dataTables.min" %>
+<%= javascript_include_tag "dataTables.responsive" %>
+<%= javascript_include_tag "ddaccordian.js" %>
+<%= javascript_include_tag "fullcalendar/moment.min" %>
+<%= javascript_include_tag "fullcalendar/fullcalendar.min" %>
+<%= javascript_include_tag "fullcalendar/hashtable" %>
+<%= javascript_include_tag "jquery.form.min.js" %>
+<%= javascript_include_tag "modal_upgrade_to_premium" %>
+<!--<%= stylesheet_link_tag "http://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css" %>-->
+<%= stylesheet_link_tag "dataTables.responsive" %>
+<%= stylesheet_link_tag "jquery.dataTables.min" %>
+<%= stylesheet_link_tag "fullcalendar/fullcalendar" %>
+<%= stylesheet_link_tag "modal_upgrade_to_premium" %>
+
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+<script>
+	Stripe.setPublishableKey("<%= ApplicationHelper::stripe_public_key() %>");
+</script>
+<%= javascript_include_tag "connect_with_stripe_modal" %>
+
+<style>
+#cont-1-1, #cont-7-1 {
+	min-height: 400px;
+}
+
+#cont-2-1 {
+	min-height: 600px;
+}
+
+@media screen and (max-width: 986px) {
+	#registration-mid-part-left, #details-mid-part-left, #edit-mid-part-left {
+	    width: 100%!important;
+	}
+	#cont-2-1 {
+		min-height: 1100px;
+	}	
+}
+
+.reg-img {
+    max-height: 150px;
+}
+
+
+/*.dataTables_filter, table.display thead th, table.display tbody tr td, #appointments-table_wrapper {
+	font-family: 'proxima_novasemibold';
+	color: black;
+}*/
+table.display thead th {
+	text-align: center;
+}
+table.display tbody tr td {
+	font-size: 14px;
+	text-align: center;
+}
+table.display tbody tr td a.link {
+	color: #F05A29;
+	font-weight: bold;
+}
+table.display tbody tr td.left {
+	text-align: left;
+}
+table.display tbody tr td.right {
+	text-align: right;
+}
+table.display tbody tr td.even {
+    background-color: #fff;
+}
+
+table.display tbody tr td.odd {
+    background-color: #DEDEDE;
+}
+
+.ecomm-image {
+    vertical-align: middle;
+    max-width: 25px;
+    max-height: 25px;
+}
+
+.dbl-height {
+    line-height: 26px!important;
+}
+
+
+div.order-tires, div.order-date {font-size: 0.90em;}
+
+@media screen and (max-width: 480px) {
+    .dataTable { max-width: 320px;}
+    #dialog-order { font-size: 0.70em;}
+}
+
+
+
+h1.header {
+	margin: 10px 0;
+}
+
+
+.left-buttons {
+	float: left;
+}
+.right-buttons {
+	float: right;
+}
+
+input.highlight {
+  box-shadow: 0 0 5px rgba(255, 0, 0, 1);
+  padding: 3px 0px 3px 3px;
+  margin: 5px 1px 3px 0px;
+  border: 1px solid rgba(255, 0, 0, 1);
+}
+
+table thead tr th {
+	font-family: "HelveticaLTStd-BlkCond";
+}
+
+table {
+	width: 100%;
+}
+
+</style>
+
+<%= javascript_include_tag "connect_with_stripe_ready.js" %>
+<script>
+	$(document).ready(stripe_ready);
+</script>
+
+<script type="text/javascript">
+	var ddaccordionsetting = {
+	    headerclass: "promo-header",
+	    contentclass: "content",
+	    revealtype: "click",
+	    mouseoverdelay: 200,
+	    collapseprev: true,
+	    defaultexpanded: [1],
+	    onemustopen: false,
+	    animatedefault: false,
+	    persiststate: true,
+	    toggleclass: ["", "openheader"],
+	    togglehtml: ["prefix", "", ""],
+	    animatespeed: "fast",
+	    oninit:function(headers, expandedindices){
+	        //do nothing
+	    },
+	    onopenclose:function(header, index, state, isuseractivated) {
+	        //do nothing
+	    }
+	};
+
+	var curTab = "";	//id of currently active tab
+
+	var stripe_init = false;
+
+	$(function() {
+		$("#page-tabs a, #inner-tabs a").click(function (e) {
+			e.preventDefault();
+			var $this = $(this);
+			var id = $this.attr("id");
+			curTab = id;
+			$this.siblings().removeClass("activeLink");
+			$this.addClass("activeLink");
+			var cont = $("#"+id+"-1");
+			cont.siblings().addClass("hide");
+			cont.removeClass("hide");
+			
+			var fn = $this.attr('data-fn');
+			if (fn)
+				load_data(fn, id);
+		});
+		
+		$("#account-main").on("click", "#create-storefront", function (e) {
+			e.preventDefault();
+			load_data("edit_store", curTab, "");
+		});
+		
+		$("#account-main").on("click", "a.edit-store", function (e) {
+			e.preventDefault();
+			var storeId = $(this).attr("id");
+			if (storeId)
+				load_data("edit_store", curTab, storeId);
+		});
+
+		<% if @start_tab == :storefront %>
+			curTab = "inner-cont-2";
+			load_data("edit_store", curTab, "");
+		<% elsif current_user.account.address1 == "not set" %>
+			$("#inner-cont-2").click();
+		  	jQuery.gritter.add({
+				image: '/assets/error.png',
+				title: 'Update Account',
+				text: 'Please update your account information'
+			}); 		
+		<% elsif @start_tab == "my_stores" %>
+			$("#inner-cont-3").click();
+		<% end %>
+	});
+
+	function reload_current_tab(storeID) {
+		storeID = storeID || "";
+	    var fn = $("#"+curTab).attr("data-fn");
+	    load_data(fn, curTab, storeID);
+	}
+
+	function load_data(fn, tabID, storeID) {
+		storeID = storeID || "";
+		$("#" + tabID + "-1").html(
+			'<center><br/><img src="/assets/loading.gif"/><br/><p>Loading...</p></center>'
+		);
+		$.ajax({
+			type: "GET",
+			dataType: "html",
+	        data: {tire_store_id: storeID},
+			url: "/ajax/" + fn + (fn != "edit_store" ? "_table" : ""),
+			success: function(result) {
+				$("#" + tabID + "-1").html(result);
+
+				var $table = $("#" + fn + "-table");
+
+				var search_enabled = false; //(fn == "appointments" || fn == "listings");
+				var sorting_disabled_columns;
+
+				if (fn == "appointments" && false) {
+					sorting_disabled_columns = [0];
+				} else {
+					sorting_disabled_columns = [];
+					$table.find("th").each(function (i, el) {
+						var $e = $(el);
+						if ($e.text() == "" || $e.hasClass("nosort"))
+							sorting_disabled_columns.push(i);
+					});
+				}
+				$table.DataTable({
+					paging: false,
+					info: false,
+	                responsive: true,
+	                aoColumnDefs: [{ "bSortable": false, "aTargets": sorting_disabled_columns}],
+	                bSortClasses: false,
+					searching: search_enabled,
+				});
+
+				if (fn == "edit_store" && !stripe_init) {
+					stripe_ready();
+					stripe_init = true;
+				}
+			},
+			error: function(result) {
+				$("#" + tabID + "-1").html("<p>Error loading data...</p>");
+			}
+		});
+	}
+</script>
+
+<div id="dialog-lookup-store" class="th-dialog" title="" style="display:none;">
+	<div id="fade" style="display: none;"></div>
+
+	<h4>Lookup Store</h4>
+	<p>
+		We can pre-fill a lot of information about your store if you provide
+		zipcode and phone number.
+	</p>
+	<%= label_tag "Store Zipcode" %>
+	<%= text_field_tag :zipcode, nil, 
+			{:class => "zip", :size => 5, :maxlength => 5, :style => "max-width: 100px"} %>
+	<%= label_tag "Store Phone" %>
+	<%= text_field_tag :phone, nil, 
+			{:class => "phone", :size => 10, :maxlength => 15, :style => "max-width: 150px"} %>
+	<hr />
+	<a href="#" class="btn huge" id="lookup-store"
+		onclick="lookup_zip_and_phone();">LOOKUP STORE</a>
+	<a href="#" class="btn huge" id="cancel-lookup" 
+		onclick="$('#dialog-lookup-store').dialog('close');">CANCEL
+	</a>
+</div>
+
+<div class="container-outer">
+	<div id="my-account-page" class="container-inner">
+		<h1 class="orange header">My Account</h1>
+		
+		<% if super_user? %>
+            <p>
+                <b>Current Account:</b>
+                <%= current_user.account.name %>&nbsp;&nbsp;
+                <button class="btn btn-primary" onclick="window.location.href = '<%= accounts_path %>';">Select Another</button>
+                <hr/>
+            </p>
+        <% end %>
+		
+		<div id="page-tabs" class="page-tabs tabs5 clearfix">
+			<a href="javascript:void(0);" class="tabLink first activeLink" id="cont-1">MY ACCOUNT</a>
+			<a href="javascript:void(0);" class="tabLink middle" id="cont-2" data-fn="appointments">APPOINTMENTS</a>
+			<a href="javascript:void(0);" class="tabLink middle" id="cont-3" data-fn="promotions">PROMOTIONS</a>
+			<a href="javascript:void(0);" class="tabLink middle" id="cont-4" data-fn="users">USERS</a>
+			<a href="javascript:void(0);" class="tabLink" id="cont-5" data-fn="searches">SEARCHES</a>
+		</div>
+		
+		
+		<div id="account-main">
+
+			<div class="tabcontent-1" id="cont-1-1">
+				<div id="inner-tabs" class="page-tabs inner-tabs tabs4 clearfix">
+					<a href="javascript:void(0);" class="tabLink first activeLink" id="inner-cont-1">MY PROFILE</a>
+					<a href="javascript:void(0);" class="tabLink middle" id="inner-cont-2">ACCOUNT INFO</a>
+					<a href="javascript:void(0);" class="tabLink middle" id="inner-cont-3" data-fn="stores">MY STORES</a>
+					<a href="javascript:void(0);" class="tabLink" id="inner-cont-4" data-fn="listings">MY TIRES</a>
+				</div>
+				
+				<div id="my-account-tabs">
+					<div class="innertabcont-1" id="inner-cont-1-1">
+						<div id="edit-profile-form">
+							<h5 class="edit-title">EDIT PROFILE DETAILS</h5>
+		            		<%= form_for current_user, :validate => true do |f| %>
+								<%= f.label :first_name %>
+								<%= f.text_field :first_name %>
+								<%= f.label :last_name %>
+								<%= f.text_field :last_name %>
+								<%= f.label :email %>
+								<%= f.text_field :email %>
+								<%= f.label :phone %>
+								<%= f.text_field :phone, value: current_user.formatted_phone %>
+								<%= f.label :password, "New Password" %>
+								<%= f.password_field :password %>
+								<%= f.label :password_confirmation, "Re-enter password" %>
+								<%= f.password_field :password_confirmation %>
+								
+								<div class="form-box-submit">
+								  <%= f.submit "SUBMIT", :class => "btn" %>
+								</div>
+							<% end %>
+						</div>
+					</div>
+					
+					<div class="innertabcont-1 hide" id="inner-cont-2-1">
+						<div id="edit-profile-form">
+							<h5 class="edit-title">EDIT ACCOUNT INFORMATION</h5>
+		            		<%= form_for @account, :validate => true do |f| %>
+								<%= f.label :name %>
+								<%= f.text_field :name %>
+								<%= f.label :address1 %>
+								<%= f.text_field :address1 %>
+								<%= f.label :address2, "'Suite 103', etc. (ok if blank)" %>
+								<%= f.text_field :address2 %>
+								<%= f.label :city %>
+								<%= f.text_field :city %>
+								<%= f.label :state %>
+								<%= f.text_field :state %>
+								<%= f.label :zipcode %>
+								<%= f.text_field :zipcode %>								
+								<%= f.label :billing_email %>
+								<%= f.text_field :billing_email %>
+								<%= f.label :phone %>
+								<%= f.text_field :phone, value: current_user.formatted_phone %>
+								
+								<div class="form-box-submit">
+								  <%= f.submit "SUBMIT", :class => "btn" %>
+								</div>
+							<% end %>
+						</div>						
+					</div>
+
+					<div class="innertabcont-1 hide" id="inner-cont-3-1">
+						<p>My Stores</p>
+					</div>
+					
+					<div class="innertabcont-1 hide" id="inner-cont-4-1">
+						<p>My Tires</p>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="tabcontent-1 hide" id="cont-2-1">
+				<p>Appointments</p>
+			</div>
+			<div class="tabcontent-1 hide" id="cont-3-1">
+				<p>Promotions</p>
+			</div>
+			<div class="tabcontent-1 hide" id="cont-4-1">
+				<p>Users</p>
+			</div>
+			<div class="tabcontent-1 hide" id="cont-5-1">
+				<p>Reviews</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<% if @start_tab == :storefront %>
+<script>
+	$("#inner-tabs a").removeClass("activeLink");
+	$("#inner-cont-2").addClass("activeLink");
+	$(".innertabcont-1").addClass("hide");
+	$("#inner-cont-2-1").removeClass("hide");
+</script>
+<% end %>

@@ -1,0 +1,49 @@
+<a id="tire_listing_<%= @tire_listing.id %>" 
+	href="<%= url_for @tire_listing %>" 
+	data-fjs="true">
+
+	<div id="results-item" class="results-item">
+		<div class="tire-manufacturer" style="text-align: center; font-size: 1.2em;">
+			<i>Brands vary</i>
+		</div>
+		<div class="tire-image">
+			<div><img src="/assets/generic.png"></img></div>
+		</div>
+		<div class="tire-details">
+			<div style="font-weight: bold; font-style: italic; font-size: 0.8em;">
+				<%= @tire_listing.gendesc %>
+			</div>
+			<div class=""></div>
+			<div style="bottom: 0;">
+				<div class="qty-treadlife">
+        			<% if @tire_listing.quantity > 0 && @tire_listing.quantity < 4 %>
+						Quantity: <div class="tire-quantity"><%= @tire_listing.quantity %></div>
+        			<% else %>
+						<div class="tire-quantity">&nbsp;</div>
+        			<% end %>
+					<div class="tire-treadlife">&nbsp;</div>
+				</div>
+				<div class="tire-price">
+					<span class="price-data">
+						$<%= @tire_listing.discounted_price.to_s %>
+					</span>
+					<br>
+					<font size="1">
+						<% if @tire_listing.includes_mounting %>
+							(inc. mounting)
+						<% else %>
+							mounting: $<%= @tire_listing.mount_price.to_s %>
+						<% end %>
+					</font>
+				</div>
+			</div>
+			<div class="hidden-treadlife" style="visibility: hidden; width:0px; float:left;">
+				<%= @tire_listing.generic_tire_listing.treadlife_min %>
+			</div>
+			<div class="hidden-updated" style="visibility: hidden; width:0px; float:left;">
+				<%= @tire_listing.updated_at %>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+</a>

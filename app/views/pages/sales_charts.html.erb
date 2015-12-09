@@ -1,0 +1,27 @@
+<script src='https://www.google.com/jsapi'></script>
+
+<style>
+	div#weekly_order_amount div div div svg g g text,
+	div#weekly_order_count div div div svg g g text,
+	div#weekly_tires_count div div div svg g g text {
+		font-size: 0.7em;
+	}
+</style>
+
+<div id='weekly_order_amount'></div>
+<%= render_chart(@weekly_order_amount, 'weekly_order_amount') %>
+
+<div id='weekly_order_count'></div>
+<%= render_chart(@weekly_order_count, 'weekly_order_count') %>
+
+<div id='weekly_tires_count'></div>
+<%= render_chart(@weekly_tires_count, 'weekly_tires_count') %>
+
+<div id='monthly_order_amount'></div>
+<%= render_chart(@monthly_order_amount, 'monthly_order_amount') %>
+
+<div id='monthly_order_count'></div>
+<%= render_chart(@monthly_order_count, 'monthly_order_count') %>
+
+<div id='monthly_tires_count'></div>
+<%= render_chart(@monthly_tires_count, 'monthly_tires_count') %>

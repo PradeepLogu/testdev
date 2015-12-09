@@ -1,0 +1,115 @@
+<% provide(:title, 'Congratulations!') %>
+
+<% provide(:visfire, "true") %>
+
+<!-- Google Code for Single Login Conversion Page -->
+<script type="text/javascript">
+	var google_conversion_id = 992255746;
+	var google_conversion_language = "en";
+	var google_conversion_format = "1";
+	var google_conversion_color = "ffffff";
+	var google_conversion_label = "M7hcCKaJ_QcQgr6S2QM";
+	var google_conversion_value = 0;
+	var google_remarketing_only = false;
+</script>
+
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+
+<noscript>
+	<div style="display:inline;">
+		<img height="1" 
+			width="1" 
+			style="border-style:none;" 
+			alt="" src="//www.googleadservices.com/pagead/conversion/992255746/?value=0&amp;label=M7hcCKaJ_QcQgr6S2QM&amp;guid=ON&amp;script=0"/>
+	</div>
+</noscript>
+
+<div class="main-slideshow-2">
+	<!--banner slider-->
+</div>
+
+<style>
+	.btn-vf {
+		width: 180px;
+	}
+</style>
+
+<div id="searc-header">
+	<%= render 'layouts/header_visfire' %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+	<div id="search-content-inner2" class="clearfix">
+		<div id="search-main2">
+			<h2>Registration Successful</h2>
+			<ul>
+				<li>Home /</li>
+				<li><a href="#">Successful Registration</a></li>
+			</ul>
+		</div>
+		<div id="registration-mid-part" class="clearfix">
+			<div id="registration-mid-part-left">
+				<h2>Congratulations - you have registered with TreadHunter.  What Now?</h2>
+				<p>
+					<% if @tire_store.private_seller? %>
+						As a private seller, you will need to create a Tire Listing that describes your
+						tires, the price of the tires, etc.
+						<%= link_to "List Tires", 
+								"/tire_listings/new?tire_store_id=#{@tire_store.id}", :class => "btn-vf" %>
+						<br />
+						If you do not wish to list your tires today, that's fine - you can do it later
+						through the My TreadHunter page.
+						<%= link_to "Not Today", "/myTreadHunter", :class => "btn-vf" %>
+					<% else %>
+						Wait!  You will have a storefront on TreadHunter, but to fully realize
+						the benefit of TreadHunter you should add some tires to your inventory today.
+						<br /><br />
+						<% if @registration.store_type.downcase == "used" %>
+							Since you sell used tires, the easiest way to add inventory is through
+							bulk listings.  This is when you have a stack of various branded tires of
+							a particular size for the customer to choose from at a set price.	
+							<%= link_to "List Bulk Used Tires",
+								"/generic_tire_listings/new?tire_store_id=#{@tire_store.id}", :class => "btn-vf" %>
+							<br />
+							You can also list any new tires you carry.  You can enter your prices for every
+							size of a selected tire model, or enter your prices for every model of a selected size.
+							<%= link_to "List New Tires", 
+								"/new_multiple?tire_store_id=#{@tire_store.id}", :class => "btn-vf" %>
+							<br />
+							If you do not wish to list your tires today, that's fine - you can do it later
+							through the My TreadHunter page.
+							<%= link_to "Not Today", "/myTreadHunter", :class => "btn-vf" %>
+						<% else %>
+							Since you sell new tires, the easiest way to add inventory is through
+							"multiple listings".  You can enter your prices for every
+							size of a selected tire model, or enter your prices for every model 
+							of a selected size.
+							<%= link_to "List New Tires", 
+								"/new_multiple?tire_store_id=#{@tire_store.id}", :class => "btn-vf" %>
+							<br />
+							If you also sell used tires, the easiest way to add inventory is through
+							bulk listings.  This is when you have a stack of various branded tires of
+							a particular size for the customer to choose from at a set price.	
+							<%= link_to "List Bulk Used Tires",
+								"/generic_tire_listings/new?tire_store_id=#{@tire_store.id}", :class => "btn-vf" %>
+							<br />
+							If you do not wish to list your tires today, that's fine - you can do it later
+							through the My TreadHunter page.
+							<%= link_to "Not Today", "/myTreadHunter", :class => "btn-vf" %>
+						<% end %>
+					<% end %>
+				</p>
+			</div>
+			<div id="registration-mid-part-right">
+				<h2>What if I need help?</h2>
+				<p>
+					Please call and leave a message at: (858) 848-7323<br />
+					Send us an email at: <%= mail_to 'support@treadhunter.com' %><br />
+					Or use our online form at: 
+					<%= link_to('Contact Us', {:controller => "contact_us", :action => "new"}) %>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>

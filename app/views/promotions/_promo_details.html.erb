@@ -1,0 +1,50 @@
+<hr />
+<div id="promo-details-image">
+	<center><img src="<%= promotion.promo_image_url %>"></center>
+</div>
+<div id="promo-info" class="promotion-detail">
+	<div id="promo-info-1">
+		<h2><b><%= promotion.summary %></b></h2>
+		<i><%= promotion.remaining_time %></i>
+	</div>
+
+	<% if @tire_store %>
+		<div class="promo-store-info">
+			<h3><%= tire_store.name %></h3>
+			<p><%= tire_store.address1 %><br><%= tire_store.address2 %><br>
+				<%= tire_store.city%>, <%= tire_store.state %> <%= tire_store.zipcode %><br>
+				<%= tire_store.formatted_phone_number %>
+			</p>
+		</div>
+	<% end %>
+</div>
+
+<div class="deals-container clear">
+	<h3>The Details</h3>
+	<%= simple_format promotion.description %>
+	<br />
+	<br />
+	<% if !promotion.promo_url.blank? %>
+		<h3>More Information</h3>
+		<a href="<%= promotion.promo_url %>" target="_blank">Click for more information</a>
+		<br />
+		<br />
+	<% end %>
+	<% if promotion.promo_attachment.exists? %>
+		<h3>Rebate Form</h3>
+		<a href="<%= promotion.promo_attachment.url %>" target="_blank">Click to download rebate form</a>
+		<br /><br />
+	<% end %>
+	<% @tire_model_infos = promotion.tire_model_infos_list %>
+	<% if @tire_model_infos.size > 0 %>
+		<h3>Eligible Tires</h3>
+		<% @tire_model_infos.each do |tm| %>
+			<div class="span1">
+				<%= link_to tm.tire_model_name, "/brands/models/#{tm.id}" %>
+			</div>
+		<% end %>
+	<% end %>
+</div>
+
+<div class="clear">
+</div>

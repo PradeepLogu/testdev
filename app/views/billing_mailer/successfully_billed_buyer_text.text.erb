@@ -1,0 +1,4 @@
+TreadHunter has successfully charged your credit card ending in <%= @card_last_4 %> in the amount of <%= number_to_currency @order.total_order_price %>.
+<% if @appointment.nil? %>
+If you haven't requested an appointment with the shop, please use the link at <%= @appt_link %>.
+<% end %>

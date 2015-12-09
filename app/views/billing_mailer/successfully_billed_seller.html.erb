@@ -1,0 +1,60 @@
+Dear <%= @tire_store.contact_email %>,<br />
+<br />
+You have received a new order through TreadHunter.com.  The amount of <%= number_to_currency @order.total_retained_by_store %> has been transferred to your <%= @account_type %><%= @card_last_4.blank? ? "" : " ending in (#{@card_last_4})" %>. Please note that it may take up to 48 hours before the funds are available.  A breakout of the transfer is shown below:<br />
+
+<br />
+Store Name: <%= @tire_store.name %><br />
+Store Address: <%= @tire_store.full_address %><br />
+<br />
+
+<%= render :partial => "layouts/billing_mailer/seller_order_details_html", 
+			:locals => {:@transfer_or_refund => 'Transferred'} %>
+
+<br />
+<br />
+The tires being installed are:<br />
+<b><%= @tire_listing.stock_number.blank? ? "" : "Stock #: #{@tire_listing.stock_number} " %>
+	<%= @order.tire_quantity %> <%= @tire_listing.sizestr %> <%= @tire_listing.tire_manufacturer_name %> <%= @tire_listing.tire_model_name %> <%= @tire_listing.tire_model.manu_part_num.blank? ? "" : "Part#: #{@tire_listing.tire_model.manu_part_num}" %>
+</b>
+<br />
+The buyer is:<br />
+Name: <%= @order.buyer_name %><br />
+Phone: <%= @order.formatted_phone %><br />
+Email: <%= @order.buyer_email %><br />
+<br />
+<% if !@appointment.nil? %>
+	<% if !@appointment.confirmed_flag? %>
+		The user has requested an appointment to have these tires installed.  The times requested are:<br />
+		<br />
+		<%= @appointment.primary_request_time %><br/>
+		<br />
+		<%= @appointment.secondary_request_time %><br />
+		<br />
+		<b>It is very important that you do the following as soon as possible:
+			<ul>
+				<li>Confirm one of the user's requested appointment times, and</li>
+				<li>Ensure that you have the requested tires in stock at that time</li>
+			</ul>
+		</b>
+		<br />
+		To confirm the appointment, use the following link: <%= @confirm_appt_link %><br />
+	<% else %>
+		You have confirmed their requested appointment time of: <b><%= @appointment.confirm_time %></b>.  It is very important that you do the following as soon as possible:
+			<ul>
+				<li>Ensure that you have the requested tires in stock at the requested appointment time</li>
+			</ul>
+		</b>
+	<% end %>
+	<% if !@appointment.services_list.join(", ").blank? %>
+		In addition, the customer has requested the following services for their vehicle.  These services <b>have not</b> been paid for so you should collect payment upon rendering the services.<br />
+		<br />
+		<%= @appointment.services_list.join(", ") %><br />
+	<% end %>
+<% else %>
+	The user has not yet requested an appointment to have these tires installed.  If you do not receive an appointment request from TreadHunter soon, you should contact the customer via email or telephone to make the appointment.<br />
+<% end %>
+<br />
+Thank you for letting TreadHunter find customers for your store.  Please let us know if there is any way we can make things even better for you.<br />
+<br />
+Sincerely,<br />
+The TreadHunter Team<br />

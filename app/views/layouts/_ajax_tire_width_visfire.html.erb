@@ -1,0 +1,41 @@
+<div class="hover" id="tire_widths">
+  <select class="tires" 
+          id="width" 
+          name="width" >
+    <option value="">Width</option>
+    <% @diameters.each do |d| %>
+      <% if d.diameter == session[:diameter] %>
+        <option selected="selected" value="<%= d.diameter %>"><%= d.diameter %></option>
+      <% else %>
+        <option value="<%= d.diameter %>"><%= d.diameter %></option>
+      <% end %>
+    <% end %>
+  </select>
+  <script>
+    $('select#width').change(function() {
+      v = $(this).attr('value');
+      if(typeof v == 'undefined')
+        v = $('select#width').val();
+      $.ajax({
+        type: "GET",
+        dataType: "html",
+        url: "/ajax/update_tire_ratios_visfire",
+        data: {width: $(this).attr('value')},
+        success:function(result){
+          $("div#tire_ratios").html(result);
+          fix_select2('select#ratio', 30);
+        } 
+      });
+      $.ajax({
+        type: "GET",
+        dataType: "html",
+        url: "/ajax/update_tire_wheeldiameters_visfire",
+        data: {ratio: 0},
+        success:function(result){
+          $("div#tire_wheeldiameters").html(result);
+          fix_select2('select#wheeldiameters', 20);
+        } 
+      });
+    });
+  </script>
+</div>

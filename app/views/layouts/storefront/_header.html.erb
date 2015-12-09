@@ -1,0 +1,50 @@
+<style>
+  #header-brand {
+    background: #white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    height: 24px;
+    float: right;
+    text-align: right;
+    display: inline;
+  };
+</style>
+
+<%= javascript_include_tag "tabs" %>
+
+<%= stylesheet_link_tag "tire_listings" %>
+<%= javascript_include_tag "tabStoreFront" %>
+
+<% if !in_storefront? %>
+  <%= stylesheet_link_tag "tabbedContent" %>
+  <%= javascript_include_tag "tabbedContent" %>
+<% end %>
+
+<%= yield :head %>
+  <header class="navbar-branding">
+    <nav>
+      <div id="header-brand" style="color: white;">
+        <% if signed_in? %>
+          <%= link_to "Sign out", signout_path, method: "delete" %>
+        <% else %>
+          <%= link_to "Sign in", signin_path %>
+        <% end %>
+      </div>
+    </nav>
+  </header>
+
+  <% if !@tire_store.branding.nil? && @tire_store.branding.logo.exists? %>
+    <div class="logo">
+      <%= image_tag(@tire_store.branding.logo.url, :style => 'max-width: 100%;') %>
+    </div>
+  <% else %>
+    <!-- <img src="<%= @default_leftlogo %>"><img src="<%= @default_rightlogo %>"> -->
+    <div style="padding: 0.2em;" class="main">
+      <div>
+        <%= render 'layouts/storefront/store_information' %>
+      </div>
+    </div>
+  <% end %>

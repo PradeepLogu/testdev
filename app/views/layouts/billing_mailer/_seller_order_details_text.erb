@@ -1,0 +1,15 @@
+Description                          Quantity     Price ea.      Total
+<%= @order.tire_listing.short_description.truncate(35).ljust(35) %> <%= @order.tire_quantity.to_s.rjust(9) %> <%= (number_to_currency @order.tire_ea_price).rjust(13) %> <%= (number_to_currency @order.total_tire_price).rjust(10) %>
+<%= "Sales Tax on tires".ljust(35) %> <%="".rjust(9) %> <%= ("").rjust(13) %> <%= (number_to_currency @order.sales_tax_on_tires, :unit => '').rjust(10) %>
+<%= "Tire Installation".ljust(35) %> <%= @order.tire_quantity.to_s.rjust(9) %> <%= (number_to_currency @order.tire_ea_install_price).rjust(13) %> <%= (number_to_currency @order.total_install_price, :unit => '').rjust(10) %>
+<%= "Sales Tax on Installation".ljust(35) %> <%="".rjust(9) %> <%= "".rjust(13) %> <%= (number_to_currency @order.sales_tax_on_tires, :unit => '').rjust(10) %>
+<%= "Sales Tax on installation".ljust(35) %> <%="".rjust(9) %> <%= "".rjust(13) %> <%= (number_to_currency @order.sales_tax_on_installation, :unit => '').rjust(10) %>
+<%= "TreadHunter Consumer Convenience Fee".ljust(35) %> <%="".rjust(9) %> <%= "".rjust(13) %><%= (number_to_currency @order.th_user_fee, :unit => '').rjust(10) %>
+<%= "Sales Tax on TH Consumer Conv. Fee".ljust(35) %> <%="".rjust(9) %> <%= "".rjust(13) %> <%= (number_to_currency @order.th_sales_tax_collected, :unit => '').rjust(10) %>
+----------------------------------------------------------------------
+<%= "Total Charged To Consumer".ljust(35) %> <%="".rjust(9) %> <%= ("").rjust(13) %> <%= (number_to_currency @order.total_order_price).rjust(10) %>
+<%= "TreadHunter Consumer Convenience Fee".ljust(35) %> <%="".rjust(9) %> <%= ("").rjust(13) %><%= (number_to_currency (@order.th_user_fee * -1), :unit => '').rjust(10) %>
+<%= "Sales Tax on TreadHunter Consumer Convenience Fee".ljust(35) %> <%="".rjust(9) %> <%= (number_to_currency (@order.th_sales_tax_collected * -1), :unit => '').rjust(10) %>
+<%= "TreadHunter Retailer Processing Fee".ljust(35) %> <%="".rjust(9) %> <%= ("").rjust(13) %> <%= (number_to_currency (@order.th_processing_fee * -1), :unit => '').rjust(10) %>
+----------------------------------------------------------------------
+<%= "Total Amount #{@transfer_or_refund}".ljust(35) %> <%="".rjust(9) %> <%= ("").rjust(13) %> <%= (number_to_currency @order.total_retained_by_store).rjust(10) %>

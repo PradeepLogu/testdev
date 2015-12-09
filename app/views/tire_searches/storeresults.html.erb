@@ -1,0 +1,169 @@
+<% provide(:title, 'Search Results') %>
+<% provide(:visfire, "true") %>
+
+<%= javascript_include_tag "jquery.infinite-scroll-helper.js" %>
+<%= javascript_include_tag "jquery.lazyload.min.js" %>
+<%= javascript_include_tag "popup.js" %>
+
+<script>
+$(function () {
+  $("img.lazy").show().lazyload({effect : "fadeIn"});
+
+  $("#change-zip").click(function (e) {
+  	e.preventDefault();
+  	var $form = $("#search-resubmit-form");
+
+  	$("#dialog-zipcode").dialog({
+  	  modal: true
+  	});
+	$("#zipcode-dialog-form").submit(function (e) {
+	  e.preventDefault();
+	  var $zipform = $(this);
+	  var zip = $zipform.find("#dialog-locationstr").val();
+	  if (/^\d{5}$/.test(zip)) {
+	    $zipform.find(".error-msg").hide();
+	    $("#dialog-zipcode").dialog("close");
+	    $form.find("#tire_search_locationstr").val(zip);
+	    //$form.submit();					<-- somehow this produces a javascript error
+	    $form.find("#submit").click();
+	  } else {
+	    $zipform.find(".error-msg").show();
+	  }
+	  return false;
+	});
+  });
+  
+	var pageCount;
+    var async_mode = true;
+
+    $('div#loader').infiniteScrollHelper({
+        loadMore: function(page) {
+            pageCount = page;
+            $('div#loader').html('<center><img src="/assets/loading.gif"/></center>');
+            <% if @tire_search.nil? %>
+                ajax_url = "/ajax/load_tiresearch_records/?id=<%= @tire_search.id %>&" + FilterQS + "&page=" + page;
+            <% else %>
+                ajax_url = "/ajax/load_tiresearch_stores?id=<%= @tire_search.id %>&page=" + page;
+            <% end %>
+            $.ajax({url: ajax_url,
+                success: function(result) {
+                    $('div#loader').html('');
+	                // if we didn't get anything back, we're out of data.
+	                if (result.length == 0) {
+	                  //$('#search_results').infiniteScrollHelper('destroy');
+	                  //$('div#next-page').text('');
+	                }
+	                else {
+	                  // insert the data here
+	                  $('#tire-stores #listing').append(result);
+	
+	                  $("img.lazy").show().lazyload({effect : "fadeIn"});
+	                }
+                }, 
+                error: function(result) {
+                    $('div#loader').html('');
+                },
+                async: async_mode});
+        },
+        doneLoading: function(pageCount) {
+            // $('#search_results').infiniteScrollHelper('destroy');
+            //alert("done - " + pageCount);
+            async_mode = true;
+            return true;
+        },
+        bottomBuffer: 80
+    });
+});
+
+//Restructure the DOM when switching between desktop and mobile size
+addMobileLayoutConverter(function () {
+	$(".store").each(function () {
+		var $this = $(this);
+		$this.find(".mobile-btn-container").append( $this.find(".inventory-btn") );
+	});
+}, function () {
+	$(".store").each(function () {
+		var $this = $(this);
+		$this.find(".btn-container").append( $this.find(".inventory-btn") );
+	});
+});
+</script>
+
+
+<% if signed_in? && false %>
+    <%= render :partial => 'layouts/saved_search_modal', 
+               :locals => {:tiresearch => @tire_search, :id => '' } %>
+<% end %>
+
+<%= render :partial => 'layouts/modal_enter_zipcode',
+           :locals => {:@default_locationstr => ''} %>
+
+
+<div class="container-outer">
+	<div id="tire-store-results-page" class="container-inner">
+		<div id="store-results-top" class="row-fluid">
+			<div class="span9 left-content">
+				<h1 class="orange">Tire Stores near <%= @tire_search.geo_level %></h1>
+				<!-- <p>Lorem ipsum.</p> -->
+			</div>
+		
+			<div class="span3 right-content">
+				<div id="change-params"><span>CHANGE</span> <a href="#" id="change-zip">ZIP CODE</a></div>
+				
+				<div><a href="/tire_size" class="btn black-btn" id="search-by-tire">SEARCH BY TIRE</a></div>
+				<div><a href="/car_type" class="btn black-btn" id="search-by-car">SEARCH BY CAR</a></div>
+				<div><a href="/brands" class="btn black-btn" id="search-by-brand">SEARCH BY BRAND</a></div>
+			</div>
+		</div>
+		
+		<div id="tire-stores" class="stores">
+			<div class="top">
+				<%= form_for @tire_search,
+				        :method => "post",
+						:html => {:id => "search-resubmit-form"},
+						:url => {:action => "storeresults", 
+						   		 :controller => "tire_searches"} do |f| %>
+					<%= hidden_field_tag @form_mode, "resubmit" %>
+					<%= f.hidden_field :quantity %>
+					<%= f.hidden_field :locationstr %>
+					<%= f.hidden_field :new_or_used %>
+					<%= f.hidden_field :auto_manufacturer_id %>
+					<%= f.hidden_field :auto_model_id %>
+					<%= f.hidden_field :auto_year_id %>
+					<%= f.hidden_field :auto_options_id %>
+					<%= f.hidden_field :tire_manufacturer_id %>
+					<%= f.hidden_field :tire_model_id %>
+					<%= f.fields_for :tire_size, include_id: false do |ts| %>
+						<%= ts.hidden_field :ratio %>
+						<%= ts.hidden_field :diameter %>
+						<%= ts.hidden_field :wheeldiameter %>
+					<% end %>
+					
+					Found <%= @tire_search.tirestores.count %> tire stores within
+					<%= f.select :radius, options_for_select(TireSearch::RADIUS_CHOICES, @tire_search.radius.to_s) %>
+					miles of <%= @tire_search.geo_level %>
+	
+					<input type="submit" id="submit" class="btn" value="SUBMIT"/>
+					
+					<div class="search-description">
+						That carry <span class="criteria"><%= @tire_search.search_description %></span>
+					</div>
+				<% end %>
+				
+				<div id="sort-by">
+					<span>SORT BY</span> <a href="#" id="sortby-distance">DISTANCE</a> | <a href="#" id="sortby-name">NAME</a>
+				</div>
+			</div>
+			
+			<div id="listing">
+				<%= render :partial => 'layouts/paginated_store_results',
+						   :locals => {:@stores => @tire_search.paginated_tirestores_page(1),
+									   :@search_query => @tire_search.url_params('', true) + "&tire_search=#{@tire_search.id}",
+									   :@button_type => "contact", :page_no => 1} %>
+			</div>
+			<div id="loader-wrap">
+				<div id="loader"></div>
+            </div>
+		</div>
+	</div>
+</div>

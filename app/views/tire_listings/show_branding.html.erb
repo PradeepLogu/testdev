@@ -1,0 +1,36 @@
+<%= stylesheet_link_tag "carousel" %>
+<%= stylesheet_link_tag "bootstrap", media: "all" %>
+<%= stylesheet_link_tag "bootstrap-responsive" %>
+<%= stylesheet_link_tag "primary.css", :media => 'screen' %>
+<% content_for :page_specific_footer do %>
+	<% unless signed_in? and Reservation.where(:user_id => current_user.id, :tire_listing_id => @tire_listing.id).exists? %>
+		<a class="btn btn-large btn-success" data-toggle="modal" align="center" href="#reservation_modal" >
+			Reserve <%= @tire_listing.quantity == 1 ? 'this' : 'these' %> 
+			<%= "tire".pluralize(@tire_listing.quantity) %> for me!
+		</a>
+	<% else %>
+		<img src="/assets/reserved.png")>&nbsp;You reserved 
+			<%= @tire_listing.quantity == 1 ? 'this' : 'these' %> 
+			<%= "tire".pluralize(@tire_listing.quantity) %> at
+		<%= Reservation.find_by_user_id_and_tire_listing_id(current_user.id, @tire_listing.id).created_at.utc.getlocal.to_s(:long) %>
+	<% end %>
+<% end %>
+<% unless signed_in? and Reservation.where(:user_id => current_user.id, :tire_listing_id => @tire_listing.id).exists? %>
+	<%= render :partial => 'layouts/reservation_modal', 
+				:locals => {:tirelisting => @tire_listing, 
+							:reservation => Reservation.new(:user_id => signed_in? ? current_user.id : 0,
+															:tire_listing_id => @tire_listing.id,
+															:buyer_email => signed_in? ? current_user.email : '',
+														    :seller_email => @tire_listing.tire_store.contact_email,
+															:name => signed_in? ? current_user.first_name + ' ' + 
+																					current_user.last_name : "",
+															:phone => signed_in? ? current_user.phone : '',
+															:address => session[:street_address],
+															:city => session[:city],
+															:state => session[:state],
+															:zip => session[:zip],
+															:phone => session[:phone]
+															) } %>
+<% end %>
+<% provide(:title, @tire_listing.teaser) %>
+<%= ERB.new(@tire_listing.tire_store.branding.listing_html).result(binding).html_safe %>

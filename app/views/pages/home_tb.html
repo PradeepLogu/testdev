@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; width=device-width"/>
+<% if !Rails.env.production? %>
+  <meta name="robots" content="noindex">
+<% end %>
+<meta property="og:title" content="TreadHunter is your new and used tires search engine" />
+<meta property="og:description" content="Find new tires and used tires for sale at TreadHunter.com, and use TreadHunter to find stores near you. With TreadHunter, finding the best deal on tires is fast and easy." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://www.treadhunter.com" />
+<meta property="og:image" content="http://www.treadhunter.com/assets/homepage/logo.jpg" />
+<meta property="og:site_name" content="TreadHunter.com" />
+<meta content="TreadHunter is your new and used tires search engine.  List your tires with TreadHunter to sell them quickly, or use TreadHunter to find tires for your vehicle." name="description" />
+<meta content="TreadHunter, TreadHunters, Tires, New Tires, Used Tires, Cheap Tires, Discount Tires, Tires Plus, sell tires, buy tires, sell used tires, where to buy tires, buy used tires" name="keywords" />
+
+<title>TREADHUNTER | Your Source for Finding New &amp; Used Tires</title>
+
+<%= stylesheet_link_tag "style_final.css" %>
+<%= stylesheet_link_tag "style_th" %>
+
+<%= javascript_include_tag "application.js" %>
+
+<%= stylesheet_link_tag "http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" %>
+<%= javascript_include_tag "http://code.jquery.com/jquery-1.10.2.js" %>
+<%= javascript_include_tag "http://code.jquery.com/ui/1.11.2/jquery-ui.js" %>
+
+<%= javascript_include_tag "smooth-scroll.js" %><% end %>
+
+<!--mobile menu -->
+<%= javascript_include_tag "mobilemenu2.js" %>
+<!--mobile menu -->
+
+<%= javascript_include_tag "jquery.jqtransform.js" %>
+
+<!-- Important Owl stylesheet -->
+<%= stylesheet_link_tag "owl-carousel/owl.carousel.css" %>
+<%= stylesheet_link_tag "owl-carousel/owl.theme.css" %>
+<%= javascript_include_tag "owl-carousel/owl.carousel.js" %>
+
+<script>
+$(document).ready(function() {
+  $(".owl-carousel").owlCarousel(
+    { autoPlay: 3000, // false
+      navigation: false,
+      singleItem:true
+    }
+  );
+
+  $(".tabLink").each(function(){
+    $(this).click(function() {
+      tabId = $(this).attr('id');
+      if (tabId == "cont-1")
+        otherTabId = "cont-2";
+      else
+        otherTabId = "cont-1";
+      $(".tabLink").removeClass("activeLink");
+      $(this).addClass("activeLink");
+      $(".tabcontent").addClass("hide");
+      $("#"+tabId+"-1").removeClass("hide");
+
+      // Set values on new tab to equal values from old tab
+      $("#"+tabId+"-1").find("input#tire_search_locationstr").val($("#"+otherTabId+"-1").find("input#tire_search_locationstr").val());
+      copy_select_value_between_tabs(otherTabId, tabId, "tire_search_radius"); 
+      copy_select_value_between_tabs(otherTabId, tabId, "tire_search_quantity"); 
+      copy_radio_value_between_tabs(otherTabId, tabId, "new_or_used");
+
+      $("#"+tabId+"-1").find("input#tire_search_locationstr").removeClass("hide");
+      
+      return false;
+    });
+  });
+
+
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+});
+</script>
+
+
+<style>
+  #header {position: relative;}
+  /* .content-left {width: 50%!important;} */
+  /* .content-right { width: 90%; } */
+</style>
+
+<style>
+  .ui-widget, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+    font: 14px 'proxima_nova_rgregular';
+  }
+
+  .ui-widget label {
+    font: 14px 'proxima_nova_rgregular';
+  }
+
+  .ui-tabs .ui-tabs-panel {
+    padding: 10px;
+  }
+
+  .ui-widget-header {
+    border: none;
+    background: none;
+  }
+  #tab1, #tab2 {
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-bottom-width: 1px;
+  }
+
+  .row:before, .row:after {
+    content: " ";
+    display: table;
+  }
+
+  .col-xs-12 {
+    width: 100%;
+  }
+
+  .homeFitment {
+    top: 0px;
+    right: 0px;
+  }
+
+  .content-right {
+    width: 96%;
+  }
+
+  .marquee-wrapper {
+    position: relative!important;
+  }
+
+  .owl-controls {
+    display: none!important;
+  }
+
+  .container-leftimg {
+    top: 129px;
+  }
+
+  .outer {
+    position: relative;
+    background: url(/assets/homepage/TH_mobile_app.jpg);
+    width: 90%;
+    height: 309px;
+  }
+  .bottomleft {
+    position: absolute;
+    bottom: 0;
+    left: 0.5em;
+    width: 80%;
+    font-weight: bold;
+    color: #fff;
+  }
+ .topright {
+    position: absolute;
+    top: 1em;
+    right: 2em;
+    width: 20%;
+    padding: 4px;
+    background-color: #fff;
+    font-weight: bold;
+    font-size: 11px;
+  }    
+
+  @media (min-width: 768px) {
+    .outer {
+      width: 50%;  
+    }
+
+    .bottomleft {
+      width: 80%;
+    }
+
+    .topright {
+      width: 20%;
+    }
+
+    .container-leftimg {
+      top: 69px;
+    }
+
+    .container-left-box-2 p {
+      line-height: 20px;
+    }
+
+    .owl-controls {
+      display: block!important;
+    }
+
+    .marquee-wrapper {
+      position: absolute!important;
+    }
+
+    .col-sm-offset-8 {
+      margin-left: 50%; /* 66.66666666666666%; */
+    }
+
+    .col-sm-4 {
+      width: 50%; /* 33.33333333333333%; */
+    }
+
+    .container-left {
+      width: 50%;
+    }
+
+    .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, 
+    .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11 {
+      float: left;
+    }
+
+    .content-right {
+      /* float: left; */
+    }
+
+    .homeFitment {
+      top: 20px;
+      right: 20px;
+    }
+
+    .content-right {
+      width: 90%;
+    }
+  }
+
+  .icon-close {display:none;}
+
+  .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, 
+    .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, 
+    .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, 
+    .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, 
+    .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, 
+    .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+    position: relative;
+    min-height: 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .panel {
+    margin-bottom: 18px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+  }
+
+  .panel-primary {
+    border-color: #0092d0;
+  }
+
+  .row:after {
+    clear: both;
+  }
+
+  .row:before, .row:after {
+    content: " ";
+    display: table;
+  }
+
+  .icon-close:before {
+    content: "\f05c";
+  }
+
+  .rel, .info-dots li {
+    position: relative;
+  }
+
+  .marquee-wrapper {
+    position: absolute;
+  }
+
+  .homeMarquee {
+    padding-top: 60px;
+  }
+
+  .owl-pagination {
+    position: absolute;
+    bottom: -10px; /* 0 */
+    margin-left: 250px;
+  }
+
+  .content-left p {
+    font-size: 18px/20px;
+  }
+
+  .content-left ul li {
+    font-size: 14px/20px;
+  }
+
+  #content-outer {
+    padding-bottom: 0px;
+  }
+
+  @media screen and (max-width: 900px) {
+    .content-left h2 {
+      font-size: 26px;
+    }
+    .content-left ul li {
+      line-height: 30px;
+    }
+  }
+
+  input#tire_search_locationstr {
+    max-width: 50%;
+  }
+
+  select#auto_manufacturers, select#auto_models, select#auto_years, select#auto_options {
+    width: 100%;
+  }
+
+  .content-left h2 {
+    padding-top: 20px;
+  }
+
+  .app-button-left {padding: 0px!important; max-width:49%;}
+  .app-button-right {padding: 0px!important; max-width:49%; float:right;}
+  @media screen and (max-width: 768px) {
+    .app-button-left {float: none;}
+    .app-button-right {float: none;}
+  }  
+
+</style>
+
+</head>
+<body>
+  <div id="header">
+    <!-- <div class="main-slideshow-2"></div> -->
+    <div id="header-inner">
+      <div id="header-inner-logo">
+        <a href="/"><%= image_tag("homepage/logo.jpg", alt: "treadhunter") %></a>
+      </div>
+      <div id="header-inner-nav"> 
+        <ul>
+          <% if show_partners %>
+            <li><%= link_to "partners", "/partners" %></li>
+          <% end %>
+          <li><%= link_to "search by store", :action => :index, :controller => :tire_stores %></li>
+          <li><%= link_to "get in touch", :action => :new, :controller => :contact_us %></li>
+
+          <% if signed_in? %>
+            <% if super_user? || current_user.is_tireseller? %>
+              <li><%= link_to "my treadhunter", '/myTreadHunter' %></li>
+            <% end %>
+            <li><%= link_to "profile", current_user %></li>
+            <li><%= link_to "sign out", signout_path, method: "delete" %></li>
+          <% else %>
+            <li><%= link_to "sign in", signin_path %></li>
+            <li><a href="/th_landing">sell your tires</a></li>
+          <% end %>
+
+        </ul>
+      </div>
+      <div id="header-inner-nav2"> <a href="#" id="pull">Menu</a>
+        <ul>
+          <% if show_partners %>
+            <li><%= link_to "partners", "/partners" %></li>
+          <% end %>
+          <li><%= link_to "search by store", :action => :index, :controller => :tire_stores %></li>
+          <li><%= link_to "get in touch", :action => :new, :controller => :contact_us %></li>
+
+          <% if signed_in? %>
+            <% if super_user? || current_user.is_tireseller? %>
+              <li><%= link_to "my treadhunter", '/myTreadHunter' %></li>
+            <% end %>
+            <li><%= link_to "profile", current_user %></li>
+            <li><%= link_to "sign out", signout_path, method: "delete" %></li>
+          <% else %>
+            <li><%= link_to "sign in", signin_path %></li>
+            <li><a href="/th_landing">sell your tires</a></li>
+          <% end %>
+        </ul>
+      </div>
+      <div id="header-inner-tab">
+      </div>
+    </div> <!-- header-inner -->
+  </div> <!-- header -->
+
+  <div class="homeMarquee row rel" style="min-height: 500px;">
+    <div class="col-xs-12 marquee-wrapper">
+      <div id="content-outer">
+        <div id="content-inner">
+          <div id="owl-demo" class="owl-carousel owl-theme">
+            <div>
+              <div class="content-left">
+                <h2>How TreadHunter Works</h2>
+                <p>You can compare hundreds of new & used tire stores, private sellers and their prices, all at once!</p>
+                <ul>
+                  <li>Search for new and used tires by vehicle or tire size.</li>
+                  <li>Filter result by the type of seller, brand, and tire type. </li>
+                  <li>Sort results by distance, price, type, quantity, and treadlife. </li>
+                  <li>Click a tire listing to see more information.</li>
+                  <li>Reserve the tire(s) sending an instant alert to the seller.</li>
+                </ul>
+                <a href="/ut_landing" class="contact-leftbutton">LEARN MORE</a> 
+              </div>
+            </div>
+            <div>
+              <div class="content-left" style="margin-top: 20px;">
+                <%= image_tag("homepage/TH_mobile_app.jpg",
+                              alt: "TreadHunter Mobile App For iOS or Android") %>
+              </div>
+              <div class="content-left" style="float: none">
+                <a href="https://itunes.apple.com/us/app/treadhunter/id847774974?mt=8"
+                    target="_blank">
+                  <%= image_tag("homepage/Apple_App_Button.png", 
+                              class: "app-button-left",
+                              alt: "TreadHunter Mobile App For iOS") %>
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=com.treadhunter.tirebuyer"
+                    target="_blank">
+                  <%= image_tag("homepage/Android_App_Button.png", 
+                              class: "app-button-right",
+                              alt: "TreadHunter Mobile App For Android") %>
+                </a>
+              </div>     
+            </div>
+            <div>
+              <div class="container-left">
+                <div class="container-left-box-1">
+                  <h3>SELLING TIRES</h3>
+                  <h4>Is Easy On TREADHUNTER</h4>
+                  <a class="arrow" href="/tireseller_registration">Find Out How</a>
+                  <div class="container-leftimg">
+                    <img alt="treadhunter" src="/assets/homepage/tiers-5b48423cb7af81b8c721460d10ebae63.png">
+                  </div>
+                </div>
+                <div class="container-left-box-2">
+                  <p>If you sell tires, TreadHunter drives the customer right to your door! It is as easy as taking a picture with your smart phone and your inventory will be visible to customers in minutes. Just click <span><a href="/tireseller_registration">HERE</a></span> to begin registration to sell tires on TreadHunter. </p>
+                </div>
+              </div>
+            </div>
+          </div>        
+        </div> <!-- content-inner -->
+      </div> <!-- content-outer -->
+    </div> <!-- col-xs-12 marquee-wrapper -->
+    <div id="fitmentMbox" class="homeFitment col-xs-12 col-sm-4 col-sm-offset-8 xs-no-padding">
+      <div class="content-right panel panel-primary panel-fitment">
+        <div class="pull-right icon icon-close icon-fw text-inverse fitment-close-button" 
+              data-dismiss="modal">
+        </div>
+
+        <%= form_for @tire_search,
+            :url => { :action => "tireresults", 
+                      :controller => "tire_searches"} do |f| %>
+
+          <div class="home-form-containers">
+            <%= render :partial => 'layouts/search_by_tire_or_car_tb', :locals => {:f => f} %>
+          </div>
+        <% end %>
+
+      </div> <!-- panel panel-primary panel-fitment -->
+    </div> <!-- fitmentMbox -->
+  </div> <!-- homeMarquee row rel -->
+
+  <div id="more-detail">
+    <% if @show_get_treadhunter_news_footer %>
+      <% if !session[:registered_newsletter].nil? && !session[:registered_newsletter].blank? %>
+        <%= render :partial => 'layouts/homepage/get_treadhunter_news',
+                    :locals => {:action => "already_registered", 
+                                :email_address => session[:registered_newsletter]} %>  
+      <% else %>
+        <%= render :partial => 'layouts/homepage/get_treadhunter_news',
+                    :locals => {:action => "get_registration"} %>  
+      <% end %>
+    <% end %>
+  </div>
+  <%= render :partial => 'layouts/footer_visfire' %>
+  <script>
+    smoothScroll.init({
+      speed: 500, 
+      easing: 'Linear',
+      updateURL: false,
+      offset: 0,
+      callbackBefore: function ( toggle, anchor ) {}, 
+      callbackAfter: function ( toggle, anchor ) {} 
+    });   
+  </script>
+
+  <!--outer wrapper-->
+</body>
+</html>

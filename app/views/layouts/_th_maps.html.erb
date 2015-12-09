@@ -1,0 +1,131 @@
+<script>
+	var map = null;
+	var BingCredentials = "ArW5u_MZDCbLaSabVyXCaOxN18AZnpdQawOJYvUlz33z9Uq9GYWz-a4ycWvk_6F2";
+	var storeLocation = null;
+	var myLocation = null;
+	var popuplat;
+	var popuplon;
+	var viewRect = null;
+
+    $(function() {
+      $( "#directions_dialog" ).dialog({
+        autoOpen: false,
+        show: "blind",
+        hide: "explode",
+        closeOnEscape: true,
+        position: { within: "#photo-div", collision: "fit" },
+        resizable: true,
+        maxHeight: 365,
+        height: 365,
+        maxWidth: 320,
+        width: 320
+      });
+    });
+
+	function GetMap() {
+		// Initialize the map
+		map = new Microsoft.Maps.Map(document.getElementById("myMap"), 
+			{credentials:BingCredentials});
+		
+		Microsoft.Maps.loadModule('Microsoft.Maps.Directions', { callback: directionsModuleLoaded });
+	}    
+
+	function CallRestService(request) {
+		var script = document.createElement("script");
+		script.setAttribute("type", "text/javascript");
+		script.setAttribute("src", request);
+		var dochead = document.getElementsByTagName("head").item(0);
+		dochead.appendChild(script);
+	} 
+
+	function getDirections() {
+		// geocode address entered
+		var geocodeRequest = "http://dev.virtualearth.net/REST/v1/Locations" 
+                           + "?query=" + encodeURI(document.getElementById('myAddress').value)
+                           + "&key=" + BingCredentials
+                           + "&jsonp=addressGeocoded";
+        CallRestService(geocodeRequest);
+	}
+
+	function addressGeocoded(result) {
+		if (result && result.resourceSets && result.resourceSets.length > 0 && result.resourceSets[0].resources && result.resourceSets[0].resources.length > 0) {
+			myLocation = new Microsoft.Maps.Location(
+				result.resourceSets[0].resources[0].point.coordinates[0],
+				result.resourceSets[0].resources[0].point.coordinates[1]
+			);
+			showDirections();
+			$('#directions_dialog').dialog('open');
+		}
+	}
+
+	function directionsModuleLoaded() {
+		// Initialize the DirectionsManager
+		directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+		showDirections();
+	}
+
+	function showDirections() {
+		if (myLocation != null && storeLocation != null) {
+			// Create start and end waypoints
+			var startWaypoint = new Microsoft.Maps.Directions.Waypoint({ location: myLocation }); 
+			var endWaypoint = new Microsoft.Maps.Directions.Waypoint({ location: storeLocation } );
+
+			directionsManager.resetDirections();
+
+			directionsManager.addWaypoint(startWaypoint);
+			directionsManager.addWaypoint(endWaypoint);
+
+			// Set request options
+			directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode.driving });
+
+			// Set the render options
+			directionsManager.setRenderOptions({ itineraryContainer: document.getElementById('itineraryDiv'), displayWalkingWarning: false, walkingPolylineOptions:{strokeColor: new Microsoft.Maps.Color(200, 0, 255, 0)} });
+
+			// Specify a handler for when an error occurs
+			Microsoft.Maps.Events.addHandler(directionsManager, 'directionsError', displayError);
+
+			// Calculate directions, which displays a route on the map
+			directionsManager.calculateDirections();
+		}
+	}
+
+	function displayError(e)
+	{
+		alert(e.message);
+	}
+
+	function setZoom() {
+		if ("<%= session[:mylatitude] %>" != "" && "<%= session[:mylongitude] %>" != "") {
+			if (myLocation == null) {
+				myLocation = new Microsoft.Maps.Location(<%= session[:mylatitude] %> + 0,
+															<%= session[:mylongitude] %> + 0);
+				pushpin = new Microsoft.Maps.Pushpin(myLocation, {text: 'you', typeName: 'pushpinStyle'});
+				map.entities.push(pushpin);
+
+				viewRect = Microsoft.Maps.LocationRect.fromLocations(storeLocation, myLocation);
+				viewRect.width = viewRect.width * 1.4;
+				viewRect.height = viewRect.height * 1.4;
+			}
+         	
+         	map.setView({bounds: viewRect});
+		}
+		else {
+			map.setView({ zoom: 16, center: storeLocation });
+		}
+
+	}
+
+	$(document).ready(function() {
+		GetMap();
+
+		map.entities.clear();
+		storeLocation = new Microsoft.Maps.Location(<%= @latitude %>, 
+													<%= @longitude %>);
+		var pushpin= new Microsoft.Maps.Pushpin(storeLocation, {text: 'Store', 
+													typeName: 'pushpinStyle',
+													width: 35}); 
+		map.entities.push(pushpin);
+
+		setZoom();
+	});
+</script>

@@ -1,0 +1,257 @@
+<%= javascript_include_tag "filter" %>
+<%= javascript_include_tag "tinysort" %>
+<%= javascript_include_tag "tabs" %>
+
+<%= javascript_include_tag "build_listing_row" %>
+<%= javascript_include_tag "compress_listing_rows" %>
+    
+<%= javascript_include_tag "jquery.infinite-scroll-helper.js" %>
+<%= javascript_include_tag "popup.js" %>
+<%= javascript_include_tag "ddaccordian.js" %>
+
+<%= javascript_include_tag "jquery.lazyload.min.js" %>
+
+<script type="text/javascript">
+	var ddaccordionsetting = {
+		headerclass: "expandable",
+		contentclass: "categoryitems",
+		revealtype: "click",
+		mouseoverdelay: 200,
+		collapseprev: true,
+		defaultexpanded: [1],
+		onemustopen: false,
+		animatedefault: false,
+		persiststate: true,
+		toggleclass: ["", "openheader"],
+		togglehtml: ["prefix", "", ""],
+		animatespeed: "fast",
+		oninit:function(headers, expandedindices){
+			//do nothing
+		},
+		onopenclose:function(header, index, state, isuseractivated) {
+			//do nothing
+		}
+	}
+	
+	ddaccordion.init(ddaccordionsetting);
+</script>
+
+<style>
+    .compressed-node {
+        /*height:80px;*/
+        display:none;
+        margin-left: 20px;
+    }
+    .compressed-node > div {
+        background-color: yellow;
+    }
+	
+	.categoryitems {
+		display: none;
+	}
+
+    .lazy {
+        display: none;
+    }
+
+
+/*#tirelistings_list .search-content-left-inner {
+	padding: 1em;
+	border: 2px solid black;
+}*/
+#tirelistings_list .search-content-left-inner .search-content-left-inner-b .search-right-b p {
+	margin: 0;
+}
+
+
+/*@media screen and (max-width: 767px) {
+	
+}*/
+</style>
+
+<script>
+    function bindLiveEvents() {
+    };
+
+    $('#toggleDetails').click(function () {
+        $('.toggledDiv').slideToggle('fast');
+    });
+
+    $(function() {
+        $("img.lazy").show().lazyload({effect : "fadeIn"});
+    });
+</script>
+
+    <script>
+            $(function() {
+                var pageCount;
+                var async_mode = true;
+
+                //$('form').jqTransform();
+                
+                //$('#search-main').infiniteScrollHelper({
+                $('div#loader').infiniteScrollHelper({
+                    
+                    loadMore: function(page) {
+                        pageCount = page;
+                        $('div#loader').html('<center><img src="/assets/loading.gif"></center>');
+                        <% if @tire_search.nil? %>
+                            ajax_url = "/ajax/load_tiresearch_records/?id=<%= @tire_search.id %>&" + FilterQS + "&page=" + page
+                        <% else %>
+                            ajax_url = "/ajax/load_tiresearch_records/<%= raw @tire_search.url_params('_filter') %>&id=<%= @tire_search.id %>&" + FilterQS + "&page=" + page
+                        <% end %>
+                        $.ajax({url: ajax_url,
+                            success:function(result) {
+                                $('div#loader').html('');
+                                // if we didn't get anything back, we're out of data.
+                                if (result.length == 0) {
+                                    //$('#search_results').infiniteScrollHelper('destroy');
+                                    //$('div#next-page').text('');
+
+			                        $('div#loader').html('<center><br /><p>End of records<p></center>');
+                                }
+                                else {
+                                    $('div#tirelistings_list').append(result);
+									ddaccordion.init(ddaccordionsetting);
+
+                                    $("img.lazy").show().lazyload({effect : "fadeIn"});
+									
+									// total hack...the .init() causes the click event to register
+									// multiple times...so this will strip any extras.
+									for (i=0; $(".expandable").length; i++) {
+										$._data($(".expandable")[i], "events" ).click.splice(1);
+										$._data($(".expandable")[i], "events" ).evt_accordion.splice(1);
+									}
+                                    bindLiveEvents();
+                                }
+                            }, 
+                            error: function(result) {
+                                $('div#loader').html('');
+                            },
+                            async: async_mode});
+                    },
+                    
+                    doneLoading: function(pageCount) {
+                        // $('#search_results').infiniteScrollHelper('destroy');
+                        //alert("done - " + pageCount);
+												
+                        async_mode = true;
+                        return true;
+                    },
+                    
+                    bottomBuffer: 80
+                })
+            });
+    </script>
+
+<% if Rails.env.development? && false %>
+    <p><a onClick="deleteCompressedNodes();">Delete compressed</a></p>
+    <p><a onClick="createCompressedNodes(last_known_result);">Create compressed</a></p>
+<% end %>
+
+<% if signed_in? && false %>
+    <%= render :partial => 'layouts/saved_search_modal', 
+               :locals => {:tiresearch => @tire_search, :id => '' } %>
+<% end %>
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="search_results">
+
+<% if not @tire_search.tirelistings.nil? %>
+    <% if @tire_search.tirelistings.count > 0 %>
+        <div id="serach-content" class="clearfix">
+                <div id="search-main">
+                    <div class="search-main-left">
+                        <%= render :partial => 'layouts/listings_sort_visfire',
+                            :locals => {:include_distance => true, 
+                                        :date_sort => false} %>
+                    </div>
+                    
+                    <div class="row-fluid">
+	                    <div class="search-main-right span3">
+	                        <h2><span>REFINE YOUR</span> SEARCH RESULTS</h2>
+	                        
+	                        <div class="search-content-right">
+		                        <%= render :partial => 'layouts/listings_filter_visfire', 
+		                            :locals => {:tire_listings => @tire_search.tirelistings, :@box=>""} %>
+		                    </div>
+	                    </div>
+
+                    <div class="search-content-left span9">
+                        <div id="tirelistings_list">
+    						<% @cur_consolidated = nil %>
+    						<% @consolidated_count = 0 %>
+                            <% rec_count = 0 %>
+                            <% @tire_search.consolidated_tirelistings_page(1).each do |t| %>
+    							<% 
+                                rec_count += 1
+    							if !@cur_consolidated.nil? && @cur_consolidated.num_listings <= @consolidated_count
+    								@cur_consolidated = nil
+    								@consolidated_count = 0
+    							%>
+    							</div></div></div>
+    							<% end %>
+                                <% if t.is_generic? %>
+                                    <%= render :partial => 'layouts/build_generic_listing_row_visfire', 
+                                                :locals => {:@tire_listing => t, 
+    														:@cur_consolidated => @cur_consolidated,
+    														:@consolidated_count => @consolidated_count} %>
+    								<% @consolidated_count += 1 %>
+    							<% elsif t.is_a?(ConsolidatedTireListing) %>
+    								<% @cur_consolidated = t %>
+    								<% @consolidated_count = 0 %>
+                                    <%= render :partial => 'layouts/build_consolidated_listing_row_visfire', 
+                                                :locals => {:@tire_listing => t, :@store=>""} %>
+                                <% else %>
+                                    <%= render :partial => 'layouts/build_listing_row_visfire', 
+                                                :locals => {:@tire_listing => t, :@store=>"", 
+    														:@cur_consolidated => @cur_consolidated,
+                                                            :@lazy_off => (rec_count <= 2),
+    														:@consolidated_count => @consolidated_count} %>
+    								<% @consolidated_count += 1 %>
+                                <% end %>
+                            <% end %>
+    						<% 
+    						if !@cur_consolidated.nil? && @cur_consolidated.num_listings <= @consolidated_count
+    							@cur_consolidated = nil
+    							@consolidated_count = 0
+    						%>
+    							</div></div></div>
+    						<% end %>
+                            <div id="next-page"></div>
+                        </div>
+                        <div id="loader-wrap" class="search-content-left">
+                            <div id="loader"></div>
+                        </div>
+                    </div>
+                    
+                    </div> <!--end of row-->
+                </div>
+        </div>
+    <% else %>
+		<% if signed_in? %>
+			<h3>No results found. (<%= @tire_search.tire_size.sizestr %>)</h3>
+		<% else %>
+			<%= render :partial => 'layouts/build_no_results_visfire', 
+                    	:locals => {:@tire_search=> @tire_search} %>
+		<% end %>
+        <% if !params['o'] && !@existing_search && signed_in? %>
+        <div>
+          <span style="display: inline; float: left; font-size: 0.8em;">
+            <a href="#saved_search_modal" data-toggle="modal">
+                Click here to get email alerts for new tires this size in your area!
+            </a>
+          </span>
+        </div>
+        <% elsif @existing_search || params['o'] %>
+          <span style="font-size: 0.8em;">
+            <br />You have already saved this search.  Click <%= link_to 'here', '/saved_searches' %> to manage your searches. 
+          </span>
+        <% end %>
+    <% end %>
+<% end %>
+
+		</div>
+	</div>
+</div>

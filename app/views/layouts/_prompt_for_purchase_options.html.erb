@@ -1,0 +1,65 @@
+<%= javascript_include_tag 'post_to_page' %>
+
+<script>
+  $(function() {
+    $( "#get-tires-dialog" ).dialog({
+      autoOpen: false,
+      show: "blind",
+      // hide: "explode",
+      width: "auto"
+    });
+  });
+
+  function buy_now() {
+    $("#get-tires-dialog").dialog('close');
+
+    var tire_qty = $("#buy-tire-qty").val();
+
+    post('/order/complete', {tire_listing_id: <%= @tire_listing.id %>, qty: tire_qty})
+  };
+
+  function schedule_appt() {
+    $("#get-tires-dialog").dialog('close');
+    window.open("/appointments/new?tire_store_id=<%= @tire_listing.tire_store.id %>&tire_listing_id=<%= @tire_listing.id %>", "_self", false);
+  };  
+
+  function get_info() {
+    $("#get-tires-dialog").dialog('close');
+    $('#dialog-contactseller').dialog('open');
+  };  
+</script>
+
+<div id="get-tires-dialog" class="hide" title="I Want These Tires">
+  <div class="modal-body">
+    <p>
+      <h3>How do you want to get these tires?</h3>
+    </p>
+    <br />
+
+    <% if @tire_listing.can_do_ecomm? %>
+      <p>
+        <button id="" class="jqTransformButton" onclick="buy_now()">
+          <span>Buy Now!</span>
+        </button>
+        <span class="button-label">Purchase Online - Qty:</span>
+        <%= select_tag("buy-tire-qty",
+            options_for_select({'1'=>'1', '2'=>'2', '3'=>'3', '4'=>'4'}, '4')) %>
+      </p>
+    <% end %>
+
+    <p>
+      <button id="" class="jqTransformButton" onclick="schedule_appt()">
+        <span>Schedule Appt</span>
+      </button>
+      <span class="button-label">I'll pay when I get there</span>
+    </p>
+
+    <p>
+      <button id="" class="jqTransformButton" onclick="get_info()">
+        <span>More Info</span>
+      </button>
+      <span class="button-label">I want to contact the seller and get more info</span>
+    </p>
+
+  </div>
+</div>

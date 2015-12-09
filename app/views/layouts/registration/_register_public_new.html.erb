@@ -1,0 +1,57 @@
+
+<%= f.label "First name" %>
+<%= f.text_field :first_name %>
+
+<%= f.label "Last name" %>
+<%= f.text_field :last_name %>
+
+<%= f.label :email %>
+<%= f.text_field :email %>
+
+<%= f.label :phone %>
+<%= f.text_field :phone %>
+
+<%= f.label :password %>
+<%= f.password_field :password %>
+
+<%= f.label :password_confirmation, "Re-enter password" %>
+<%= f.password_field :password_confirmation %>
+
+<% if allow_ecomm() %>
+	<hr />
+	<label>
+		Note: if you have multiple stores, just enter the information
+		for one of the stores now.  You can add more stores later.
+	</label>
+
+	<%= render :partial => 'layouts/new_store_from_phone_and_zip', :locals => {:f => f} %>
+<% else %>
+	<%= label_tag "Do you have a referral code?" %>
+	<%= text_field_tag :referral_code %>
+
+	<hr />
+	<label>
+		Note: if you have multiple stores, just enter the information
+		for one of the stores now.  You can add more stores later.
+	</label>
+
+	<%= label_tag "Store Name" %>
+	<%= f.text_field :name %>
+
+	<%= label_tag "Store Address 1" %>
+	<%= f.text_field :address1 %>
+
+	<%= label_tag "Store Address 2" %>
+	<%= f.text_field :address2 %>
+
+	<%= label_tag "Store City" %>
+	<%= f.text_field :city %>
+
+	<div id="state">
+		<%= f.label :state, "State" %>
+		<%= f.select(:state, us_states, {}) %>
+	</div>
+
+	<%= label_tag "Store Zip Code" %>
+	<%= f.text_field :zipcode %>
+<% end %>

@@ -1,0 +1,45 @@
+<div class="tire-models">
+	<br />
+	<table>
+		<% colcount = 0 %>
+		<% maxcols = 1 %>
+		<% maxcols = 2 if @tire_models.count > 5 %>
+		<% maxcols = 3 if @tire_models.count > 10 %>
+		<tr>
+			<% (1..maxcols).each do |i| %>
+				<th>Add?</th>
+				<th>Qty in<br />stock</th>
+				<th>Your price<br />each</th>
+				<th>Size</th>
+				<th></th>
+			<% end %>
+		</tr>
+		<% @tire_models.each do |m| %>
+			<% if colcount >= maxcols %>
+				<tr>
+			<% end %>
+				<% if maxcols > 1 %>
+					<td style='padding-left: 10px; border-left: black solid; border-left-width: thin;'><%= check_box_tag('tire_sizes[]', value = m.tire_size.id) %></td>
+				<% else %>
+					<td><%= check_box_tag('tire_sizes[]', value = m.tire_size.id) %></td>
+				<% end %>
+				<td>
+					<%= select_tag("quantity_" + m.tire_size.id.to_s, 
+							options_for_select({'1'=>'1', '2'=>'2', '3'=>'3', '4+'=>'4'}, '4'),
+							:style => "width: 50px;", 
+							:class => 'listing_info users') %>
+				</td>
+				<td><%= text_field_tag("price_" + m.tire_size.id.to_s, 
+							(m.formatted_orig_cost != '0.00' ? m.formatted_orig_cost : ''),
+							:style => 'width: 50px;', :class => 'user') %></td>
+				<td><%= m.tire_size.sizestr %></td>
+				<td width="50px"></td>
+			<% colcount += 1 %>
+			<% if colcount >= maxcols %>
+				</tr>
+				<% colcount = 0 %>
+			<% end %>
+		<% end %>
+	</table>
+</div>
+<br />

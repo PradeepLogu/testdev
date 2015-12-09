@@ -1,0 +1,12 @@
+development:
+  app_id: 641920869236040
+  secret: 581d392737ec0fd046f7a08c899092ec
+  api_key: db43637e7f132d46bbd97cbf95320bc6
+staging:
+  app_id: 641920869236040
+  secret: 581d392737ec0fd046f7a08c899092ec
+  api_key: db43637e7f132d46bbd97cbf95320bc6
+production:
+  app_id: 641920869236040
+  secret: 581d392737ec0fd046f7a08c899092ec
+  api_key: db43637e7f132d46bbd97cbf95320bc6

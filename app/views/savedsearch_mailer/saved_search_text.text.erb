@@ -1,0 +1,5 @@
+TreadHunter.com has found new tires for:
+<%= @tire_search.user.name %>
+
+Click here to see new <%= @tire_search.tirelistings.count.to_s %> listings:
+<%= url_for @tire_search.search_link %>

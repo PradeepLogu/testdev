@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>You have received a reservation for tires from TreadHunter.com</h1>
+    <p>Dear <%= @reservation.tire_store.contact_email %>,<p />
+
+A reservation has been placed for a set of <%= @reservation.tire_listing.short_description %> at a price of $<%= @reservation.formatted_price %>.<p />
+
+<% unless @reservation.tire_listing.blank? %>
+	Stock #:<%= @reservation.tire_listing.stock_number %> <p/>
+<% end %>
+
+Please contact the buyer as soon as possible.  Their contact information is: <p />
+
+<%= @reservation.name %><br />
+<%= @reservation.buyer_email %><br />
+<%= @reservation.formatted_phone %><br />
+<%= @reservation.address %><br />
+<%= @reservation.city %>, <%= @reservation.state %> <%= @reservation.zip %><p />
+
+Thank you for using TreadHunter.com to help connect with your customers!
+    </p>
+  </body>
+</html>

@@ -1,0 +1,193 @@
+<% provide(:title, @tire_store.visible_name + " | New & Used Tires #{@tire_store.city} #{@tire_store.state} | TreadHunter") %>
+<% provide(:metadescription, "#{@tire_store.visible_name}, Category: new and used tires, tire store, #{@tire_store.city} #{@tire_store.state} #{@tire_store.zipcode}") %>
+
+<%= stylesheet_link_tag "storefront" %>
+<%= render 'layouts/storefront/css_overrides' %>
+<%= stylesheet_link_tag "tabbedContent" %>
+
+<%= javascript_include_tag "http://code.jquery.com/jquery-1.8.3.js" %>
+<%= javascript_include_tag "http://code.jquery.com/ui/1.9.2/jquery-ui.js" %>
+<%= stylesheet_link_tag "http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" %>
+
+<%= javascript_include_tag "tabStoreFront" %>
+<%= javascript_include_tag "tabbedContent" %>
+<style>
+/*
+  div.main {
+    background-color: rgb(235, 235, 235);
+  }
+*/
+  div.footer, a.footer-link  {
+    color: #ccc;
+  }
+</style>
+
+<script>
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+
+  function showTabNum(tabNum) {
+    if (tabNum == 0) {
+      TabbedContent.slideContent($('#tab-0'));
+      $('div.moving_bg').css('left', '0px');
+    }
+    else if (tabNum == 1) {
+      TabbedContent.slideContent($('#tab-1'));
+      $('div.moving_bg').css('left', '155px');
+    }
+    else if (tabNum == 2) {
+      TabbedContent.slideContent($('#tab-2'));
+      $('div.moving_bg').css('left', '310px');
+    }
+    else if (tabNum == 3) {
+      TabbedContent.slideContent($('#tab-3'));
+      $('div.moving_bg').css('left', '465px');
+    }
+  }
+</script>
+
+<style>
+  #content-container {
+    margin-top: 50px;
+  }
+
+  .main {
+    width: 924px;
+  }
+</style>
+
+<div class='tabbed_content'>
+  <div class='tabs'>
+    <div class='moving_bg'>
+      &nbsp;
+    </div>
+    <span class='tab_item' id='tab-0'>
+      Home
+    </span>
+    <span class='tab_item' id='tab-1'>
+      Our Tires
+    </span>
+    <span class='tab_item' id='tab-2'>
+      Our Store
+    </span>
+    <span class='tab_item' id='tab-3'>
+      Information
+    </span>
+    <% i = 4 %>
+    <% @tire_store.branding.storefront_tab_titles.each do |t| %>
+      <span class='tab_item' id='tab-<%= i %>'>
+        <%= t %>
+      </span>
+      <% i += 1 %>
+    <% end %>
+  </div>
+ 
+  <div class='slide_content'>
+    <div class='tabslider'>
+      <ul class='tabcontent'>
+        <div class="slide-tab">
+          <li>
+            <div class="inforow">
+              <div class="infocol-left">
+                <%= render :partial =>'layouts/storefront/carousel_widget' %>
+              </div>
+            </div>
+
+            <div class="inforow">
+              <div class="infocol-left">
+                <%= render :partial =>'layouts/storefront/professional_installation' %>
+              </div>
+            </div>
+
+            <div class="inforow">
+              <div class="infocol-left">
+                <%= render 'layouts/storefront/choose_tires_half_left' %>
+              </div>
+              <div class="infocol-right">
+                <%= render :partial =>'layouts/storefront/get_directions_half_right' %>
+              </div>
+            </div>
+
+            <div class="inforow">
+              <div class="infocol-left">
+                <%= render :partial =>"layouts/storefront/choose_auto" %>
+              </div>
+            </div>
+
+            <div class="inforow">
+              <div class="infocol-left">
+                <%= render :partial =>'layouts/storefront/carousel_widget',
+                            :locals => {:@photos => @promotions,
+                                        :@slogan => "Current Promotions",
+                                        :@slogan_description => "Here are the current specials and discounts at #{@tire_store.name}"} %>
+              </div>
+            </div>
+
+            <div class="inforow">
+              <div class="infocol-left">
+                <%= render :partial =>"layouts/storefront/admin" %>
+              </div>
+            </div>
+          </li>
+        </div>
+      </ul>
+      <ul class="tabcontent">
+        <div class="slide-tab">
+          <li>
+            <% if @tire_search %>
+              <h3>
+                <% 
+                  param_list = "?showtab=1"
+                  params.each do |param|
+                    if ["storefront", "slidetabs"].include?(param[0].downcase)
+                      param_list += "&#{param[0]}=#{param[1]}"
+                    end
+                  end
+                %>
+                Results for <%= @tire_search.search_description %> - 
+                  <%= link_to "click to see all tires for this store", 
+                        tire_store_path + param_list %>
+              </h3>
+            <% end %>
+            <%= render :partial => 'layouts/tire_store_listings_turbo' %>
+          </li>
+        </div>
+      </ul>
+      <ul class="tabcontent" id='tab-3'>
+        <div class="slide-tab">
+          <li>
+            <%= render :partial => 'layouts/storefront/our_store' %>
+          </li>
+        </div>
+      </ul>
+      <ul class="tabcontent">
+        <div class="slide-tab">
+          <li>
+            <%= render :partial => 'layouts/storefront_info/index' %>
+          </li>
+        </div>
+      </ul>
+      <% @tire_store.branding.storefront_tabs.each do |t| %>
+        <ul class="tabcontent">
+          <div class="slide-tab">
+            <li>
+              <div>
+                <p><%= simple_format(t) %></p>
+              </div>
+            </li>
+          </div>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(window).load(function() {
+    var initialTab = getQueryVariable('showtab');
+    if (initialTab != null) {
+      showTabNum(initialTab);
+    }
+  })
+</script>

@@ -1,0 +1,201 @@
+<style>
+	.complete{
+	    display:none;
+	}
+
+	.more{
+	    background:lightblue;
+	    color:navy;
+	    cursor:pointer;
+	}
+</style>
+
+<h3>Tire Info</h3>
+<div class="details-right">
+	<ul>
+		<li>Quantity: 
+			<span>
+				<%= @tire_listing.quantity.to_s %>
+				<% if @tire_listing.breakable_set? %>
+					<span style="font-size: 0.8em;">
+						(can be broken up)
+					</span>
+				<% end %>
+			</span>
+		</li>
+		<li>Manufacturer:
+			<span>
+				<%= @tire_listing.tire_manufacturer.name unless
+						@tire_listing.tire_manufacturer.nil? %>
+			</span>
+		</li>
+		<li>Model:
+			<span>
+					<%= @tire_listing.tire_model.name unless
+							@tire_listing.tire_model.nil? %>
+			</span>
+		</li>
+		<li>Size:
+			<span>
+				<%= @tire_listing.tire_size.sizestr unless @tire_listing.tire_size.nil?  %>
+			</span>
+		</li>
+		<% unless @tire_listing.tire_model.nil? ||
+						@tire_listing.tire_model.tire_category.nil? %>
+			<li>Category:
+				<span>
+					<%= @tire_listing.tire_model.tire_category.category_name %>
+				</span>
+			</li>
+		<% end %>
+		<% if @tire_listing.is_new? %>
+			<li>Condition:
+				<span>
+					<%= image_tag("new_icon.png", :size=>"32x32", alt: "New!") %>
+				</span>
+			</li>
+		<% else %>
+			<li>Condition:
+				<span>Used</span>
+			</li>
+			<li>Willing To Ship:
+				<% if @tire_listing.willing_to_ship == 2 || 
+						(@tire_listing.willing_to_ship == 0 && 
+							@tire_listing.tire_store.willing_to_ship == 2) %>
+					<span>Yes - will ship at additional cost</span>
+				<% elsif @tire_listing.willing_to_ship == 1 ||
+							(@tire_listing.willing_to_ship == 0 &&
+							@tire_listing.tire_store.willing_to_ship == 1) %>
+					<span>No - seller will not ship tires</span>
+				<% else %>
+					<span>Unspecified - please contact seller to inquire</span>
+				<% end %>
+			</li>
+			<li>Remaining Tread:
+				<span>
+					<%= @tire_listing.treadlife.to_s + '%' unless
+							@tire_listing.treadlife.nil? %>
+					<% if !@tire_listing.remaining_tread.nil? &&
+							@tire_listing.remaining_tread.to_s != '' &&
+							@tire_listing.remaining_tread.to_i > 2 %>
+						(<sup><%= "%g" % @tire_listing.remaining_tread %></sup>
+						&frasl;<sub>32</sub>")
+					<% end %>
+				</span>
+			</li>
+			<div>
+				<li class="lidual">Speed Rating:
+					<span>
+						<%= @tire_listing.tire_model.speed_rating unless
+								@tire_listing.tire_model.nil? %>
+						<%= render :partial => 'layouts/speed_rating_info_popover',
+									:locals => {:icon_black => "true"} %>
+					</span>
+				</li>
+				<li class="lidual">Treadwear:
+					<span>
+						<%= @tire_listing.tire_model.utqg_treadwear unless
+								@tire_listing.tire_model.nil? %>
+						<%= render :partial => 'layouts/treadwear_info_popover',
+									:locals => {:icon_black => "true"} %>
+					</span>
+				</li>
+			</div>
+			<div class="dual">
+				<li class="lidual">Traction:
+					<span>
+						<%= @tire_listing.tire_model.utqg_traction unless
+								@tire_listing.tire_model.nil? %>
+						<%= render :partial => 'layouts/traction_info_popover' %>
+					</span>
+				</li>
+				<li class="lidual">Load Index:
+					<span>
+						<%= @tire_listing.tire_model.load_index unless
+								@tire_listing.tire_model.nil? %>
+						<%= render :partial => 'layouts/load_index_info_popover',
+									:locals => {:icon_black => "true"} %>
+					</span>
+				</li>
+			</div>
+			<div class="dual">
+				<li class="lidual">Sidewall:
+					<span>
+						<%= @tire_listing.tire_model.sidewall unless
+								@tire_listing.tire_model.nil? %>
+						<%= render :partial => 'layouts/sidewall_info_popover' ,
+									:locals => {:icon_black => "true"} %>
+					</span>
+				</li>
+				<li class="lidual">Temp:
+					<span>
+						<%= @tire_listing.tire_model.utqg_temp unless
+								@tire_listing.tire_model.nil? %>
+						<%= render :partial => 'layouts/temperature_info_popover' ,
+									:locals => {:icon_black => "true"} %>
+					</span>
+				</li>
+			</div>
+			<% if !@tire_listing.description.blank? %>
+				<% if @tire_listing.description.size > 64 %>
+					<div class="dual">
+						<li>More information:
+							<span class="teaser"><%= simple_format(@tire_listing.description[0..63]) %></span>
+							<span class="complete"> 
+								<%= simple_format(@tire_listing.description[64..999]) %>
+							</span>
+							<span class="more">more...</span>
+						</li>
+					</div>
+					<script>
+						$(".more").toggle(function(){
+							$(this).text("less..").siblings(".complete").show();    
+						}, function(){
+							$(this).text("more..").siblings(".complete").hide();    
+						});
+					</script>
+				<% else %>
+					<div class="dual">
+						<li>More information:
+							<span><%= simple_format(@tire_listing.description) %></span>
+						</li>
+					</div>
+				<% end %>
+			<% end %>
+		<% end %>
+	</ul>
+</div>
+<div class="clear"></div>
+<h3>Seller Info</h3>
+<div class="details-right">
+	<ul>
+		<li>Seller:
+			<span>
+				<% if @tire_listing.tire_store.private_seller? %>
+					Private Seller
+				<% else %>
+					<%= link_to @tire_listing.tire_store.visible_name, 
+							url_for(@tire_listing.tire_store) + "?tire_size_id=#{@tire_listing.tire_size_id}",
+							:style => "font-size: 1.2em; font-weight: bold;" %>
+				<% end %>
+			</span>
+		</li>
+		<li>Address:
+			<span>
+				<% if @tire_listing.tire_store.private_seller? %>
+					<%= @tire_listing.tire_store.full_address %>
+				<% else %><%= @tire_listing.tire_store.address1 %><br /><%= @tire_listing.tire_store.address2 unless @tire_listing.tire_store.address2.blank? %><% unless @tire_listing.tire_store.address2.blank? %><br/><% end %><%= @tire_listing.tire_store.city %>, <%= @tire_listing.tire_store.state %>&nbsp;<%= @tire_listing.tire_store.zipcode %>
+				<% end %>
+			</span>
+		</li>
+		<li>Phone:
+			<span>
+				<% if @tire_listing.tire_store.private_seller? %>
+					<img src="<%= @phone_image %>">
+				<% else %>
+					<%= @tire_listing.tire_store.visible_phone %>
+				<% end %>
+			</span>
+		</li>
+	</ul>
+</div>

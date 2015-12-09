@@ -1,0 +1,144 @@
+<script>
+  // on window resize run function
+  $(window).resize(function () {
+    //fluidDialog();
+  });
+
+  // catch dialog if opened within a viewport smaller than the dialog width
+  $(document).on("dialogopen", ".ui-dialog", function (event, ui) {
+    //fluidDialog();
+  });
+
+  function fluidDialog() {
+    var $visible = $(".ui-dialog:visible");
+    // each open dialog
+    $visible.each(function () {
+      var $this = $(this);
+      var dialog = $this.find(".ui-dialog-content").data("ui-dialog");
+      var wWidth = $(window).width();
+      //var wMarginLeft = wWidth
+      // check window width against dialog width
+      if (wWidth < (parseInt(800) + 50))  {
+          // keep dialog from filling entire screen
+          $this.css("max-width", "95%");
+      } else {
+          // fix maxWidth bug
+          $this.css("max-width", "800px");
+      };
+      window.scrollTo(0, 0);
+    });
+  };
+
+  $(function() {
+    $( "#dialog-sizesearch" ).dialog({
+      autoOpen: false,
+      show: "blind",
+      hide: "explode",
+      open: function( event, ui ) {
+        $("#tb-<%= @default_tab %>").click();
+      },
+      show: {
+        complete: function() {
+          $(this).css("left", "0px");
+          $(this).css("margin-left", "0px");
+        }
+      },
+      position: ['left', 0],
+      width: "auto",
+      modal: true,
+      resizable: false,
+      maxWidth: 800,
+      fluid: true
+    });
+  });
+
+  $(document).ready(function() {
+    $(".tabSizeLink").each(function(){
+      $(this).click(function(){
+        tabId = $(this).attr('id');
+        if (tabId == "tb-1")
+          otherTabId = "tb-2";
+        else
+          otherTabId = "tb-1";
+        $(".tabSizeLink").removeClass("activeLink");
+        $(this).addClass("activeLink");
+        $(".tabsizecontent").addClass("hide");
+        $("#"+tabId+"-1").removeClass("hide");
+        
+        return false;   
+      });
+    });
+  });
+</script>
+
+<style>
+  .ui-dialog, .ui-widget, .ui-widget-content, .ui-corner-all, .foo, .ui-draggable, .ui-resizable {background:white !important; max-width: 800px;
+  }​
+</style>
+
+<div id="dialog-sizesearch" class="hide" title="Search By Size">
+  <div class="tab-box"> 
+    <a href="javascript:void(0);" class="tabSizeLink activeLink" id="tb-1">
+      <%= image_tag("homepage/car.png", alt: "tab") %>
+      <p>BY CAR</p>
+    </a> 
+    <a href="javascript:void(0);" class="tabSizeLink " id="tb-2" >
+      <%= image_tag("homepage/wheel.png", alt: "tab") %>
+      <p>BY SIZE</p>
+    </a> 
+  </div>
+  <div class="tabsizecontent" id="tb-1-1">
+    <%= form_for @refine_tire_search,
+        :html => { :id => "form1" },
+        :validate => true,
+        #:method => "GET",
+        :url => { :action => "show", 
+                  :controller => "tire_stores"} do |f| %>
+      <div class="form-box-1 nobg">
+        <small>Car</small>
+        <%= render :partial => 'layouts/ajax_auto_manufacturers_visfire', 
+                  :object => @auto_manufacturers, 
+                  :locals => {:f => f} %>
+        <%= render :partial => 'layouts/ajax_auto_models_visfire',
+                  :object => @models,
+                  :locals => {:f => f} %>
+        <%= render :partial => 'layouts/ajax_auto_years_visfire',
+                  :object => @models,
+                  :locals => {:f => f} %>
+        <%= render :partial => 'layouts/ajax_auto_options_visfire',
+                  :object => @models,
+                  :locals => {:f => f} %>
+        <%= f.submit "FIND MY TIRES",
+                  :name => "auto_search" %>
+        <label class="error-msg">
+          <% flash.each do |key, value| %>
+            <%= value %><br />
+          <% end %>                
+        </label>
+      </div>
+    <% end %>
+  </div>  
+  <div class="tabsizecontent hide" id="tb-2-1">
+    <%= form_for @refine_tire_search,
+        #:method => "GET",
+        :validate => true,
+        :html => { :id => "form2" },
+        :url => { :action => "show", 
+                  :controller => "tire_stores"} do |f| %>
+      <div class="form-box-1 nobg">
+        <small>Size</small>
+        <%= render :partial => 'layouts/ajax_tire_width_visfire',     
+                   :object => @diameters,      
+                   :locals => {:f => f} %>
+        <%= render :partial => 'layouts/ajax_tire_ratios_visfire',         
+                   :object => @ratios,         
+                   :locals => {:f => f} %>
+        <%= render :partial => 'layouts/ajax_tire_wheeldiameters_visfire', 
+                   :object => @wheeldiameters, 
+                   :locals => {:f => f} %>
+        <%= f.submit "FIND MY TIRES",
+                  :name => "size_search" %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,93 @@
+<h2 class="section-header">Local Tire Deals <img alt="" src="/assets/homepage/local-locations.png"></h2>
+<div class="tire-columns-outer">
+  <div class="columns tire-columns">
+    <% if !promo1_id.blank? %>
+      <div class="tire-deal"><a href="/promotions/<%= promo1_id %>">
+    <% else %>
+      <div class="tire-deal"><a href="/deals">
+    <% end %>
+      <div class="title">
+        <% if promo1_title.blank? %>
+          &nbsp;
+        <% else %>
+          <%= promo1_title %>
+        <% end %>
+      </div>
+      <div class="location"><%= promo1_location %></div>
+      <div class="image">
+        <% if promo1_image_url.blank? %>
+          <img alt="" src="/assets/homepage/sample_image1.jpg">
+        <% else %>
+          <img alt="" src="<%= promo1_image_url %>">
+        <% end %>
+      </div>
+    </a></div>
+    <% if !promo2_id.blank? %>
+      <div class="tire-deal"><a href="/promotions/<%= promo2_id %>">
+    <% else %>
+      <div class="tire-deal"><a href="/deals">
+    <% end %>
+      <div class="title">
+        <% if promo2_title.blank? %>
+          &nbsp;
+        <% else %>
+          <%= promo2_title %>
+        <% end %>
+      </div>
+      <div class="location"><%= promo2_location %></div>
+      <div class="image">
+        <% if promo2_image_url.blank? %>
+          <img alt="" src="/assets/homepage/sample_image2.jpg">
+        <% else %>
+          <img alt="" src="<%= promo2_image_url %>">
+        <% end %>
+      </div>
+    </a></div>
+  </div>
+</div>
+<div class="tire-columns-outer">
+  <div class="columns tire-columns">
+    <% if !promo3_id.blank? %>
+      <div class="tire-deal"><a href="/promotions/<%= promo3_id %>">
+    <% else %>
+      <div class="tire-deal"><a href="/deals">
+    <% end %>
+      <div class="title">
+        <% if promo3_title.blank? %>
+          &nbsp;
+        <% else %>
+          <%= promo3_title %>
+        <% end %>
+      </div>
+      <div class="location"><%= promo3_location %></div>
+      <div class="image">
+        <% if promo3_image_url.blank? %>
+          <img alt="" src="/assets/homepage/sample_image3.jpg">
+        <% else %>
+          <img alt="" src="<%= promo3_image_url %>">
+        <% end %>
+      </div>
+    </a></div>
+    <% if !promo4_id.blank? %>
+      <div class="tire-deal"><a href="/promotions/<%= promo4_id %>">
+    <% else %>
+      <div class="tire-deal"><a href="/deals">
+    <% end %>
+      <div class="title">
+        <% if promo4_title.blank? %>
+          &nbsp;
+        <% else %>
+          <%= promo4_title %>
+        <% end %>
+      </div>
+      <div class="location"><%= promo4_location %></div>
+      <div class="image">
+        <% if promo4_image_url.blank? %>
+          <img alt="" src="/assets/homepage/sample_image4.jpg">
+        <% else %>
+          <img alt="" src="<%= promo4_image_url %>">
+        <% end %>
+      </div>
+    </a></div>
+  </div>
+</div>

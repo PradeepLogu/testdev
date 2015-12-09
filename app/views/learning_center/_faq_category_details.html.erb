@@ -1,0 +1,11 @@
+<h5><%= @cur_category.title %></h5>
+<div class="qa-container">
+	<% @cur_category.posts.each do |post| %>
+		<div class="question">
+			<%= raw post.title %>
+		</div>
+		<div class="answer">
+			<%= raw post.content_without_html %>
+		</div>
+	<% end %>
+</div>

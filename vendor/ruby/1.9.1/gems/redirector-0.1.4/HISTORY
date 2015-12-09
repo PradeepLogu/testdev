@@ -1,0 +1,24 @@
+== 0.1.0 / 2012-08-24
+* Middleware for redirecting users based on rules stored in the database.
+* Rules can have a regex or string source to match against.
+* Regex rules can evaluate the destination using groupings from the source.
+* Rules can have further request environment conditions to match based on HTTP Headers or Rack environment variables.
+* RequestEnvironmentRules can be exact string matches or regex matches.
+* Make regex's case sensitivity configurable
+
+
+== 0.1.1 / 2012-08-24
+* Destroy RequestEnvironmentRules when the parent RedirectRule is destroyed
+* Add some more indexes to redirect_rules table
+* Allow query strings to be part of the match on RedirectRules
+
+== 0.1.2 / 2012-08-27
+* Change ordering on match to prefer exact matches and longer matches
+
+== 0.1.3 / 2012-08-28
+* Include request_environment_rules when pulling back possible matches
+
+== 0.1.4 / 2012-09-07
+* Allow nested attributes for request environment rules on redirect rules and be set by mass assignment.
+* [BUG] Allow active to be set to false
+* [BUG] Handle a nil value for a match group correctly

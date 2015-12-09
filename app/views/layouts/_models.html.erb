@@ -1,0 +1,20 @@
+<%= collection_select(f, 
+					:auto_model_id, 
+					@models, 
+					:id, 
+					:name,
+                   {:prompt   => "Model",
+                   	 :selected => session[:auto_model_id]},
+                   {:select_model_path => url_for(:controller => :tire_searches,
+                   										 :action => :update_years),
+                     :class => 'cars',
+                   	 :id => 'auto_models'}) %>
+<script>
+	$('select#auto_models').change(function() {
+		$.ajax({
+			type: "POST",
+			url: $(this).attr('select_model_path'),
+			data: { model_id: $(this).attr('value') }
+		})
+	});
+</script>

@@ -1,0 +1,201 @@
+div#registration-mid-part img {
+    border-radius: 50%;
+}
+.col1 {
+    float:left;
+    width: 16.67%;
+    margin-right: 25px;
+    position: relative;
+}    
+.col2 {
+    float:right;
+    width: 76%;
+    position: relative;
+}
+/*h4 {
+    color: #EC4832;
+}*/
+p {
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #c2c2c2;
+}
+/*.row {
+    display: block;
+}*/
+
+@media screen and (max-width: 768px) {
+    .col1 { 
+        width: 25%;
+    }
+    .col2 {
+        width: 65%;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .col1 {
+        width: 100%;
+    }
+    .col2 {
+        float: left;
+        width: 100%;
+    }
+    /*img {
+        max-width: 240px;
+    }*/
+}
+
+
+.jqTransformRadioWrapper { color: #FFFFFF; display: block;  float: left;  margin: 5px 4px 0;}
+a.jqTransformChecked { background-position: center bottom;  color: #FF0000;}
+.jqTransformHidden {  display: none; }
+/*.form-box-1 .option-list .jqTransformSelectWrapper div span { cursor: pointer; float: none;  height: 31px; line-height: 15px; overflow: hidden; padding:0px 0 0 7px;  position: absolute; white-space: nowrap;font:15px/25px 'proxima_nova_rgregular';}*/
+/*.select-box form.jqtransformdone label { display: block; float: left;margin:20px 0 0 10px;  font:16px/39px 'proxima_nova_rgregular'; text-align:left; color:#000; }*/
+.option-list{width:480px; float:left;}
+.option-list .jqTransformSelectWrapper div span {
+	cursor: pointer;
+	float: none;
+	font-size: 12px;
+	height: 31px;
+	line-height: 15px;
+	overflow: hidden;
+	padding: 8px 0 0 7px;
+	position: absolute;
+	white-space: nowrap;
+	width: 435px !important;
+	font-size: 12px;
+	line-height: 25px;
+}
+.jqTransformSelectWrapper a.jqTransformSelectOpen {
+	background: url(assets/homepage/contact4.gif) no-repeat scroll center center transparent;
+	display: block;
+	height:30px;
+	position: absolute;
+	right: 0;
+	width:22px;
+	top:0px;
+}
+.jqTransformSelectWrapper ul {
+	display: none;
+	height: 145px;
+	left: 0;
+	list-style: none outside none;
+	margin: 0;
+	overflow: auto;
+	padding: 0;
+	position: absolute;
+	top: 39px;
+	width: 261px!important;
+	z-index: 10;
+	background: white;
+	border: 1px solid #9e9290;
+}	
+
+.hover{ }
+button.jqTransformButton {
+	background: #F05A29;
+	color: #FFFFFF;
+	cursor: pointer;
+	font-size: 14px;
+	line-height: 43px;
+	text-align:center;
+	border-radius:3px;
+	width:178px;
+	border:none;
+	margin: 20px 0 0;
+}
+.hover .jqTransformSelectWrapper {
+	background: white;
+	/*float: left;*/
+	height: 25px;
+	position: relative;
+	/*width: 136px !important;*/
+	font-size: 12px;
+	line-height: 25px;
+}
+.hover .jqTransformSelectWrapper span {
+	font-size: 15px;
+	line-height: 25px;
+}
+.hover .jqTransformSelectWrapper ul {
+	/*width: 145px!important;*/
+	height: 150px;
+}
+.option-list .jqTransformSelectWrapper ul {
+	width: 100%!important;
+	height: 150px;
+} 
+.jqTransformHidden { display: none;}
+.jqTransformSelectWrapper {
+	background: white;
+	/*float: left;*/
+	height: 25px;
+	position: relative;
+	width: 261px !important;
+	font-size: 12px;
+	line-height: 25px;
+	margin: 0 0 15px 0;
+	padding:5px 0 0 10px;
+	border-radius: 5px;
+	border: 1px solid #9e9290;
+	overflow: hidden;
+}
+
+.jqTransformSelectWrapper span {
+	font-size: 16px;
+	line-height: 25px;
+}
+.jqTransformSelectWrapper ul a {
+	display: block;
+	font-size: 12px;
+	line-height: 25px;
+	padding: 5px;
+	text-decoration: none;
+	border-bottom: 1px solid #9e9290;
+}
+.jqTransformSelectWrapper ul li:last-child a {
+	border-bottom: none;
+}
+.jqTransformSelectWrapper ul a:hover {
+	display: block;
+	font-size: 12px;
+	line-height: 25px;
+	padding: 5px;
+	text-decoration: none;
+	/*background:#2e2f31;*/
+}
+
+.jqTransformInputWrapper {
+    background: white;
+    height: 38px;
+    padding: 0px;
+    /*float:left;*/
+    margin: 0 0 15px 0;
+}
+.jqTransformInputInner {
+    background: white;
+    padding: 0px;
+    margin: 0px;
+}
+.jqTransformInputInner div {
+    /*height: 38px;*/
+}
+.jqTransformInputInner div input {
+    font-size: 16px;
+    line-height: 25px;
+    vertical-align: middle;
+    height: 30px;
+    border: none;
+    padding: 0px 0px 0px 10px;
+    margin: 0px;
+    background:transparent;
+    border: 1px solid #9e9290;
+    border-radius: 5px;
+    width: 45%;
+}

@@ -1,0 +1,67 @@
+
+	<div class="store">
+		<div class="row-fluid">
+			<div class="info span4">
+				<h5><%= "#{index}. " unless index.blank? %><%= store.visible_name %></h5>
+				<div><%= store.address1 %></div>
+				<div><%= store.address2 %></div>
+				<div><%= store.city %>, <%= store.state %> <%= store.zipcode %></div>
+				<div>Phone: <%= store.visible_phone %></div>
+				<% if store.th_customer %>
+					<div class="btn-container">
+						<%= link_to "VIEW INVENTORY", tire_store_path(store) + (defined?(search_query) ? search_query.to_s : ''), class: "btn inventory-btn" %>
+					</div>
+				<% end %>
+				<div class="hours"><%= store.today_hours %></div>
+				<div class="distance">
+					<% if store.has_attribute?("distance") then %>
+						<%= store.distance.to_f.round(2) %> miles
+					<% end %>
+				</div>
+			</div>
+			
+			<div class="description span4">
+				<% if store.th_customer %>
+					<%= render :partial => 'layouts/fivestar_rating',
+	                           :locals => {:extra_class => "smaller-mobile", :stars => store.consumer_rating,
+	                                       # :reviews_link => tire_store_path(store, anchor: "cont-3-1"),
+	                                       :reviews_link => store.store_review_link,
+	                                       	:target => (store.store_review_link.blank? ? "" : "_blank"),
+	                                       :reviews_count => store.consumer_rating_count} %>
+
+					<p class="summary"><%= store.short_description_excerpt(160) %></p>
+					
+					<div class="services">
+						<span>
+							<%= image_tag("icon-wifi.png", alt: "Wifi", title: "Wifi", 
+										class: (store.has_wifi ? '' : 'not-available') ) %>
+						</span>
+						<span>
+							<%= image_tag("icon-coffee.png", alt: "Coffee", title: "Free Coffee", 
+										class: (store.has_coffee ? '' : 'not-available') ) %>
+						</span>
+						<span>
+							<%= image_tag("icon-air.png", alt: "Air", title: "Free Air", 
+										class: (store.has_air ? '' : 'not-available') ) %>
+						</span>
+						<span>
+							<%= image_tag("icon-overnight.png", alt: "Overnight", title: "Leave Overnight", 
+										class: (store.has_overnight ? '' : 'not-available') ) %>
+						</span>
+					</div>
+					<%= link_to "Read More", tire_store_path(store, anchor: "cont-2-1"), class: "read-more-link underlined" %>
+				<% end %>
+				<div class="clear"></div>
+			</div>
+			
+			<div class="mobile-btn-container"></div>
+			
+			<div class="image span4">
+				<% if !store.branding.nil? && !store.branding.logo.nil? && store.branding.logo.exists? %>
+					<%= image_tag store.branding.logo.url, alt: "No photo" %>
+				<% else %>
+					<div class="no-photo"><div class="inner">No photo</div></div>
+				<% end %>
+			</div>
+		</div>
+	</div>

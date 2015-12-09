@@ -1,0 +1,19 @@
+#banner-overlay {
+    width: 320px;
+    max-width: 100%;
+    height: 26px;
+    background: #e5eecc;
+    color: #666;
+    position: relative;
+    /*right: 135px;*/
+    top: -180px;
+    font-size: 14px;
+    line-height: 26px;
+    text-align: center;
+    opacity:0.8;
+}
+.hero-unit {
+    padding: 15px;
+    margin-right: 15px;
+    max-width: 885px;
+}

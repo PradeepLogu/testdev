@@ -1,0 +1,53 @@
+<% provide(:title, "Traffic Statistics") %>
+<h1>Traffic Statistics</h1>
+
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+<script>
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+</script>
+
+<div id="search">
+  <%= render :partial => 'search' %>
+</div>
+
+<style>
+  table.fix {table-layout: fixed; }
+  td.fix, th.fix{
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 5px;
+    max-width: 275px;
+  }
+</style>
+
+<%= will_paginate :page_links => false, :container => true %><p /><p />
+
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">All visitors - 7 Days</a></li>
+    <li><a href="#tabs-2">Unique visitors - 7 Days</a></li>
+    <li><a href="#tabs-3">All visitors - 30 Days</a></li>
+    <li><a href="#tabs-4">Unique visitors - 30 Days</a></li>
+  </ul>
+  <div id="tabs-1">
+    <%= render :partial => 'stats_tab', 
+                :locals => {:@view => 'all7'} %>
+  </div>
+  <div id="tabs-2">
+    <%= render :partial => 'stats_tab', 
+                :locals => {:@view => 'unique7'} %>
+  </div>
+  <div id="tabs-3">
+    <%= render :partial => 'stats_tab', 
+                :locals => {:@view => 'all30'} %>
+  </div>
+  <div id="tabs-4">
+    <%= render :partial => 'stats_tab', 
+                :locals => {:@view => 'unique30'} %>
+  </div>
+</div>

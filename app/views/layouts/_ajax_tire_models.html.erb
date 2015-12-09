@@ -1,0 +1,16 @@
+<div id="tire_models">
+  <select class="cars" 
+          id="tire_models" 
+          name="tire_model_id" 
+          select_model_path="/ajax/update_tire_models"
+          style="width: 180px;">
+    <option value="">Select a Tire Model</option>
+    <% @tire_models.each do |m| %>
+      <% if !@tire_listing.nil? && @tire_listing.tire_model_id == m.id %>
+        <option selected="selected" value="<%= m.id %>"><%= m.name_and_product_code %></option>
+      <% else %>
+        <option value="<%= m.id %>"><%= m.name_and_product_code %></option>
+      <% end %>
+    <% end %>
+  </select>
+</div>

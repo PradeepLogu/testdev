@@ -1,0 +1,6 @@
+
+<%= collection_select(f, :ratio, @ratios, :ratio, :ratio,
+                     {:prompt   => "Ratio",
+                   	  :selected => session[:ratio]},
+                     {:onchange => "#{remote_function(:url  => {:action => "update_wheeldiameters", :controller => "tire_searches"},
+                     :with => "'ratio='+value")}", :style => 'width: 150px;', :class => "tires"}) %>

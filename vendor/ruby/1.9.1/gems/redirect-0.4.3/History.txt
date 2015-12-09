@@ -1,0 +1,48 @@
+=== 0.3.2 / 2009-03-03
+
+* 1 major enhancement
+
+  * Added generation of tests to the app generator
+
+=== 0.3.0 / 2009-02-24
+
+* 1 major enhancement
+
+  * Added reuse of match patterns
+    [/old\/(.*)/, '/new/$1']  # /old/2008/02/01 will be redirected to /new/2008/02/01
+
+=== 0.2.0 / 2009-02-22
+
+* 1 major enhancement
+
+  * Added a generator method
+  
+=== 0.1.0 / 2009-02-22
+
+* 1 major enhancement
+
+  * Works properly with rackup now
+  
+=== 0.0.4 / 2009-02-21
+
+* 1 minor bug fix
+
+  * Removed Hoe dependency
+  
+=== 0.0.3 / 2009-02-21
+
+* 1 minor bug fix
+
+  * Fixed gemspec
+  
+=== 0.0.2 / 2009-02-21
+
+* 1 major enhancement
+
+  * Only require Hoe if installed
+  
+=== 0.0.1 / 2009-02-08
+
+* 1 major enhancement
+
+  * Birthday!

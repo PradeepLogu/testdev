@@ -1,0 +1,136 @@
+<%= javascript_include_tag "filter" %>
+<%= javascript_include_tag "tinysort" %>
+<%= javascript_include_tag "tabs" %>
+<%= javascript_include_tag "filter_listings" %>
+<%= javascript_include_tag "build_listing_row" %>
+<%= javascript_include_tag "compress_listing_rows" %>
+
+<style>
+    .compressed-node {
+        /*height:80px;*/
+        display:none;
+        margin-left: 20px;
+    }
+    .compressed-node > div {
+        background-color: yellow;
+    }
+</style>
+<script>
+    $('#toggleDetails').click(function () {
+        $('.toggledDiv').slideToggle('fast');
+    });
+</script>
+
+<% if Rails.env.development? %>
+    <p><a onClick="deleteCompressedNodes();">Delete compressed</a></p>
+    <p><a onClick="createCompressedNodes(last_known_result);">Create compressed</a></p>
+<% end %>
+
+<script>
+    function initSettings() {
+        return {
+            filter_criteria: {
+                treadlife: ['#treadlife_list input:checkbox .EVENT.click .SELECT.:checked .TYPE.range', 
+                            'treadlife'],
+                price: ['#price_list input:checkbox .EVENT.click .SELECT.:checked .TYPE.range', 
+                            'cost_per_tire'],
+                //treadlife: ['#treadlife_filter .EVENT.change .SELECT.:input .TYPE.range', 'treadlife'],
+                tire_manufacturers: ['#manufacturer_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'tire_manufacturer_id'],
+                tire_categories: ['#categories_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'tire_category_id'],
+                quantities: ['#quantities_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'quantity'],
+                seller_types: ['#seller_types_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'tire_store.private_seller'],
+                condition: ['#condition_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'is_new']
+
+            },
+            and_filter_on: true,
+            callbacks: filter_callbacks,
+            exec_callbacks_on_init: true
+        };
+
+    }
+    function initTireListings() {
+        return <%= raw @tire_search.tirelistings.to_json(
+                            :root => true,
+                            :except => [:price, :teaser, :description],
+                            :include => [:tire_store, :tire_manufacturer, 
+                                            :tire_model, :tire_category], 
+                            :methods => [:distance, :formatted_price, :discounted_price,
+                                    :photo1_thumbnail, :store_visible_name,
+                                    :logo_thumbnail, :cost_per_tire, :tire_category_id,
+                                    :to_param, :store_to_param, :has_rebate, :has_price_break,
+                                    :tire_manufacturer_name, :tire_model_name, :is_generic,
+                                    :gendesc, :mount_price]) %>;
+    }
+</script>
+
+<% if signed_in? %>
+    <%= render :partial => 'layouts/saved_search_modal', 
+                :locals => {:tiresearch => @tire_search, :id => '' } %>
+<% end %>
+
+<% if not @tire_search.tirelistings.nil? %>
+    <% if @tire_search.tirelistings.count > 0 %>
+        <!-- header -->
+        <div id="results-label">
+          <span class="search-info">
+            <%= @tire_search.search_description %>
+          </span>
+
+          <span class="search-link" style="display: inline; float: right;">
+            <%= link_to "Return to Find My Tires page", "/" %>
+          </span>
+        </div>
+        <% if !params['o'] && !@existing_search && signed_in? %>
+        <div>
+          <span style="display: inline; float: left; font-size: 0.8em;">
+            <a href="#saved_search_modal" data-toggle="modal">
+                Click here to get email alerts for new tires this size in your area!
+            </a>
+          </span>
+        </div>
+        <% elsif @existing_search || params['o'] %>
+          <span style="font-size: 0.8em;">
+            <br />You have already saved this search.  Click <%= link_to 'here', '/saved_searches' %> to manage your searches. 
+          </span>
+        <% end %>
+        <div class="clear"></div>
+        <div style="margin-bottom: 20px;"></div>
+
+        <!-- results plus filter -->
+        <div>
+            <!-- filter box -->
+            <%= render :partial => 'layouts/listings_filter', 
+                        :locals => {:tire_listings => @tire_search.tirelistings} %>
+            <!-- results box -->
+            <div class="primary-results">
+                <%= render :partial => 'layouts/listings_sort',
+                        :locals => {:include_distance => true, :date_sort => false} %>
+                <div id='search_results'>
+                    <div id="tirelistings_list">
+                    </div>
+                </div>
+            </div><!-- display results -->
+        </div>
+    <% else %>
+        <h3>No results found. (<%= @tire_search.tire_size.sizestr %>)</h3>
+        <% if !params['o'] && !@existing_search && signed_in? %>
+        <div>
+          <span style="display: inline; float: left; font-size: 0.8em;">
+            <a href="#saved_search_modal" data-toggle="modal">
+                Click here to get email alerts for new tires this size in your area!
+            </a>
+          </span>
+        </div>
+        <% elsif @existing_search || params['o'] %>
+          <span style="font-size: 0.8em;">
+            <br />You have already saved this search.  Click <%= link_to 'here', '/saved_searches' %> to manage your searches. 
+          </span>
+        <% end %>
+    <% end %>
+<% end %>
+<div class="clear"></div>

@@ -1,0 +1,17 @@
+/* CSS Document */
+
+.tabs{padding: 3px 0px; margin: 0px; font: 12px "Arial Narrow", "Arial Narrow Bold", Arial, sans-serif; list-style-type: none; text-align: left;}
+.tabs li{display: inline; margin: 0px;}
+.tabs li a{text-decoration: none; position: relative; z-index: 1; padding: 3px 7px; margin: 0px; color: #000; background: #ccc;}
+.tabs li a:visited{color: #000;}
+.tabs li a:hover{text-decoration: underline; color: #F63;}
+.tabs li a.selected{position: relative; background: #F63; color: #FFF;}
+.tabs li a.selected:hover{text-decoration: none;}
+.tabcontainer{border: 1px solid #f63; width: 564px; padding: 10px; margin: 0px;}
+.tabcontent{display:none;}
+
+@media print {
+.tabcontent {
+display:block !important;
+}
+}

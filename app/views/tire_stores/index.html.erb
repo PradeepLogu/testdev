@@ -1,0 +1,145 @@
+<% if !@location.blank? %>
+  <% provide(:title, "Tire Stores Near #{@location}") %>
+  <% provide(:metadescription, "Find tire stores selling new tires and used tires near #{@location} with the TreadHunter.com store search.") %>
+  <% provide(:metakeywords, "Tire Stores Near Me, Find Tire Stores, Tire Sellers, New Tires, Used Tires, Tires Plus, Cheap Tires, #{@location}") %>
+<% else %>
+  <% provide(:title, "Search for Tire Stores Near You") %>
+  <% provide(:metadescription, "Find tire stores selling new tires and used tires near you with the TreadHunter.com store search.") %>
+  <% provide(:metakeywords, "Tire Stores Near Me, Find Tire Stores, Tire Sellers, New Tires, Used Tires, Tires Plus, Cheap Tires") %>
+<% end %>
+<% provide(:visfire, "true") %>
+
+<% if @show_mobile_notice %>
+  <%= javascript_include_tag "gritter" %>
+  <%= stylesheet_link_tag "gritter" %>
+  <%= stylesheet_link_tag "gritter_override" %>
+  <script>
+    <%= add_gritter('Try our new mobile tire store app - find stores in your area on your mobile device.<br /><br />
+                      <a href="https://play.google.com/store/apps/details?id=com.treadhunter.tirebuyer" 
+                        style="float: left;"
+                        target="_new"><img src="https://s3.amazonaws.com/THImages/google-play-logo.png"/></a>
+                      <a href="https://itunes.apple.com/us/app/treadhunter/id847774974?mt=8" 
+                        style="float: right;"
+                        target="_new"><img src="https://s3.amazonaws.com/THImages/App_Store.png"/></a>',
+                  :fade_in_speed => "medium",
+                  :fade_out_speed => 1000,
+                  :position => 'top-right',
+                  :title => "New from TreadHunter", 
+                  :time => 10000) %>
+    jQuery(function(){$("#gritter-notice-wrapper").removeClass('bottom-right')});
+  </script>
+<% end %>
+
+<%= javascript_include_tag "jquery.lazyload.min.js" %>
+
+<script language="javascript">
+//$(function(){
+//  $('form').jqTransform({imgPath:'html/images/'});
+//});
+//function getBindData(){
+//  $("#cont-2").live($('#form01').jqTransform({imgPath:'html/images/'}));
+//}
+
+$(function () {
+  $("img.lazy").show().lazyload({effect : "fadeIn"});
+  
+  $("#change-zip").click(function (e) {
+  	e.preventDefault();
+  	var $form = $("#search-resubmit-form");
+
+  	$("#dialog-zipcode").dialog({
+  	  modal: true
+  	});
+	$("#zipcode-dialog-form").submit(function (e) {
+	  e.preventDefault();
+	  var $zipform = $(this);
+	  var zip = $zipform.find("#dialog-locationstr").val();
+	  if (/^\d{5}$/.test(zip)) {
+	    $zipform.find(".error-msg").hide();
+	    $("#dialog-zipcode").dialog("close");
+	    $form.find("#Location").val(zip);
+	    //$form.submit();					<-- somehow this produces a javascript error
+	    $form.find("#submit").click();
+	  } else {
+	    $zipform.find(".error-msg").show();
+	  }
+	  return false;
+	});
+  });
+});
+
+//Restructure the DOM when switching between desktop and mobile size
+addMobileLayoutConverter(function () {
+	$(".store").each(function () {
+		var $this = $(this);
+		$this.find(".mobile-btn-container").append( $this.find(".inventory-btn") );
+	});
+}, function () {
+	$(".store").each(function () {
+		var $this = $(this);
+		$this.find(".btn-container").append( $this.find(".inventory-btn") );
+	});
+});
+</script>
+
+<%= render :partial => 'layouts/modal_enter_zipcode',
+           :locals => {:@default_locationstr => ''} %>
+
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="store-results-top" class="row-fluid">
+			<div class="span9 left-content">
+				<% if @page_mode == 'city' %>
+					<h1 class="orange"><%= @location %> Tire Stores</h1>
+				<% else %>
+					<h1 class="orange">Tire Stores near <%= @location %></h1>
+				<% end %>
+				
+				<% lc_header_seo_post = @lc.find_post_by_title_in_posts_array(@brand_seo, "Under <Location> TIRE STORES") %>
+				<% if !lc_header_seo_post.nil? && !lc_header_seo_post.content_without_html.blank? %>
+					<p><%= lc_header_seo_post.content_without_html %></p>
+				<% else %>
+					<p></p>
+				<% end %>
+			</div>
+		
+			<div class="span3 right-content">
+				<% if @page_mode == 'city' %>
+					<div id="change-params"><span>CHANGE</span> <a href="/states">STATE</a> | <a href="/states/<%= @state %>">CITY</a></div>
+				<% else %>
+					<div id="change-params"><span>CHANGE</span> <a href="#" id="change-zip">ZIP CODE</a></div>
+				<% end %>
+				
+				<div><a href="/tire_size" class="btn black-btn" id="search-by-tire">SEARCH BY TIRE</a></div>
+				<div><a href="/car_type" class="btn black-btn" id="search-by-car">SEARCH BY CAR</a></div>
+				<div><a href="/brands" class="btn black-btn" id="search-by-brand">SEARCH BY BRAND</a></div>
+			</div>
+		</div>
+		
+		<div id="tire-stores" class="stores">
+			<div class="top">
+				<%= form_tag request.path, :method => "get",
+				             :id => "search-resubmit-form" do %>
+					<%= hidden_field_tag :Location, @location %>
+					
+					Found <%= @tire_stores.count %> tire stores within 
+					<%= select_tag :Radius, options_for_select(TireSearch::RADIUS_CHOICES, @radius.to_s) %>
+					miles of <%= @location %>.
+					
+					<input type="submit" id="submit" class="btn" value="SUBMIT"/>
+				<% end %>
+				
+				<div id="sort-by">
+					<span>SORT BY</span> <a href="<%= "#" %>">DISTANCE</a> | <a href="<%= "#" %>">NAME</a>
+				</div>
+			</div>
+
+			<div id="listing">
+				<%= render :partial => 'layouts/paginated_store_results',
+						   :locals => {:@stores => @tire_stores,	#Don't paginate the tire stores, list them all for SEO.
+									   :@button_type => "inventory", :page_no => 1, :offset => 0} %>
+			</div>
+		</div>
+	</div>
+</div>

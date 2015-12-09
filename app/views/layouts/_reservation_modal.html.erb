@@ -1,0 +1,91 @@
+<%= javascript_include_tag :defaults, 'rails.validations' %>
+
+<script>
+  $(function() {
+    $( "#dialog-reservation" ).dialog({
+      autoOpen: false,
+      show: "blind",
+      hide: "explode",
+      width: "auto"
+    });
+  });
+</script>
+<div id="dialog-reservation" class="hidden" title="Create a Reservation">
+  <%= form_for reservation, :validate => true do |f| %>
+    <% if reservation.errors.any? %>
+      <div id="error_explanation">
+        <h3><%= pluralize(reservation.errors.count, "error") %> prohibited this reservation from being saved:</h3>
+
+        <ul>
+        <% reservation.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="modal-body">
+      <%= f.hidden_field :user_id %>
+      <%= f.hidden_field :tire_listing_id %>
+      <%= f.hidden_field :seller_email %>
+      <table>
+          <tr>
+            <td><%= f.label "Your email" %></td>
+            <td><%= f.text_field :buyer_email, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :name %></td>
+            <td><%= f.text_field :name, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :address %></td>
+            <td><%= f.text_field :address, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :city %></td>
+            <td><%= f.text_field :city, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :state %></td>
+            <td><%= f.select(:state, us_states, {}, {:style => 'width: 150px', :class => 'users'}) %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :zip %></td>
+            <td><%= f.text_field :zip, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :phone %></td>
+            <td><%= f.text_field :phone, :class => 'user' %></td>
+          </tr>
+          <% if tirelisting.quantity_required_for_reservation? %>
+            <tr>
+              <td><%= f.label :quantity %></td>
+              <td>
+                <% h = {}
+                   (1..tirelisting.quantity).each do |i|
+                      h[i] = i
+                    end
+                  %>
+                <%= f.select(:quantity, 
+                  h, 
+                  {},
+                  {:style => 'width: 50px;', 
+                    :class => 'users'}) %>
+              </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                  <% if tirelisting.is_new? %>
+                    <%= f.label 'Please indicate how many of these new tires you would like to reserve.' %>
+                  <% else %>
+                    <%= f.label 'This set can be broken up from its set of ' +  tirelisting.quantity.to_s + ' - select how many you would like to reserve.' %>
+                  <% end %>
+                </td>
+            </tr>
+          <% end %>
+      </table>
+    </div>
+    <%= show_simple_captcha %>
+    <br />
+    <%= f.submit "Create Reservation", :class => "btn btn-primary center" %>
+  <% end %>
+</div>

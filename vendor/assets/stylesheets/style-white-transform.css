@@ -1,0 +1,43 @@
+
+.jqTransformSelectWrapper {background: white!important;}
+.jqTransformSelectWrapper div span {color: black!important;}
+.jqTransformSelectWrapper ul {background: white!important;}
+.jqTransformSelectWrapper a.jqTransformSelectOpen {
+	background: url(/assets/contact03white.jpg) no-repeat scroll center center transparent;
+}
+.jqTransformSelectWrapper ul a { color:black; }
+.jqTransformSelectWrapper {border: 1px solid #dfdede; }
+div#createStoreForAccount *, div.check * { width: auto;}
+div#domain * {width: auto; display: inline; float: none;}
+input#domain {height: 20px;}
+.form-part input[type="submit"] {
+	font: 12px proxima_novasemibold;
+}
+
+form label {
+	color: black!important;
+	clear:both;
+}
+
+.jqTransformInputInner, .jqTransformInputWrapper {background:none;}
+.jqTransformInputInner div input {color:black;}
+
+.check span, .check label, .check input { display: inline; float: left;}
+
+.smalltext .jqTransformInputInner div input, .smalltext input {width: 100px!important;}
+.smalltext label, .smalltext input[type="number"] {margin: 30px 0 0 10px!important;}
+.smalltext input {float:left;}
+.small {
+	float:none!important;
+	display:inline!important;
+	margin: 30px 0 0 10px!important;
+	font-size: 0.8em!important;
+}
+.smallertext div.jqTransformInputWrapper input {width: 50px!important;}
+.smallertext div.jqTransformInputWrapper {width: 20%;}
+
+.check input[type="checkbox"] { width: auto!important;}
+.check label, .check input {margin-top: 30px!important;}
+.check input {margin-left: 10px!important;}
+td div.jqTransformInputWrapper {margin: 0;}
+tr >td {padding-bottom: 1em;}

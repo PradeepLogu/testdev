@@ -1,0 +1,17 @@
+<%= form_for(@auto_manufacturer) do |f| %>
+  <% if @auto_manufacturer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@auto_manufacturer.errors.count, "error") %> prohibited this auto_manufacturer from being saved:</h2>
+
+      <ul>
+      <% @auto_manufacturer.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

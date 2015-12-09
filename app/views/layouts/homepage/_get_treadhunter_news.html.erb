@@ -1,0 +1,58 @@
+<% if action == "register_success" %>
+  <div id="more-detail-inner">
+    <div id="more-detail-inner-text">
+      <h2>Thank you for registering for TreadHunter's newsletter.</h2>
+    </div>
+    <div id="more-detail-inner-text" class="">
+      <p style="padding-top: 15px">You should receive an email with a confirmation link shortly.</p>
+    </div>
+  </div>
+<% elsif action == "already_registered" %>
+  <div id="more-detail-inner">
+    <div id="more-detail-inner-text">
+      <h2 style="font-size: 1em;">You are currently registered for TreadHunter's newsletter.</h2>
+      <p>Email address: <%= email_address %></p>
+    </div>
+    <div id="more-detail-inner-text" class="">
+      <!--
+      <h2 style="font-size: 1em;">Click HERE to change the registration preferences.</h2>
+      -->
+    </div>
+  </div>  
+<% elsif action == "get_registration" %>
+  <div id="more-detail-inner">
+    <div id="more-detail-inner-text">
+      <% if !(defined?(message)).nil? && !message.blank? %>
+        <h2 style="padding-top: 15px">Sign Up For The Latest Tire Deals.</h2>
+        <p>Enter your email to receive offers and promos in your inbox.</p>
+        <p style="color: yellow;">Failure registering: <%= message %></p>
+      <% else %>
+        <h2>Sign Up For The Latest Tire Deals.</h2>
+        <p>Enter your email to receive offers and promos in your inbox.</p>
+      <% end %>
+    </div>
+    <div id="more-detail-inner-email" class="">
+      <input type="text" maxlength="150" value="" 
+          onFocus="if (this.value == 'Please enter your e-mail address') {this.value = '';} " 
+          onBlur="if (this.value == '') {this.value = 'Please enter your e-mail address';}" 
+          onKeyPress="if(event.keyCode==13) eemail_submit_ajax('')" 
+          id="eemail_txt_email" 
+          name="eemail_txt_email" 
+          class="eemail_textbox_class"
+          placeholder="Please enter your e-mail address"/>
+      <span class="submit">
+        <input type="submit" 
+              value="Register"
+              onclick='$.ajax({
+                  type: "GET",
+                  dataType: "html",
+                  url: "/ajax/register_for_newsletter",
+                  data: {newsletter_email: $("input#eemail_txt_email").val()},
+                  success:function(result) {
+                    $("div#more-detail").html(result);} 
+              })'/>
+      </span>
+    </div>
+  </div>
+<% end %>
+<div class="clear"></div>

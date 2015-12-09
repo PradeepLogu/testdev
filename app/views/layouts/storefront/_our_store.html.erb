@@ -1,0 +1,25 @@
+<h1>Visit Our Store</h1>
+
+<div style="width: 300px; float: left; display: inline;">
+	<h3 style="padding-top: 25px;">
+		<%= @tire_store.name %><br />
+		<%= @tire_store.address1 %><br />
+		<% if @tire_store.address2 && @tire_store.address2.size > 0 %>
+			<%= @tire_store.address2 %><br />
+		<% end %>
+		<%= @tire_store.city %>, <%= @tire_store.state %> <%= @tire_store.zipcode %><br />
+        <%= @tire_store.visible_phone %><br />
+	</h3>
+</div>
+
+<div style="display: inline; float: right;">
+	<%= render :partial => "layouts/driving_directions" %>
+	<%= render :partial => "layouts/th_maps", :locals => {:@latitude => @tire_store.latitude,
+													:@longitude => @tire_store.longitude} %>
+
+	<div id='myMap' style="position:relative; width:600px; height:300px;">
+	</div>
+</div>
+
+<script type="text/javascript" src="https://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&s=1">
+</script>

@@ -1,0 +1,42 @@
+<% provide(:title, 'TreadHunter Survey') %>
+<%= stylesheet_link_tag "style-wide-form" %>
+
+<% provide(:visfire, "true") %>
+
+<link href='http://docs.google.com/static/forms/client/css/1292319201-formview_st_ltr.css' 
+      type='text/css' 
+      rel='stylesheet'>
+
+<script type="text/javascript">
+  var submitted=false;
+  </script>
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" 
+        onload="if(submitted) {window.location='/pages/account_thank_you?account_id=<%= @account.id %>';}">
+</iframe>
+
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<div id="searc-header">
+  <%= render :partial => 'layouts/header_visfire' %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+    <div id="search-main2">
+      <h2>Welcome to TreadHunter!</h2>
+    </div>
+    <br />
+    <p style="font-size: 1.5em">Thank you for registering with TreadHunter.  In order to serve you better, we are asking
+     you to fill out a short survey with a few questions.  If you are unclear what we are asking here, or 
+     would rather not fill it out at this time, we can contact you by phone as soon as possible.
+    </p>
+    <p>
+    <a href="/pages/survey_declined?account_id=<%= @account.id %>">Please click here to be contacted by phone instead of filling out this survey.</a>
+    </p>
+    <hr />
+    <br />
+    <%= raw @survey_html %>
+  </div>
+</div>

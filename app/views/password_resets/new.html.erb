@@ -1,0 +1,51 @@
+
+<% provide(:visfire, "true") %>
+<%= stylesheet_link_tag "style-wide-form" %>
+
+	<script>
+	$(function() {
+		$('form').jqTransform();
+	});
+</script>
+
+<div class="main-slideshow-2">
+	<!--banner slider-->
+</div>
+
+<div id="searc-header">
+	<%= render :partial => 'layouts/header_visfire' %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+	<div id="search-content-inner2" class="clearfix">
+		<div id="search-main2">
+			<h2>Reset Your Password</h2>
+			<ul>
+				<li>Home /</li>
+				<li><a href="#">Password Reset</a></li>
+			</ul>
+		</div>
+
+		<div id="edit-mid-part" class="clearfix">
+			<div id="edit-mid-part-left">
+				<div class="form-part">
+					<div class="form-heading">
+						<h3>Enter your email</h3>
+					</div>
+					<%= form_tag password_resets_path, :method => :post do %>
+						<%= label_tag :email %>
+						<%= text_field_tag :email, params[:email] %>
+						<%= submit_tag "Reset Password" %>
+					<% end %>
+				</div>
+			</div>
+			<div id="edit-mid-part-right">
+				<h3>Resetting your password</h3>
+				<p>
+					Enter your email address, and we will email you a link that you
+					can use to reset your password.
+				</p>
+			</div>
+		</div>
+	</div>
+</div>

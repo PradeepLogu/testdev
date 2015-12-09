@@ -1,0 +1,132 @@
+<% provide(:title, 'Edit storefront tabs') %>
+
+<% provide(:visfire, "true") %>
+<%= stylesheet_link_tag "style-wide-form" %>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+
+<script>
+  $(function() {
+    $('form').jqTransform();
+  });
+</script>
+
+<%= render :partial => 'layouts/store_hours_modal', 
+      :locals => {:tire_store=> @tire_store } %>  
+
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<div id="searc-header">
+  <%= render :partial => 'layouts/header_visfire', :locals => {:@error_object => @branding} %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+    <div id="search-main2">
+      <h2>Edit Storefront Tabs and Hours</h2>
+      <ul>
+        <li>Home /</li>
+        <li><a href="#">Edit Tabs</a></li>
+      </ul>
+    </div>
+
+    <style>
+      .field div label, .field label {margin-top: 10px;}
+      .field {margin-bottom: 50px;}
+      .check {clear: both;}
+      .check span, .check label { display: block; float: left;}
+      .check span {margin-top: 15px; margin-left: 5px;}
+      .check label {width: 70%;}
+    </style>
+        
+    <div id="edit-mid-part-left">
+      <%= form_for(@branding, :url => '/storefront/' + @tire_store.id.to_s + '/update') do |f| %>
+        <div id="edit-mid-part" class="clearfix">
+          <div class="form-part">
+            <div class="field">
+              <%= f.label :tab1title, 'Tab 1 title' %>
+              <%= f.text_field :tab1title %>
+              <div class="check">
+                <%= f.check_box(:storefront_tab1) %>
+                <%= f.label :storefront_tab1, "Include tab on storefront?" %>
+              </div>
+              <%= f.label :tab1content, 'Tab 1 content' %>
+              <%= f.text_area :tab1content, :size => "40x10" %>
+            </div>
+            <div class="field">
+              <%= f.label :tab2title, 'Tab 2 title' %>
+              <%= f.text_field :tab2title %>
+              <div class="check">
+                <%= f.check_box(:storefront_tab2) %>
+                <%= f.label :storefront_tab2, "Include tab on storefront?" %>
+              </div>
+              <%= f.label :tab2content, 'Tab 2 content' %>
+              <%= f.text_area :tab2content, :size => "40x10" %>
+            </div>
+            <div class="field">
+              <%= f.label :tab3title, 'Tab 3 title' %>
+              <%= f.text_field :tab3title %>
+              <div class="check">
+                <%= f.check_box(:storefront_tab3) %>
+                <%= f.label :storefront_tab3, "Include tab on storefront?" %>
+              </div>
+              <%= f.label :tab3content, 'Tab 3 content' %>
+              <%= f.text_area :tab3content, :size => "40x10" %>
+            </div>
+            <div class="field">
+              <%= f.label :tab4title, 'Tab 4 title' %>
+              <%= f.text_field :tab4title %>
+              <div class="check">
+                <%= f.check_box(:storefront_tab4) %>
+                <%= f.label :storefront_tab4, "Include tab on storefront?" %>
+              </div>
+              <%= f.label :tab4content, 'Tab 4 content' %>
+              <%= f.text_area :tab4content, :size => "40x10" %>
+            </div>
+            <div class="field">
+              <%= f.label :tab5title, 'Tab 5 title' %>
+              <%= f.text_field :tab5title %>
+              <div class="check">
+                <%= f.check_box(:storefront_tab5) %>
+                <%= f.label :storefront_tab5, "Include tab on storefront?" %>
+              </div>
+              <%= f.label :tab5content, 'Tab 5 content' %>
+              <%= f.text_area :tab5content, :size => "40x10" %>
+            </div>
+            <div class="actions">
+              <%= f.submit %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div id="edit-mid-part-right">
+      <h3>Storefront Tabs</h3>
+      <p>
+        Use this form to customize your storefront.  By adding a new tab and checking
+        the "Include this tab on storefront?" box, you will add new information that
+        your customers can click on your storefront page.
+      </p>
+      <h3>Hours</h3>
+      <p>
+        Click here to edit your store hours. These hours will be displayed on your storefront
+        page, and will be displayed to mobile users who are looking for an open tire store
+        near them.
+      </p>
+      <button class="jqTransformButton" onclick="$('#dialog-store-hours').dialog('open');" style="margin: 0px;">
+        <a class="btn btn-primary" 
+          href="#" 
+          onclick="$('#dialog-store-hours').dialog('open');">
+          Edit Storefront Hours
+        </a>
+      </button>
+      <p>
+        <% @tire_store.hours_open_as_string_array.each do |h| %>
+          <%= h %><br />
+        <% end %>
+      </p>
+    </div>
+  </div>
+</div>

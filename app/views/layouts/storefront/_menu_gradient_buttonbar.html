@@ -1,0 +1,33 @@
+<%= stylesheet_link_tag "button_bar" %>
+<script>
+  function showTabNum(tabNum) {
+    if (tabNum == 0) {
+    	window.open('/', '_self');
+    }
+    else if (tabNum == 1) {
+    	window.open('/our-tires', '_self');
+    }
+    else if (tabNum == 2) {
+    	window.open('/store', '_self');
+    }
+    else if (tabNum == 3) {
+    	window.open('/information', '_self');
+    }
+  }
+</script>
+
+<ul class="gradient-buttonbar">
+	<li><a href="/"            <%= request.path == '/'            ? ' class=selected' : '' %>>Home</a></li>
+	<li><a href="/our-tires"   <%= request.path == '/our-tires'   ? ' class=selected' : '' %>>Our Tires</a></li>
+	<li><a href="/store"       <%= request.path == '/store'       ? ' class=selected' : '' %>>Our Store</a></li>
+	<li><a href="/information" <%= request.path == '/information' ? ' class=selected' : '' %>>Information</a></li>
+    <% i = 1 %>
+    <% @tire_store.tab_titles.each do |title| %>
+        <li>
+            <a href="/info<%= i %>" <%= request.path == "/info#{i}" ? ' class=selected' : '' %>>
+                <%= title %>
+            </a>
+            <% i+= 1 %>
+        </li>
+    <% end %>
+</ul>

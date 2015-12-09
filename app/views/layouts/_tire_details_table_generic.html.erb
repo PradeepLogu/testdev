@@ -1,0 +1,127 @@
+<style>
+	.tire-details-table {
+		background-color: #ff6633;
+	}
+	.table-data {
+		padding-left: 5px;
+	}
+	.table-row-title {
+		font-size: 1.2em;
+		font-weight: bold;
+		padding-left: 5px;
+	}
+	.tire-details-info {
+		float: left;
+	}
+	.tire-details-table {
+		font-size: 14px;
+		color: white;
+		font-weight: bold;
+		padding-left: 5px;
+	}
+	.tire-details-table a {
+		color: black;
+	}
+	.table-even {
+		background-color: #DBDBDB;
+	}
+	.table-odd {
+		background-color: #ECECEC;
+	}
+</style>
+<table class="row-no-pad">
+	<tbody>
+		<tr>
+			<td class="tire-details-table" width="280">
+				Tire Info <%= link_to " - Click for details", @tire_listing unless @hide_details_links %>
+			</td>
+			<td class="tire-details-table" width="320">
+				Seller
+			</td>
+		</tr>
+		<tr>
+			<td width="280" valign="top">
+				<table width="280">
+					<tbody>
+						<tr class="table-even">
+							<td class="table-row-title">
+								Quantity
+							</td>
+							<td class="table-data">
+								<% if @tire_listing.quantity > 0 && @tire_listing.quantity < 4 %>
+									<%= @tire_listing.quantity.to_s %>
+								<% else %>
+									4+
+								<% end %>
+							</td>
+						</tr>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								Size
+							</td>
+							<td class="table-data">
+								<%= @tire_listing.tire_size.sizestr unless @tire_listing.tire_size.nil?  %>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+			<td width="328" valign="top">
+				<table width="328">
+					<tbody>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								Seller
+							</td>
+							<td>
+								<% if @tire_listing.tire_store.private_seller? %>
+									Private Seller
+								<% else %>
+									<%= link_to @tire_listing.tire_store.visible_name, 
+											url_for(@tire_listing.tire_store) + "?tire_size_id=#{@tire_listing.tire_size_id}",
+											:style => "font-size: 1.2em; font-weight: bold;" %>
+								<% end %>
+							</td>
+						</tr>
+						<tr class="table-even">
+							<td class="table-row-title">Address</td>
+							<td>
+								<% if @tire_listing.tire_store.private_seller? %>
+									<%= @tire_listing.tire_store.full_address %>
+								<% else %><%= @tire_listing.tire_store.address1 %><br /><%= @tire_listing.tire_store.address2 unless @tire_listing.tire_store.address2.blank? %><% unless @tire_listing.tire_store.address2.blank? %><br/><% end %><%= @tire_listing.tire_store.city %>, <%= @tire_listing.tire_store.state %>&nbsp;<%= @tire_listing.tire_store.zipcode %>
+								<% end %>
+							</td>
+						</tr>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								Phone
+							</td>
+							<td>
+								<% if @tire_listing.tire_store.private_seller? %>
+									<img src="<%= @phone_image %>">
+								<% else %>
+									<%= @tire_listing.tire_store.visible_phone %>
+								<% end %>
+							</td>
+						</tr>
+						<% if @tire_listing.tire_store.account.can_use_logo? && 
+								@tire_listing.tire_store.branding && 
+								@tire_listing.tire_store.branding.logo.exists? %>
+							<tr class="table-odd">
+								<td colspan="2">
+									<br />
+									<%= image_tag(@tire_listing.tire_store.branding.logo.url(:medium)) %>
+								</td>
+							</tr>
+						<% end %>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="99" style="max-width: 250px;">
+				<br /><%= @tire_listing.gendesc %>
+			</td>
+		</tr>
+	</tbody>
+</table>

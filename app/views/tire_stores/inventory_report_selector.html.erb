@@ -1,0 +1,62 @@
+<% provide(:title, 'Inventory Reports - ' + @tire_store.name) %>
+<div style="background-color: #F63;">
+	<h3 style="color: white;">
+		Inventory Reports - <%= @tire_store.name %>
+	</h3>
+</div>
+
+<%= stylesheet_link_tag "forms" %>
+
+<style>
+  td {padding: 5px;}
+</style>
+
+<br />
+
+<%= form_tag(:action => :inventory_report, :controller => :tire_stores) %>
+<%= hidden_field_tag :tire_store_id, @tire_store_id %>
+<table width="100%">
+	<tr>
+		<td width="45%"><h3>View inventory report for all sizes of a selected model</h3></td>
+		<td width="10%"><h3 style="color: red; font-size: 2.0em;">Or</h3></td>
+		<td width="45%"><h3>View inventory report for all models in a selected size</h3></td>
+	</tr>
+	<tr>
+		<td>
+			<div id="choose-by-model">
+				<div id="tire_manufacturers">
+					<%= render :partial => 'layouts/ajax_tire_manufacturers_no_size', 
+					          :object => @tire_manufacturers %>
+				</div>
+				<div id="tire_models">
+					<%= render :partial => 'layouts/ajax_tire_models_no_size',
+					          :object => @tire_models,
+					          :locals => {:@tire_store_id => @tire_store_id} %>
+				</div>
+			</div>
+		</td>
+		<td></td>
+		<td valign="top">
+			<div id="choose-by-size">
+				<div id="tire_sizes">
+					<%= render :partial => 'layouts/ajax_tire_sizes_no_mfr', 
+					          :object => @tire_manufacturers,
+					          :locals => {:@tire_store_id => @tire_store_id} %>
+				</div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<%= submit_tag('View Report',
+					:class => 'btn-primary btn btn-large', 
+					:name => 'report_by_model') %>
+		</td>
+		<td>&nbsp;</td>
+		<td>
+			<%= submit_tag('View Report',
+					:class => 'btn-primary btn btn-large', 
+					:name => 'report_by_size') %>
+		</td>
+	</tr>
+</table>

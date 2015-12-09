@@ -1,0 +1,89 @@
+	<script>
+		function selectItemByValue(elmnt, value) {
+			for(var i=0; i < elmnt.options.length; i++)
+			{
+				if(elmnt.options[i].text.toUpperCase() === value.toUpperCase()) {
+					elmnt.selectedIndex = i;
+					//elmnt.val(elmnt.options[i].value);
+					break;
+				}
+			}
+		}
+
+		function lookup_store(orig_phone, orig_zip) {
+			if (has_looked_up)
+				return;
+
+			var phone = orig_phone.replace(/\D/g,'');
+			var zip = orig_zip.replace(/\D/g,'');
+			if (phone.length == 10 && zip.length >= 5) {
+				has_looked_up = true;
+				$.ajax({
+					type: "GET",
+					dataType: "html",
+					url: '/ajax/get_store_from_phone_and_zip',
+					data: {phone: phone,
+							zipcode: zip},
+					success:function(result){
+						show_other_fields();
+
+						j = JSON.parse(result);
+						$('input#registration_name').val(j.name);
+						$('input#registration_address1').val(j.address1);
+						$('input#registration_address2').val(j.address2);
+						$('input#registration_city').val(j.city);
+						if (j.state.length == 2) {
+							$('select#registration_state').val(j.state);
+						} else {
+							selectItemByValue(document.getElementById('registration_state'), j.state);
+						}
+						$('input#registration_zipcode').val(j.zipcode);
+						$('input#registration_store_phone').val(j.phone);
+						// $('select#tire_size').val(j.id);
+						// $('select#tire_size').change();
+					},
+					error:function(result){
+						show_other_fields();
+					}
+				})
+			}
+		}
+
+		function show_other_fields() {
+			$('div#store-details').show();
+			$('div#store-info').hide();
+			$('input#create-store').show();
+		}
+	</script>
+
+	<%= label_tag "Store Zip Code" %>
+	<%= f.text_field :zipcode %>
+
+	<%= label_tag "Store Phone" %>
+	<%= f.text_field :store_phone %>	
+
+	<% if false %>
+	<div id="store-info">
+		<%= label_tag "Show other fields", nil, style: 'width: initial;' %>
+		<%= check_box_tag :show_store_info, true, false, :style => 'display: inline; height: inherit; margin-top: 12px; margin-left: 5px;' %>
+	</div>
+	<% end %>
+
+	<div id="store-details" class="hide">
+		<%= label_tag "Store Name" %>
+		<%= f.text_field :name %>
+
+		<%= label_tag "Store Address 1" %>
+		<%= f.text_field :address1 %>
+
+		<%= label_tag "Store Address 2" %>
+		<%= f.text_field :address2 %>
+
+		<%= label_tag "Store City" %>
+		<%= f.text_field :city %>
+
+		<!-- <div id="state"> -->
+			<%= f.label :state, "State", style: 'width: initial;' %>
+			<%= f.select(:state, us_states, {}, {:style => 'display: inline; height: inherit; margin-top: 12px; margin-left: 5px;'}) %>
+		<!-- </div> -->
+	</div>

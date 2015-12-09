@@ -1,0 +1,73 @@
+
+.account-search{ width:1158px; padding:39px 0 0 0; margin:0 auto;}
+.account-search .heading2 { float:right; }
+.account-search .heading2 ul{ float:right;}
+.account-search .heading2 ul li + li{ padding:9px 7px;}
+.account-search .heading2 ul li + li + li + li + li + li + li + li{ padding:0; }
+.account-search .pro-clm{ width:100%; border:1px solid #ece9e9; border-radius:4px; margin:0 0 13px 0; float:left; height:auto; padding: 0;}
+.account-search .pro-clm div{ float:left; background:#f3f3f3; height:139px; width:19%; border-right:1px solid #ece9e9; text-align:center;}
+.account-search .pro-clm div img{display: block; margin-left: auto; margin-right: auto; max-height: 100%; max-width: 100%;}
+.account-search .pro-clm div h3{ padding: 0 0 13px; font-family: 'proxima_novasemibold'; font-size:22px; color:#272c31;}
+.account-search .pro-clm div + div{ float:left; background:none; border:none; width: 31%; padding:0 0 0 10px; height:auto; text-align:left;}
+.account-search .pro-clm div + div p{   font-family: 'proxima_nova_rgregular'; font-size:15px; color:#272c31;float:left; width:196px;}
+.account-search .pro-clm div + div p + p{ float:right; width: auto;}
+.account-search .pro-clm div + div p span{ float:right; width:90%;}
+.account-search .pro-clm div + div p img{ float:left;   padding: 2px 8px 0 0;}
+.account-search .pro-clm div + div + div{   padding: 2% 0 0;float: right; width: auto; margin-right:2%;}
+.account-search .pro-clm div + div + div a{
+	background: url(/assets/btn-bg.gif) 0 0 repeat-x; 
+	width:134px; 
+	height:43px;  
+	font-family: 'proxima_novasemibold'; 
+	font-size:14px; 
+	color:#fff; 
+	display:inline; 
+	border-radius:4px; 
+	text-transform:uppercase; 
+	padding:10px; 
+	line-height:43px; 
+	text-shadow: 2px 2px 2px #da422d;
+}
+
+
+@media screen and (max-width: 1200px) { 
+    .src-your-account .clm1, .account-search{ width:98%; } 
+    .account-search .pro-clm div + div p{ padding:0 0 10px 0;}
+    .account-search .pro-clm div + div p + p{ float:left; margin-right: 20px;}
+    .account-search .pro-clm div + div{width: 66%;}
+    .account-search .pro-clm div + div + div a{ width:100%;} 
+}
+
+@media screen and (max-width: 640px) { 
+    .account-search .pro-clm div h3 {   font-size: 20px;}
+    .account-search .pro-clm div + div{width: 50%;}
+    .account-search .pro-clm{ height:auto;}
+}
+
+@media screen and (max-width: 500px) { 
+	.account-search .pro-clm div h3 {   font-size: 18px;}
+    /*.account-search .pro-clm div + div + div{ float:left;}*/
+
+    .clm1 .select-box .jqTransformSelectWrapper, .clm1 .select-box .jqTransformSelectWrapper + .jqTransformSelectWrapper,.clm1 .select-box .jqTransformSelectWrapper + .jqTransformSelectWrapper + .jqTransformSelectWrapper {
+        width: 42% !important;
+    }
+
+    .clm1 .select-box .jqTransformInputWrapper {
+        width: 72% !important;
+    }
+
+    .account-search .pro-clm div + div + div a {
+    	font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 320px) { 
+    .account-search .pro-clm div, .account-search .pro-clm div + div { 
+        float:none; 
+        width:100%; 
+        padding-left:0;
+    }
+    .account-search .pro-clm div + div + div{ float:left;}
+    .account-search .pro-clm div + div + div{ width:41%; margin:0 0 5% 6%;}
+    .account-search .pro-clm div + div p + p, .account-search .pro-clm div + div p { float:none;} 
+}

@@ -1,0 +1,94 @@
+/*.MicrosoftMap { max-width: 50%;}*/
+#curLocation { width: 65%;}
+#myMap {
+    position:relative; 
+    height:300px; 
+    width: 65%;
+    float:left;
+}
+
+.nosimilarbox {width: 90%!important;}
+.nosimilarbox #myMap { width: 100%!important;}
+
+#details-map {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    /* padding-top: 350px; */
+    margin-top: 25px;
+}
+
+.pushpinStyle div{
+    color: black !important; /*Make Pushpin text black*/
+    left: 0px !important;  /*Since Pushpin text is absolutely positioned, this will cause the text to be 5 pixels from the left instead of 0 pixels */
+    text-shadow: 1px 0px white, -1px 0px white, 0px -1px white, 0px 1px white;  /*Give the text all around white text shadow so it looks nice on browsers that support it*/
+    font: 1px arial,sans-serif!important;
+}
+.similarbox {
+    width: 30%;
+    padding: 10px;
+    border: 1px solid #CCC;
+    border-radius: 3px;
+    /*background: white;*/
+    /*font-size: 12px !important;*/
+    float: right;
+}
+
+.MicrosoftNav { visibility: hidden; }
+.MicrosoftMap:hover>.MicrosoftNav { visibility: visible;}
+
+.form-part {
+	background: none;
+}
+
+ul { margin: 0px;}
+
+.MicrosoftMap .dd_itinerary .dd_instruction {
+	font-size: 90%;
+}
+.MicrosoftMap .dd_tripSummary {
+	font-size: 125%;
+}
+
+@media screen and (max-width: 640px) {
+    #curLocation { width: 65%;}
+    #myMap {
+        width: 100%;
+        float:none;
+    }
+    #details-map {
+        width: 90%;
+        margin-left: 5%;
+        margin-right: 5%;
+        /* padding-top: 350px; */
+        margin-top: 25px;
+    }
+    .similarbox {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: none;
+        /*background: white;*/
+        /*font-size: 12px !important;*/
+        float: none;
+    }
+}
+
+@media screen and (max-width: 480px) {
+	div#reservation_modal {
+		max-width: 318px!important;
+		margin-top: -204px;
+		margin-left: -160px;
+		height: 400px;
+	}
+    div#reservation_modal input[type="text"] {
+        height: 8px!important;
+    }
+    div#reservation_modal td {
+    	font-size: 0.7em;
+    }
+    div#reservation_modal h3 {
+    	font-size:15px;
+    	line-height: 15px;
+    }
+}

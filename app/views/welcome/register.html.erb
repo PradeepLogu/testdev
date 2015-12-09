@@ -1,0 +1,287 @@
+<% provide(:title, 'Welcome To TreadHunter') %>
+
+
+<style>
+#registration-mid-part-left, #registration-mid-part-right {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+h1 {
+	color: #F05A29;
+	font-size: 24px;
+}
+.form-heading h1 {
+	line-height: 25px;
+	padding-top: 10px
+}
+
+.form-part {
+	background-color: #e1e1e1;
+	border: solid 1px #7d7d7d;
+	border-radius: 5px;
+	padding: 10px;
+}
+.form-heading {
+	margin-bottom: 15px;
+}
+.form-part hr {
+	background-color: #c2c2c2;
+	margin-left: 5%;
+	margin-right: 5%;
+}
+.form-part input[type="text"], .form-part input[type="password"] {
+	width: calc(100% - 10px);	/* subtract padding+border */
+}
+.submit {
+	text-align: center;
+}
+
+
+ul.orange-check-list {
+	margin: 15px 0;
+}
+ul.orange-check-list li {
+	list-style: disc inside url("/assets/orange-check.png");
+	font-size: 16px;
+	padding-bottom: 5px;
+}
+
+#dialog {
+	display: none;
+	position: absolute;
+	top: 250px;
+	left: 0;
+	width: 100%;
+	z-index: 1001;
+	text-align: center;
+}
+
+.ui-dialog-titlebar {
+	display: none;
+}
+.ui-dialog .register-success {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.register-success .title {
+	line-height: 1;
+	margin-bottom: -5px !important;     /* because the font is so messed up */
+}
+.register-success hr {
+	width: 80%;
+	margin: 15px auto;
+}
+.register-success .btn-cont {
+	margin: 20px 0;
+}
+.register-success .btn {
+	width: 200px;
+}
+.register-success .my-profile-link {
+	color: #F05A29;
+	text-decoration: underline;
+}
+
+
+@media screen and (max-width: 767px) {
+	#registration-mid-part-left {
+		width: 100%;
+	}
+	#registration-mid-part-right {
+		float: left;
+		width: 100%;
+	}
+	#dialog {
+		top: 150px;
+	}
+}
+
+</style>
+
+<%= javascript_include_tag "jquery.form.min.js" %>
+<%= javascript_include_tag "video_page" %>
+<%= stylesheet_link_tag "video_page" %>
+<%= javascript_include_tag "jquery.fancybox" %>
+<%= stylesheet_link_tag "jquery.fancybox" %>
+
+<script>
+$(function() {
+	$(".various").fancybox({
+      maxWidth  : 800,
+      maxHeight : 600,
+      fitToView : false,
+      width   : '90%',
+      height    : '90%',
+      autoSize  : false,
+      closeClick  : false,
+      openEffect  : 'none',
+      closeEffect : 'none',
+      closeBtn : true
+	});
+
+  document.getElementById('user_password').focus();
+});
+</script>
+
+<!-- localhost:3000/welcome/register/26ad44f2-544b-4fc6-a954-1ac76c468c8d -->
+
+<div id="search-content2" class="container-outer">
+  <div id="search-content-inner2" class="container-inner">
+
+    <div class="row-fluid">
+      <div id="registration-mid-part-left" class="span4">        
+        <div id="store-form" class="form-part">
+          <div class="form-heading">
+          	Register with TreadHunter &amp;
+            <h1 class="orange">START LISTING TIRES TODAY</h1>
+          </div>
+          <%= form_for @user, :url => {:controller => "welcome", 
+          					  				:action => "registration"}, 
+                              :html => {:method => :post, :class => "register-form"},
+                              :validate => true do |u| %>
+
+            <h3>User Information</h3>
+
+            <%= hidden_field_tag :uuid, params[:uuid] %>
+
+            <%= u.label :first_name, "First Name" %>
+            <%= u.text_field :first_name %>
+
+            <%= u.label :last_name, "Last Name" %>
+            <%= u.text_field :last_name %>
+
+            <%= u.label :email %>
+            <%= u.text_field :email %>
+
+            <%= u.label :phone %>
+            <%= u.text_field :phone %>
+            
+            <%= u.label "Zip Code" %>
+            <%= u.text_field :zipcode %>
+
+            <% if @user.password.blank? %>
+              <%= u.label :password, :style=>"color: red" %>
+              <%= u.password_field :password %>
+
+              <%= u.label :password_confirmation, "Re-enter password", :style=>"color: red" %>
+              <%= u.password_field :password_confirmation %>
+            <% else %>
+              <%= u.label :password %>
+              <%= u.password_field :password %>
+
+              <%= u.label :password_confirmation %>
+              <%= u.password_field :password_confirmation %>
+            <% end %>
+
+
+            
+            <h3>Store Information</h3>
+            <%= u.fields_for @tire_store, :validate => true do |t| %>
+            	<%= t.label "Store Name" %>
+            	<%= t.text_field :name %>
+
+            	<%= t.label "Store Address" %>
+            	<%= t.text_field :address1 %>
+            	<%= t.text_field :address2 %>
+
+            	<%= t.label "City" %>
+            	<%= t.text_field :city %>
+
+            	<%= t.label "State" %>
+            	<%= t.select(:state, us_states, {}) %>
+
+            	<%= t.label "Zip" %>
+            	<%= t.text_field :zipcode %>
+
+            	<%= t.label "Contact Email" %>
+            	<%= t.text_field :contact_email %>
+
+            	<%= t.label "Store Phone" %>
+            	<%= t.text_field :phone %>
+
+	            <p class="note">
+	            	<strong>NOTE:</strong>
+	            	If you have multiple stores, use the main corporate name above.  If you have
+	            	a single store, you can use its name above.
+	            </p>
+            <% end %>
+
+            <h3>Account Information</h3>
+            <%= u.fields_for @account do |a| %>
+            	<%= a.label "Account Name" %>
+            	<%= a.text_field :name %>
+
+            	<%= a.label "Mailing Address" %>
+            	<%= a.text_field :address1 %>
+            	<%= a.text_field :address2 %>
+
+            	<%= a.label "City" %>
+            	<%= a.text_field :city %>
+
+            	<%= a.label "State" %>
+            	<%= a.select(:state, us_states, {}) %>
+
+            	<%= a.label "Zip" %>
+            	<%= a.text_field :zipcode %>
+
+            	<%= a.label "Account contact phone" %>
+            	<%= a.text_field :phone %>
+
+            	<%= a.label "Account contact email" %>
+            	<%= a.text_field :billing_email %>
+            <% end %>
+
+            <div class="submit">
+              <%= u.submit "Register With TreadHunter", :class => "btn submit-btn" %>
+            </div>
+
+            <br />
+            <div id="seller-create-errors">
+            </div>
+          <% end %>
+        </div>
+
+      </div>
+    
+      <div id="registration-mid-part-right" class="span8">
+        <div id="store-info" class="info">
+          <h1>Why TreadHunter?</h1>
+	      <p>TreadHunter allows tire stores and individuals to list their tires for free.
+	      	 For new tires, we collect credit card payment from consumers and transfer the funds immediately into your bank account (minus a <%= $th_processing_fee_percent %>% credit card processing and marketing charge). We also gather the consumer's preferred appointment times
+	      	 to have the tires installed, and allow you to confirm the appointment with the consumer through our application. If you prefer, you can do all this, as well as ordering tires from your distributors, from your smart phone or tablet.</p>
+	      <h1>Why use TreadHunter to help sell your tires?</h1>
+	      <ul class="orange-check-list">
+	        <li>Gives you an Internet presence with targeted marketing</li>
+	        <li>Easily promote sales and specials</li>
+	        <li>Targeted search engine experience</li>
+	        <li>Customers can make reservations online to schedule an appointment</li>
+	      </ul>
+	      <h1>How it Works</h1>
+	      <p>
+	      	<a class="various fancybox.iframe" href="http://www.youtube.com/embed/qKLdHTfjK8A?autoplay=1">
+              <img src="/assets/play-button-overlay.png" 
+              	style="width: 100%;background:transparent URL(/assets/8QGu6k0WtMQ.png) no-repeat center;background-size: 100% 100%;"/>
+            </a>
+	      </p>
+          <h1>What is TreadHunter?</h1>
+	      <p>TreadHunter is a new service that connects tire buyers in your area to your tire store. By allowing you to easy advertise your tire inventory, potential customers can find your store and find the tire they need.</p>
+	      <p>We also handle the credit card processing fees and Internet marketing so consumers can find your tires and store. As more consumers do their research and purchasing of tires on the Internet, partnering with TreadHunter lets your business grow with the changing times.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="dialog-store-success" class="th-dialog register-success" style="display:none;">
+	<div class="center-content">
+		<h2 class="title">WELCOME TO TREADHUNTER.COM</h2>
+		<hr/>
+		<p>Thank you for creating an account with us. To get started, create a storefront so you can start listing your tires,
+		   managing your appointments, creating promotions, and managing your reviews.</p>
+		<div class="btn-cont">
+			<%= link_to "CREATE A STOREFRONT", "/myTreadHunter?create_storefront=1", :class => "btn storefront-btn" %>
+		</div>
+		<%= link_to "GO TO MY ACCOUNT", "/myTreadHunter", :class => "my-account-link" %>
+	</div>
+</div>

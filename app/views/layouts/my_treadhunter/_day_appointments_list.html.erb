@@ -1,0 +1,96 @@
+<center>
+	<br />
+	<span class="date-title"><b><%= Date.parse(params[:appt_date]).strftime("%B %d, %Y") %></b></span><br />
+	<span class="appt-count"><%= @appointments.size %> Total Appointments</span>
+</center>
+<hr />
+<% @appointments.each_with_index do |appt, i| %>
+	<div class="appt-details <%= cycle('appt-even', 'appt-odd') %>">
+		<div class="appt-user-details">
+			<span class="appt-confirmed">Appointment <%= i + 1 %>:
+				<% if appt.confirmed_flag %>
+					<span class="confirm-status">Confirmed</span>
+				<% else %>
+					<span class="confirm-status">Unconfirmed</span>
+				<% end %>
+			</span>
+			<br />
+			<div class="appt-store-details">
+				<b><strong>Store Info:</strong></b><br />
+				<%= appt.tire_store.name %><br />
+				Primary: <%= appt.primary_request_time_short %><br />
+				Secondary: <%= appt.secondary_request_time_short %><br />
+				Phone: <%= appt.tire_store.formatted_phone_number %><br />
+			</div>
+			<br />
+			<div class="appt-buyer-details">
+				<b><strong>Customer Info:</strong></b><br />
+				<%= appt.buyer_name %><br />
+				Phone: <%= appt.formatted_buyer_phone %><br />
+				Email: <%= appt.buyer_email %><br />
+			</div>
+		</div>
+		<% if appt.order_id %>
+			<div class="appt-order-details">
+				Order Info:<br />
+				<div class="tires-ordered-details">
+					<%= appt.tire_description %> <br />
+					Part #: <%= appt.tire_listing.tire_model.manu_part_num %><br />
+				</div>
+				Price Each: <%= number_to_currency appt.order.tire_ea_price_money %><br />
+				Order Total: <%= appt.order.total_order_price_money %><br />
+				<a href="#" onclick="load_and_show_order(<%= appt.order_id %>);">
+					<b><u>View Order Details</u></b>
+				</a>
+			</div>
+		<% else %>
+			<div class="appt-order-details">
+				<div class="tires-ordered-details">
+					<%= appt.tire_description %> <br />
+					Part #: <%= appt.tire_listing.tire_model.manu_part_num %><br />
+				</div>
+				Price Each: <%= number_to_currency appt.price %><br />
+				<br />
+
+				<div class="appt-has-no-order-details">
+					<span class="appt-no-order">
+						<br />
+						Note: this appointment request is not associated with an order,
+						so you will need to collect payment upon services rendered.
+					</span>
+				</div>	
+			</div>
+		<% end %>
+
+		<center>
+			<div class="appt-user-buttons">
+				<% if appt.confirmed_flag == false %>
+					<a href="#" 
+						onclick="begin_confirm_appt(<%= appt.id %>, '<%= appt.primary_request_time %>', '<%= appt.secondary_request_time %>')" 
+						class="btn confirm-btn" style="width: 50px;">
+						CONFIRM
+					</a>
+				<% else %>
+					<a class="btn confirm-btn" style="width: 50px; color: gray;">
+						CONFIRM
+					</a>
+				<% end %>
+				<% if appt.order_id %>
+					<a href="#" 
+						onclick="begin_cancel_order('<%= appt.order_id %>', '<%= appt.id %>')"
+						class="btn cancel-btn" 
+						style="width: 50px;">
+						CANCEL
+					</a>
+				<% else %>
+					<a href="#" 
+						onclick="begin_cancel_appt('<%= appt.id %>')" 
+						class="btn cancel-btn" 
+						style="width: 50px;">
+						CANCEL
+					</a>
+				<% end %>			
+			</div>
+		</center>
+	</div>
+<% end %>

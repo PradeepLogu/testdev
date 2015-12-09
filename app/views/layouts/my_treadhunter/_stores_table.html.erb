@@ -1,0 +1,71 @@
+<% unless !@account.tire_stores.first.nil? && @account.tire_stores.first.private_seller? %>
+<div class="right-buttons">
+	<%= link_to "CREATE A STOREFRONT", new_tire_store_path(account: @account.id), class: "btn btn-primary", id: "create-storefront" %>
+</div>
+<% end %>
+
+<table id="stores-table" class="display">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th></th>
+			<th>Address</th>
+			<th>Phone Number</th>
+			<th>Payment Info</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% i = 0
+		   @account.tire_stores.each do |t|
+		   	i += 1 %>
+		<tr>
+			<!--<% if allow_ecomm() %>
+				<td>
+					<center>
+						<% if t.can_do_ecomm? %>
+							<% if super_user? %>
+								<a href="/pages/get_financial_data?tire_store_id=<%= t.id %>">
+									<%= image_tag("ecomm-ready.png", class: "ecomm-image", title: "Ready for eComm!") %>
+								</a>
+							<% else %>
+								<%= image_tag("ecomm-ready.png", class: "ecomm-image", title: "Ready for eComm!") %>
+							<% end %>
+						<% else %>
+							<% if super_user? %>
+								<a href="/pages/get_financial_data?tire_store_id=<%= t.id %>">
+									<%= image_tag("ecomm-not-ready.png", class: "ecomm-image", title: "Not ready for eComm :(") %>
+								</a>
+							<% else %>
+								<%= image_tag("ecomm-not-ready.png", class: "ecomm-image", title: "Not ready for eComm :(") %>
+							<% end %>
+						<% end %>
+					</center>
+				</td>
+			<% end %>-->
+			<td class="left"><%= "#{i}. #{t.name}" %></td>
+			<td>
+				<% if !t.private_seller? %>
+					<%= link_to 'View', t, class: "link" %> | 
+				<% end %>
+				<%= link_to 'Edit', edit_tire_store_path(t), class: "link edit-store", id: t.id %>
+			</td>
+			<td><%= t.address1 %><br/><%= "#{t.city}, #{t.state} #{t.zipcode}" %></td>
+			<td><%= t.visible_phone %></td>
+			<td>
+				<% if t.can_do_ecomm? %> Online and<br/>In-store
+				<% else %> In-store only
+				<% end %>
+			</td>
+			<td class="right">
+				<%= link_to "DELETE STORE", tire_store_path(t), 
+						method: "delete", 
+						:confirm => 'Are you sure?',
+						class: "btn" %>
+			</td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+
+

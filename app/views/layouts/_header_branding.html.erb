@@ -1,0 +1,35 @@
+<style>
+  #header-brand {
+    background: #808080;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    height: 34px;
+    float: right;
+    text-align: right;
+    display: inline;
+  };
+</style>
+<header class="navbar-branding">
+  <%= yield :head %>
+  <nav>
+    <div id="header-brand" style="color: white;">
+      <div style="float: left;">
+        <%= link_to image_tag('tire_logo.png', :size=>'180x31', 
+              alt: 'TreadHunter.com'), '/' %>
+      </div>
+      <% if signed_in? %>
+        <%= link_to "Home", root_path %>
+        | <%= link_to "Find a Store", tire_stores_path %>
+        <% if super_user? && false %>
+            | <%= link_to("Edit this brand", users_path) %>
+        <% end %>
+      <% else %>
+        <%= link_to "Sign in", signin_path %>
+        | <%= link_to "Find a Store", '/tire-stores' %>
+      <% end %>
+    </div>
+  </nav>
+</header>

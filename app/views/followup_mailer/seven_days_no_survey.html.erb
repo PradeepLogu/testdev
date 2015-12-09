@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+		</head>
+		<body>
+			<p>Dear TreadHunter Customer Care,<p />
+				The account below has registered with TreadHunter, but has not yet completed our survey 
+				after seven days.  Please contact the customer and ask the questions from the link below
+				and answer them on the page.
+				<br />
+				<a href="<%= @survey_url %>">Use this link</a>
+				<br /><br />
+				Account Info:<br />
+				Name: <%= @account.name %><br />
+				Address: <%= @account.full_address %><br />
+				Phone: <%= @account.formatted_phone %><br />
+				Billing Email: <%= @account.billing_email %><br />
+				<br />
+				<br />
+				Main Store Info:<br />
+				Name: <%= @tire_store.name %><br />
+				Address: <%= @tire_store.full_address %><br />
+				Phone: <%= @tire_store.formatted_phone_number %><br />
+				Contact Email: <%= @tire_store.contact_email %><br />
+				<br />
+				<br />
+				User Info:<br />
+				Name: <%= @user.name %><br />
+				Phone: <%= @user.formatted_phone %><br />
+				Email: <%= @user.email %><br />
+			</p>
+		</body>
+	</html>

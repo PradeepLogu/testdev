@@ -1,0 +1,41 @@
+<div class="hover" id="tire_widths">
+  <select class="users" 
+          id="tire_sizes" 
+          name="tire_size_id" >
+    <option value="">Select a Size</option>
+    <% @tire_sizes.each do |t| %>
+      <% if !@tire_listing.nil? && @tire_listing.tire_size_id == t.id %>
+        <option selected="selected" value="<%= t.id %>"><%= t.sizestr %></option>
+      <% else %>
+        <option value="<%= t.id %>"><%= t.sizestr %></option>
+      <% end %>
+    <% end %>
+  </select>
+  <script>
+    $('select#tire_sizes').change(function() {
+      v = $(this).attr('value');
+      if(typeof v == 'undefined')
+        v = $('select#tire_sizes').val();
+      $.ajax({
+        type: "GET",
+        dataType: "html",
+        url: '/ajax/update_tire_manufacturers_visfire',
+        data: {tire_size_id: v},
+        success:function(result){
+          $('div#tire_manufacturers').html(result);
+          fix_select('select#tire_manufacturers');
+        } 
+      });
+      $.ajax({
+        type: "GET",
+        dataType: "html",
+        url: '/ajax/update_tire_models_visfire',
+        data: {tire_size_model: 0},
+        success:function(result){
+          $('div#tire_models').html(result);
+          fix_select('select#tire_models');
+        } 
+      });
+    });
+  </script>
+</div>

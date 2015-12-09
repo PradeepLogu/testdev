@@ -1,0 +1,39 @@
+<% provide(:title, 'TreadHunter.com') %>
+<%= stylesheet_link_tag "pricing" %>
+
+<% provide(:visfire, "true") %>
+
+<style>
+    ul li {
+        list-style: inherit;
+        font: 12px proxima_novasemibold;;
+    }
+    div.price {
+        font: 18px proxima_novasemibold!important;
+        color:black!important;
+    }
+</style>
+
+<div class="main-slideshow-2">
+    <!--banner slider-->
+</div>
+
+<div id="searc-header">
+    <%= render 'layouts/header_visfire' %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+    <div id="search-content-inner2" class="clearfix">
+        <div id="search-main2">
+            <h2>TreadHunter Pricing</h2>
+            <ul>
+                <li>Home /</li>
+                <li><a href="#">TreadHunter Pricing</a></li>
+            </ul>
+        </div>
+
+        <div id="registration-mid-part" class="clearfix">
+            <%= render 'layouts/pricing' %>
+        </div>
+    </div>
+</div>

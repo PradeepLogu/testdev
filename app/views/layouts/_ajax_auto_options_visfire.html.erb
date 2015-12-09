@@ -1,0 +1,15 @@
+<div id="auto_options">
+<select id="auto_options" name="option_id">
+  <option value="">Option</option>
+  <% @options.each do |o| %>
+    <% if o.id == session[:option_id] %>
+      <option selected="selected" value="<%= o.id %>"><%= o.name %></option>
+    <% else %>
+      <option value="<%= o.id %>"><%= o.name %></option>
+    <% end %>
+  <% end %>
+</select>
+<span class="help-icon">
+  <a href="#" id="help-auto-options"><%= image_tag("question-icon.png", alt: "?") %></a>
+</span>
+</div>

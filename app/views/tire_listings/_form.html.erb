@@ -1,0 +1,331 @@
+<% provide(:visfire, "true") %>
+<%= stylesheet_link_tag "style-wide-form" %>
+
+<style>
+  .form-part span.jqTransformRadioWrapper + label {
+    width: auto;
+  }
+
+  .nomargin {
+    margin: 10px 0 0 10px!important;
+  }
+
+  .jqTransformCheckboxWrapper {
+    margin-top:10px!important;
+  }
+
+  .jqTransformSelectWrapper {margin: 0 0 0 0!important;}
+  .check label, .check span { display: block; float: left;}
+  .check span {width: 10%!important;}
+  .check label {width: 40%!important;}
+
+  .qty span, .qty label {display: block; float: left; clear:both;}
+  .qty div.jqTransformSelectWrapper {width: 30%!important; z-index:400!important;}
+  .qty label {width: 40%!important;}
+
+  .size, .manu, .model, .tire-price, .remaining-tread, .check, #willing-to-ship { 
+    padding-top: 10px;
+    margin-top: 10px;
+    clear:both;
+  }
+
+  .size span + label {display: block; float: left; clear:both;}
+  .size label + label {display: inline; margin-top: 0px; float:none;}
+  .size div.jqTransformSelectWrapper {width: 150px!important; z-index:300!important;}
+  .size label {width: 40%!important;}
+
+  .manu span, .manu label {display: block; float: left; clear:both;}
+  .manu label + label {display: inline; margin-top: 0px; float:none;}
+  .manu div.jqTransformSelectWrapper {width: 200px!important; z-index:200!important;}
+  .manu label {width: 40%!important;}
+
+  .model span, .model label {display: block; float: left; clear:both;}
+  .model label + label {display: inline; margin-top: 0px; float: none;}
+  .model div.jqTransformSelectWrapper {width: 200px!important;}
+  .model label {width: 40%!important;}
+
+  .tire-price span, .tire-price label {display: block; float: left; clear:both;}
+  .tire-price div.jqTransformInputWrapper {width: 40%!important; margin-left:0px!important;}
+  .tire-price label {width: 40%!important;}
+
+  .will-ship span, .will-ship label {display: block; float: left; clear:both;}
+  .will-ship label + label {display: inline; margin-top: 0px; float: none;}
+  .will-ship div.jqTransformSelectWrapper {width: 200px!important;}
+  .will-ship label {width: 40%!important;}
+
+  .remaining-tread span, .remaining-tread label {display: block; float: left; clear:both;}
+  .remaining-tread div.jqTransformInputWrapper {width: 10%!important; margin-left:0px!important;}
+  .remaining-tread label {width: 70%!important;}
+
+  .condition {clear:both;}
+  .condition a, .condition label {display: block; float: left; margin-top:0px!important;}
+  .condition label {width: auto!important}
+  .condition .jqTransformRadioWrapper {width: 10%!important; margin: 5px 5px 0 5px;}
+  .condition .jqTransformRadioWrapper + label {width: 20%!important;}
+
+  .hover { margin-left: 0px!important;}
+
+  #edit-mid-part-right p img {clear:both; display: block;}
+
+  .small-label { 
+    margin: 0px 0px 15px 10px!important; 
+    font: 12px/23px 'proxima_nova_rgregular'!important;
+  }
+
+  @media screen and (max-width: 1024px) { 
+    .manu div.jqTransformSelectWrapper {width: 180px!important;}
+    .model div.jqTransformSelectWrapper {width: 180px!important;}
+  }
+
+  @media screen and (max-width: 380px) { 
+    .manu div.jqTransformSelectWrapper {width: 160px!important;}
+    .model div.jqTransformSelectWrapper {width: 160px!important;}
+
+    form.jqtransformdone label {font: 12px/23px 'proxima_nova_rgregular';}
+  }
+</style>
+
+<script>
+  $(function() {
+    $('form').jqTransform();
+
+    function chooseDefault() {
+      //var value = $(this).parent().index();
+      cur_selected = $(this).parent().parent().children('ul').children('li').children('a.selected').attr('index');
+      if (cur_selected == '0') {
+        $(this).parent().parent().children('ul').children('li').children('a.selected').removeClass('selected');
+        var halfway = Math.round($(this).parent().parent().children('ul').children('li').size() / 2);
+        var defaultSelect = $(this).parent().parent().children('ul').find('li').eq(halfway).find('a');
+        defaultSelect.addClass('selected');
+      }
+    }
+
+    $("div#tire_widths div.jqTransformSelectWrapper div a.jqTransformSelectOpen").on("click", chooseDefault);
+  });
+
+  function show_or_hide_break_set() {
+    used_set = ($("#tire_listing_is_new_false").attr('checked') == 'checked');
+    qty = parseInt($('select#tire_listing_quantity').attr('value'));
+    if (used_set == true && qty > 1) {
+      $("#full_set").removeClass("hide");
+    }
+    else {
+      $("#full_set").addClass("hide");
+    }
+  };
+
+  function show_or_hide_willing_to_ship_and_description() {
+    used_set = ($("#tire_listing_is_new_false").attr('checked') == 'checked');
+    if (used_set == true) {
+      $("#willing-to-ship").removeClass("hide");
+    }
+    else {
+      $("#willing-to-ship").addClass("hide");
+    }
+  };
+
+  function prompt_to_change_default_willing_to_ship() {
+    if (confirm('You do not currently have a default value for \n\n"Willing To Ship"\n\n' +
+                'on your store.\nWould you like to set this as the default value for the store?')) {
+      document.getElementById("tire_store_change_default_willing_to_ship").value = "true";
+    };
+  };
+
+  $(document).ready(function() {
+    window.scrollTo(0, 0);
+    show_or_hide_break_set();
+    show_or_hide_willing_to_ship_and_description();
+  });
+
+  function fix_select(selector) {
+    var i=$(selector).parent().find('div,ul').remove().css('zIndex');
+    $(selector).unwrap().removeClass('jqTransformHidden').jqTransSelect();
+    $(selector).parent().css('zIndex', i);
+  }
+</script>
+
+<div class="container-outer">
+  <div class="container-inner">
+    <div id="search-main2">
+      <% if !@tire_listing.new_record? %>
+        <h2>Edit Tire Listing</h2>
+      <% else %>
+        <h2>Create a Listing</h2>
+      <% end %>
+    </div>
+
+    <%= form_for(@tire_listing) do |f| %>
+      <%= hidden_field(:tire_store, :change_default_willing_to_ship, :value => false) %>
+      <!--
+      <input id="tire_store_change_default_willing_to_ship" 
+              name="tire_store[change_default_willing_to_ship]" 
+              type="hidden" 
+              value="false" />
+      -->
+      <div id="edit-mid-part" class="clearfix">
+        <div id="edit-mid-part-left">
+          <div class="form-part">
+            <div class="form-heading">
+              <h3>Tire Listing</h3>
+              <p>Fill this form out with information about the tire(s)</p>
+            </div>
+            <%= f.hidden_field :tire_store_id, :value => @tire_listing.tire_store_id %>
+            <div class="qty">
+              <%= f.label :quantity %>
+              <%= f.select(:quantity, { "1" => "1", "2" => "2", "3" => "3", "4" => "4"}, {}) %>
+            </div>
+
+            <div class="size">
+              <%= f.label "Size" %>
+              <% if @tire_listing.new_record? %>
+                <%= render :partial => 'layouts/ajax_tire_sizes_visfire' %>
+              <% else %>
+                <label><%= @tire_listing.tire_size.sizestr %></label>
+              <% end %>   
+            </div>
+
+            <div class="manu">
+              <%= f.label "Manufacturer" %>
+              <% if @tire_listing.new_record? %>
+                <%= render :partial => 'layouts/ajax_tire_manufacturers_visfire' %>
+              <% else %>
+                <label><%= @tire_listing.tire_manufacturer.name %></label>
+              <% end %>
+            </div>
+
+            <div class="model">
+              <%= f.label "Model" %>
+              <% if @tire_listing.new_record? %>
+                <%= render :partial => 'layouts/ajax_tire_models_visfire' %>
+              <% else %>
+                <label><%= @tire_listing.tire_model.name %></label>
+              <% end %>
+            </div>
+
+            <div class="tire-price">
+              <%= f.label "Total Price" %>
+              <%= f.text_field :price, {:value => f.object.formatted_price} %>
+            </div>
+            <% if !@tire_listing.tire_store.private_seller? %>
+              <div class="check">
+                <%= f.label "Inc mounting?" %>
+                <%= f.check_box :includes_mounting %>
+              </div>
+            <% end %>
+
+            <% if !@tire_listing.tire_store.private_seller? %>
+              <div class="tire-price">
+                <%= f.label :warranty_days %>
+                <%= f.text_field :warranty_days %>
+              </div>
+            <% end %>
+
+            <div class="remaining-tread">
+              <%= f.label :remaining_tread, "Remaining tread (in 32s of inch)" %>
+              <%= f.text_field :remaining_tread %>
+            </div>
+
+            <div class="condition">
+              <%= f.label 'Condition' %>
+              <%= f.radio_button :is_new, false %><label>Used</label>
+              <%= f.radio_button :is_new, true %><label>Brand New</label>
+            </div>
+
+            <div class="hide" id="full_set">
+              <div class="check">
+                <%= f.label 'Only sell as a full set?' %>
+                <%= f.check_box :sell_as_set_only %>
+              </div>
+              <label class="small-label">
+                For used listings, uncheck this if you are willing to break the set up.
+              </label>
+            </div>
+
+            <% if !@tire_listing.tire_store.private_seller? %>
+              <div class="tire-price">
+                <%= f.label 'Stock number (for internal tracking)' %>
+                <%= f.text_field :stock_number %>
+              </div>
+            <% end %>
+
+            <div class="hide" id="willing-to-ship">
+              <div class="will-ship">
+                <%= f.label 'Willing to ship?' %>
+                <%= f.select(:willing_to_ship, { "Unspecified" => "0", "No" => "1", "Yes" => "2"}, {}) %>
+              </div>
+              <label class="small-label">
+                For used listings, select "Yes" if you are willing to ship the tires at an additional cost.
+              </label>
+              <label class="small-label">
+                Add any additional information you would like to publish about this used tire or tires.  For example, you might list the DOT date(s), any repairs, etc.
+              </label>
+              <%= f.text_area :description, :size => "40x10" %>
+            </div>              
+          </div>
+        </div>
+        <div id="edit-mid-part-right">
+          <h3>Creating a Listing</h3>
+          <p>
+            If you are creating a listing for used tires, select the quantity (1-4) of tires
+            you have for this set.  The set should be matching in manufacturer and model,
+            and similar in condition.  The price for a used tire set should reflect the cost
+            for the whole set.
+          </p>
+          <p>
+            If this listing is for new tires, just select 4 as the quantity to indicate you
+            have at least that many in stock or immediately available.  The price for new tires
+            should be for each tire, and warranty and remaining tread should not be entered.
+          </p>
+          <h3>Photo 1</h3>
+          <p>
+            <%= f.file_field :photo1 %>
+            <%= image_tag(f.object.photo1.url(:medium)) if !f.object.nil? && f.object.photo1.exists? %>
+          </p>
+          <h3>Photo 2</h3>
+          <p>
+            <%= f.file_field :photo2 %>
+            <%= image_tag(f.object.photo2.url(:medium)) if !f.object.nil? && f.object.photo2.exists? %>
+          </p>
+          <h3>Photo 3</h3>
+          <p>
+            <%= f.file_field :photo3 %>
+            <%= image_tag(f.object.photo3.url(:medium)) if !f.object.nil? && f.object.photo3.exists? %>
+          </p>
+          <h3>Photo 4</h3>
+          <p>
+            <%= f.file_field :photo4 %>
+            <%= image_tag(f.object.photo4.url(:medium)) if !f.object.nil? && f.object.photo4.exists? %>
+          </p>
+        </div>
+        <% if !@tire_listing.new_record? %>
+          <%= f.submit nil, :class => 'nomargin' %>
+          <button class="jqTransformButton nomargin" style="display: inline;">
+            <%= link_to 'Delete listing', 
+                @tire_listing, 
+                :method => :delete, 
+                :confirm => 'Are you sure you want to delete this listing?'  %>
+          </button>
+        <% else %>
+          <%= f.submit %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<script>
+  $('select#tire_listing_quantity').change(function() {
+    show_or_hide_break_set();
+  });
+
+  $('#tire_listing_is_new_false, #tire_listing_is_new_true').change(function() {
+    show_or_hide_break_set();
+    show_or_hide_willing_to_ship_and_description();
+  });
+
+  <% if @tire_listing.new_record? && @tire_listing.tire_store.willing_to_ship < 1 %>
+    $('#tire_listing_willing_to_ship').change(function() {
+      if (document.getElementById("tire_store_change_default_willing_to_ship").value == "false")
+        prompt_to_change_default_willing_to_ship();
+    });
+  <% end %>
+</script>

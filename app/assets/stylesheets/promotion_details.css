@@ -1,0 +1,51 @@
+#promo-details-image {
+	float: left;
+	width: 45%;
+}
+
+#promo-details-image img {
+	max-width: 100%;
+	max-height: 250px;
+}
+
+#promo-info {
+	float: right;
+	width: 48%;
+}
+
+#promo-info-1 {
+	float: left;
+	width: 60%;
+}
+
+h1 span.black-title {
+	color: black;
+}
+
+h1 span.orange-right a {
+	color: #ef5a29;
+	float: right;
+}
+
+.deals-container {
+	padding-top: 20px;
+}
+
+.promo-store-info {
+	float: right!important;
+	width: 30%!important;
+}	
+
+@media (max-width: 768px) {
+	.store-info {
+		float: left!important;
+		width: 90%!important;
+	}
+	#promo-details-image {
+		width: 100%;
+	}
+	#promo-info {
+		width: 100%;
+		float:left;
+	}
+}

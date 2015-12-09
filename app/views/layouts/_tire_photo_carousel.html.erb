@@ -1,0 +1,81 @@
+<!--  Carousel - consult the Twitter Bootstrap docs at
+      http://twitter.github.com/bootstrap/javascript.html#carousel -->
+
+<%= stylesheet_link_tag "carousel" %>
+<%= javascript_include_tag "carousel" %>
+
+	<div id="this-carousel-id" class="carousel slide" style="max-width: 300px">
+	  <div class="carousel-inner">
+	    <div class="item active"><!-- class of active since it's the first item -->
+	      <% if @tire_listing.photo1.exists? %>
+		      <img src="<%= @tire_listing.photo1.url(:medium) %>" alt="" />
+		      <div class="carousel-caption">
+		        <p>
+		        	Image 1 of <%= @tire_listing.picture_count %>
+		        	<a href="<%= @tire_listing.photo1.url() %>" style="float: right;" rel="thumbnail">		View larger
+		        	</a>
+		        </p>
+		      </div>
+		  <% elsif @tire_listing.tire_model_info && @tire_listing.tire_model_info.stock_photo1.exists? %>
+		      <img src="<%= @tire_listing.tire_model_info.stock_photo1.url(:medium) %>" alt="" />
+		      <div class="carousel-caption">
+		        <p>
+		        	Image 1 of 1
+		        	<a href="<%= @tire_listing.tire_model_info.stock_photo1.url() %>" style="float: right;" rel="thumbnail">		View larger
+		        	</a>
+		        </p>
+		      </div>
+		  <% else %>
+		      <img src="/assets/no_image.png" alt="" height="225" width="300" />
+		  <% end %>
+	    </div>
+	    <% if @tire_listing.photo2.exists? %>
+		    <div class="item">
+		      <img src="<%= @tire_listing.photo2.url(:medium) %>" alt="" />
+		      <div class="carousel-caption">
+		        <p>
+		        	Image 2 of <%= @tire_listing.picture_count %>
+	        		<a href="<%= @tire_listing.photo2.url() %>" 
+	        			style="float: right;" rel="thumbnail">
+	        			View larger
+	        		</a>
+		        </p>
+		      </div>
+		    </div>
+		<% end %>
+	    <% if @tire_listing.photo3.exists? %>
+		    <div class="item">
+		      <img src="<%= @tire_listing.photo3.url(:medium) %>" alt="" />
+		      <div class="carousel-caption">
+		        <p>
+		        	Image 3 of <%= @tire_listing.picture_count %>
+	        		<a href="<%= @tire_listing.photo3.url() %>" 
+	        			style="float: right;" rel="thumbnail">
+	        			View larger
+	        		</a>
+		        </p>
+		      </div>
+		    </div>
+		<% end %>
+	    <% if @tire_listing.photo4.exists? %>
+		    <div class="item">
+		      <img src="<%= @tire_listing.photo4.url(:medium) %>" alt="" />
+		      <div class="carousel-caption">
+		        <p>
+		        	Image 4 of <%= @tire_listing.picture_count %>
+	        		<a href="<%= @tire_listing.photo4.url() %>" 
+	        			style="float: right;" rel="thumbnail">
+	        			View larger
+	        		</a>
+	        	</p>
+		      </div>
+		    </div>
+		<% end %>
+	  </div><!-- /.carousel-inner -->
+	  <!--  Next and Previous controls below
+	        href values must reference the id for this carousel -->
+	 <% if @tire_listing.photo2.exists? %>
+	    <a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
+	    <a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
+	 <% end %>
+	</div><!-- /.carousel -->

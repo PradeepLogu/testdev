@@ -1,0 +1,156 @@
+<% provide(:title, "Browse Tires") %>
+<% provide(:visfire, "true") %>
+<% provide(:metadescription, "Find nearby tire shops with your tires in-stock.  Buying tires has never been easier, search TreadHunter now!") %>
+
+<style>
+label.error-msg {
+	margin-top: 10px;
+	color: red;
+}
+</style>
+
+<script>
+$(function() {
+	$(".search-card .help").click(function (e) {
+		e.preventDefault();
+		var dialog = $("#dialog-" + $(this).attr("id"));
+		if (dialog.length)
+			dialog.dialog({ modal: true }).dialog("open");
+	});
+});
+</script>
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="top-search-section">
+			<div id="tire-search-outer">
+				<h2>SHOP BY:</h2>
+				<%= render :partial => 'layouts/search_panel',
+						   :locals => {:id => "tire-search2"} %>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-outer">
+	<div class="container-inner">
+		<hr/>
+		
+		<div id="fluid-title">
+			<h1 class="orange">Browse Tires</h1>
+				<p>
+					<%= @lc.find_post_by_title_in_posts_array(@page_seo, "Browse Tires Header") || "Things like your weather conditions, local road conditions, driving style or driving habits should impact your decision when buying tires." %>
+				</p>
+			<div class="clear"></div>
+		</div>
+		
+		<div class="row-fluid">
+			<div class="span6 search-card">
+				<div class="search-icon">
+					<%= image_tag "search-icon-location.png", alt: "" %>
+				</div>
+				<h3>LOCATION <div class="help" id="search-location-help"></div></h3>
+				<p>
+					<%= @lc.find_post_by_title_in_posts_array(@page_seo, "Location") || "" %>
+				</p>
+				
+				<div class="browse-link">
+					<a href="/states">Browse by State</a>
+				</div>
+				<%= form_tag  tire_stores_path, :method => "get" do %>
+					<%= text_field_tag :Location, "", placeholder: "ZIP Code" %>
+					<input type="submit" class="btn" value="GO"/>
+				<% end %>
+				<div class="clear"></div>
+			</div>
+			
+			<div class="span6 search-card">
+				<div class="search-icon">
+					<%= image_tag "search-icon-brand.png", alt: "" %>
+				</div>
+				<h3>TIRE BRAND <div class="help" id="search-brand-help"></div></h3>
+				<p>
+					<%= @lc.find_post_by_title_in_posts_array(@page_seo, "Tire Brand") || "" %>
+				</p>
+				
+				<div class="browse-link">
+					<a href="/brands">Browse by Brand</a>
+				</div>
+				<%= form_tag  request.path, :method => "get" do %>
+					<%= text_field_tag :brand, "", placeholder: "Enter Tire Brand" %>
+					<input type="submit" class="btn" name="by_brand" value="GO"/>
+					
+					<% if @brand_search_error %>
+						<label class="error-msg"><%= @brand_search_error %></label>
+					<% end %>
+				<% end %>
+				<div class="clear"></div>
+			</div>
+		</div>
+		
+		<div class="row-fluid">
+			<div class="span6 search-card">
+				<div class="search-icon">
+					<%= image_tag "search-icon-car.png", alt: "" %>
+				</div>
+				<h3>TYPE OF CAR <div class="help" id="search-cartype-help"></div></h3>
+				<p>
+					<%= @lc.find_post_by_title_in_posts_array(@page_seo, "Type of Car") || "" %>
+				</p>
+				
+				<div class="browse-link">
+					<a href="/car_type">Browse by Type</a>
+				</div>
+				<%= form_tag  request.path, :method => "get" do %>
+					<%= select_tag :type, options_for_select(@car_type_options) %>
+					<input type="submit" class="btn" name="by_type" value="GO"/>
+				<% end %>
+				<div class="clear"></div>
+			</div>
+			
+			<div class="span6 search-card">
+				<div class="search-icon">
+					<%= image_tag "search-icon-tire.png", alt: "" %>
+				</div>
+				<h3>WHEEL SIZE <div class="help" id="tire-size-help"></div></h3>
+				<p>
+					<%= @lc.find_post_by_title_in_posts_array(@page_seo, "Wheel Size") || "" %>
+				</p>
+				
+				<div class="browse-link">
+					<a href="/tire_size">Browse by Size</a>
+				</div>
+				<%= form_tag  request.path, :method => "get" do %>
+					<%= text_field_tag :size, "", placeholder: 'Ex. 16", 17", 18"' %>
+					<input type="submit" class="btn" name="by_size" value="GO"/>
+					
+					<% if @size_search_error %>
+						<label class="error-msg"><%= @size_search_error %></label>
+					<% end %>
+				<% end %>
+				<div class="clear"></div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+<!-- tire size dialog is already on the page -->
+
+<div id="dialog-search-location-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">SEARCH BY LOCATION</h5>
+	<p>Search by City and State, or Zip Code.<br/>Example: Wayne, NJ or 07470</p>
+</div>
+
+<div id="dialog-search-cartype-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">SEARCH BY CAR TYPE</h5>
+	<p>Search by categories of the type of car that you have. Example: Car, Minivan, Crossover, CUV, SUV, Truck, Pickup</p>
+</div>
+
+<div id="dialog-search-brand-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">SEARCH BY BRAND</h5>
+	<p>Search by the brand of tire you’re interested in. Example: GoodYear</p>
+</div>
+

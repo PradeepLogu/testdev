@@ -1,0 +1,9 @@
+
+<%= collection_select(f, :auto_manufacturer_id, @manufacturers, :id, :name,
+                   {:prompt   => "Make",
+                   	 :selected => session[:manufacturer_id]},
+                   {:onchange => "#{remote_function(:url  => {:action => "update_models", :controller => "tire_searches"},
+                      :with => "'manufacturer_id='+value")}",
+						:class => "cars"
+					  
+                   }) %>

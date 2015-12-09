@@ -1,0 +1,126 @@
+<% provide(:title, 'Sign up') %>
+<% @show_pricing = false %>
+
+<% provide(:visfire, "true") %>
+
+<%= javascript_include_tag "video_page" %>
+<%= stylesheet_link_tag "video_page" %>
+<%= javascript_include_tag "jquery.fancybox" %>
+<%= stylesheet_link_tag "jquery.fancybox" %>
+
+<%= stylesheet_link_tag "bootstrap" %>
+
+<script>
+	$(document).ready(function() {
+		$(".various").fancybox({
+			maxWidth  : 800,
+			maxHeight : 600,
+			fitToView : false,
+			width   : '90%',
+			height    : '90%',
+			autoSize  : false,
+			closeClick  : false,
+			openEffect  : 'none',
+			closeEffect : 'none',
+			closeBtn : true
+		});
+
+		// $('div#state').jqTransform();
+
+		<% if allow_ecomm() %>
+		$('input#create-store').hide();
+		<% end %>
+
+		$('input#show_store_info').live('change', function() {
+			show_other_fields();
+		});
+
+		$('#registration_zipcode').bind('input', function() {
+			lookup_store($('#registration_store_phone').val(), $('#registration_zipcode').val());
+		});
+
+		$('#registration_store_phone').bind('input', function() { 
+			lookup_store($('#registration_store_phone').val(), $('#registration_zipcode').val());
+		});
+	});
+	var has_looked_up = false;
+</script>
+
+<style>
+	div.checklist ul li {
+		list-style-position: inside!important;
+		list-style-image: url("/assets/check.png")!important;
+		font: 14px/22px proxima_nova_rgregular;
+		color: #484d52;		
+	}
+	
+	div.jqTransformSelectWrapper div span {
+		color: white;
+	}
+</style>
+
+<div class="main-slideshow-2">
+	<!--banner slider-->
+</div>
+
+<div id="searc-header">
+	<%= render :partial => 'layouts/header_visfire', 
+				:locals => {:@error_object => @registration} %>
+</div>
+
+<%= render :partial => 'layouts/choose_new_or_used2' %>
+  
+<div id="serach-content2" class="clearfix">
+	<div id="search-content-inner2" class="clearfix">
+		<div id="search-main2">
+			<h2>Sell Tires with TreadHunter</h2>
+			<ul>
+				<li>Home /</li>
+				<li><a href="#">Seller Registration</a></li>
+			</ul>
+		</div>
+
+		<div id="registration-mid-part" class="clearfix">
+			<div id="registration-mid-part-left">
+				<div class="form-part">
+					<div class="form-heading">
+						<h3>Free Membership</h3>
+						<p>To get started listing tires with TreadHunter</p>
+					</div>
+					<%= form_for @registration, :url => { :action => :th_unified }, 
+												:html => { :method => :post },
+												:validate => true do |f| %>
+						<%= f.hidden_field :store_type, :value => @store_type %>
+						<% if @store_type == "private" ||
+								(!session[:store_type].blank? && 
+									session[:store_type].downcase == "private") %>
+							<%= render :partial => 'layouts/registration/register_private', 
+										:locals => {:f => f} %>
+						<% else %>
+							<%= render :partial => 'layouts/registration/register_public_new', 
+										:locals => {:f => f} %>
+						<% end %>
+
+						<%= f.submit "Sign up", :id=> "create-store" %>
+					<% end %>
+				</div>
+			</div>
+
+			<div id="registration-mid-part-right">
+				<% if @store_type == "private" ||
+						(!session[:store_type].blank? && 
+							session[:store_type].downcase == "private") %>
+					<%= render :partial => 'layouts/registration/free_trial_offer_private' %>
+					<%= render :partial => 'layouts/registration/about_th_private' %>
+				<% else %>
+					<%= render :partial => 'layouts/registration/free_trial_offer_public' %>
+					<% if @store_type == "used" %>
+						<%= render :partial => 'layouts/registration/about_th_public_used' %>
+					<% else %>
+						<%= render :partial => 'layouts/registration/about_th_public_new' %>
+					<% end %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,52 @@
+<div id="dialog-cancel-order" class="th-dialog" title="" style="display:none;">
+	<div class="fade" id="cancel-order-fade"></div>
+	<div id="cancel-order-panel" class="cancel-order-panel">
+		<input type="hidden" id="cancel_order_id" value="" />
+		<input type="hidden" id="cancel_order_appt_id" value="" />
+
+		<h3>Cancel Order</h3>
+		<hr /><br />
+		<p>
+			Are you sure you wish to cancel this order? It has already been paid for, so the money
+			that has already been transferred to your account will be removed.
+		</p>
+		<div id="reason" class="line-item">
+		    <label class="left">Reason:</label>
+			<%= radio_button_tag(:reason, :pricing_error, true, class: "cancel-input") %>
+			<%= label_tag(:reason_1, "The price on the website is incorrect.") %>
+			<%= radio_button_tag(:reason, :cannot_obtain, false, class: "cancel-input") %>
+			<%= label_tag(:reason_2, "I don't have those tires in stock and cannot get them.") %>
+			<%= radio_button_tag(:reason, :other, false, class: "cancel-input") %>
+			<%= label_tag(:reason_other, "Please enter the reason below:") %>
+			<%= text_area_tag(:reason_desc, nil, {rows: 2, cols: 60}) %>
+	    </div>
+
+	    <hr />
+	    <input class="btn submit-btn" id="btn-cancel-order" type="submit" 
+	    			onclick="cancel_order($('#cancel_order_id').val(), $('#cancel_order_appt_id').val());"
+	    			value="CANCEL ORDER" />
+	    <input class="btn submit-btn" id="btn-close" type="submit" 
+	    			value="DO NOT CANCEL" onclick="$('#dialog-cancel-order').dialog('close');" />
+	</div>
+
+	<div id="cancel-appt-panel" class="cancel-appt-panel" style="display:none;">
+		<input type="hidden" id="cancel_appt_id" value="" />
+
+		<h3>Cancel Appointment</h3>
+		<hr /><br />
+		<p>
+			Are you sure you wish to cancel this appointment?
+		</p>
+	    <hr />
+	    <input class="btn submit-btn" id="btn-cancel-appt" type="submit" 
+	    			value="CANCEL APPT" 
+	    			onclick="deny_appt_without_confirmation($('#cancel_appt_id').val());" />
+	    <input class="btn submit-btn" id="btn-close" type="submit" 
+	    			value="DO NOT CANCEL" 
+	    			onclick="$('#dialog-cancel-order').dialog('close');" />
+	</div>
+
+	<div class="error-msg submission-error" id="cancel-err" style="display: none;">
+		A server error occurred.
+	</div>
+</div>

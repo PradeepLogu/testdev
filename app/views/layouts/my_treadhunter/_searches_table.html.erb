@@ -1,0 +1,16 @@
+<table id="searches-table" class="display">
+	<thead>
+		<tr>
+			<th>Size</th>
+			<th align="right">Count last 7 days</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @searches.each do |s| %>
+		<tr>
+			<td><%= s.sizestr %></td>
+			<td align="right"><%= s.count %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>

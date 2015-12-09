@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; width=device-width"/>
+<% if !Rails.env.production? %>
+  <meta name="robots" content="noindex">
+<% end %>
+<meta property="og:title" content="TreadHunter is your new and used tires search engine" />
+<meta property="og:description" content="Find new tires and used tires for sale at TreadHunter.com, and use TreadHunter to find stores near you. With TreadHunter, finding the best deal on tires is fast and easy." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://www.treadhunter.com" />
+<meta property="og:image" content="http://www.treadhunter.com/assets/homepage/logo.jpg" />
+<meta property="og:site_name" content="TreadHunter.com" />
+<meta content="Find Tires and Tire Stores Nearby : TreadHunter" name="description" />
+<meta content="TreadHunter, TreadHunters, Tires, New Tires, Used Tires, Cheap Tires, Discount Tires, Tires Plus, sell tires, buy tires, sell used tires, where to buy tires, buy used tires" name="keywords" />
+
+<title>TREADHUNTER | Your Source for Finding New & Used Tires</title>
+
+<%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+<link rel="stylesheet" href="assets/jquery.bxslider.css" type="text/css" />
+
+<%= javascript_include_tag "application" %>
+<!--<%= javascript_include_tag "jquery-1.9.1.min.js" %>-->
+<%= javascript_include_tag "smooth-scroll.js" %>
+<!--mobile menu -->
+<%= javascript_include_tag "mobilemenu2.js" %>
+<!--mobile menu -->
+<%= javascript_include_tag "popup.js" %>
+<%= javascript_include_tag "jquery.jqtransform.js" %>
+<!-- bxSlider -->
+<%= javascript_include_tag "jquery.bxslider.min.js" %>
+
+
+<script type="text/javascript">
+  $(function() {
+	$("#show-cities a").click(function (e) {
+		e.preventDefault();
+		$("#city-listing").slideToggle();
+	});
+	
+    $('.feature-right ul').bxSlider({
+		auto: true,
+		autoControls: false,
+		pager: false,
+		minSlides: 1,
+		maxSlides: 6,
+		slideWidth: 180,
+		slideMargin: 10,
+		adaptiveHeight: true,
+		moveSlides: 1,
+		nextSelector: '#nextimg',
+		prevSelector: '#previmg',
+		nextText: '>',
+		prevText: '<'
+	});
+  });
+
+	$(document).ready(function() {
+		$.ajax({
+			type: "GET",
+			dataType: "html",
+			url: "/ajax/homepage_foursquare_reviews",
+			data: {
+				lat: "<%= session[:lat] %>",
+				lon: "<%= session[:lon] %>",
+				locationstr: "<%= session[:location] %>"
+			},
+			success:function(result){
+				$("div#four-square-content").html(result);
+			} 
+		});
+
+		$.ajax({
+			type: "GET",
+			dataType: "html",
+			url: "/ajax/homepage_yelp_reviews",
+			data: {
+				lat: "<%= session[:lat] %>",
+				lon: "<%= session[:lon] %>",
+				locationstr: "<%= session[:location] %>"
+			},
+			success:function(result){
+				$("div#yelp-content").html(result);
+			} 
+		});
+
+		$.ajax({
+			type: "GET",
+			dataType: "html",
+			url: "/ajax/homepage_google_reviews",
+			data: {
+				lat: "<%= session[:lat] %>",
+				lon: "<%= session[:lon] %>",
+				locationstr: "<%= session[:location] %>"
+			},
+			success:function(result){
+				$("div#google-content").html(result);
+			} 
+		});
+
+		$.ajax({
+			type: "GET",
+			dataType: "html",
+			url: "/ajax/homepage_local_promotions",
+			data: {
+				lat: "<%= session[:lat] %>",
+				lon: "<%= session[:lon] %>",
+				locationstr: "<%= session[:location] %>"
+			},
+			success:function(result){
+				$("div#local-deals").html(result);
+			} 
+		});	
+
+		$.ajax({
+			type: "GET",
+			dataType: "html",
+			url: "/ajax/homepage_cities_by_state",
+			data: {
+				lat: "<%= session[:lat] %>",
+				lon: "<%= session[:lon] %>",
+				locationstr: "<%= session[:location] %>"
+			},
+			success:function(result){
+				$("div#state-listing").html(result);
+			} 
+		});	
+
+		$.ajax({
+			type: "GET",
+			dataType: "html",
+			url: "/ajax/homepage_cities_by_region",
+			data: {
+				lat: "<%= session[:lat] %>",
+				lon: "<%= session[:lon] %>",
+				locationstr: "<%= session[:location] %>"
+			},
+			success:function(result){
+				$("div#region-listing").html(result);
+			} 
+		});	
+	});
+</script>
+
+<style>
+/*input[type="text"], textarea {
+	border: 1px solid #9e9290 !important;
+}*/
+
+label.message {
+	font-size: 10px!important;
+	display: inline!important;
+	margin: -80px 0 50px 10px!important;
+	color: red!important;
+	max-height: 30px;
+	overflow: hidden;
+	max-width:100%;
+}
+
+
+
+#top-section {
+	height: 545px;
+	position: relative;
+	clear: both;
+	background: url("assets/homepage/background.jpg") no-repeat center 0 / cover;
+}
+
+#tagline {
+	position: absolute;
+	top: 290px;
+	left: 55px;
+	font-size: 40px;
+	line-height: 40px;
+}
+#tagline .first-line {
+	display: block;
+	color: #fff;
+}
+#tagline .second-line {
+	display: block;
+	color: #F05A29;
+	font-style: italic;
+	position: relative;
+	top: 0;
+	left: 50px;
+}
+
+#start-here {
+	float: right;
+	position: relative;
+	top: 76px;
+}
+
+#tire-search {
+	float: right;
+	margin-top: 25px;
+	margin-right: 50px;
+}
+
+
+#register-btn-container {
+	display: none;
+	text-align: center;
+}
+
+#register-btn {
+	display: block;
+	text-align: center;
+	color: #fff;
+	background: #000;
+	padding-top: 4px;
+	font-size: 16px;
+	font-weight: bold;
+	font-style: italic;
+	border-radius: 5px;
+	margin: 20px 0;
+}
+a#register-btn:hover {
+	text-decoration: none;
+}
+
+  #how-it-works {
+	clear: both;
+	text-align: center;
+	padding-top: 20px;
+  }
+  #how-it-works h1 {
+	/*background: #F05A29;*/
+	background: url("/assets/tread_bg.png") no-repeat 0 0;	/* 1099x59 */
+	background-size: 100% auto;
+	color: white;
+	/*font-size: 36px;*/
+	line-height: 2;
+	text-align: center;
+	text-transform: uppercase;
+	font-style: italic;
+	margin-bottom: 30px;
+  }
+  .columns {
+	display: table;
+	width: 100%;
+  }
+  .columns .col-4 {
+	display: table-cell;
+	text-align: center;
+	width: 25%;
+  }
+  .columns .col-3 {
+	display: table-cell;
+	text-align: center;
+	width: 33.333333%
+  }
+  #how-it-works h4 {
+	color: #F05A29;
+	text-transform: uppercase;
+	font-size: 16px;
+	font-style: italic;
+  }
+  #how-it-works p {
+	color: #000;
+  }
+  #how-it-works img.icon {
+	width: 70px;
+	margin-bottom: 1em;
+  }
+  
+  
+  #slider-wrapper {
+	display: table;
+	width: 100%;
+	margin: 20px 0;
+  }
+  .feature-right {
+	display: table-cell;
+  }
+  .feature-right ul li {
+	display: inline-block;	/* default display until the javascript overrides */
+  }
+  #nextimg, #previmg {
+  	padding-top: 10px;
+	display: table-cell;
+	vertical-align: middle;
+  }
+  #previmg {
+	padding-right: 6px;
+  }
+  #nextimg {
+	padding-left: 6px;
+  }
+  #nextimg a, #previmg a {
+	font-size: 44px;
+	font-weight: bold;
+	color: #F05A29;
+  }
+  #nextimg a:hover, #previmg a:hover {
+	text-decoration: none;
+	background-color: none;
+  }
+  
+  
+  #container-inner-2 h2 {
+	background-color: #F05A29;
+	color: white;
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 14px;
+	font-style: italic;
+  }
+  #local-deals h2.section-header, #local-reviews h2.section-header {
+	font-size: 20px;
+	line-height: 30px;
+	padding-top: 8px;
+  }
+  #local-deals h2.section-header img, #local-reviews h2.section-header img {
+	position: relative;
+	top: -3px;
+	left: 4px;
+  }
+  
+  .tire-columns-outer {
+	  margin: 0 -10px;
+  }
+  .tire-columns {
+	border-collapse: separate;
+	border-spacing: 10px;
+  }
+  .tire-deal {
+	display: table-cell;
+	width: 50%;
+	text-align: center;
+  }
+  .tire-deal .title {
+	background-color: black;
+	color: white;
+	font-weight: bold;
+	overflow: hidden;
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+	height: 16px;
+	padding: 0.4em 0 0.2em;
+  }
+  .tire-deal .location {
+	overflow: hidden;
+	padding: 0.4em 0 0.1em;
+  }
+  .tire-deal .image {
+  }
+  .tire-deal .image img {
+	width: 100%;
+	max-width: none;
+  }
+
+
+#local-reviews .reviews {
+	text-align: center;
+}
+#local-reviews .review {
+	text-align: left;
+	padding-top: 10px;
+	padding-right: 10px;
+	margin: 0 auto;
+}
+#local-reviews .review .icon {
+	float: left;
+	width: 15%;
+	text-align: center;
+}
+#local-reviews .review .icon img {
+	max-width: 100%;
+}
+#local-reviews .review .content {
+	float: left;
+	width: 80%;
+	padding-left: 5%;
+}
+#local-reviews .review .upper {
+	border-bottom: solid 1px #F05A29;
+}
+#local-reviews .review .location {
+	font-weight: bold;
+}
+#local-reviews .review .content .text {
+	font-size: 12px;
+	margin: 5px 0 1em;
+}
+#local-reviews .review .content .read-more {
+	text-align: right;
+}
+#local-reviews .review .content .read-more a {
+	color: #F05A29;
+	font-weight: bold;
+}
+
+
+#more-detail {
+    background: #F05A29;
+    margin: 0;
+    padding: 30px;
+}
+#more-detail-inner {
+    margin: 0 auto;
+}
+#more-detail-inner-text {
+    float: left;
+    width: 440px;
+}
+#more-detail-inner-text h2 {
+    color: #fff;
+    float: left;
+    font-size: 24px;
+    font-style: italic;
+    line-height: 24px;
+    padding: 0;
+    text-align: left;
+    text-transform: uppercase;
+}
+#more-detail-inner-text p {
+    color: #fff;
+    float: left;
+    font-size: 14px;
+    line-height: 14px;
+    padding: 0;
+    text-align: left;
+    margin: 0;
+}
+#more-detail-inner-email {
+    float: left;
+    width: auto;
+    margin-top: 5px;
+}
+#more-detail-inner-email input {
+    background: url("/assets/message.gif") no-repeat scroll right center #fff;
+    border: none;
+    border-radius: 2px;
+    float: left;
+    font-size: 13px;
+    height: 30px;
+    padding-bottom: 0 !important;
+    padding-left: 6px;
+    /*padding-right: 42px;*/
+    padding-top: 0;
+    margin: 0;
+    width: 380px;
+}
+#more-detail-inner-email input[type="submit"] {
+    background: #000;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 0 0 5px;
+    padding: 0 20px;
+    text-align: center;
+    text-transform: uppercase;
+    width: auto;
+}
+
+
+#app-info-box {
+	border: solid 1px #7a706f;
+	border-radius: 5px;
+	display: table;
+	width: 100%;
+	margin: 20px 0 0;
+}
+#app-info-box .img-wrapper {
+	display: table-cell;
+	width: 200px;
+	text-align: center;
+}
+#app-info-box .inner {
+	display: table-cell;
+	vertical-align: middle;
+	padding: 20px 20px 20px 50px;
+}
+#app-info-box .inner .big {
+	font-size: 26px;
+	line-height: 26px;
+}
+#app-info-box .inner .small {
+	font-size: 12px;
+	line-height: 24px;
+}
+#app-info-box .inner form {
+	margin: 10px 0 0;
+}
+#app-info-box .inner form input[type="text"] {
+	margin: 0 10px 0 0;
+}
+#app-info-box input[type="submit"] {
+	color: #fff;
+	background: #F05A29;
+	border-radius: 3px;
+	cursor: pointer;
+	font-size: 14px;
+    text-align: center;
+    width: 130px;
+}
+
+#app-info-box + .app-fine-print {
+    font-size: 14px;
+    font-family: 'HelveticaLTStd-Roman';
+    padding-top: 4px;
+    padding-bottom: 20px;
+    text-align: center;
+    color: #707070;
+}
+
+
+#show-cities {
+	display: none;
+	text-align: center;
+	background: #000;
+	font-size: 16px;
+	font-weight: bold;
+	font-style: italic;
+	margin: 20px 0;
+}
+#show-cities a {
+	color: #fff;
+	display: block;
+	padding-top: 4px;
+}
+#show-cities a:hover {
+	text-decoration: none;
+}
+#show-cities img {
+	position: relative;
+	top: 0;
+	left: 4px;
+}
+	
+#city-listing {
+	margin: 20px 0;
+}
+#city-listing h4 {
+	color: black;
+	font-size: 16px;
+	height: 1.5em;
+}
+#city-listing .store {
+	color: #000;
+	font-size: 14px;
+	font-weight: bold;
+}
+#city-listing a {
+	color: #F05A29;
+	font-style: italic;
+    font-weight: bold;
+}
+#city-listing span.city-name {
+    color: black;
+    font-style: normal;
+    font-weight: normal;
+}
+
+
+
+
+
+
+
+@media screen and (max-width: 900px) {
+	#tagline {
+		left: 30px;
+		font-size: 28px;
+		line-height: 28px;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	#start-here, #tagline {
+		display: none;
+	}
+	
+	#top-section {
+		background: none;
+		height: auto;
+		margin-top: 20px;
+	}
+	
+	#register-btn-container {
+		display: block;
+	}
+	
+	#tire-search {
+		width: 100%;
+		padding: 0;
+		border: none;
+		float: none;
+		/*margin: 20px 0 0;*/
+	}
+	
+	#tire-search .tabcontent .form-box-collapse {
+		float: left;
+		width: 40%;
+	}
+	#tire_search_locationstr {
+		width: 100%;
+	}
+	#tire-search .tabcontent .form-box-submit {
+		float: left;
+		margin-left: 10%;
+		width: 50%;
+	}
+	#tire-search .tabcontent .form-box-submit input[type="submit"] {
+		height: 30px;
+		line-height: 14px;
+		margin: 0;
+		width: 100%;
+	}
+	#tire-search .tabcontent .field-combo {
+		text-align: center;
+	}
+	
+	.tire-columns-outer {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.tire-columns {
+		border-spacing: none;
+		border-collapse: collapse;
+		text-align: center;
+		display: block;
+	}
+	.tire-deal {
+		display: block;
+		width: 86%;
+		margin: 10px auto;
+	}
+	
+	#local-reviews .review {
+		width: 86%;
+		padding-right: 0;
+	}
+	
+	#app-info-outer, #city-listing, #previmg {
+		display: none;
+	}
+	#show-cities {
+		display: block;
+	}
+	#city-listing {
+		margin-left: 7%;
+		margin-right: 7%;
+	}
+	.region-listing h4 {
+		margin-top: 1em;
+	}
+	
+	
+	#more-detail {
+		padding: 30px 20px;
+	}
+	#more-detail-inner-text {
+		float: none;
+		width: auto;
+	}
+	#more-detail-inner-text h2 {
+		float: none;
+		padding: 0;
+		font-size: 22px;
+	}
+	#more-detail-inner-text p {
+		float: none;
+		font-size: 12px;
+	}
+	#more-detail-inner-email {
+		float: none;
+	}
+	#more-detail-inner-email input, #eemail_txt_email {
+		float: none;
+		margin: 0;
+		width: 100%;
+		padding: 0;
+	}
+	#more-detail-inner-email .submit {
+		display: block;
+		margin-top: 10px;
+		text-align: center;
+	}
+	#more-detail-inner-email input[type="submit"] {
+		margin: 0 auto;
+		width: 150px;
+	}
+	
+	#city-listing h4.empty {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 660px) {
+	#app-info-box .inner {
+		padding-left: 20px;
+	}
+	#app-info-box .inner form input[type="text"] {
+		width: 160px;
+	}
+}
+</style>
+
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgb8Xq_bdNlBZzSBKBptWzn-hqMJ7zFMs"></script>-->
+</head>
+<body>
+<section id="outer-wrapper">
+
+  <%= render :partial => 'layouts/header_visfire' %>
+
+  <div class="container-outer">
+    <div class="container-inner">
+	  <div id="top-section">
+		<div id="tagline">
+		  <span class="first-line">BUYING TIRES HAS</span>
+		  <span class="second-line">NEVER BEEN EASIER.</span>
+		</div>
+      
+        <%= render :partial => 'layouts/search_panel',
+                   :locals => {:inner_title => "SHOP BY"} %>
+      
+        <div id="start-here">
+			<%= image_tag("homepage/start_here.png", alt: "") %>
+		</div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container-outer" id="register-btn-container">
+    <div class="container-inner">
+      <%= link_to "REGISTER", signin_path, id: "register-btn" %>
+    </div>
+  </div>
+  
+  <div class="container-outer" id="how-it-works">
+	<h1>How It Works</h1>
+    <div class="container-inner">
+      <div class="row-fluid">
+        <div class="span4">
+		  <%= image_tag("homepage/search.png", alt: "search", class: "icon") %>
+		  <h4>Search</h4>
+		  <p>FOR NEW TIRES BY<br/> VEHICLE, TIRE SIZE<br/> OR LOCATION.</p>
+        </div>
+        <div class="span4">
+		  <%= image_tag("homepage/navigate.png", alt: "navigate", class: "icon") %>
+		  <h4>Navigate</h4>
+		  <p>RESULTS BY DISTANCE,<br/> PRICE, TYPE, QUANTITY,<br/> AND TREADLIFE.</p>
+        </div>
+        <div class="span4">
+		  <%= image_tag("homepage/purchase.png", alt: "purchase", class: "icon") %>
+		  <h4>Purchase</h4>
+		  <p>THE TIRE(S) SENDING<br/> AN INSTANT ALERT<br/> TO THE SELLER.</p>
+          </div>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  
+  <div class="container-outer">
+    <div class="container-inner">
+	  <div id="slider-wrapper">
+		<div id="previmg"></div>
+      <% if @featured == 'stores' %>
+        <%= render :partial => 'layouts/homepage/featured_stores' %>
+      <% elsif @featured == 'brands' %>
+        <%= render :partial => 'layouts/homepage/featured_brands' %>
+      <% elsif @featured == 'bwbrands' %>
+        <%= render :partial => 'layouts/homepage/featured_brands_bw' %>
+      <% end %>
+        <div id="nextimg"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container-outer">
+    <div id="container-inner-2" class="row-fluid">
+      <div id="local-deals" class="span6">
+        <h2 class="section-header">Local Tire Deals <%= image_tag("homepage/local-locations.png", alt: "") %></h2>
+        <div class="tire-columns-outer">
+          <div class="columns tire-columns">
+            <div class="tire-deal">
+			  <div class="title">Loading...</div>
+			  <div class="location"></div>
+			  <div class="image"><%= image_tag("homepage/sample_image1.jpg", alt: "") %></div>
+            </div>
+            <div class="tire-deal">
+			  <div class="title">Loading...</div>
+			  <div class="location"></div>
+			  <div class="image"><%= image_tag("homepage/sample_image2.jpg", alt: "") %></div>
+            </div>
+          </div>
+        </div>
+        <div class="tire-columns-outer">
+          <div class="columns tire-columns">
+            <div class="tire-deal">
+			  <div class="title">Loading...</div>
+			  <div class="location"></div>
+			  <div class="image"><%= image_tag("homepage/sample_image3.jpg", alt: "") %></div>
+            </div>
+            <div class="tire-deal">
+			  <div class="title">Loading...</div>
+			  <div class="location"></div>
+			  <div class="image"><%= image_tag("homepage/sample_image4.jpg", alt: "") %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="local-reviews" class="span6">
+        <h2 class="section-header">Local Tire Reviews <%= image_tag("homepage/local-reviews.png", alt: "") %></h2>
+        <div class="reviews">
+          <% if false # no facebook for now %>
+          <div class="review">
+            <div class="icon">
+              <%= image_tag("facebook_big.png", alt: "Facebook") %>
+            </div>
+            <div class="content">
+              <div class="upper">
+                <span class="location">AUTOZONE, 07470</span>
+                <span class="rating"></span>
+              </div>
+              <p class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec condimentum diam. In rhoncus tellus vehicula odio pretium fermentum. Donec tortor dui, pulvinar vitae nibh eu</p>
+              <div class="read-more">
+				  <a href="#">READ MORE</a>
+              </div>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <% end %>
+          <div class="review">
+            <div class="icon">
+              <%= image_tag("foursquare.png", alt: "Foursquare") %>
+            </div>
+            <div class="content" id="four-square-content">
+				<div class="upper">
+					<span class="location">Loading content...</span>
+					<span class="rating"></span>
+				</div>
+				<p class="text">Loading content...</p>
+				<!--
+				<div class="read-more">
+					<a href="#">READ MORE</a>
+				</div>
+				-->
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="review">
+            <div class="icon">
+              <%= image_tag("yelp.png", alt: "Yelp") %>
+            </div>
+            <div class="content" id="yelp-content">
+              <div class="upper">
+                <span class="location">Loading content...</span>
+                <span class="rating"></span>
+              </div>
+              <p class="text">Loading content...</p>
+              <!-- 
+              <div class="read-more">
+				  <a href="#">READ MORE</a>
+              </div>
+          	  -->
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="review">
+            <div class="icon">
+              <%= image_tag("google.png", alt: "Google") %>
+            </div>
+            <div class="content" id="google-content">
+              <div class="upper">
+                <span class="location">Loading content...</span>
+                <span class="rating"></span>
+              </div>
+              <p class="text">Loading content...</p>
+              <!--
+              <div class="read-more">
+				  <a href="#">READ MORE</a>
+              </div>
+          	  -->
+            </div>
+            <div class="clear"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  
+  <div class="container-outer">
+    <div class="container-inner">
+	  <div id="app-info-outer">
+	    <div id="app-info-box">
+		  <div class="img-wrapper">
+		    <%= image_tag("homepage/mobile_app.png", alt: "") %>
+		  </div>
+		  <div class="inner">
+		    <div class="text">
+			  <div class="big"><span class="bold">GET THE APP</span> <span style="font-style:italic;"><span class="nowrap">FOR A FASTER,</span> <span class="nowrap">EASIER TIRE SEARCH.</span></span></div>
+			  <div class="small">Send a download link to your phone.</div>
+		    </div>
+		    <form id="mobile-app-form" method="post" action="">
+		      <input type="text" name="phone" value="" placeholder="(ex.: 207-555-5555)" />
+		      <input type="submit" class="btn" value="GET THE APP" />
+		    </form>
+		  </div>
+	    </div>
+	    <p class="app-fine-print">By providing your number, you agree to receive a one-time automated text message with a link to get the app. Our app offers promotions and tire information.
+No purchase necessary. Standard text message rates may apply.</p>
+      </div>
+	</div>
+  </div>
+  
+  <div class="container-outer">
+    <div id="show-cities">
+	  <a href="#">SEARCH BY CITY <%= image_tag("homepage/down-icon.png", alt: "") %></a>
+	</div>
+    <div class="container-inner">
+	  <div id="city-listing" class="row-fluid">
+		<div class="state-listing span3" id="state-listing">
+			<h4>GEORGIA TIRES</h4>
+			<% ["Atlanta", "Columbus", "Savannah", "Athens", "Sandy Springs", "Roswell",
+				"Albany", "Johns Creek", "Warner Robins"].each do |city| %>
+				<div class="store"><a href="/tire-stores/?Location=<%= city %>%2C+GA"><span class="city-name"><%= city %> </span>
+					Tires</a>
+				</div>	
+			<% end %>
+		</div>
+		<div class="region-listing span3">
+			<h4>SOUTHEAST TIRES</h4>
+			<% ["Atlanta", "Columbus", "Savannah", "Athens", "Sandy Springs", "Roswell",
+				"Albany", "Johns Creek", "Warner Robins"].each do |city| %>
+                <div class="store"><a href="/tire-stores/?Location=<%= city %>%2C+GA"><span class="city-name"><%= city %> </span>
+                    Tires</a>
+                </div>  
+			<% end %>
+		</div>
+		<div class="region-listing span3">
+			<h4 class="empty"> </h4>
+			<% ["Atlanta", "Columbus", "Savannah", "Athens", "Sandy Springs", "Roswell",
+				"Albany", "Johns Creek", "Warner Robins"].each do |city| %>
+                <div class="store"><a href="/tire-stores/?Location=<%= city %>%2C+GA"><span class="city-name"><%= city %> </span>
+                    Tires</a>
+                </div>  
+			<% end %>
+		</div>
+		<div class="region-listing span3">
+			<h4 class="empty"> </h4>
+			<% ["Atlanta", "Columbus", "Savannah", "Athens", "Sandy Springs", "Roswell",
+				"Albany", "Johns Creek", "Warner Robins"].each do |city| %>
+                <div class="store"><a href="/tire-stores/?Location=<%= city %>%2C+GA"><span class="city-name"><%= city %> </span>
+                    Tires</a>
+                </div>  
+			<% end %>
+		</div>
+	  </div>
+	</div>
+  </div>
+  
+  <div class="container-outer">
+    <div class="">
+      <div id="more-detail">
+    <% if @show_get_treadhunter_news_footer %>
+      <% if !session[:registered_newsletter].nil? && !session[:registered_newsletter].blank? %>
+        <%= render :partial => 'layouts/homepage/get_treadhunter_news',
+                    :locals => {:action => "already_registered", 
+                                :email_address => session[:registered_newsletter]} %>  
+      <% else %>
+        <%= render :partial => 'layouts/homepage/get_treadhunter_news',
+                    :locals => {:action => "get_registration"} %>  
+      <% end %>
+    <% end %>
+      </div>
+    </div>
+  </div>
+  <%= render :partial => 'layouts/footer_visfire' %>
+
+  <script>
+    smoothScroll.init({
+      speed: 500, 
+      easing: 'Linear',
+      updateURL: false,
+      offset: 0,
+      callbackBefore: function ( toggle, anchor ) {}, 
+      callbackAfter: function ( toggle, anchor ) {} 
+    });  
+  </script>
+</section>
+<!--outer wrapper-->
+</body>
+</html>

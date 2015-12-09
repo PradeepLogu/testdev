@@ -1,0 +1,97 @@
+<% if @cur_consolidated.nil? %>
+
+<div class="search-content-inner search-content-left-<%=@store%>inner">
+<% else %>
+<div class="search-content-inner search-content-left-store-inner1">
+<% end %>
+	<div class="left-content">
+		<div class="search-img">
+			<div class="logo">
+				<%= image_tag "brand_logos/#{@tire_listing.tire_manufacturer_name.upcase}.png", alt: "" %>
+			</div>
+			<a <%= @tire_listing.tire_model ? 'href=' + show_tire_model_path(@tire_listing.tire_model.tire_model_info_id) : '' %>>
+				<% if @tire_listing.photo1_thumbnail %>
+					<% if @lazy_off %>
+						<%= image_tag @tire_listing.photo1_thumbnail %>					
+					<% else %>
+						<img class="lazy" src="/assets/grey.gif" 
+							 data-original="<%= @tire_listing.photo1_thumbnail %>"/>
+						<noscript>
+							<%= image_tag @tire_listing.photo1_thumbnail %>
+						</noscript>
+					<% end %>
+				<% else %>
+					<%= image_tag "th_icon_128.png" %>
+				<% end %>
+			</a>
+		</div>
+	</div>
+	<div class="right-content">
+		
+		<% if @show_tire_reviews %>
+			<%= render :partial => 'layouts/fivestar_rating',
+				   :locals => {:extra_class => "smaller-mobile", :stars => 1.4,
+							   :reviews_link => "#", :reviews_count => 23} %>
+	   	<% end %>
+
+        <div class="search-text">
+			<h2><%= @tire_listing.tire_manufacturer_name %></h2>
+			<% if @tire_listing.tire_model %>
+				<%= link_to  show_tire_model_path(@tire_listing.tire_model.tire_model_info_id) do %>
+					<h4><%= @tire_listing.tire_model.name %></h4>
+				<% end %>
+			<% end %>
+		</div>
+		
+		<div class="rebate">
+			<% if @tire_listing.has_rebate && @tire_listing.has_price_break %>
+				<span class="promotion">Save even more after rebate! Includes price break!</span>
+			<% elsif @tire_listing.has_rebate %>
+				<span class="promotion">Save even more after rebate!</span>
+			<% elsif @tire_listing.has_price_break %>
+				<span class="promotion">Includes price break!</span>
+			<% end %>					
+		</div>
+		<div class="search-right-b">
+			<h1><span>$</span><%= @tire_listing.discounted_price %></h1>
+			<% if @tire_listing.is_new %>
+				<p style="line-height: 4px;">each</p>
+			<% end %>
+			<div class="quantity">
+				<label>Qty</label>
+				<%= select_tag :quantity, options_for_select(1..4, 4) %>
+			</div>
+			<a class="btn view-tire-btn search-right-b-img" href="<%= url_for @tire_listing %>" id="<%= @tire_listing.id %>">BUY NOW</a>
+        </div>
+        
+	    <div class="search-right">
+			<% if @tire_listing.respond_to?(:distance) %>
+				<h3><%= @tire_listing.tire_store.visible_name %></h3>
+			<% elsif !@tire_listing.tire_size.nil? %>
+				<h3><%= @tire_listing.tire_size.sizestr %></h3>
+			<% end %>
+			<ul class="orange-bullets">
+				<% if @tire_listing.tire_category %>
+					<li><span><%= @tire_listing.tire_category.category_name %></span></li>
+				<% end %>
+			</ul>
+			<ul class="orange-bullets">
+				<% if @tire_listing.respond_to?(:distance) %>
+					<li><span>Distance: <span><%= pluralize(@tire_listing.distance.to_f.floor, 'mile') %></span></span></li>
+				<% end %>
+				<% if @tire_listing.is_new %>
+					<li><span>Treadlife: <span>100%</span>
+					<!--<%= image_tag "new_icon.png", alt: "New" %>--></span></li>
+				<% elsif @tire_listing.treadlife %>
+					<li><span>Treadlife: <span><%= @tire_listing.treadlife %>%</span></span></li>
+				<% else %>
+					<li class="hide"><span>Treadlife: 0</span></li>
+				<% end %>
+				<% if @tire_listing.includes_mounting %>
+					<li><span>Price includes mounting</span></li>
+				<% end %>
+			</ul>
+		</div>
+		
+	  </div>
+</div>

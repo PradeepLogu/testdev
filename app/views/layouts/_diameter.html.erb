@@ -1,0 +1,7 @@
+
+<%= collection_select(f, :auto_model_id, @models, :id, :name,
+                   {:prompt   => "Select a Model",
+                   	 :selected => session[:auto_model_id]},
+                   {:onchange => "#{remote_function(:url  => {:action => "update_years", :controller => "tire_searches"},
+                      :with => "'model_id='+value")}"}) %>
+<br/>

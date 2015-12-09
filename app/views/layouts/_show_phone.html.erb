@@ -1,0 +1,15 @@
+<%= 
+#require 'rubygems'
+#require 'RMagick'
+include Magick
+
+image = Image.new(50, 50) {
+  self.background_color = "white"
+}
+text = Draw.new
+text.annotate(image, 0,0,0,40, tire_store.visible_phone) {
+     self.fill = 'black'
+     self.pointsize = 32
+}
+image.write(tire_store.id.to_s + ".png")
+%>

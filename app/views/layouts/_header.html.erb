@@ -1,0 +1,55 @@
+    <header class="navbar navbar-fixed-top">
+      <%= yield :head %>
+      <div id="wrapper">
+        <div id="header-container">
+          <div id="header-objects">
+            <%= image_tag("th-header.png", :size=>"290x40", alt: "TreadHunter.com", id: "header-logo") %>
+            <nav>
+              <div id="header-nav">
+                <ul class="headernav">
+                  <% if signed_in? %>
+                    <li><%= link_to "Home", root_path %></li>
+                    <li><%= link_to "Find a Store", tire_stores_path %></li>
+                    <li id="fat-menu" class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <%= current_user.first_name + ' ' + current_user.last_name %>
+                        <b class="caret"></b>
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><%= link_to "Profile", current_user %></li>
+                        <li><%= link_to "Sign out", signout_path, method: "delete" %></li>
+                      </ul>
+                    </li>
+                      <li id="fat-menu" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                          Account<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li>
+                            <%= link_to(current_user.account.name, current_user.account) unless current_user.account.nil? %>
+                          </li>
+                        </ul>
+                      </li>
+                    </li>
+                    <% if super_user? %>
+                      <li id="fat-menu" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                          Super User <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><%= link_to("Users", users_path) if super_user? %></li>
+                        </ul>
+                      </li>
+                    <% end %>
+                  <% else %>
+                    <li class="urhere"><%= link_to "Home", root_path %></li>
+                    <li><%= link_to "Sign in", signin_path %></li>
+                    <li><%= link_to "Find a Store", tire_stores_path %></li>
+                  <% end %>
+                </ul>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>

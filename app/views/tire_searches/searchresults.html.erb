@@ -1,0 +1,6 @@
+<% provide(:title, 'Search Results') %>
+
+<%= render :partial => 'layouts/tiresize_vehicle_modal', 
+		:locals => {:tiresize => @tire_search.tire_size } %>
+
+<%= render 'layouts/tireresults_new' %>

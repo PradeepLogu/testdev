@@ -1,0 +1,67 @@
+						<% 
+							markup.markup_tire_model_info_id ||= markup.markup_pct
+							markup.markup_tire_category_id ||= markup.markup_pct
+							markup.markup_tire_size_id ||= markup.markup_pct
+						%>
+						<div class="sub-markup">
+							<% if markup.new_record? %>
+								<% markup_fields = "new_markups[]" %>
+							<% else %>
+								<% markup_fields = "markups[]" %>
+							<% end %>
+							<%= fields_for markup_fields, markup do |f| %>
+								<%= f.hidden_field :id, multiple: true %>
+								<%= f.hidden_field :new_record?, multiple: true %>
+								<%= f.hidden_field :tire_manufacturer_id, multiple: true %>
+								<%= f.hidden_field :skip, {:class => "skip"} %>
+								<div class="markup-num">
+									<%= i %>.
+								</div>
+								<div class="markup-category">
+									<%= f.select(:tire_category_id, 
+										options_for_select(
+											@tire_categories.map{|c| [c.category_name, c.id]},
+											markup.tire_category_id),
+											{:include_blank => "N / A"}) %>
+								</div>
+								<div class="markup-pct">
+									<% if (markup.markup_tire_category_id || 0) % 1 == 0 %>
+										<%= f.text_field :markup_tire_category_id, 
+											:value => markup.markup_tire_category_id.to_i %> %
+									<% else %>
+										<%= f.text_field :markup_tire_category_id %> %
+									<% end %>
+								</div>
+								<div class="markup-model">
+									<%= f.select(:tire_model_info_id, 
+										options_for_select(
+											@tire_models.map{|c| [c.tire_model_name, c.id]},
+											markup.tire_model_info_id) ,
+										{:include_blank => 'N / A'}) %>
+								</div>
+								<div class="markup-pct">
+									<% if (markup.markup_tire_model_info_id || 0) % 1 == 0 %>
+										<%= f.text_field :markup_tire_model_info_id, 
+												:value => markup.markup_tire_model_info_id.to_i %> %
+									<% else %>
+										<%= f.text_field :markup_tire_model_info_id %> %
+									<% end %>
+								</div>
+								<div class="markup-size">
+									<%= f.select(:tire_size_id, 
+										options_for_select(
+											@tire_sizes.map{|c| [c.sizestr, c.id]},
+											markup.tire_size_id) ,
+										{:include_blank => 'N / A', multiple: true}) %>
+								</div>
+								<div class="markup-pct">
+									<% if (markup.markup_tire_size_id || 0 ) % 1 == 0 %>
+										<%= f.text_field :markup_tire_size_id, 
+											:value => markup.markup_tire_size_id.to_i %> %
+									<% else %>
+										<%= f.text_field :markup_tire_size_id %> %
+									<% end %>
+								</div>
+							<% end %>
+							<a href="#" onclick="delete_markup(this); return false;"><img src="/assets/delete-line.png"></a>
+						</div>

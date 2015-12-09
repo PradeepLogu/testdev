@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+		</head>
+		<body>
+			<p>Dear <%= @user.name %>,<p />
+				Thank you for registering with TreadHunter.com to list your tires for <%= @tire_store.name %>.  Our
+				goal is to drive customers to you, and you've taken the most important step!</br>
+				However, to fully realize the benefits of TreadHunter, we need a little bit more help from you.
+				Customers will find your store by searching for the specific tires they need on their car,
+				but you do not have any listings on our site right now.<br />
+				<h2>We have two very easy ways to get your listings on our site.</h2>
+				<ul>
+					<li><h3>Used Tires</h3><br/>
+						By using our Bulk Tire Listings feature, you can create multiple listings for used tires
+						quickly and easily.  Just enter a price, select a wheel size, and a mounting price and
+						warranty (if applicable) and you will automatically generate listings for dozens of different
+						sizes.  Click <a href="<%= @bulk_url %>">here</a> to begin entering bulk listings.</li>
+					<li><h3>New Tires</h3><br/>
+						You can use our Create Multiple Listings feature to quickly enter pricing by tire model or
+						for all models in a selected size.  Click <a href="<%= @multiple_url %>">here</a> to begin
+						entering prices for your new tires.</li>
+				</ul>
+				<h3>Are you a TCI Customer?</h3>
+					If you are a TCI customer, we will do all the hard work for you!  Simply contact your
+					TCI representative for your <b>TCI TIPS API</b> login credentials.  Then enter them
+					<a href="<%= @TCI_url %>">here</a> and we will automatically create thousands of listings
+					for you every month with your desired pricing markup.
+			</p>
+		</body>
+	</html>
+<% else %>
+<html></html>

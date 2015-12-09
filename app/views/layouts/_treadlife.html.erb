@@ -1,0 +1,10 @@
+<div id="treadlife">
+	<p>
+		<%= label_tag "Tread life" %>
+		<% if disabled %>
+			<%= text_field_tag :treadlife, message, :disabled => true, :style => 'background-color : #808080' %>
+		<% else %>
+			<%= text_field_tag :treadlife %>
+		<% end %>
+	</p>
+</div>

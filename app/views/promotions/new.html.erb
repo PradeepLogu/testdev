@@ -1,0 +1,179 @@
+<% provide(:title, 'Create Promotion') %>
+
+<% provide(:visfire, "true") %>
+<%= stylesheet_link_tag "style-wide-form" %>
+
+<script>
+	$(function() {
+		//$('form').jqTransform();
+	});
+</script>
+
+<style>
+	label { 
+		display: inline; 
+		font-family: Arial, Helvetica, sans-serif;
+		font-weight: normal;
+	}
+	td { 
+		font-family: Arial, Helvetica, sans-serif;
+		font-weight: normal;
+		margin: 0;	
+	}
+	.hidden {
+		display: none;
+		visibility: hidden;
+	}
+	td.right-align { text-align: right; padding-right: 5px; padding-top: 10px; padding-bottom: 10px;}
+	.my-button {
+	    background-color: #ef5a29;
+		height: 30px;
+		line-height: 30px;
+		font-size: 14px;
+		color: #fff;
+		display: block;
+		border: 0;
+		border-radius: 4px;
+		text-transform: uppercase;
+		padding-left: 14px;
+		padding-right: 14px;
+	}
+	.my-button a {
+		color: #fff;
+	}
+	#edit-mid-part {
+		padding-bottom: 20px;
+	}
+</style>
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+    <div id="search-main2">
+      <h2>Create a New Promotion</h2>
+    </div>
+	
+	<div id="edit-mid-part-leftxxx" class="clearfix">
+		<div id="edit-mid-part">
+			<h3>Create Promotion</h3>
+				<%= form_tag('/create_tiered_promotion',
+						:method => "post", :multipart => true) do %>
+					<div>
+						<table>
+							<% if super_user? %>
+								<tr>
+									<td width="200" class="right-align"><%= label_tag "Level:" %></td>
+									<td>
+										<%= radio_button_tag :promo_level, "N" %>&nbsp;National&nbsp;
+										<%= radio_button_tag :promo_level, "D" %>&nbsp;Distributor&nbsp;
+										<%= radio_button_tag :promo_level, "A", true %>&nbsp;Account/Store
+									</td>
+								</tr>
+							<% end %>								
+							<tr>
+								<td class="right-align"><%= label_tag "Type:" %></td>
+								<td>
+									<%= radio_button_tag :promotion_type, "R", true, 
+															:class => "promo-type" %>&nbsp;Rebate&nbsp;
+									<%= radio_button_tag :promotion_type, "P", false, 
+															:class => "promo-type" %>&nbsp;Percent Off&nbsp;
+									<%= radio_button_tag :promotion_type, "D", false, 
+															:class => "promo-type" %>&nbsp;Dollar Amount Off&nbsp;
+									<%= radio_button_tag :promotion_type, "S", false, 
+															:class => "promo-type" %>&nbsp;Special Price&nbsp;
+								</td>
+							</td>
+							<tr>
+								<td class="right-align"><%= label_tag "Applies to New/Used Tires:" %></td>
+								<td>
+									<%= radio_button_tag :new_or_used, "N", true %>&nbsp;New Only&nbsp;
+									<%= radio_button_tag :new_or_used, "U", false %>&nbsp;Used Only&nbsp;
+									<%= radio_button_tag :new_or_used, "B", false %>&nbsp;Both&nbsp;
+								</td>
+							</td>
+							<script>
+								$(".promo-type").on("change", function(e){
+									// $("#esatu").toggle($(this).hasClass("relat__atu_yes"));
+									if (e.target.value == "R") {
+										$("div.rebate").removeClass("hidden");
+										$("div.percent").addClass("hidden");
+										$("div.special").addClass("hidden");
+										$("div.amount").addClass("hidden");
+									}
+									else if (e.target.value == "P") {
+										$("div.rebate").addClass("hidden");
+										$("div.percent").removeClass("hidden");
+										$("div.special").addClass("hidden");
+										$("div.amount").addClass("hidden");
+									}
+									else if (e.target.value == "D") {
+										$("div.rebate").addClass("hidden");
+										$("div.percent").addClass("hidden");
+										$("div.special").addClass("hidden");
+										$("div.amount").removeClass("hidden");
+									}
+									else if (e.target.value == "S") {
+										$("div.rebate").addClass("hidden");
+										$("div.percent").addClass("hidden");
+										$("div.special").removeClass("hidden");
+										$("div.amount").addClass("hidden");
+									}
+								});
+							</script>
+
+							<tr>
+								<td class="right-align"><%= label_tag "Start Date:" %></td>
+								<td>
+									<%= date_select(:start_date, :start_date, :start_year => Date.current.year, 
+											:order => [:month, :day, :year]) %>
+								</td>
+							</tr>
+							<tr>
+								<td class="right-align"><%= label_tag "End Date:" %></td>
+								<td>
+									<%= date_select(:end_date, :end_date, :start_year => Date.current.year, 
+											:order => [:month, :day, :year]) %>
+								</td>
+							</tr>
+							<tr>
+								<td class="right-align"><%= label_tag "Promotion Name (if applicable):" %></td>
+								<td><%= text_field_tag(:promo_name, nil, :class => 'user') %></td>
+							</tr>
+							<tr>
+								<td class="right-align"><%= label_tag "Promotion Description:" %></td>
+								<td><%= text_area_tag :description, nil, 
+									{:cols => 100, :rows => 5, :style => 'width: 600px'} %>
+								</td>
+							</tr>
+							<tr>
+								<td class="right-align"><%= label_tag "External website (if applicable):" %></td>
+								<td>
+									<%= text_field_tag :promo_url, nil, {:class => 'user', :style=>'width: 400px;'} %>
+								</td>
+							</tr>
+							<tr>
+								<td class="right-align"><%= label_tag "Promotion Logo Image" %></td>
+								<td><%= file_field_tag :promo_image %></td>
+							</tr>
+							<tr>
+								<td class="right-align">
+									<%= label_tag "Promotion Attachment (e.g. rebate form PDF, if applicable)" %>
+								</td>
+								<td><%= file_field_tag :promo_attachment %></td>
+							</tr>
+						</table>
+					</div>
+
+					<%= render :partial => 'new_tier' %>
+
+					<button class='my-button'>
+					<%= link_to "Add a new tier", 
+						'/new_promo_tier',
+						:remote => true %>
+					</button>
+
+					<br />
+					<center><%= submit_tag "Save changes", :class => 'my-button' %></center>
+				<% end %>
+		</div>
+	</div>
+</div>

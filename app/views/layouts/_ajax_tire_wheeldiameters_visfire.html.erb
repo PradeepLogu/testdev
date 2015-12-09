@@ -1,0 +1,17 @@
+<div class="hover" id="tire_wheeldiameters">
+  <select class="tires" 
+          id="wheeldiameters" 
+          name="wheeldiameter">
+    <option value="">Wheel Diameter</option>
+    <% @wheeldiameters.each do |w| %>
+      <% if w.wheeldiameter == session[:wheeldiameter] %>
+        <option selected="selected" value="<%= w.wheeldiameter %>"><%= w.wheeldiameter %></option>
+      <% else %>
+        <option value="<%= w.wheeldiameter %>"><%= w.wheeldiameter %></option>
+      <% end %>
+    <% end %>
+  </select>
+  <span class="help-icon">
+    <a href="#" id="help-wheeldiameters"><%= image_tag("question-icon.png", alt: "?") %></a>
+  </span>
+</div>

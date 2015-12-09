@@ -1,0 +1,235 @@
+<style>
+	.tire-details-table {
+		background-color: #ff6633;
+	}
+	.table-data {
+		padding-left: 5px;
+	}
+	.table-row-title {
+		font-size: 1.2em;
+		font-weight: bold;
+		padding-left: 5px;
+	}
+	.tire-details-info {
+		float: left;
+	}
+	.tire-details-table {
+		font-size: 14px;
+		color: white;
+		font-weight: bold;
+		padding-left: 5px;
+	}
+	.tire-details-table a {
+		color: black;
+	}
+	.table-even {
+		background-color: #DBDBDB;
+	}
+	.table-odd {
+		background-color: #ECECEC;
+	}
+</style>
+<table class="row-no-pad">
+	<tbody>
+		<tr>
+			<td class="tire-details-table" width="280">
+				Tire Info <%= link_to " - Click for details", @tire_listing unless @hide_details_links %>
+			</td>
+			<td class="tire-details-table" width="320">
+				Seller
+			</td>
+		</tr>
+		<tr>
+			<td width="280" valign="top">
+				<table width="280">
+					<tbody>
+						<tr class="table-even">
+							<td class="table-row-title">
+								Quantity
+							</td>
+							<td class="table-data">
+								<%= @tire_listing.quantity.to_s %>
+								<% if @tire_listing.breakable_set? %>
+									<span style="font-size: 0.8em;">
+										(can be broken up)
+									</span>
+								<% end %>
+							</td>
+						</tr>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								Size
+							</td>
+							<td class="table-data">
+								<%= @tire_listing.tire_size.sizestr unless @tire_listing.tire_size.nil?  %>
+							</td>
+						</tr>
+						<tr class="table-even">
+							<td class="table-row-title">
+								Category
+							</td>
+							<td class="table-data">
+								<%= @tire_listing.tire_model.tire_category.category_name unless 
+												@tire_listing.tire_model.nil? ||
+												@tire_listing.tire_model.tire_category.nil? %>
+							</td>
+						</tr>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								Manufacturer
+							</td>
+							<td class="table-data">
+								<%= @tire_listing.tire_manufacturer.name unless
+										@tire_listing.tire_manufacturer.nil? %>
+							</td>
+						</tr>
+						<tr class="table-even">
+							<td class="table-row-title">
+								Model
+							</td>
+							<td class="table-data">
+								<%= @tire_listing.tire_model.name unless
+										@tire_listing.tire_model.nil? %>
+							</td>
+						</tr>
+						<tr class="table-odd">
+							<% if @tire_listing.is_new? %>
+								<td class="table-row-title">
+									Condition
+								</td>
+								<td class="table-data">
+									<%= image_tag("new_icon.png", :size=>"32x32", alt: "New!") %>
+								</td>
+							<% else %>
+								<td class="table-row-title">
+									Remaining Tread
+								</td>
+								<td class="table-data">
+									<%= @tire_listing.treadlife.to_s + '%' unless
+											@tire_listing.treadlife.nil? %>
+									<% if !@tire_listing.remaining_tread.nil? &&
+											@tire_listing.remaining_tread.to_s != '' &&
+											@tire_listing.remaining_tread.to_i > 2 %>
+										(<sup><%= @tire_listing.remaining_tread.to_i %></sup>
+										&frasl;<sub>32</sub>")
+									<% end %>
+								</td>
+							<% end %>
+						</tr>
+						<tr class="table-even">
+							<td class="table-row-title">
+								Speed Rating
+							</td>
+							<td class="table-data">
+								<%= @tire_listing.tire_model.speed_rating unless
+										@tire_listing.tire_model.nil? %>
+        						<%= render :partial => 'layouts/speed_rating_info_popover' %>
+							</td>
+						</tr>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								Treadwear
+							</td>
+							<td class="table-data">
+								<%= @tire_listing.tire_model.utqg_treadwear unless
+										@tire_listing.tire_model.nil? %>
+        						<%= render :partial => 'layouts/treadwear_info_popover' %>
+							</td>
+						</tr>
+						<tr class="table-even">
+							<td class="table-row-title">
+								Traction
+							</td>
+							<td class="table-data">
+								<%= @tire_listing.tire_model.utqg_traction unless
+										@tire_listing.tire_model.nil? %>
+        						<%= render :partial => 'layouts/traction_info_popover' %>
+							</td>
+						</tr>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								Load Index
+							</td>
+							<td class="table-data">
+								<%= @tire_listing.tire_model.load_index unless
+										@tire_listing.tire_model.nil? %>
+        						<%= render :partial => 'layouts/load_index_info_popover' %>
+							</td>
+						</tr>
+						<tr class="table-even">
+							<td class="table-row-title">
+								Sidewall
+							</td>
+							<td class="table-data">
+								<%= @tire_listing.tire_model.sidewall unless
+										@tire_listing.tire_model.nil? %>
+        						<%= render :partial => 'layouts/sidewall_info_popover' %>
+							</td>
+						</tr>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								Temp. Rating
+							</td>
+							<td class="table-data">
+								<%= @tire_listing.tire_model.utqg_temp unless
+										@tire_listing.tire_model.nil? %>
+        						<%= render :partial => 'layouts/temperature_info_popover' %>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+			<td width="328" valign="top">
+				<table width="328">
+					<tbody>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								Seller
+							</td>
+							<td>
+								<% if @tire_listing.tire_store.private_seller? %>
+									Private Seller
+								<% else %>
+									<%= link_to @tire_listing.tire_store.visible_name, 
+											url_for(@tire_listing.tire_store) + "?tire_size_id=#{@tire_listing.tire_size_id}",
+											:style => "font-size: 1.2em; font-weight: bold;" %>
+								<% end %>
+							</td>
+						</tr>
+						<tr class="table-even">
+							<td class="table-row-title">Address</td>
+							<td>
+								<% if @tire_listing.tire_store.private_seller? %>
+									<%= @tire_listing.tire_store.full_address %>
+								<% else %><%= @tire_listing.tire_store.address1 %><br /><%= @tire_listing.tire_store.address2 unless @tire_listing.tire_store.address2.blank? %><% unless @tire_listing.tire_store.address2.blank? %><br/><% end %><%= @tire_listing.tire_store.city %>, <%= @tire_listing.tire_store.state %>&nbsp;<%= @tire_listing.tire_store.zipcode %>
+								<% end %>
+							</td>
+						</tr>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								Phone
+							</td>
+							<td>
+								<% if @tire_listing.tire_store.private_seller? %>
+									<img src="<%= @phone_image %>">
+								<% else %>
+									<%= @tire_listing.tire_store.visible_phone %>
+								<% end %>
+							</td>
+						</tr>
+						<% if @tire_listing.tire_store.account.can_use_logo? && 
+								@tire_listing.tire_store.branding && 
+								@tire_listing.tire_store.branding.logo.exists? %>
+							<tr class="table-odd">
+								<td colspan="2">
+									<br />
+									<%= image_tag(@tire_listing.tire_store.branding.logo.url(:medium)) %>
+								</td>
+							</tr>
+						<% end %>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</tbody>
+</table>

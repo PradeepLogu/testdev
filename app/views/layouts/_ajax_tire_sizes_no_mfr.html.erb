@@ -1,0 +1,44 @@
+<div style="margin-bottom: 10px;">
+  <input class="user" id="tire_size_str" size="15"
+        style="width: 100px;" placeholder="e.g. 2055516">
+</div>
+<select class="tires" 
+        id="tire_size" 
+        name="tire_size" 
+        select_size_path="/ajax/get_models_for_tire_size">
+  <option value="">Size</option>
+  <% @tire_sizes.each do |m| %>
+    <option value="<%= m.id %>"><%= m.sizestr %></option>
+  <% end %>
+</select>
+<script>
+  $('#tire_size_str').bind('input', function() { 
+    size_str = $(this).val();
+    if (size_str.length >= 7) {
+      // validate 
+      $.ajax({
+        type: "GET",
+        dataType: "html",
+        url: '/ajax/validate_size_str',
+        data: {tire_size_str: size_str},
+        success:function(result){
+          j = JSON.parse(result);
+          $('select#tire_size').val(j.id);
+          $('select#tire_size').change();
+        } 
+      })
+    }
+  });
+  $('select#tire_size').change(function() {   
+    $.ajax({
+      type: "GET",
+      dataType: "html",
+      url: $(this).attr('select_size_path'),
+      data: {tire_size_id: $(this).attr('value'),
+            tire_store_id: <%= @tire_store_id %>,
+            report_mode: "<%= @report_mode %>"},
+      success:function(result){
+        $("div#choose-tire-sizes").html(result);} 
+    })
+  });  
+</script>

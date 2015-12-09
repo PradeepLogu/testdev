@@ -1,0 +1,12 @@
+Tire Reservation:
+Tires: <%= @reservation.tire_listing.short_description %> - $<%= @reservation.formatted_price %>
+<% unless @reservation.tire_listing.blank? %>
+Stock #:<%= @reservation.tire_listing.stock_number %>
+<% end %>
+
+Buyer info:
+<%= @reservation.name %>
+<%= @reservation.buyer_email %>
+<%= @reservation.formatted_phone %>
+<%= @reservation.address %>
+<%= @reservation.city %>, <%= @reservation.state %> <%= @reservation.zip %>

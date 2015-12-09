@@ -1,0 +1,926 @@
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript" src="https://stripe.github.io/jquery.payment/lib/jquery.payment.js"></script>
+<%= javascript_include_tag "jquery.maskedinput.min" %>
+
+
+<script>
+  function validateEmail(email) { 
+      var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+  };
+
+  function validatePhone(phone) {
+    if (phone == "")
+      return false;
+    else
+      return true;
+  }
+
+  Stripe.setPublishableKey("<%= ApplicationHelper::stripe_public_key() %>");
+
+  $.fn.toggleInputError = function(erred) {
+    this.toggleClass('has-error', erred);
+    return this;
+  };
+
+  function stripeResponseHandler(status, response) {
+    var $form = $('#payment-form');
+
+    $form.find('input#commit').prop('disabled', false);
+    $('#loading-indicator').hide();
+
+    if (response.error) {
+      // Show the errors on the form
+      $form.find('.payment-errors').text(response.error.message);
+      $form.find('input#commit').prop('disabled', false);
+    } else {
+      // response contains id and card, which contains additional card details
+      	var token = response.id;
+		var $dialog = $("#dialog-create-appointment");
+		var qty = $dialog.find("#appointment_quantity").val();  
+
+		$.ajax({
+		  type: "GET",
+		  dataType: "json",
+		  url: "/ajax/create_order",
+		  data: {
+		  	tire_listing_id: $("#appointment_tire_listing_id").val(),
+		  	quantity: qty,
+		  	stripe_token: token,
+		  	buyer_email: $("#appointment_buyer_email").val(),
+		  	buyer_name: $("#appointment_buyer_name").val(),
+		  	buyer_phone: $("#appointment_buyer_phone").val(),
+		  	appointment_id: $("#appt_id").text(),
+		  	request_date_primary: $("appointment_request_date_primary").val(),
+		  	request_hour_primary: $("appointment_request_hour_primary").val()
+		  },
+		  success: function(result) {
+		  	$dialog.dialog("close");
+		  	jQuery.gritter.add({
+  				image: '/assets/success.png',
+  				title: 'Your order number is ' + result.id,
+  				text: 'Your order is in the billing queue.  You should receive confirmation of your appointment from the store soon'
+			}); 
+		  },
+		  error: function(result) {
+		  	var err_text = "Error creating Order:<br\>";
+		  	var json = eval('(' + result.responseText + ')');
+
+		  	for (propertyName in json)
+		  		err_text = err_text + json[propertyName] + "<br \>";
+
+		  	$(".payment-errors").html(err_text);
+		  	$(".payment-errors").show();
+		  }
+		});      
+
+      // bNotifyViaText = $("#notify_via_text").is(":checked");
+      // $form.append($('<input type="hidden" name="notify_buyer_via_text" value="' + bNotifyViaText + '"" />'));
+
+      // and submit
+      // $form.get(0).submit();
+    }
+  }
+
+  jQuery(function($) {
+    $("#card_buyer_phone").mask("(999) 999-9999");
+
+    // $('#submit-cc-info').click(function(event) {
+	$('#payment-form').submit(function(event) {
+      var $form = $("#payment-form");
+
+      event.preventDefault();
+
+      var validEmail = validateEmail($('#card_buyer_email').val());
+      var validPhone = validatePhone($('#card_buyer_phone').val());
+      var validCC = $.payment.validateCardNumber($('#cardNumber').val());
+      var validExpire = $.payment.validateCardExpiry($('#cardExpMonth').val(),
+                                                $('#cardExpYear').val());
+      var validCVC = $.payment.validateCardCVC($('#cardCVC').val());
+
+      var validName = $('#cardName').val().length > 5;
+      var validAddress = $('#cardAddress').val().length > 5;
+      var validCity = $('#cardCity').val().length > 5;
+      var validState = $('#cardState').val().length >= 2;
+      var validZip = $('#cardZip').val().length == 5;
+
+      var anyErrors = !(validCC && validExpire && validCVC && validName && validAddress &&
+                      validCity && validState && validZip && validEmail);
+
+      $('#cardNumber').toggleInputError(!validCC);
+      $('#cardExpMonth').toggleInputError(!validExpire);
+      $('#cardExpYear').toggleInputError(!validExpire);
+      $('#cardCVC').toggleInputError(!validCVC);
+
+      $('#cardName').toggleInputError(!validName);
+      $('#cardAddress').toggleInputError(!validAddress);
+      $('#cardCity').toggleInputError(!validCity);
+      $('#cardState').toggleInputError(!validState);
+      $('#cardZip').toggleInputError(!validZip);
+
+      $('#buyer_email').toggleInputError(!validEmail);
+      $('#buyer_phone').toggleInputError(!validPhone);
+
+      if (validCC == false) {
+        $('.payment-errors').text("Invalid Credit Card number.");
+        $('#loading-indicator').hide();
+        $('#payment-form').find('input#commit').prop('disabled', false);
+        return false;
+      } else if (Stripe.card.validateCardNumber($('#cardNumber').val()) == false) {
+        $('.payment-errors').text("Invalid Credit Card number.");
+        $('#loading-indicator').hide();
+        $('#payment-form').find('input#commit').prop('disabled', false);
+        return false;
+      } else if (validExpire == false) {
+        $('.payment-errors').text("Invalid expiration date.");
+        $('#loading-indicator').hide();
+        $('#payment-form').find('input#commit').prop('disabled', false);
+        return false;
+      } else if (validCVC == false) {
+        $('.payment-errors').text("Invalid CVC.");
+        $('#loading-indicator').hide();
+        $('#payment-form').find('input#commit').prop('disabled', false);
+        return false;
+      } else if (validEmail == false) {
+        $('.payment-errors').text("Invalid email.");
+        $('#loading-indicator').hide();
+        $('#payment-form').find('input#commit').prop('disabled', false);
+        return false;
+      } else if (validPhone == false) {
+        $('.payment-errors').text("Invalid phone.");
+        $('#loading-indicator').hide();
+        $('#payment-form').find('input#commit').prop('disabled', false);
+      } else if (anyErrors) {
+        $('.payment-errors').text("Invalid billing info.");
+        $('#loading-indicator').hide();
+        $('#payment-form').find('input#commit').prop('disabled', false);
+        return false;
+      }
+
+      // Disable the submit button to prevent repeated clicks
+      $form.find('input#commit').prop('disabled', true);
+      $('#loading-indicator').show();
+      $('.payment-errors').hide();
+
+      Stripe.card.createToken($form, stripeResponseHandler);
+
+      // Prevent the form from submitting with the default action
+      return false;
+    });
+
+    $('#cardNumber').payment('formatCardNumber');
+    $('#cardCVC').payment('formatCardCVC');    
+  });
+
+	function onCreateAppt() {
+		document.getElementById('fade').style.display = 'block';
+		return true;
+	};
+</script>
+
+<style>
+	input.btn {
+		font-family: "HelveticaLTStd-Cond";
+		padding-top: 0.5em!important;
+	}
+
+	#loading-indicator {
+		display: none;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		/* background: url(spinner.gif) no-repeat center #fff; */
+		text-align: center;
+		padding: 10px;
+		font: normal 16px Tahoma, Geneva, sans-serif;
+		border: 1px solid #666;
+		margin-left: -50px;
+		margin-top: -50px;
+		z-index: 2;
+		overflow: auto;
+	}
+
+	#fade {
+	    display: none;
+	    position:absolute;
+	    top: 0%;
+	    left: 0%;
+	    width: 100%;
+	    height: 100%;
+	    background-color: #ababab;
+	    background: url(/assets/loading.gif) no-repeat center #fff;
+	    z-index: 1001;
+	    -moz-opacity: 0.8;
+	    opacity: .70;
+	    filter: alpha(opacity=80);
+	}
+</style>
+
+<div id="dialog-create-appointment" class="th-dialog" title="" style="display:none;">
+	<%= form_for(@appointment, :url => { :action => "create", :controller => "appointments" }, 
+                               :html => { :method => :post, :onsubmit => "return onCreateAppt();" },
+                               :validate => true) do |f| %>  
+		<%= f.hidden_field :tire_store_id, :value => @tire_store.id %>
+		<%= f.hidden_field :tire_listing_id %>
+		<%= f.hidden_field :user_id %>
+		<%= f.hidden_field :auto_manufacturer_id %>
+		<%= f.hidden_field :auto_model_id %>
+		<%= f.hidden_field :auto_year_id %>
+		<%= f.hidden_field :auto_option_id %>
+		<%= f.hidden_field :preferred_contact_path, :value => 0 %>
+		<%= f.hidden_field :can_do_ecomm, :value => true %>
+
+		<%= f.hidden_field :request_date_primary %>
+		<%= f.hidden_field :request_hour_primary %>
+
+		<% if !current_user.nil? %>
+			<%= f.hidden_field :buyer_name %>
+			<%= f.hidden_field :buyer_email %>
+			<%= f.hidden_field :buyer_address %>
+			<%= f.hidden_field :buyer_city %>
+			<%= f.hidden_field :buyer_state %>
+			<%= f.hidden_field :buyer_phone %>
+			<%= f.hidden_field :buyer_zip %>
+			<script>var buyerknown = true;</script>
+		<% end %>
+
+		<div id="fade"></div>
+		
+		<div id="schedule-panel" class="dlg-panel">
+			<h4 class="title">1. SCHEDULE AN APPOINTMENT</h4>
+			
+			<p>
+				<b><%= @tire_store.name %></b><br/>
+				<%= @tire_store.full_address %><br/>
+				<%= @tire_store.visible_phone %><br/>
+			</p>
+			<p>You can schedule an appointment on or after <strong><%= (Date.today + 2).to_formatted_s(:long) %></strong></p>
+			
+			<hr/>
+			
+			<h6>1. CHOOSE A DAY</h6>
+			<p class="center-content">All available appointments as soon as <strong>48 hours</strong> from now.</p>
+			
+			<div id='calendar-container' class='calendar-container'>
+				<div id='svc-calendar'></div>
+			</div>
+			
+			<div id="store-hours" class="store-hours">
+				<div class="bold">STORE HOURS:</div>
+				
+				<% something_displayed = nil %>
+				<% for i in [1,2,3,4,5,6,0]
+					str =  @tire_store.hours_as_string(i, false)
+					str.gsub!(/\A[A-Za-z]+:/) { |s| s[0] }		#replace day with its first letter
+					str.gsub!(/Open\s*/i, '')
+					something_displayed ||= !str.blank?
+					if !str.blank? %>
+						<b><%= str[0] %></b> <%= str.slice(1, str.length) %><br/>
+					<% end %>
+				<% end %>
+				<% if !something_displayed %>
+					<span class="no-hours">No hours available.</span>
+				<% end %>
+			</div>
+			<div class="clear"></div>
+			
+			<div style="display:none;">
+				<!-- internal date value that mirrors the form in appointments/new.html -->
+				<%= f.date_select(:request_date_primary,
+				                  {:default => 2.days.from_now,
+				                   :start_year => Time.now.year,
+				                   :end_year => (Time.now + 2.months).year},
+				                  {:class => "primary-date-select"}) %>
+			</div>
+			
+			<hr/>
+			
+			<h6 style="display:inline;">2. CHOOSE A TIME</h6>
+
+			<div id="primary-hour" style="display:inline;">
+				<%= f.select :request_hour_primary, options_for_select(@primary_hours, @appointment.request_hour_primary) %>
+			</div>
+			<div class="error-msg closed">
+				The store is closed on that day. Please choose another date.
+			</div>
+			<div class="error-msg in-past">
+				You must choose a date after today.
+			</div>
+
+			<hr class="thick"></hr>
+
+			<h6>CHOOSE AN ALTERNATE DAY</h6>
+			<p class="center-content">In case your primary choice is unavailable</p>			
+			<div id='calendar-container-secondary' class='calendar-container'>
+				<div id='svc-calendar-secondary'></div>
+			</div>
+
+			<div id="store-hours-secondary" class="store-hours">
+				<div class="bold">STORE HOURS:</div>
+				
+				<% something_displayed = nil %>
+				<% for i in [1,2,3,4,5,6,0]
+					str =  @tire_store.hours_as_string(i, false)
+					str.gsub!(/\A[A-Za-z]+:/) { |s| s[0] }		#replace day with its first letter
+					str.gsub!(/Open\s*/i, '')
+					something_displayed ||= !str.blank?
+					if !str.blank? %>
+						<b><%= str[0] %></b> <%= str.slice(1, str.length) %><br/>
+					<% end %>
+				<% end %>
+				<% if !something_displayed %>
+					<span class="no-hours">No hours available.</span>
+				<% end %>
+			</div>
+			<div class="clear"></div>			
+
+			<div style="display:none;">
+				<!-- internal date value that mirrors the form in appointments/new.html -->
+				<%= f.date_select(:request_date_secondary,
+				                  {:default => 3.days.from_now,
+				                   :start_year => Time.now.year,
+				                   :end_year => (Time.now + 2.months).year},
+				                  {:class => "primary-date-select"}) %>
+			</div>
+			
+			<hr/>
+			
+			<h6 style="display:inline;">CHOOSE AN ALTERNATE TIME</h6>
+			<div id="secondary-hour" style="display:inline;">
+				<%= f.select :request_hour_secondary, options_for_select(@primary_hours, @appointment.request_hour_secondary) %>
+			</div>			
+			
+			<hr/>
+
+			<% if current_user.nil? %>
+				<script>var buyerknown = false;</script>
+				<h6 style="display:inline;">3. YOUR INFORMATION</h6>
+				<p>
+					<%= f.label "Name", :style => "display:inline;" %>
+					<%= f.text_field :buyer_name, validate: { presence: true } %>
+				</p>
+				<p>
+					<%= f.label "Email", :style => "display:inline;" %>
+					<%= f.text_field :buyer_email, validate: { presence: true } %>
+				</p>
+				<p>
+					<%= f.label "Phone", :style => "display:inline;" %>
+					<%= f.text_field :buyer_phone, validate: { presence: true }  %>
+				</p>
+				<div class="error-msg contact-info">
+					You must provide your name, email, and phone.
+				</div>
+				<hr/>
+			<% end %>
+
+			<!--<% if current_user.nil? %>
+				<h6 style="float:left;">4.</h6>
+			<% else %>
+				<h6 style="float:left;">3.</h6>
+			<% end %>-->
+			<div class="center-content">
+				<a href="#" id="checkout-btn" class="btn huge">NEXT: CHECKOUT</a>
+				<!--<a href="#" id="cancel-link" class="orange">Cancel &amp; go back</a>-->
+			</div>
+			<div class="clear"></div>
+			
+			<div class="error-msg submission-error" id="appt-err">
+				A server error occurred.
+			</div>
+		</div>
+		
+		
+		
+		<div id="purchase-panel" class="dlg-panel" style="display:none;">
+			<h4 class="title">2. CHECKOUT</h4>
+			
+			<div class="tire-info">
+				<div class="image">
+					<img id="thumbnail" src="" alt=""/>
+				</div>
+				<p>
+					<span id="name"></span><br/>
+					<% if !@auto_name.blank? %>
+						Vehicle: <span id="vehicle"><%= @auto_name %></span><br/>
+					<% end %>
+					Tire Size: <span id="sizestr"></span><br/>
+				</p>
+				<div class="clear"></div>
+			</div>
+			
+			<hr/>
+			
+			<div class="line-item orange bold">
+				<div class="left">Quantity:</div>
+				<div class="right">
+					<label class="qty">Qty</label> <%= f.select :quantity, options_for_select(1..4, 4) %>
+				</div>
+			</div>
+			<div class="line-item orange bold">
+				<div class="left">Tires:</div>
+				<div class="right" id="tires-cost"></div>
+			</div>
+			
+			<hr/>
+			
+			<div class="line-item orange bold">
+				<div class="left">Installation:</div>
+				<div class="right" id="installation"></div>
+			</div>
+
+			<div class="line-item indent">
+				<div class="left">Mounting and balancing - Labor</div>
+				<div class="right" id="mounting-cost-labor"></div>
+			</div>
+			<div class="line-item indent">
+				<div class="left">Parts</div>
+				<div class="right" id="mounting-cost-parts"></div>
+			</div>
+			<!--
+			<div class="line-item indent">
+				<div class="left">TPMS Kit</div>
+				<div class="right" id="tpms-cost"></div>
+			</div>
+			-->
+			
+			<hr/>
+
+			<div class="line-item orange bold">
+				<div class="left">Convenience Fee (<%= $th_user_fee_percent %>% of tire total):</div>
+				<div class="right" id="convenience-fee"></div>
+			</div>
+
+			<hr/>
+			
+			<div class="line-item orange bold">
+				<div class="left">Taxes and Fees:</div>
+				<div class="right" id="total-taxes"></div>
+			</div>
+			<div class="line-item indent">
+				<div class="left">Sales Tax on Tires</div>
+				<div class="right" id="sales-tax-tires"></div>
+			</div>
+			<div class="line-item indent">
+				<div class="left">Sales Tax on Installation (Labor)</div>
+				<div class="right" id="sales-tax-install-labor"></div>
+			</div>
+			<div class="line-item indent">
+				<div class="left">Sales Tax on Installation (Parts)</div>
+				<div class="right" id="sales-tax-install-parts"></div>
+			</div>
+			<div class="line-item indent">
+				<div class="left">Sales Tax on Convenience Fee</div>
+				<div class="right" id="sales-tax-user-fee"></div>
+			</div>
+			
+			<hr/>
+			
+			<div class="line-item orange total">
+				<div class="left">TOTAL:</div>
+				<div class="right" id="total-cost"></div>
+			</div>
+			
+			<hr/>
+
+			<div class="line-item buttons">
+				<a href="#" class="btn huge" id="pay-online">PAY ONLINE</a>
+				<div class="right">
+					<%= f.submit "PAY IN-STORE", :class => "btn", :id => "pay-in-store" %>
+				</div>				
+			</div>
+
+			<div class="clear"></div>
+			
+			<div class="error-msg appt-submission-error">
+				A server error occurred.
+			</div>			
+		</div>
+	<% end %>		
+
+<style>
+	.label-input {
+		display:inline-block; 
+		clear: both;
+	}
+	.label-input >div.left {
+		padding-top:5px; 
+		padding-right: 10px;
+	}
+	#card-notify {
+		padding-top: 5px; 
+		padding-left: 5px;
+	}
+	.left {
+		float: left;
+		/* width: 150px; */
+	}
+	.right {
+		float: right;
+	}
+</style>
+
+		<div id="payment-panel" class="dlg-panel" style="display:none;">
+			<h4 class="title">3. ENTER PAYMENT INFO</h4>
+
+	        <form method="POST" id="payment-form" action="/order/create">
+	        	<%= hidden_field_tag :appt_id %>
+				<div class="line-item label-input orange bold">
+					<div class="left">Name on Card</div>
+					<div class="right">
+	              		<input type="text" size="50" data-stripe="name" class="full" 
+	                			id="cardName" value="" />
+	                </div>
+            	</div>
+
+				<div class="line-item label-input orange bold">
+					<div class="left">Phone</div>
+					<div class="right" id="card-phone">
+	                    <input type="text" size="50" class="full" id="card_buyer_phone" 
+	                            value="" />
+                	</div>
+                </div>
+                <div class="line-item label-input orange bold">
+                	<div class="left">Notify via text?</div>
+                	<div class="right" id="card-notify">
+						<input type="checkbox" id="notify_via_text"/>
+					</div>
+				</div>
+				<div class="line-item label-input orange bold">
+					<div class="left">Email</div>
+					<div class="right" id="card-email">
+	                    <input type="text" size="50" class="full" id="card_buyer_email" 
+	                            value=""/>
+					</div>
+				</div>
+				<div class="line-item label-input orange bold">
+					<div class="left">Address Line 1</div>
+					<div class="right" id="card-addr1">
+						<input type="text" size="50" data-stripe="address_line1" class="full" id="cardAddress"/>
+					</div>
+				</div>
+				<div class="line-item label-input orange bold">
+					<div class="left">Address Line 2</div>
+					<div class="right" id="card-addr2">
+						<input type="text" size="50" data-stripe="address_line2" class="full"/>
+					</div>
+				</div>
+				<div class="line-item label-input orange bold">
+					<div class="left">City</div>
+					<div class="right" id="card-city">
+						<input class="full" type="text" size="20" data-stripe="address_city" id="cardCity"/>
+					</div>
+				</div>
+				<div class="line-item label-input orange bold">
+					<div class="left">State</div>
+					<div class="right" id="card-state">
+						<%= select_tag :cardState, options_for_select(us_states, ""), 
+	                        {"data-stripe" => "address_state"} %>
+					</div>
+				</div>
+				<div class="line-item label-input orange bold">
+					<div class="left">Zip</div>
+					<div class="right" id="card-zip">
+						<input class="full" type="text" size="20" data-stripe="address_zip" 
+								id="cardZip" style="max-width: 75px" />
+					</div>
+				</div>
+				<div class="clear"></div>
+				<div class="line-item label-input orange bold">
+					<div class="left">Card Number</div>
+					<div class="right" id="card-number">
+						<input class="full" type="text" size="20" data-stripe="number" id="cardNumber" />
+					</div>
+				</div>
+				<div class="line-item label-input orange bold">
+					<div class="left">CVC/Security Code</div>
+					<div class="right" id="card-number">
+						<input class="full" type="text" size="4" data-stripe="cvc" id="cardCVC"
+								style="max-width: 50px" />
+					</div>
+				</div>
+				<div class="line-item label-input orange bold">
+					<div class="left">Expiration (MM/YY)</div>
+					<div class="right" id="card-number">
+						<%= select_tag(:cardExpMonth, options_for_select(@ar_months),
+	                        {'data-stripe' => "exp-month"}) %>
+						<%= select_tag(:cardExpYear, options_for_select(@ar_years),
+	                        {'data-stripe' => "exp-year"}) %>
+					</div>
+				</div>
+
+				<div class="clear"></div>
+				<hr />
+				<div class="center-content">
+	          		<input class="btn huge" name="submit" type="submit"
+          				value="PURCHASE" data-validate="true" id="submit-cc-info">
+  				</div>
+
+				<div id="loading-indicator">          				
+					<img src="/assets/loading.gif" />
+				</div>
+				<div class="error-msg payment-errors">
+					A server error occurred.
+				</div>			
+	        </form>
+		</div>	
+</div>
+
+<script>
+var event_colors = {};
+var ht = <%= raw(@appointments.to_json) %>;
+
+function update_appointment_time() {
+	$.ajax({
+	  type: "GET",
+	  dataType: "html",
+	  url: "/ajax/update_hours_for_store",
+	  data: {primary: "true",
+	        selected_year: $("select#appointment_request_date_primary_1i").attr('value'),
+	        selected_month: $("select#appointment_request_date_primary_2i").attr('value'),
+	        selected_day:   $("select#appointment_request_date_primary_3i").attr('value'),
+	        tire_store_id: "<%= @tire_store.id %>"},
+	  success: function(result) {
+	    $("div#primary-hour").html(result);
+	    $("div#primary-hour select").val("12:00");		//Attempt to set a default value of 12 noon
+	  } 
+	});
+}
+
+function hideStuff() {
+	var $dialog = $("#dialog-create-appointment");
+	$dialog.find("#payment-panel").hide();
+    $("#payment-form").hide();
+	$("#appt-err").html("");
+	$("#appt-err").show();
+	document.getElementById('fade').style.display = 'none';
+}
+
+function show_calculated_order(result) {
+  	document.getElementById('fade').style.display = 'none';
+  	var $dialog = $("#dialog-create-appointment");
+    var panel = $dialog.find("#purchase-panel");
+    var $calendar_primary = $dialog.find('#svc-calendar');
+	var date = $calendar_primary.fullCalendar('getDate');
+	var time = $dialog.find("#primary-hour select").val();
+	var $calendar_primary = $dialog.find('#svc-calendar');
+
+    panel.find("#thumbnail").attr("src", result.tire_listing.photo1_thumbnail);
+    panel.find("#name").html(result.tire_listing.manufacturer_name + ' ' + result.tire_listing.model_name);
+    panel.find("#sizestr").html(result.tire_listing.sizestr);
+    panel.find("#tires-cost").html(result.total_tire_price_money);
+    panel.find("#installation").html(result.total_install_price_money);
+    panel.find("#mounting-cost-labor").html(result.total_install_price_labor_money);
+    panel.find("#mounting-cost-parts").html(result.total_install_price_parts_money);
+    panel.find("#total-taxes").html(result.sales_tax_collected_money_formatted);
+    panel.find("#sales-tax-tires").html(result.sales_tax_on_tires_money);
+    // panel.find("#sales-tax-install").html(result.sales_tax_on_install_money);
+    panel.find("#sales-tax-install-parts").html(result.sales_tax_on_install_parts_money);
+    panel.find("#sales-tax-install-labor").html(result.sales_tax_on_install_labor_money);
+    panel.find("#total-cost").html(result.total_order_price_money);
+    panel.find("#convenience-fee").html(result.th_user_fee_money_formatted);
+    panel.find("#sales-tax-user-fee").html(result.th_sales_tax_collected_money);
+
+    panel.find("#appt_request_date_primary").html(date);
+    panel.find("#appt_request_hour_primary").html(time);
+    
+    $dialog.find("#schedule-panel").hide();
+
+    if (result["can_do_ecomm"] == false) {
+    	panel.find("#pay-online").css('background', '#F0F0F0');
+    	$("#appointment_can_do_ecomm").val("false");
+    } else {
+		panel.find("#pay-online").css('background', '#F05A29');
+		$("#appointment_can_do_ecomm").val("true");
+    }
+
+    panel.show();
+	$('html, body').animate({
+		scrollTop: $("#purchase-panel").offset().top
+	}, 50);
+}
+
+//Call this function after the calendar is visible
+function init_appointment_calendar() {
+	var $dialog = $("#dialog-create-appointment");
+	var $calendar_primary = $dialog.find('#svc-calendar');
+	var $calendar_secondary = $dialog.find('#svc-calendar-secondary');
+	var $primary_default_date = moment().add(2, 'days').startOf('day');
+	var $secondary_default_date = moment().add(3, 'days').startOf('day');
+	$calendar_primary.fullCalendar({
+	  defaultDate: $primary_default_date,
+	  header: {
+	  	left: "",
+	  	center: "title",
+	  	right: "prev,next"
+	  },
+	  height: "auto",
+	  dayClick: function(date, jsEvent, view) {
+	    var month=date.format('M');
+	    var day=date.format('D');
+	    var year=date.format('YYYY');
+	    
+	    document.getElementById('appointment_request_date_primary_1i').value=year;
+	    document.getElementById('appointment_request_date_primary_2i').value=month;
+	    document.getElementById('appointment_request_date_primary_3i').value=day;
+
+	    $calendar_primary.fullCalendar('gotoDate', date);
+	    
+	    $calendar_primary.find(".fc-state-highlight").removeClass("fc-state-highlight");
+    	$calendar_primary.find($("[data-date="+date.format("YYYY-MM-DD")+"]")).addClass("fc-state-highlight");
+	    update_appointment_time();
+	  }
+	});
+    $calendar_primary.find(".fc-state-highlight").removeClass("fc-state-highlight");
+    $calendar_primary.find($("[data-date="+$primary_default_date.format("YYYY-MM-DD")+"]")).addClass("fc-state-highlight");
+    update_appointment_time();
+
+	$calendar_secondary.fullCalendar({
+	  defaultDate: $secondary_default_date,
+	  header: {
+	  	left: "",
+	  	center: "title",
+	  	right: "prev,next"
+	  },
+	  height: "auto",
+	  dayClick: function(date, jsEvent, view) {
+	    var month=date.format('M');
+	    var day=date.format('D');
+	    var year=date.format('YYYY');
+	    
+	    document.getElementById('appointment_request_date_secondary_1i').value=year;
+	    document.getElementById('appointment_request_date_secondary_2i').value=month;
+	    document.getElementById('appointment_request_date_secondary_3i').value=day;
+	
+	    $calendar_secondary.fullCalendar('gotoDate', date);
+	    
+	    $calendar_secondary.find(".fc-state-highlight").removeClass("fc-state-highlight");
+    	$calendar_secondary.find($("[data-date="+date.format("YYYY-MM-DD")+"]")).addClass("fc-state-highlight");
+	    update_appointment_time();
+	  }
+	});
+    $calendar_secondary.find(".fc-state-highlight").removeClass("fc-state-highlight");
+    $calendar_secondary.find($("[data-date="+$secondary_default_date.format("YYYY-MM-DD")+"]")).addClass("fc-state-highlight");
+    update_appointment_time();
+}
+
+$("#pay-online").click(function (e) {
+	e.preventDefault();
+
+	var $dialog = $("#dialog-create-appointment");
+	var qty = $dialog.find("#appointment_quantity").val();
+	var appt_id = "";
+
+	if (document.getElementById("appointment_can_do_ecomm").value == "true") {
+		document.getElementById('fade').style.display = 'block';
+		// create an appointment
+
+		$.ajax({
+		  type: "GET",
+		  dataType: "json",
+		  url: "/ajax/create_appointment",
+		  data: {
+		  	tire_listing_id: $("#appointment_tire_listing_id").val(),
+		  	quantity: qty,
+		  	buyer_email: $("#appointment_buyer_email").val(),
+		  	buyer_name: $("#appointment_buyer_name").val(),
+		  	buyer_phone: $("#appointment_buyer_phone").val(),
+		  	request_date_primary: $("#appointment_request_date_primary").val(),
+		  	request_hour_primary: $("#primary-hour select").val()
+		  },
+		  success: function(result) {
+		  	document.getElementById('fade').style.display = 'none';
+		    var panel = $dialog.find("#purchase-panel");
+
+		    appt_id = result.id;
+
+		    document.getElementById("payment-form").reset();
+		    
+		    $("input#cardName").val(result.buyer_name);
+		    $("input#card_buyer_email").val(result.buyer_email);
+		    $("input#card_buyer_phone").val(result.buyer_phone);
+		    $("#appt_id").html(appt_id);
+
+		    $dialog.find("#payment-panel").show();
+		    $("#payment-form").show();
+			$dialog.find("#purchase-panel").hide();
+
+		  	jQuery.gritter.add({
+					image: '/assets/success.png',
+					title: 'Your appointment ID  is ' + appt_id,
+					text: 'Your appointment has been created, please enter your payment information.'
+			}); 
+		  },
+		  error: function(result) {
+		  	document.getElementById('fade').style.display = 'none';
+		  	var err_text = "Error creating appointment:<br\>";
+		  	var json = eval('(' + result.responseText + ')');
+
+		  	for (propertyName in json)
+		  		err_text = err_text + json[propertyName] + "<br \>";
+
+		  	$(".appt-submission-error").html(err_text);
+		  	$(".appt-submission-error").show();
+		  }
+		});
+	};
+	return true;
+});
+
+$("#checkout-btn").click(function (e) {
+	e.preventDefault();
+	var $dialog = $("#dialog-create-appointment");
+	var $calendar_primary = $dialog.find('#svc-calendar');
+	var today = $.fullCalendar.moment().startOf('day');
+	var date = $calendar_primary.fullCalendar('getDate');
+	var time = $dialog.find("#primary-hour select").val();
+    
+    $dialog.find(".error-msg").hide();
+    
+    if (today.diff(date) > 0) {
+		$dialog.find(".error-msg.in-past").show();
+		return;
+	}
+	if (!time) {
+		$dialog.find(".error-msg.closed").show();
+		return;
+	}
+
+	if (!buyerknown) {
+		if ($.trim($("#appointment_buyer_name").val()) == "" ||
+			$.trim($("#appointment_buyer_phone").val()) == "" ||
+			$.trim($("#appointment_buyer_email").val()) == "") {
+			document.getElementById('fade').style.display = 'none';
+			$dialog.find(".error-msg.contact-info").show();
+			return;
+		}
+	}
+
+	document.getElementById('fade').style.display = 'block';
+	
+	$.ajax({
+	  type: "GET",
+	  dataType: "json",
+	  url: "/ajax/get_checkout_info",
+	  data: {
+	  	tire_listing_id: $dialog.find("#appointment_tire_listing_id").val(),
+	  	quantity: $dialog.find("#appointment_quantity").val(),
+	  	email: $dialog.find("#appointment_buyer_email").val(),
+	  	phone: $dialog.find("#appointment_buyer_phone").val()
+	  },
+	  success: function(result) {
+	  	show_calculated_order(result);
+	  },
+	  error: function(result) {
+	  	document.getElementById('fade').style.display = 'none';
+	  	//$dialog.find("#submission-error").show();
+
+	  	var err_text = "Error trying to checkout:<br\>";
+	  	var json = eval('(' + result.responseText + ')');
+
+	  	for (propertyName in json)
+	  		err_text = err_text + json[propertyName] + "<br \>";
+
+	  	$("#appt-err").html(err_text);
+	  	$("#appt-err").show();
+	  }
+	});
+});
+
+$("#appointment_quantity").change(function () {
+	//TODO: re-do ajax call for checkout information
+	var new_qty = $(this).val();
+	var $dialog = $("#dialog-create-appointment");
+	document.getElementById('fade').style.display = 'block';
+
+	$.ajax({
+	  type: "GET",
+	  dataType: "json",
+	  url: "/ajax/get_checkout_info",
+	  data: {
+	  	tire_listing_id: $dialog.find("#appointment_tire_listing_id").val(),
+	  	quantity: new_qty
+	  },
+	  success: function(result) {
+	  	show_calculated_order(result);
+	  },
+	  error: function(result) {
+	  	document.getElementById('fade').style.display = 'none';
+	  	//$dialog.find("#submission-error").show();
+
+	  	var err_text = "Error trying to checkout:<br\>";
+	  	var json = eval('(' + result.responseText + ')');
+
+	  	for (propertyName in json)
+	  		err_text = err_text + json[propertyName] + "<br \>";
+
+	  	$("#appt-err").html(err_text);
+	  	$("#appt-err").show();
+	  }
+	});
+});
+
+$("#cancel-link").click(function (e) {
+	e.preventDefault();
+	$("#dialog-create-appointment").dialog("close");
+});
+</script>

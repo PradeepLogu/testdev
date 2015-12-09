@@ -1,0 +1,14 @@
+<%	if @stores.length == 0 && (page_no.blank? || page_no.to_i == 1) %>
+	<h5 class="no-results">No tire stores found.</h5>
+<%	else
+		i = 0
+		index = (defined?(offset) ? offset.to_i : 0)
+		@stores.each do |s|
+			index += 1
+			i += 1 %>
+		<%= render :partial => 'layouts/build_store_row', 
+				   :locals => {:store => s, :index => index, :button => @button_type,
+				   			   :search_query => @search_query, :lazy_off => (i <= 2)} %>
+<%		end
+	end
+%>

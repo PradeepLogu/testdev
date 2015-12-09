@@ -1,0 +1,565 @@
+// Global styles and overrides
+
+$orange: #F05A29;
+
+body {
+	font-family: "HelveticaLTStd-Cond";
+	text-align: center;
+	padding: 1em 1em 0;
+}
+
+#outer-wrapper {
+	max-width: 1100px;
+	margin: 0 auto;
+	text-align: left;
+	font-size: 14px;
+}
+
+::selection{background:#ff1c00; color:#fff;}
+::-moz-selection{background:#ff1c00; color:#fff;}
+
+//Hide the profiler for now
+.profiler-results { display: none; }
+
+.orange {
+  color: $orange;
+}
+
+.bold {
+  font-family: "HelveticaLTStd-BoldCond";   //alternate type of bold for all pages
+  font-weight: normal;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+a.underlined {
+  color: $orange;
+  text-decoration: underline;
+}
+
+.btn, .btn:hover {
+	color: #fff;
+	background: $orange;
+	padding-top: 0.5em;
+	font-size: 14px;
+	box-shadow: none;
+	text-shadow: none;
+}
+input[type="submit"].btn {
+  padding-top: 0.25em;
+}
+
+.btn.blue {
+  background-color: #547cff;
+}
+.btn.green {
+  background-color: #35a035;
+}
+
+form {
+  margin: 0;
+}
+
+label {
+  font-size: 14px;
+}
+
+form .field_with_errors label.message {
+  color: red;
+}
+
+ul, ul li {
+  font-size: 14px;
+}
+
+ul.orange-bullets {
+  padding-left: 1em;
+
+  li {
+    color: $orange;
+    list-style: outside disc;
+    font-size: 16px;
+
+    & > span {
+      font-size: 14px;
+      color: black;
+    }
+  }
+}
+
+ul.two-column {
+  -moz-column-count: 2;
+  -webkit-column-count: 2;
+  column-count: 2;
+}
+ul.three-column {
+  -moz-column-count: 3;
+  -webkit-column-count: 3;
+  column-count: 3;
+}
+
+
+.hide {
+  display: none !important;
+}
+/*.hidden {
+  overflow:hidden!important;
+}*/
+
+
+//Grey out the screen for a modal
+#dimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.5;
+  z-index: 1000;
+}
+
+#header-inner-logo {
+	padding-bottom: 8px;
+	float: left;
+}
+
+#pulldown {
+	display: none;
+	margin: 10px 20px 0 0;
+}
+
+
+#header-cart {
+  float: right;
+  margin-top: 15px;
+  margin-right: 60px;
+  font-family: "HelveticaLTStd-Bold";
+  font-size: 20px;
+  
+  #account-info {
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    min-width: 150px;     //keeps the down-arrow from intruding on the cart icon when the user name is short
+    
+    .name-line {
+      font-family: "HelveticaLTStd-Roman";
+      .name {
+        color: $orange;
+      }
+    }
+    #account-link {
+      margin-top: 9px;
+      
+      a {
+        color: #000;
+        position: relative;
+        
+        &::after {
+          position: absolute;
+          display: block;
+          top: 5px;
+          right: -21px;
+          width: 16px;
+          height: 9px;
+          background: url("/assets/cart-link-arrow.png") no-repeat scroll 0 0;
+          content: "";
+        }
+      }
+    }
+  }
+  
+  #cart {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    
+    #cart-link {
+      display: block;
+      position: relative;
+      height: 43px;
+      padding-left: 60px;
+      background: url("/assets/cart-icon.png") no-repeat scroll 0 bottom;   // 43x56
+      color: $orange;
+    }
+    .cart {
+      position: relative;
+      top: calc(43px - 1em);    //put the text's bottom even with the cart icon's bottom
+      line-height: 1.5;
+      vertical-align: text-bottom;
+    }
+    .cart-count {
+      position: absolute;
+      top: 0;
+      left: 25px;
+      color: #000;
+      font-size: 26px;
+    }
+  }
+  
+  
+  .popup {
+    display: none;
+    position: absolute;
+    z-index: 101;
+    margin-top: 15px;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 0 3px 1px #c2c2c2;
+    border-radius: 3px;
+    padding: 15px;
+    
+    &::before {
+      position: absolute;
+      display: block;
+      top: -14px;
+      right: 0;
+      width: 24px;
+      height: 14px;
+      background: url("/assets/popup-menu-top-arrow.png") no-repeat scroll 0 0;
+      content: "";
+    }
+  }
+  
+  #popup-account-menu {
+    width: 130px;
+    
+    &.user .menu-inner-guest { display: none; }
+    &.guest .menu-inner-user { display: none; }
+    
+    .menu-inner-guest {
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.25;
+      
+      .new {
+        color: #414141;
+      }
+      .register a {
+        color: $orange;
+        text-decoration: underline;
+      }
+      .signin {
+        margin-top: 10px;
+        
+        .btn {
+          width: 100px;
+        }
+      }
+    }
+    
+    .menu-inner-user {
+      text-align: left;
+      font-size: 16px;
+      font-family: "HelveticaLTStd-Roman";
+      
+      .link {
+        line-height: 1.75;
+        margin-left: 10px;
+      }
+    }
+  }
+  
+  #popup-cart-menu {
+    width: 250px;
+    
+    .header {
+      text-align: center;
+    }
+
+    .cart-list {
+      font-size: 10pt;
+      font-weight: normal;
+      font-family: "HelveticaLTStd-Cond";
+      text-align: center;
+    }
+  }
+}
+  
+  
+#header-menu {
+	clear: both;
+	margin: 0 -5px;		// to make the table cells hug the edges
+
+  ul {
+  	display: table;
+  	width: 100%;
+  	height: 53px;
+  	border-spacing: 5px;
+  	border-collapse: separate;
+  
+    li {
+    	display: table-cell;
+    	width: 25%;
+    	text-align: center;
+    	vertical-align: middle;
+    	background-color: black;
+      color: white;
+      text-decoration: none;
+      text-transform: uppercase;
+      
+      a {
+        display: block;
+        color: white;
+        text-decoration: none;
+        text-transform: uppercase;
+        padding: 6px 4px 0;
+        font: 20px/40px "HelveticaLTStd-BoldCondObl";
+        
+        &.register {
+          background: $orange;
+        }
+      }
+    }
+  }
+}
+
+#footer {
+	background: #000;
+	text-align: left;
+	
+	.col {
+    padding: 1em 20px;
+  }
+  .col-title {
+    font-weight: bold;
+    font-size: 14px;
+    
+    .first {
+      color: white;
+    }
+    .second {
+      color: $orange;
+      font-style: italic;
+    }
+  }
+  .links {
+    margin: 1em 15px;
+  }
+  .link {
+    padding: 3px 0;
+    
+    a {
+      color: white;
+    }
+  }
+}
+#footer-inner {
+	padding: 10px;
+}
+
+
+
+//Horizontal search panel with sunset background
+#top-search-section {
+  height: 500px;
+  text-align: center;
+  position: relative;
+  clear: both;
+  background: url("/assets/sunset.jpg") no-repeat scroll center 0 / cover;
+}
+
+
+
+
+//Up/down arrow for accordion panel titles 
+.panel-heading a.panel-title span.arrow {
+  display: inline-block;
+  background: url("/assets/accordion-up.png") no-repeat scroll 0 0;
+  width: 18px;
+  height: 9px;
+}
+.panel-heading a.panel-title.collapsed span.arrow {
+  background-image: url("/assets/accordion-down.png");
+}
+
+
+
+//Commonly-used grey tabs for main page content
+.page-tabs {
+  padding-bottom: 20px;
+
+  a {
+    background-color: #acacac;
+    border-radius: 2px;
+    color: #fff;
+    float: left;
+    font: 16px/32px "HelveticaLTStd-BoldCondObl";
+    padding: 6px 0 0;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    
+    &.middle {
+      border-left: solid 1px white;
+      border-right: solid 1px white;
+      box-sizing: border-box;
+    }
+    &.activeLink {
+      background-color: #555555;
+      border-bottom: 0 none;
+      position: relative;
+      
+      &::after {
+        background: url("/assets/downarrow-grey.png") no-repeat scroll center bottom;
+        bottom: -13px;
+        content: "";
+        display: block;
+        height: 14px;
+        position: absolute;
+        width: 100%;
+        z-index: 10;
+      }
+    }
+  }
+  
+  &.tabs3 a {
+    width: 33.3333%;
+  }
+  &.tabs4 a {
+    width: 25%;
+  }
+  &.tabs5 a {
+    width: 20%;
+  }
+}
+
+//Inner tabs within a tab section
+.page-tabs.inner-tabs {
+  a {
+    background-color: $orange;
+    
+    &.activeLink {
+      background-color: $orange;
+      
+      &::after {
+        background-image: url("/assets/downarrow-orange.png")
+      }
+    }
+  }
+}
+
+
+//Title section with accompanying paragraph text that adjusts for mobile
+#fluid-title {
+  display: table;
+  width: 90%;
+  margin: 20px 5% 20px;
+
+  h1 {
+    display: table-cell;
+    min-width: 200px;       //default width: usually should be overridden
+  }
+  p {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: left;
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .page-tabs a {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 462px) {
+  .page-tabs a {
+    font-size: 9px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  /* Reset side margins of page to let headers touch edge of screen */
+  body {
+    padding: 0;
+  }
+  .container-inner {
+    padding: 0 1em;
+  }
+  
+	#header-inner-search {
+		display: none;
+	}
+	#pulldown {
+		display: block;
+		position: absolute;
+	}
+	.menu-hidden {
+		display: none;
+	}
+	
+	#header-cart {
+    display: none;
+  }
+	
+	#header {
+		margin: 1em 1em 20px;
+		padding: 1em 1em 20px;
+		border-bottom: solid 2px #7a706f;
+	}
+	
+	#header-inner-logo {
+		padding-bottom: 0px;
+		float: none;
+		text-align: center;
+	}
+	
+	#header-menu {
+		margin: 10px -1em 0;
+	
+    ul {
+  		display: block;
+  		height: auto;
+  	
+      li {
+    		display: block;
+    		width: auto;
+    	}
+    }
+  }
+  
+  //Horizontal search panel with sunset background
+  #top-search-section {
+    background: none;
+    height: auto;
+    margin-top: 20px;
+  }
+  
+  
+  #fluid-title {
+    display: block;
+    width: 100%;
+    margin: 10px 0 10px;
+    
+    h1 {
+      display: block;
+      text-align: center;
+      width: auto !important;
+      min-width: none !important;
+    }
+    p {
+      display: block;
+      padding-left: 0 !important;
+      
+      .break {
+        display: block;
+      }
+    }
+  }
+  
+  ul.collapse-mobile {
+    -moz-column-count: 1;
+    -webkit-column-count: 1;
+    column-count: 1;
+  }
+}

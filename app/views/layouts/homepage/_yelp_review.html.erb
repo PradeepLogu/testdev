@@ -1,0 +1,27 @@
+<% if store_name.blank? %>
+  <div class="upper">
+    <span class="location">Unable to find Yelp tire store</span>
+    <span class="rating"></span>
+    </div>
+    <p class="text">
+    </p>
+    <div class="read-more">
+    </div>
+  </div>
+<% else %>
+  <div class="upper">
+    <span class="location"><%= store_name %>, <%= location %></span>
+    <span class="rating">
+      <img src="<%= rating %>"></img>
+    </span>
+    </div>
+    <p class="text">
+      <%= review_text %>
+    </p>
+    <div class="read-more">
+      <% if !review_url.blank? %>
+        <a href="<%= review_url %>" target="_blank">READ MORE</a>
+      <% end %>
+    </div>
+  </div>
+<% end %>

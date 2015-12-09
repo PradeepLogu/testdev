@@ -1,0 +1,21 @@
+<h1>Listing tire_sizes</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @tire_sizes.each do |tire_size| %>
+  <tr>
+    <td><%= link_to 'Show', tire_size %></td>
+    <td><%= link_to 'Edit', edit_tire_size_path(tire_size) %></td>
+    <td><%= link_to 'Destroy', tire_size, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Tire size', new_tire_size_path %>

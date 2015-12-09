@@ -1,0 +1,346 @@
+<% provide(:title, @tire_store.visible_name + " | New & Used Tires #{@tire_store.city} #{@tire_store.state} | TreadHunter") %>
+<% provide(:metadescription, "#{@tire_store.visible_name}, Category: new and used tires, tire store, #{@tire_store.city} #{@tire_store.state} #{@tire_store.zipcode}") %>
+
+<% @final_mode = false %>
+
+<% if visfire_storemode == true %>
+  <% provide(:visfire, "true") %>
+  <% if @final_mode %>
+    <% provide(:visfire_final, "true") %>
+  <% end %>
+  <% provide(:nofooter, "") %>
+  <%= javascript_include_tag "jquery.infinite-scroll-helper.js" %>
+  <%= javascript_include_tag "popup.js" %>
+  <%= javascript_include_tag "jquery.lazyload.min.js" %>
+  <script language="javascript">
+    $(function(){
+      $('form').jqTransform({imgPath:'html/images/'});
+      $("img.lazy").show().lazyload({effect : "fadeIn"});
+    });
+
+    function getBindData(){
+      $("#cont-2").live($('#form01').jqTransform({imgPath:'html/images/'}));
+    };  
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(".tabLink").each(function(){
+        $(this).click(function(){
+          tabeId = $(this).attr('id');
+          $(".tabLink").removeClass("activeLink");
+          $(this).addClass("activeLink");
+          $(".tabcontent-1").addClass("hide");
+          $("#"+tabeId+"-1").removeClass("hide")   
+          return false;   
+        });
+      }); 
+    });
+  </script>
+
+  <script>
+    $(function() {
+      var pageCount;
+      var async_mode = true;
+
+      $('form').jqTransform();
+
+      //$('#search-main').infiniteScrollHelper({
+      $('div#loader').infiniteScrollHelper({        
+
+        loadMore: function(page) {
+          pageCount = page;
+          $('div#loader').html('<center><img src="/assets/loading.gif"></center>');
+            <% if @tire_search.nil? %>
+                ajax_url = "/ajax/load_storelisting_records/?id=<%= @tire_store.id %>&" + FilterQS + "&new=1&page=" + page;
+            <% else %>
+                ajax_url = "/ajax/load_storelisting_records/<%= raw @tire_search.url_params('_filter') %>&id=<%= @tire_store.id %>&" + FilterQS + "&new=1&page=" + page;
+            <% end %>
+
+          $.ajax({url: ajax_url,
+            success:function(result) {
+              $('div#loader').html('');
+                // if we didn't get anything back, we're out of data.
+                if (result.length == 0) {
+                  //$('#search_results').infiniteScrollHelper('destroy');
+                  //$('div#next-page').text('');
+                }
+                else {
+                  // insert the data here
+                  // Need to insert our compressible node here.
+                  $('div#tirelistings_list').append(result);
+                  $("img.lazy").show().lazyload({effect : "fadeIn"});
+                  bindLiveEvents();
+                }
+            }, 
+          error: function(result) {
+            $('div#loader').html('');
+          },
+          async: async_mode});
+        },
+
+        doneLoading: function(pageCount) {
+          // $('#search_results').infiniteScrollHelper('destroy');
+          //alert("done - " + pageCount);
+          async_mode = true;
+          return true;
+        },
+
+        bottomBuffer: 80
+      })
+    });
+  </script>  
+
+  <% if @final_mode %>
+    <div class="main-slideshow-2">
+      <!--banner slider-->
+    </div>
+  <% else %>
+    <div class="main-slideshow-3">
+      <!--banner slider-->
+    </div>
+  <% end %>
+
+  <div id="searc-header"> <!-- class="small-header" -->
+    <%= render :partial => 'layouts/header_visfire_storefront', 
+            :locals => {:@store_logo => (@tire_store.branding.nil? ? nil : @tire_store.branding.logo)} %>
+  </div>
+
+  <div id="serach-content" class="clearfix">
+      <% if @search_mode %>
+          <div id="search-content-inner" class="clearfix">
+      <% else %>
+          <div id="search-content-inner" class="clearfix nosearch">
+      <% end %>
+      <div id="search-main">
+        <div id="header-inner-tab-1">
+          <div class="tab-box-1" onclick="getBindData();">
+            <a href="javascript:void(0);" class="tabLink activeLink" id="cont-1">MY TIRES</a> 
+          </div>
+        </div>
+        <div class="tabcontent-1" id="cont-1-1">
+          <div class="search-main-left-store">
+            <div class="heading2">
+              <% if @tire_search %>
+                <p>
+                  Results for <%= @tire_search.search_description %><br />
+                  <%= link_to "Click here to see all tires for this store", tire_store_path %>
+                </p>
+              <% end %>
+            </div>
+            <%= render :partial => 'layouts/listings_sort_visfire',
+                :locals => {:include_distance => false, 
+                            :date_sort => false} %>
+
+          </div>
+          <div class="search-main-right-store">
+            <h2><span>REFINE YOUR</span>SEARCH RESULTS</h2>
+            <div class="button01">
+              <h2 class="form"><span>REFINE YOUR</span>SEARCH RESULTS</h2>
+            </div>
+            <div id="popupContact">
+              <a id="popupContactClose">x</a>
+              <div class="search-content-right">
+                <%= render :partial => 'layouts/listings_filter_visfire', 
+                    :locals => {:tire_listings => @tire_listings, 
+                                :@box=>"-2", :@new_mode=>true, :@store=>"store-"} %>
+              </div>
+            </div>
+            <div id="backgroundPopup"></div>
+          </div>
+          <div class="search-content-left-store">
+            <div id="tirelistings_list">
+                <%= render :partial => 'layouts/paginated_listings_visfire',
+                            :locals => {:@listings => @tire_store.paginated_tirelistings(1), 
+                                        :page_no => 1} %>
+                <div id="next-page"></div>
+            </div>
+            <div id="loader-wrap" class="search-content-left">
+                <div id="loader"></div>
+            </div>
+          </div>
+          <div class="search-content-right-store">
+            <%= render :partial => 'layouts/listings_filter_visfire', 
+                :locals => {:tire_listings => @tire_listings, 
+                            :@box=>"", :@new_mode=>true,
+                            :@store=>"store-"} %>
+          </div>
+        </div>
+
+        <% cnt = 2 %>
+        <% @tire_store.tabs.each do |tab| %>
+          <% cnt += 1 %>
+          <div class="tabcontent-1 hide" id="cont-<%=cnt%>-1">
+            <span>
+              <%= simple_format(tab) %>
+            </span>
+          </div>
+        <% end %>
+      </div>
+    <div class="clear"></div>
+  </div>
+
+<% else %>
+  <%= stylesheet_link_tag "tabs.css", :media => 'screen' %>
+  <%= javascript_include_tag "tabs" %>
+  <%= stylesheet_link_tag "tire_listings", media: "all" %>
+  <%= stylesheet_link_tag "forms" %>
+  <%= javascript_include_tag "http://code.jquery.com/jquery-1.8.3.js" %>
+  <%= javascript_include_tag "http://code.jquery.com/ui/1.9.2/jquery-ui.js" %>
+  <%= stylesheet_link_tag "http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" %>
+
+  <script>
+    $(function() {
+      $( "#tabs" ).tabs();
+    });
+  </script>
+
+  <% if !in_storefront? %>
+    <!-- remove this section if you don't want a default header on a non-storefront page -->
+    <%= stylesheet_link_tag "storefront" %>
+    <%= render 'layouts/storefront/css_overrides' %>
+    <%= render 'layouts/storefront/store_information' %>
+    <br />
+  <% end %>
+
+  <% backtrace_log if backtrace_logging_enabled %>
+
+  <% if @tire_store.account.can_have_search_portal? %>
+    <%= form_for @tire_store, :url => tire_store_path(@tire_store), :method => :get do |f| %>
+      <div class="home-form-containers" style="width: 580px; margin-left: 172px;" >
+        <%= render :partial => 'layouts/search_by_tire_or_car', :locals => {:f => f} %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div>
+    <h3 class="orange-background"><%= @tire_store.visible_name %></h3>
+  </div>
+
+  <br />
+  <table width="600">
+    <tbody>
+      <tr>
+        <td valign="top" width="15%">Location:</td>
+        <td valign="top" width="33%">
+          <% if @tire_store.private_seller? %>
+            <%= @tire_store.full_address %><br />
+            <img src="<%= @phone_image %>">
+          <% else %>
+            <%= @tire_store.address1 %><br />
+            <%= @tire_store.address2 if not @tire_store.address2.blank? %>
+            <%= @tire_store.city %>, 
+            <%= @tire_store.state %>
+            <%= @tire_store.zipcode %><br />
+            <%= @tire_store.visible_phone %>
+          <% end %>
+          <% if signed_in? and (super_user? or current_user.account_id == @tire_store.account_id) then %>
+            <br /><br />
+            <%= link_to 'Edit Store Information', edit_tire_store_path(@tire_store) %>
+          <% end %>
+        </td>
+        <td width="50%" valign="center">
+          <% if signed_in? and (super_user? or current_user.account_id == @tire_store.account_id) then %>
+              <a class="btn btn-primary btn-medium" 
+                href="/tire_listings/new?tire_store_id=<%= @tire_store.id %>">
+                Create a new listing &raquo;
+              </a>
+              <br />
+              <a style="margin-top: 10px;" class="btn btn-primary btn-medium" 
+                href="/new_multiple?tire_store_id=<%= @tire_store.id %>">
+                Create Multiple New Tire Listings &raquo;
+              </a>
+              <a style="margin-top: 10px;" class="btn btn-primary btn-medium" 
+                href="/generic_tire_listings/new?tire_store_id=<%= @tire_store.id %>">
+                Create Bulk Used Tire Listings &raquo;
+              </a>
+          <% end %>
+        </td>
+      <tr>
+    </tbody>
+  </table>
+
+  <br />
+
+  <% backtrace_log if backtrace_logging_enabled %>
+
+  <% if @tire_store.tab_count > 0 %>
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">Our tires</a></li>
+            <% cnt = 1 %>
+            <% @tire_store.tab_titles.each do |title| %>
+              <% cnt += 1%>
+              <li><a href="#tabs-<%= cnt %>"><%= title %></a></li>
+            <% end %>
+        </ul>
+        <div id="tabs-1">
+          <% if @tire_search %>
+            <h3>
+              Results for <%= @tire_search.search_description %> - 
+                <%= link_to "click to see all tires for this store", tire_store_path(@tire_store.id) %>
+            </h3>
+          <% end %>
+          <% if @turbo_mode %>
+            <%= render :partial => 'layouts/tire_store_listings_turbo' %>
+          <% else %>
+            <%= render :partial => 'layouts/tire_store_listings' %>
+          <% end %>
+          <div class="clear"></div>
+        </div>
+        <% cnt = 1 %>
+        <% @tire_store.tabs.each do |tab| %>
+          <% cnt += 1 %>
+          <div id="tabs-<%= cnt %>">
+            <%= simple_format(tab) %>
+          </div>
+        <% end %>
+    </div>
+  <% else %>
+    <% if @tire_search %>
+      <h3>
+        Results for <%= @tire_search.search_description %> - 
+          <%= link_to "click to see all tires for this store", tire_store_path %>
+      </h3>
+    <% end %>
+    <div style="background-color: #F63;">
+      <% if @tire_store.private_seller? %>
+        <h3 class="orange-background">Tires available from this seller</h3>
+      <% else %>
+        <h3 class="orange-background">Tires available at this store</h3>
+      <% end %>
+    </div>
+    <br />
+    <% if @turbo_mode %>
+      <%= render :partial => 'layouts/tire_store_listings_turbo' %>
+    <% else %>
+      <%= render :partial => 'layouts/tire_store_listings' %>
+    <% end %>
+    <div class="clear"></div>
+  <% end %>
+
+  <style>
+  .primary-results {
+    width: 600px;
+  }
+
+  .secondary-results {
+    /* margin-right: -25px; */
+    margin-top: 20px;
+  }
+
+  h3.orange {
+    font-size: 1.2em;
+  }
+  
+  .lazy {
+    display: none;
+  }
+  </style>
+
+  <script type="text/javascript">
+    var tiresearch=new ddtabcontent("tireselect")
+    tiresearch.setpersist(true)
+    tiresearch.setselectedClassTarget("link") //"link" or "linkparent"
+    tiresearch.init()
+  </script>
+<% end %>

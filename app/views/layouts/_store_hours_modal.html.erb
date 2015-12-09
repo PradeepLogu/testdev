@@ -1,0 +1,267 @@
+<%= javascript_include_tag :defaults, 'rails.validations' %>
+
+<script>
+  $(function() {
+    $( "#dialog-store-hours" ).dialog({
+      autoOpen: false,
+      show: "blind",
+      open: function( event, ui ) {
+        initialize_checks();
+      },
+      hide: "explode",
+      width: "auto"
+    });
+
+    var form = document.getElementById('edit-store-hours');
+    if (form.attachEvent) {
+      form.attachEvent("submit", processForm);
+    } else {
+      form.addEventListener("submit", processForm);
+    }    
+  });
+
+  function initialize_checks() {
+    arClose = document.getElementsByClassName('close_ck');
+    for (var j=0; j < arClose.length; j++) {
+      show_or_hide_when_closed_changes(arClose[j], true);
+    };
+
+    arAllDay = document.getElementsByClassName('all_day_ck');
+    for (var i=0; i < arAllDay.length; i++) {
+      show_or_hide_when_24_hours_changes(arAllDay[i], true);
+    };       
+  }
+
+  function show_or_hide_when_closed_changes(e, first_check) {
+    if (e.checked) {
+      e.parentNode.parentNode.parentNode.parentNode.childNodes[5].childNodes[0].style.display = 'none';
+      e.parentNode.parentNode.parentNode.parentNode.childNodes[7].childNodes[0].style.display = 'none';
+      e.parentNode.parentNode.parentNode.parentNode.childNodes[9].childNodes[0].style.display = 'none';
+    } else if (first_check == false) {
+      e.parentNode.parentNode.parentNode.parentNode.childNodes[5].childNodes[0].style.display = '';
+      e.parentNode.parentNode.parentNode.parentNode.childNodes[7].childNodes[0].style.display = '';
+      e.parentNode.parentNode.parentNode.parentNode.childNodes[9].childNodes[0].style.display = '';
+    };
+  };
+
+  function show_or_hide_when_24_hours_changes(e, first_check) {
+    if (e.checked) {
+      e.parentNode.parentNode.parentNode.parentNode.childNodes[3].childNodes[0].style.display = 'none';
+      e.parentNode.parentNode.parentNode.parentNode.childNodes[7].childNodes[0].style.display = 'none';
+      e.parentNode.parentNode.parentNode.parentNode.childNodes[9].childNodes[0].style.display = 'none';
+    } else if (first_check == false) {
+      e.parentNode.parentNode.parentNode.parentNode.childNodes[3].childNodes[0].style.display = '';
+      e.parentNode.parentNode.parentNode.parentNode.childNodes[7].childNodes[0].style.display = '';
+      e.parentNode.parentNode.parentNode.parentNode.childNodes[9].childNodes[0].style.display = '';
+    };
+  };
+
+  function checkTime(field)
+  {
+    var errorMsg = "";
+
+    // regular expression to match required time format
+    re = /^(\d{1,2}):(\d{2})$/;
+
+    if(field.value != '') {
+      if(regs = field.value.match(re)) {
+        if(regs[4]) {
+          // 12-hour time format with am/pm
+          if(regs[1] < 1 || regs[1] > 12) {
+            errorMsg = "Invalid value for hours: " + regs[1];
+          }
+        } else {
+          // 24-hour time format
+          if(regs[1] > 23) {
+            errorMsg = "Invalid value for hours: " + regs[1];
+          }
+        }
+        if(!errorMsg && regs[2] > 59) {
+          errorMsg = "Invalid value for minutes: " + regs[2];
+        }
+      } else {
+        errorMsg = "Invalid time format: " + field.value;
+      }
+    }
+
+    if(errorMsg != "") {
+      alert(errorMsg);
+      field.focus();
+      return false;
+    }
+
+    return true;
+  };
+
+  function processForm(e) {
+    if (e.preventDefault) e.preventDefault();
+
+    form = document.getElementById('edit-store-hours');
+
+    var success = true;
+
+    if (!form.open_24_hrs_sunday.checked && !form.closed_sunday.checked) {
+      success = success && checkTime(form.tire_store_sunday_open);
+      success = success && checkTime(form.tire_store_sunday_close);
+    }
+
+    if (!form.open_24_hrs_monday.checked && !form.closed_monday.checked) {
+      success = success && checkTime(form.tire_store_monday_open);
+      success = success && checkTime(form.tire_store_monday_close);
+    }
+
+    if (!form.open_24_hrs_tuesday.checked && !form.closed_tuesday.checked) {
+      success = success && checkTime(form.tire_store_tuesday_open);
+      success = success && checkTime(form.tire_store_tuesday_close);
+    }
+
+    if (!form.open_24_hrs_wednesday.checked && !form.closed_wednesday.checked) {
+      success = success && checkTime(form.tire_store_wednesday_open);
+      success = success && checkTime(form.tire_store_wednesday_close);
+    }
+
+    if (!form.open_24_hrs_thursday.checked && !form.closed_thursday.checked) {
+      success = success && checkTime(form.tire_store_thursday_open);
+      success = success && checkTime(form.tire_store_thursday_close);
+    }
+
+    if (!form.open_24_hrs_friday.checked && !form.closed_friday.checked) {
+      success = success && checkTime(form.tire_store_friday_open);
+      success = success && checkTime(form.tire_store_friday_close);
+    }
+
+    if (!form.open_24_hrs_saturday.checked && !form.closed_saturday.checked) {
+      success = success && checkTime(form.tire_store_saturday_open);
+      success = success && checkTime(form.tire_store_saturday_close);
+    }
+
+    if (success)
+      form.submit();
+
+    return success;
+  };
+</script>
+<style>
+  span.jqTransformCheckboxWrapper { float: none; }
+  td div.jqTransformInputWrapper div.jqTransformInputInner { width: 50px; }
+  div.modal-body table tbody tr th, div.modal-body table tbody tr td { font-size: 0.8em; }
+  div#dialog-store-hours { padding: 0px;}
+</style>
+<div id="dialog-store-hours" style="display: none;" title="Edit Store Hours">
+  <%= form_for tire_store, :validate => false, :html => { :id => "edit-store-hours" } do |f| %>
+    <% if tire_store.errors.any? %>
+      <div id="error_explanation">
+        <h3><%= pluralize(tire_store.errors.count, "error") %> prohibited the changes from being saved:</h3>
+
+        <ul>
+        <% tire_store.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= hidden_field_tag :return_to_storefront, "1" %>
+
+    <div class="modal-body" id="hours">
+      <table>
+          <tr>
+            <th>Day</th>
+            <th>Closed?</th>
+            <th>24 Hrs?</th>
+            <th>Open<br/>Time</th>
+            <th>Close<br/>Time</th>
+          </tr>
+          <tr>
+            <td>Sunday</td>
+            <td><center><%= check_box_tag :closed_sunday, value="1", 
+                            checked = (@tire_store.day_is_closed?(0)), 
+                            :class => 'close_ck' %></center></td>
+            <td><center><%= check_box_tag :open_24_hrs_sunday, value="1", 
+                            checked = (@tire_store.day_is_24_hours?(0)),
+                            :class => 'all_day_ck' %><center></td>
+            <td><%= f.text_field :sunday_open, :class => 'user', :style => "width: 50px;" %></td>
+            <td><%= f.text_field :sunday_close, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td>Monday</td>
+            <td><center><%= check_box_tag :closed_monday, value="1", 
+                            checked = (@tire_store.day_is_closed?(1)), 
+                            :class => 'close_ck' %></center></td>
+            <td><center><%= check_box_tag :open_24_hrs_monday, value="1", 
+                            checked = (@tire_store.day_is_24_hours?(1)),
+                            :class => 'all_day_ck' %></center></td>
+            <td><%= f.text_field :monday_open, :class => 'user' %></td>
+            <td><%= f.text_field :monday_close, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td>Tuesday</td>
+            <td><center><%= check_box_tag :closed_tuesday, value="1", 
+                            checked = (@tire_store.day_is_closed?(2)), 
+                            :class => 'close_ck' %></center></td>
+            <td><center><%= check_box_tag :open_24_hrs_tuesday, value="1", 
+                            checked = (@tire_store.day_is_24_hours?(2)),
+                            :class => 'all_day_ck' %></center></td>
+            <td><%= f.text_field :tuesday_open, :class => 'user' %></td>
+            <td><%= f.text_field :tuesday_close, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td>Wednesday</td>
+            <td><center><%= check_box_tag :closed_wednesday, value="1", 
+                            checked = (@tire_store.day_is_closed?(3)), 
+                            :class => 'close_ck' %></center></td>
+            <td><center><%= check_box_tag :open_24_hrs_wednesday, value="1", 
+                            checked = (@tire_store.day_is_24_hours?(3)),
+                            :class => 'all_day_ck' %><center></td>
+            <td><%= f.text_field :wednesday_open, :class => 'user' %></td>
+            <td><%= f.text_field :wednesday_close, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td>Thursday</td>
+            <td><center><%= check_box_tag :closed_thursday, value="1", 
+                            checked = (@tire_store.day_is_closed?(4)), 
+                            :class => 'close_ck' %></center></td>
+            <td><center><%= check_box_tag :open_24_hrs_thursday, value="1", 
+                            checked = (@tire_store.day_is_24_hours?(4)),
+                            :class => 'all_day_ck' %><center></td>
+            <td><%= f.text_field :thursday_open, :class => 'user' %></td>
+            <td><%= f.text_field :thursday_close, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td>Friday</td>
+            <td><center><%= check_box_tag :closed_friday, value="1", 
+                            checked = (@tire_store.day_is_closed?(5)), 
+                            :class => 'close_ck' %></center></td>
+            <td><center><%= check_box_tag :open_24_hrs_friday, value="1", 
+                            checked = (@tire_store.day_is_24_hours?(5)),
+                            :class => 'all_day_ck' %><center></td>
+            <td><%= f.text_field :friday_open, :class => 'user' %></td>
+            <td><%= f.text_field :friday_close, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td>Saturday</td>
+            <td><center><%= check_box_tag :closed_saturday, value="1", 
+                            checked = (@tire_store.day_is_closed?(6)), 
+                            :class => 'close_ck' %></center></td>
+            <td><center><%= check_box_tag :open_24_hrs_saturday, value="1", 
+                            checked = (@tire_store.day_is_24_hours?(6)),
+                            :class => 'all_day_ck' %><center></td>
+            <td><%= f.text_field :saturday_open, :class => 'user' %></td>
+            <td><%= f.text_field :saturday_close, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td colspan="5"><hr />Enter hours in military format (5:30pm is 17:30)</td>
+          </tr>
+          <script>
+            $('.close_ck').change(function() {
+              show_or_hide_when_closed_changes(this, false);
+            });
+            $('.all_day_ck').change(function() {
+              show_or_hide_when_24_hours_changes(this, false);
+            });
+          </script>
+      </table>
+    </div>
+    <%= f.submit "Update Hours", :class=>"btn" %>
+  <% end %>
+</div>

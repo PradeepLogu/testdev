@@ -1,0 +1,38 @@
+<% provide(:title, 'TreadHunter Survey - Thank you!') %>
+<%= stylesheet_link_tag "style-wide-form" %>
+
+<% provide(:visfire, "true") %>
+
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<div id="searc-header">
+  <%= render :partial => 'layouts/header_visfire' %>
+</div>
+
+<% if false %>
+<%= render :partial => 'layouts/choose_new_or_used' %>
+<% end %>
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+      <% if params[:survey_completed].nil? %>
+      <div id="search-main2">
+        <h2>Thank you for taking our survey!</h2>
+      </div>
+      <br />
+      <p>
+        We will use this information to help you establish your TreadHunter storefront.  A representative will be calling soon.
+      </p>
+    <% else %>
+      <div id="search-main2">
+        <h2>We already have survey results for your account!</h2>
+      </div>
+      <br />
+      <p>
+        We already have survey results for your account.  We will use this information to help you establish your TreadHunter storefront.  A representative will be calling soon.
+      </p>
+    <% end %>
+  </div>
+</div>

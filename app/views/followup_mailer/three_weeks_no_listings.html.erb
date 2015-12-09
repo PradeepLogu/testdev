@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+		</head>
+		<body>
+			<p>The following store was created on <%= @tire_store.created_at %> and has created no listings:<br /><br />
+				<b><u>User information</u></b><br />
+				Name: <%= @user.name %><br />
+				Email: <%= @user.email %><br />
+				Phone: <%= @user.formatted_phone %><br />
+			</p>
+			<p>
+				<b><u>Store information</u></b><br />
+				Name: <%= @tire_store.name %><br />
+				Address: <%= @tire_store.address1 %><br />
+				<%= @tire_store.address2 %><br />
+				<%= @tire_store.city %>, <%= @tire_store.state %> <%= @tire_store.zipcode %><br />
+				Phone: <%= @tire_store.visible_phone %><br />
+			</p>
+		</body>
+	</html>

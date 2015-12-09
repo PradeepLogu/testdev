@@ -1,0 +1,685 @@
+<% provide(:title, @tire_store.visible_name + " | New & Used Tires #{@tire_store.city} #{@tire_store.state} | TreadHunter") %>
+
+<% if !@tire_search.nil? && !@tire_search.tire_size.nil? %>
+  <% provide(:metadescription, "#{@tire_store.visible_name} is your source for new tires and used tires in #{@tire_store.city} #{@tire_store.state} in size #{@tire_search.tire_size.sizestr}") %>
+<% else %>
+  <% provide(:metadescription, "#{@tire_store.visible_name} is your source for new tires and used tires in #{@tire_store.city} #{@tire_store.state}") %>
+  <% provide(:metakeywords, "TreadHunter, Tires, New Tires, Used Tires, Cheap Tires, Discount Tires, Tires Plus, buy tires, where to buy tires, buy used tires, #{@tire_store.visible_name}, #{@tire_store.city} #{@tire_store.state}") %>
+<% end %>
+
+<% @final_mode = false %>
+
+<%= stylesheet_link_tag "fullcalendar/fullcalendar" %>
+
+<style>
+  /*.ui-dialog { margin-left: -1000px;}*/
+  .more-button {
+    font: bold 11px Arial;
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 2px 6px 2px 6px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+    margin-left: 30px;
+  }
+  .lazy {
+    display: none;
+  }
+  hr.thick {
+    border: none;
+    height: 3px;
+    /* Set the hr color */
+    color: #333; /* old IE */
+    background-color: #333; /* Modern Browsers */
+  }
+</style>
+
+<% if visfire_storemode == true %>
+
+  <% provide(:visfire, "true") %>
+  <% if @final_mode %>
+    <% provide(:visfire_final, "true") %>
+  <% end %>
+  <% provide(:nofooter, "") %>
+
+  <%= javascript_include_tag "jquery.infinite-scroll-helper.js" %>
+  <%= javascript_include_tag "jquery.lazyload.min.js" %>
+  <%= javascript_include_tag "popup.js" %>
+  <%= javascript_include_tag "fullcalendar/moment.min" %>
+  <%= javascript_include_tag "fullcalendar/fullcalendar" %>
+  <%= javascript_include_tag "fullcalendar/hashtable" %>
+
+
+  <%= render :partial => 'layouts/contact_seller_modal', 
+             :locals => {:contact_seller => @contact_seller } %>
+
+  <%= render :partial => 'layouts/modal_tire_size_help' %>
+  
+  <%= render :partial => 'layouts/modal_create_appointment', 
+             :locals => {:@tire_store => @tire_store, :@appointment => @appointment,
+             			 :@appointments => @appointments, :@appt_counts => @appt_counts,
+             			 :@primary_hours => @primary_hours, :@auto_name => @appointment_auto} %>
+
+
+  <script language="javascript">
+    //$(function(){
+      //$('.select-box > form').jqTransform({imgPath:'html/images/'});
+      //$('form#form1').jqTransform({imgPath:'html/images/'});
+      //$('form#form2').jqTransform({imgPath:'html/images/'});
+    //});
+
+    function getBindData(){
+      //$("#cont-2").live($('#form01').jqTransform({imgPath:'html/images/'}));
+    };
+    function fix_select(selector) {
+      var i=$(selector).parent().find('div,ul').remove().css('zIndex');
+      $(selector).unwrap().removeClass('jqTransformHidden').jqTransSelect();
+      $(selector).parent().css('zIndex', i);
+    }
+  </script>
+  <% if !params[:noheader].nil? && params[:noheader].downcase == "true" %>
+  	<script>
+  	  $('html, body').animate({
+  			scrollTop: $("#header-inner-tab-1").offset().top
+  		}, 0);
+  	</script>
+  	<style>
+  		div.main-slideshow-3 {
+  			display:none!important;
+  		}
+  		div#header {
+  			display:none!important;
+  		}
+  	</style>
+  <% end %>
+
+  <script>
+    function bindLiveEvents() {
+    };
+      
+    $(function() {
+      $("img.lazy").show().lazyload({effect : "fadeIn"});
+      
+      $("#page-tabs a").click(function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var id = $this.attr("id");
+        $this.siblings().removeClass("activeLink");
+        $this.addClass("activeLink");
+        var cont = $("#"+id+"-1");
+        cont.siblings().addClass("hide");
+        cont.removeClass("hide");
+      });
+      
+      $("#storeheading .reviews-count").click(function (e) {
+        $("#cont-3").click();
+      });
+      
+      $("#show-filters a").click(function (e) {
+		e.preventDefault();
+		$("#show-filters").hide();
+		$("#search-filters-wrapper").show();	//.after($(".search-content-left-store .select-box"));
+      });
+      
+      $("a.view-tire-btn").click(function (e) {
+      	e.preventDefault();
+      	var $this = $(this);
+      	var listingId = $this.attr("id");
+      	var quantity = $this.parent().find("select#quantity").val();
+      	var modal = $("#dialog-create-appointment");
+      	modal.find("#appointment_tire_listing_id").val(listingId);
+      	modal.find("#appointment_quantity").val(quantity);
+      	modal.find("#schedule-panel").show();
+      	modal.find("#purchase-panel").hide();
+      	modal.find("#payment-form").hide();
+      	modal.dialog({
+      		width: 480,
+      		open: hideStuff,
+      		modal: true
+      	});
+      	init_appointment_calendar();	//must be initialized while visible
+      });
+      
+
+      var pageCount;
+      var async_mode = true;
+
+      //$('#search-main').infiniteScrollHelper({
+      $('div#loader').infiniteScrollHelper({
+        loadMore: function(page) {
+          pageCount = page;
+          $('div#loader').html('<center><img src="/assets/loading.gif"/></center>');
+            <% if @tire_search.nil? %>
+                ajax_url = "/ajax/load_storelisting_records/?id=<%= @tire_store.id %>&" + FilterQS + "&new=1&page=" + page;
+            <% else %>
+                ajax_url = "/ajax/load_storelisting_records/<%= raw @tire_search.url_params('_filter') %>&id=<%= @tire_store.id %>&" + FilterQS + "&new=1&page=" + page;
+            <% end %>
+
+          $.ajax({url: ajax_url,
+            success: function(result) {
+              $('div#loader').html('');
+                // if we didn't get anything back, we're out of data.
+                if (result.length == 0) {
+                  //$('#search_results').infiniteScrollHelper('destroy');
+                  //$('div#next-page').text('');
+                }
+                else {
+                  // insert the data here
+                  // Need to insert our compressible node here.
+                  $('div#tirelistings_list').append(result);
+
+                  $("img.lazy").show().lazyload({effect : "fadeIn"});
+
+                  bindLiveEvents();
+                }
+            }, 
+          error: function(result) {
+            $('div#loader').html('');
+          },
+          async: async_mode});
+        },
+
+        doneLoading: function(pageCount) {
+          // $('#search_results').infiniteScrollHelper('destroy');
+          //alert("done - " + pageCount);
+          async_mode = true;
+          return true;
+        },
+
+        bottomBuffer: 80
+      });
+      
+	});
+
+	addMobileLayoutConverter(function () {
+		//Rearrange order of some elements in each tire listing
+		$("#tirelistings_list .search-content-inner").each(function () {
+			var $this = $(this);
+			var ratings = $this.find(".ratings");
+			var title = $this.find(".search-text");
+			ratings.detach().insertAfter(title);	//move ratings to come after title
+		});
+	}, function () {
+		$("#tirelistings_list .search-content-inner").each(function () {
+			var $this = $(this);
+			var ratings = $this.find(".ratings");
+			var title = $this.find(".search-text");
+			ratings.detach().insertBefore(title);	//move ratings back to original position
+		});
+	});
+  </script>
+
+
+  <%= render :partial => 'layouts/header_visfire_storefront', 
+             :locals => {:@store_logo => (@tire_store.branding.nil? ? nil : @tire_store.branding.logo),
+                         :@error_object => @tire_store} %>
+  
+  <div class="container-outer">
+    <div class="container-inner">
+      <div id="page-tabs" class="page-tabs tabs3 clearfix">
+        <a href="javascript:void(0);" class="tabLink first activeLink" id="cont-1">OUR TIRES</a>
+        <a href="javascript:void(0);" class="tabLink middle" id="cont-2">STORE INFO</a>
+        <a href="javascript:void(0);" class="tabLink" id="cont-3">REVIEWS</a>
+      </div>
+
+	  <div id="search-content">
+	    <div id="search-content-inner">
+	      
+	      <div id="search-main">
+	        <!--<% if @tire_store.branding.logo.exists? && !params[:showlogo].blank? %>
+	          <center><%= image_tag @tire_store.branding.logo.url %></center>
+	        <% end %>-->
+			
+	
+	        <div class="tabcontent-1" id="cont-1-1">
+		      <div class="row-fluid">
+		        <div class="search-main-right-store span3">
+		          <% if @search_mode %>
+		            <p class="see-all-tires">
+		              <%= link_to "Click here to see all tires for this store", tire_store_path %>
+		            </p>
+		          <% end %>
+		          
+		          <div id="show-filters">
+		            <a href="#" class="btn">FILTER RESULTS</a>
+		          </div>
+		          
+		          <div id="search-filters-wrapper">
+		          	<% if @tire_listings.size > 0 %>
+			            <h2 class="filter-title">FILTER BY</h2>
+			            <div class="search-content-right-store">
+			              <%= render :partial => 'layouts/listings_filter_visfire', 
+			                         :locals => {:tire_listings => @tire_listings,
+			              	                     :@search_query => @search_query,
+			              	                     #:cur_manufacturer => (@tire_store.tire_manufacturer_id_filter.blank? ? nil : @tire_store.tire_manufacturer_id_filter),
+			                                     :@box=>"", :@new_mode=>true, :@store=>"store-"} %>
+			            </div>
+			        <% end %>
+		          </div>
+		        </div>
+		        <div class="search-content-left-store span9">
+		          <% if @tire_listings.length > 0 %>
+		          
+		            <%= render :partial => 'layouts/listings_sort_visfire',
+		                       :locals => {:include_distance => false, :date_sort => false,
+		                                   :@addl_select => " inline-select-box"} %>
+		            
+		            <div id="tirelistings_list">
+			          <%= render :partial => 'layouts/paginated_listings_visfire',
+			                     :locals => {:@listings => @tire_store.paginated_tirelistings(1), 
+			                                 :page_no => 1} %>
+			          <div id="next-page"></div>
+		            </div>
+		            <div id="loader-wrap" class="search-content-left">
+		              <div id="loader"></div>
+		            </div>
+		          
+		          <% else %>
+			        
+			        <h5 class="no-results">No tires found.</h5>
+			        
+			      <% end %>
+		        </div>
+		      </div>
+
+	        </div>	<!-- tabcontent-1 -->
+	        
+	        <div class="tabcontent-1 hide" id="cont-2-1">
+	          <div class="row-fluid" style="margin-bottom: 20px;">
+	            <div class="store-desc span8">
+	              <h3><%= @tire_store.visible_name.upcase %></h3>
+	              <p><%= simple_format @tire_store.short_description %></p>
+	            </div>
+	            <div class="store-hours span4">
+	              <h3>STORE HOURS</h3>
+	              <p>
+	                <% something_displayed = nil %>
+	                <% for i in [1,2,3,4,5,6,0] %>
+		                <%= @tire_store.hours_as_string(i, false) %><br />
+		            <% end %>
+	              </p>
+	              <% if !@tire_store.external_url.blank? %>
+	                <div class="store-website-link">
+	                  <a href="<%= @tire_store.external_url %>" class="btn store-website-btn">STORE WEBSITE</a>
+	                </div>
+	              <% end %>
+	            </div>
+	          </div>
+	          <div class="clear"></div>
+	          
+			  <div class="panel-group" id="info-accordion">
+			      <div class="panel panel-default">
+			          <div class="panel-heading">
+			              <a class="panel-title" data-toggle="collapse" data-parent="#info-accordion" href="#collapseOne">STORE OFFERINGS <span class="arrow"></span></a>
+			          </div>
+			          <div id="collapseOne" class="panel-collapse collapse in">
+			              <div class="panel-body">
+			                  <div class="mobile-title">Store offerings</div>
+			                  <ul class="two-column collapse-mobile">
+				                  <% Offering.store_offerings(@tire_store).each do |offer| %>
+				                  	<% if offer[1] == true %>
+				                  		<li><%= offer[2] %></li>
+				                  	<% end %>
+				                  <% end %>
+			                  </ul>
+			              </div>
+			          </div>
+			      </div>
+			      <div class="panel panel-default">
+			          <div class="panel-heading">
+			              <a class="panel-title collapsed" data-toggle="collapse" data-parent="#info-accordion" href="#collapseTwo">SERVICES OFFERED <span class="arrow"></span></a>
+			          </div>
+			          <div id="collapseTwo" class="panel-collapse collapse">
+			              <div class="panel-body">
+			                  <div class="mobile-title">Services Offered</div>
+			                  <ul class="three-column collapse-mobile">
+			                  	<% Offering.store_services(@tire_store).each do |svc| %>
+			                  		<% if svc[1] == true %>
+			                  			<li><%= svc[2] %></li>
+			                  		<% end %>
+			                  	<% end %>
+			                  </ul>
+			              </div>
+			          </div>
+			      </div>
+			      <div class="panel panel-default">
+			          <div class="panel-heading">
+			              <a class="panel-title collapsed" data-toggle="collapse" data-parent="#info-accordion" href="#collapseThree">DEALS <span class="arrow"></span></a>
+			          </div>
+			          <div id="collapseThree" class="panel-collapse collapse">
+			              <div class="panel-body">
+			              	<% if @tire_store.promotions.present? %>
+			                  <div class="mobile-title">Deals</div>
+			                <% end %>
+			                <ul>
+		                      <% @tire_store.promotions.each do |p| %>
+		                        <li><u><%= p.promo_name %></u> <%= p.description %></li>
+		                      <% end %>
+		                    </ul>
+			              </div>
+			          </div>
+			      </div>
+			  </div>
+	        </div>	<!-- tabcontent-1 -->
+	
+	
+	        <div class="tabcontent-1 hide" id="cont-3-1">
+	          <div id="other-reviews">
+	            <h3 class="title">OTHER LOCAL TIRE SHOPS</h3>
+	            <% if false %>
+		            <div class="review">
+		              <h3 class="store-name">Billy's Tire Service</h3>
+		              <%= render :partial => 'layouts/fivestar_rating',
+		                         :locals => {:extra_class => "smaller", :stars => 3,
+		                                     :reviews_link => "#", :reviews_count => 23} %>
+		              <div class="content">Blah blah blah blah blah blah blah blah blah blah blah blah blah blah</div>
+		              <div class="see-more">
+						<a href="#">See More</a>
+		              </div>
+		            </div>
+		            <div class="review">
+		              <h3 class="store-name">J &amp; D Tire</h3>
+		              <%= render :partial => 'layouts/fivestar_rating',
+		                         :locals => {:extra_class => "smaller", :stars => 5,
+		                                     :reviews_link => "#", :reviews_count => 36} %>
+		              <div class="content">Blah blah blah blah blah blah blah blah blah blah blah blah blah blah</div>
+		              <div class="see-more">
+						<a href="#">See More</a>
+		              </div>
+		            </div>
+		        <% else %>
+		        	<% @tire_store.other_nearby_google_place_stores.first(2).each do |other_tire_store| %>
+		        		<div class="review">
+		        			<h3 class="store-name"><%= other_tire_store.name %></h3>
+		              		<%= render :partial => 'layouts/fivestar_rating',
+		                         :locals => {:extra_class => "smaller", 
+		                         				:stars => other_tire_store.consumer_rating,
+		                                     	:reviews_link => other_tire_store.store_review_link, 
+		                                     	:reviews_count => other_tire_store.consumer_rating_count} %>
+                         	<div class="content">
+                         		<% if other_tire_store.google_place_record &&
+                         				other_tire_store.google_place_record.reviews.size > 0 %>
+                         			"<%= other_tire_store.google_place_record.reviews.first.text %>" --
+                         			<%= other_tire_store.google_place_record.reviews.first.author_name %>
+                         		</a>
+                         		<% end %>
+                         	</div>
+                         	<div class="see-more">
+                         		<%= link_to "See More", other_tire_store %>
+                         	</div>
+		        		</div>
+		        	<% end %>
+		        <% end %>
+	          </div>
+	          
+	          <div id="main-reviews">
+              	<% if @th_reviews_available %>
+		            <div id="review-form">
+		              <h2>YOUR REVIEW AWAITS</h2>
+		              <div class="para">Here are some suggestions to get you started.</div>
+		              
+		              <form id="review-submission">
+		                <h3><%= @tire_store.visible_name.upcase %></h3>
+		                <%= render :partial => 'layouts/fivestar_rating_control' %>
+		                <div class="clear"></div>
+		                
+		                <textarea id="review-content" name="content" placeholder="Start your review..."></textarea>
+		                <div class="submit-btn">
+		                  <input type="submit" class="btn submit-review" value="SUBMIT" />
+		                </div>
+		              </form>
+		            </div>
+	            <% else %>
+	            	<div id="review-form">
+	            		<% if @tire_store.allow_google_reviews %>
+	            			<h2>POST YOUR REVIEW ON GOOGLE BUSINESS</h2>
+	            			<a target="_blank" href="<%= @tire_store.store_review_link %>">Click here to review</a>
+	            		<% else %>
+	            			<h2>THIS STORE HAS NO GOOGLE BUSINESS ASSOCIATION TO ALLOW REVIEWS.</h2>
+	            		<% end %>
+	            	</div>
+	           	<% end %>
+	            
+	            <hr/>
+	            
+	            <div id="reviews">
+	              <% if true %>
+	              	<% if !@tire_store.google_place_record.nil? %>
+	              		<% @tire_store.google_place_record.reviews.each do |review| %>
+	              			<% @days_ago = (Time.now - Time.at(review.time)) / (3600 * 24) %>
+	              			<% if @days_ago > 30;@new_class = "";else;@new_class=" new";end %>
+	              			<div class="review <%= @new_class %>">
+	              				<h3><%= review.author_name %></h3>
+	              				<% if !@new_class.blank? %>
+	              					<div class="new-alert"><span>NEW</span></div>
+	              				<% end %>
+		                		<%= render :partial => 'layouts/fivestar_rating',
+		                           :locals => {:extra_class => "smaller-mobile", 
+		                           			   :stars => review.rating,
+		                                       :review_time => "Reviewed " + Time.at(review.time).strftime("%B %-d, %Y")} %>
+				                <div class="clear"></div>
+		                		<div class="content">
+		                  			<p><%= review.text %></p>
+		                		</div>
+		                		<div class="clear"></div>
+	              			</div>
+	              		<% end %>
+	              	<% end %>
+	              <% else %>
+		              <div class="review new">
+		                <h3>"GREAT CUSTOMER SERVICE"</h3>
+		                <div class="new-alert"><span>NEW</span></div>
+		                <%= render :partial => 'layouts/fivestar_rating',
+		                           :locals => {:extra_class => "smaller-mobile", :stars => 5,
+		                                       :review_time => "Reviewed April 29, 2015"} %>
+		                <div class="clear"></div>
+		                <div class="content">
+		                  <p>Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah...</p>
+		                </div>
+		                <div class="helpful">
+	                      <span>Was this review helpful?</span>
+	                      <button class="btn yes-btn">YES</button>
+	                    </div>
+	                    <div class="flag">
+	                      <a href="#"><%= image_tag "flag.png", alt: "Flag", title: "Flag this review" %></a>
+	                    </div>
+	                    <div class="clear"></div>
+		              </div>
+		            
+		              <div class="review">
+		                <h3>"CLEAN WAITING ROOM, NICE STAFF"</h3>
+		                <%= render :partial => 'layouts/fivestar_rating',
+		                           :locals => {:extra_class => "smaller-mobile", :stars => 4,
+		                                       :review_time => "Reviewed April 27, 2015"} %>
+		                <div class="clear"></div>
+		                <div class="content">
+		                  <p>Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah...</p>
+		                </div>
+		                <div class="helpful">
+	                      <span>Was this review helpful?</span>
+	                      <button class="btn yes-btn">YES</button>
+	                    </div>
+	                    <div class="flag">
+	                      <a href="#"><%= image_tag "flag.png", alt: "Flag", title: "Flag this review" %></a>
+	                    </div>
+	                    <div class="clear"></div>
+		              </div>
+		            <% end %>
+	            </div>
+	            
+	          </div>
+	          <div class="clear"></div>
+	        </div>	<!-- tabcontent-1 -->
+	        
+	      </div>
+	    </div>
+	  </div>
+	</div>
+  </div>
+
+
+
+
+<% else %>
+  <%= stylesheet_link_tag "tabs.css", :media => 'screen' %>
+  <%= javascript_include_tag "tabs" %>
+  <%= stylesheet_link_tag "tire_listings", media: "all" %>
+  <%= stylesheet_link_tag "forms" %>
+  <%= stylesheet_link_tag "http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" %>  
+
+  <%= javascript_include_tag "jquery" %>
+  <%= javascript_include_tag "jquery-ui" %>
+
+  <script>
+    $(function() {
+      $( "#tabs" ).tabs();
+    });
+  </script>
+
+  <% if !in_storefront? %>
+    <!-- remove this section if you don't want a default header on a non-storefront page -->
+    <%= stylesheet_link_tag "storefront" %>
+    <%= render 'layouts/storefront/css_overrides' %>
+    <%= render 'layouts/storefront/store_information' %>
+    <br />
+  <% end %>
+
+  <% backtrace_log if backtrace_logging_enabled %>
+
+  <% if @tire_store.account.can_have_search_portal? %>
+    <%= form_for @tire_store, :url => tire_store_path(@tire_store), :method => :get do |f| %>
+      <div class="home-form-containers" style="width: 580px; margin-left: 172px;" >
+        <%= render :partial => 'layouts/search_by_tire_or_car', :locals => {:f => f} %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div>
+    <h3 class="orange-background"><%= @tire_store.visible_name %></h3>
+  </div>
+
+  <br />
+  <table width="600">
+    <tbody>
+    	<tr>
+    		<td valign="top" width="15%">Location:</td>
+    		<td valign="top" width="33%">
+          <% if @tire_store.private_seller? %>
+            <%= @tire_store.full_address %><br />
+            <img src="<%= @phone_image %>">
+          <% else %>
+      			<%= @tire_store.address1 %><br />
+      			<%= @tire_store.address2 if not @tire_store.address2.blank? %>
+      			<%= @tire_store.city %>, 
+      			<%= @tire_store.state %>
+      			<%= @tire_store.zipcode %><br />
+            <%= @tire_store.visible_phone %>
+          <% end %>
+          <% if signed_in? and (super_user? or current_user.account_id == @tire_store.account_id) then %>
+            <br /><br />
+            <%= link_to 'Edit Store Information', edit_tire_store_path(@tire_store) %>
+          <% end %>
+    		</td>
+        <td width="50%" valign="center">
+          <% if signed_in? and (super_user? or current_user.account_id == @tire_store.account_id) then %>
+              <a class="btn btn-primary btn-medium" 
+                href="/tire_listings/new?tire_store_id=<%= @tire_store.id %>">
+                Create a new listing &raquo;
+              </a>
+              <br />
+              <a style="margin-top: 10px;" class="btn btn-primary btn-medium" 
+                href="/new_multiple?tire_store_id=<%= @tire_store.id %>">
+                Create Multiple New Tire Listings &raquo;
+              </a>
+              <a style="margin-top: 10px;" class="btn btn-primary btn-medium" 
+                href="/generic_tire_listings/new?tire_store_id=<%= @tire_store.id %>">
+                Create Bulk Used Tire Listings &raquo;
+              </a>
+          <% end %>
+        </td>
+    	<tr>
+    </tbody>
+  </table>
+
+  <br />
+
+  <% if @tire_store.tab_count > 0 %>
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">Our tires</a></li>
+            <% cnt = 1 %>
+            <% @tire_store.tab_titles.each do |title| %>
+              <% cnt += 1%>
+              <li><a href="#tabs-<%= cnt %>"><%= title %></a></li>
+            <% end %>
+        </ul>
+        <div id="tabs-1">
+          <% if @tire_search %>
+            <h3>
+              Results for <%= @tire_search.search_description %> - 
+                <%= link_to "click to see all tires for this store", tire_store_path(@tire_store.id) %>
+            </h3>
+          <% end %>
+          <% if @turbo_mode %>
+            <%= render :partial => 'layouts/tire_store_listings_turbo' %>
+          <% else %>
+            <%= render :partial => 'layouts/tire_store_listings' %>
+          <% end %>
+          <div class="clear"></div>
+        </div>
+        <% cnt = 1 %>
+        <% @tire_store.tabs.each do |tab| %>
+          <% cnt += 1 %>
+          <div id="tabs-<%= cnt %>">
+            <%= simple_format(tab) %>
+          </div>
+        <% end %>
+    </div>
+  <% else %>
+    <% if @tire_search %>
+      <h3>
+        Results for <%= @tire_search.search_description %> - 
+          <%= link_to "click to see all tires for this store", tire_store_path %>
+      </h3>
+    <% end %>
+    <div style="background-color: #F63;">
+      <% if @tire_store.private_seller? %>
+        <h3 class="orange-background">Tires available from this seller</h3>
+      <% else %>
+        <h3 class="orange-background">Tires available at this store</h3>
+      <% end %>
+    </div>
+    <br />
+    <% if @turbo_mode %>
+      <%= render :partial => 'layouts/tire_store_listings_turbo' %>
+    <% else %>
+      <%= render :partial => 'layouts/tire_store_listings' %>
+    <% end %>
+    <div class="clear"></div>
+  <% end %>
+
+  <style>
+  .primary-results {
+    width: 600px;
+  }
+
+  .secondary-results {
+    /* margin-right: -25px; */
+    margin-top: 20px;
+  }
+
+  h3.orange {
+    font-size: 1.2em;
+  }
+  </style>
+
+  <script type="text/javascript">
+    var tiresearch=new ddtabcontent("tireselect")
+    tiresearch.setpersist(true)
+    tiresearch.setselectedClassTarget("link") //"link" or "linkparent"
+    tiresearch.init()
+  </script>
+<% end %>

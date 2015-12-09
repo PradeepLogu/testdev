@@ -1,0 +1,70 @@
+<!-- bxSlider -->
+<%= javascript_include_tag "jquery.bxslider.min.js" %>
+<script type="text/javascript">
+  $(function() {
+	
+    $('.feature-right ul').bxSlider({
+		auto: false,
+		autoControls: false,
+		pager: false,
+		minSlides: 1,
+		maxSlides: 4,
+		slideWidth: 200,
+		slideMargin: 10,
+		adaptiveHeight: true,
+		moveSlides: 1,
+		nextSelector: '#nextimg',
+		prevSelector: '#previmg',
+		nextText: '>',
+		prevText: '<'
+	});
+  });
+</script>
+
+<% provide(:title, "Deals") %>
+<div id="deals">
+	<h1>Deals</h1>
+	<hr/>
+	<div class="deals-container">
+		<h2>Local Deals</h2>
+		<% if !@local_deals.blank? %>
+			<a href="/promotions/index?type=local"><span class="view-all">View All</span></a>
+		<% end %>
+
+		<% if @local_deals.blank? %>
+			<p>No Local Deals at this Time!</p>
+		<%else%>
+			<%= render(:partial => 'promotion_slides', :locals => {:deals => @local_deals})%>
+		<% end %>
+	</div>
+
+	<hr/>
+	<div class="deals-container">
+		<h2>National Deals</h2>
+		<% if !@national_deals.blank? %>
+			<a href="/promotions/index?type=national"><span class="view-all">View All</span></a>
+		<% end %>
+
+		<% if @national_deals.blank? %>
+			<p>No National Deals at this Time!</p>
+		<%else%>
+			<%= render(:partial => 'promotion_slides', :locals => {:deals => @national_deals})%>
+		<% end %>
+	</div>
+
+
+	<hr/>
+	<div class="deals-container">
+		<h2>TreadHunter Deals</h2>
+		<% if !@treadhunter_deals.blank? %>
+			<span class="view-all">View All</span>
+			<a href="/promotions/index?type=treadhunter"><span class="view-all">View All</span></a>
+		<% end %>
+
+		<% if @treadhunter_deals.blank? %>
+			<p>No TreadHunter Deals at this Time!</p>
+		<%else%>
+			<%= render(:partial => 'promotion_slides', :locals => {:deals => @treadhunter_deals})%>
+		<% end %>
+	</div>
+</div>

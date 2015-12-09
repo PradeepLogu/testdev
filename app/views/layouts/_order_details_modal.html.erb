@@ -1,0 +1,77 @@
+<% @breakout_sales_tax = @order.breakout_sales_tax %>
+
+    <div class="modal-body">
+      <h4><%= @order.buyer_name %></h4>
+      <h4>Created: <%= @order.created_at.strftime("%B %d, %Y %H:%M") %></h4>
+      <h4><%= @order.buyer_email %></h4>
+      <h4><%= @order.formatted_phone %></h4>
+      <br />
+      <table>
+        <tr>
+          <th align="left">Description</th>
+          <th align="right">Quantity</th>
+          <th align="right">Price ea.</th>
+          <th align="right">Total</th>
+        </tr>
+        <tr>
+          <td align="left"><%= @order.tire_listing.short_description %></td>
+          <td align="right"><%= @order.tire_quantity %></td>
+          <td align="right"><%= number_to_currency @order.tire_ea_price %></td>
+          <td align="right"><%= number_to_currency @order.total_tire_price %></td>
+        </tr>
+        <% if @breakout_sales_tax %>
+          <tr>
+            <td>Sales Tax on tires</td>
+            <td></td>
+            <td></td>
+            <td align="right"><%= number_to_currency @order.sales_tax_on_tires, :unit => '' %></td>
+          </tr>
+          <tr>
+            <td align="left">Tire Installation</td>
+            <td align="right"><%= @order.tire_quantity %></td>
+            <td align="right"><%= number_to_currency @order.tire_ea_install_price %></td>
+            <td align="right"><%= number_to_currency @order.total_install_price, :unit => '' %></td>
+          </tr>
+          <tr>
+            <td>Sales Tax on installation</td>
+            <td></td>
+            <td></td>
+            <td align="right"><%= number_to_currency @order.sales_tax_on_installation, :unit => '' %></td>
+          </tr>
+        <% else %>
+          <tr>
+            <td align="left">Tire Installation</td>
+            <td align="right"><%= @order.tire_quantity %></td>
+            <td align="right"><%= number_to_currency @order.tire_ea_install_price %></td>
+            <td align="right"><%= number_to_currency @order.total_install_price, :unit => '' %></td>
+          </tr>
+          <tr>
+            <td>Sales Tax on order</td>
+            <td></td>
+            <td></td>
+            <td align="right"><%= number_to_currency @order.sales_tax_collected, :unit => '' %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td>Convenience Fee</td>
+          <td></td>
+          <td></td>
+          <td align="right"><%= number_to_currency @order.th_user_fee, :unit => ''  %></td>
+        </tr>
+        <tr>
+          <td>Sales tax on Convenience Fee</td>
+          <td></td>
+          <td></td>
+          <td align="right"><%= number_to_currency @order.th_sales_tax_collected, :unit => ''  %></td>
+        </tr>
+        <tr>
+          <td colspan="4" class="total-line"><span style="max-height: 1px"></span></td>
+        </tr>
+        <tr>
+          <td>Total Order</td>
+          <td></td>
+          <td></td>
+          <td align="right"><%= number_to_currency @order.total_order_price %></td>
+        </tr>
+      </table>
+    </div>

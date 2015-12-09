@@ -1,0 +1,54 @@
+<div class="infobox-half text-right">
+ 	<div class="tirelogo vignette logo-left"></div>
+
+ 	<h3 style="padding-left: 150px;" class="box-title">Search for tires by size</h3>
+
+  	<%= form_for @tire_store, 
+  			:url => tire_store_path(@tire_store), 
+  			:method => :get do |f| %>
+
+  		<% params.each do |param| %>
+  			<% if !["showtab", "action", "controller", 
+  					"id", "utf8"].include?(param[0].downcase) %>
+  				<%= hidden_field nil, param[0], {:name => param[0], :value => param[1]} %>
+  			<% end %>
+  		<% end %>
+  		<%= hidden_field nil, "showtab", :name => "showtab", :value => "1" %>
+
+	    <ul class="selecttire">
+			<table>
+				<tr>
+					<td>
+						<li>
+							<div id="tire_widths" style="float:left;">
+								<%= render :partial => 'layouts/ajax_tire_width',     
+								       :object => @diameters,      
+								       :locals => {:f => f} %>
+							</div>
+						</li>
+					</td>
+					<td>
+						<li>
+							<div id="tire_ratios" style="float:left;"> 
+								<%= render :partial => 'layouts/ajax_tire_ratios',         
+								       :object => @ratios,         
+								       :locals => {:f => f} %>
+							</div>
+						</li>
+					</td>
+					<td>
+						<li>
+							<div id="tire_wheeldiameters" style="float:left;">
+								<%= render :partial => 'layouts/ajax_tire_wheeldiameters', 
+								       :object => @wheeldiameters, 
+								       :locals => {:f => f} %>
+							</div>
+						</li>
+					</td>
+				</tr>
+			</table>
+		</ul>
+	    <%= f.button "Find my tires!", 
+	              :name => "size_search", :style => 'margin-left: 72px;' %>
+	<% end %>
+</div>

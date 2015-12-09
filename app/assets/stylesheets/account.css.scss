@@ -1,0 +1,200 @@
+
+// Styles for the My Account page
+
+#account-main {
+  margin-bottom: 20px;
+
+
+  #edit-profile-form {
+    text-align: center;
+  
+    form {
+      text-align: left;
+      max-width: 300px;
+      margin: 10px auto;
+    
+      input[type="text"], input[type="password"] {
+        width: 100%;
+      }
+    }
+    
+    .form-box-submit {
+      margin: 15px 0;
+      text-align: center;
+    }
+  }
+  
+  
+  #edit-store-form {
+    .first-section {
+      border-bottom: solid 1px #c2c2c2;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .left-content {
+      margin-bottom: 10px;
+      
+      label {
+        font-size: 16px;
+      }
+      input[type="text"], input[type="tel"], textarea {
+        width: calc(100% - 10px);
+      }
+    }
+    
+    .right-content {
+      margin-bottom: 10px;
+    }
+    
+    div.heading {
+      margin: 15px 0 0;
+      font-size: 16px;
+    }
+    
+    .checkboxes {
+      label {
+        display: inline;
+        margin: 0;
+      }
+    }
+    
+    .day {
+      span {
+        display: inline-block;
+        width: 40px;
+      }
+      input[type="text"] {
+        width: 50px;
+      }
+      label {
+        display: inline;
+      }
+    }
+    
+    #deals {
+      .deal {
+        display: table;
+        width: 100%;
+      }
+      .labels {
+        display: table-cell;
+        width: 3.5em;
+        vertical-align: middle;
+      }
+      .inputs {
+        display: table-cell;
+        vertical-align: middle;
+        
+        input {
+          width: calc(100% - 10px);   //subtract out padding and borders
+        }
+      }
+    }
+    
+    #add-deal {
+      margin-left: 3.5em;
+    }
+    
+    #photo-upload {
+      position: relative;
+      text-align: center;
+      margin-bottom: 5px;
+      
+      .background {
+        max-width: 100%;
+        min-height: 100px;
+        max-height: 300px;
+      }
+      
+      #upload-btn-wrapper {
+        position: absolute;
+        left: 0;
+        bottom: 30px;
+        width: 100%;
+        z-index: 20;
+      }
+      #branding_logo {
+        text-indent: -99999px;
+        background: url("/assets/add-photo-btn.png") no-repeat scroll 0 0;
+        width: 158px;
+        height: 33px;
+        margin: 0 auto;
+      }
+    }
+    
+    .payment-section {
+      margin-left: 25%;
+      margin-right: 10%;
+      
+      p.foot {
+        font-size: 13px;
+        max-width: 500px;
+      }
+    }
+    
+    #stripe {
+      margin: 10px 0;
+    }
+    
+    .connected-msg {
+      display: inline-block;
+      color: #F05A29;
+      font-size: 16px;
+      line-height: 50px;
+      padding-left: 5px;
+    }
+    
+    .circle-check {
+      display: inline-block;
+      background: url("/assets/orange-circle-check.png") no-repeat scroll 0 center / contain;
+      width: 32px;
+      height: 50px;
+      vertical-align: top;
+    }
+    
+    .circle-x {
+      display: inline-block;
+      background: url("/assets/orange-x-close.png") no-repeat scroll 0 center / contain;
+      width: 32px;
+      height: 50px;
+      vertical-align: top;
+    }
+    
+    .footnote {
+      color: #989898;
+      font-size: 13px;
+    }
+    
+    .submit-section {
+      text-align: center;
+    }
+  }
+}
+
+#search-content2.edit-user {
+  .container-inner {
+    display: table;
+    margin: 0 auto;
+  }
+  .form-box-submit {
+    padding-bottom: 20px;
+    margin: 0 auto;
+    display: table;
+    input {
+      text-transform: uppercase;    
+    }
+  }
+}
+
+
+@media screen and (max-width: 767px) {
+  #account-main {
+
+    #edit-store-form {
+      .payment-section {
+        margin-left: 10%;
+      }
+    }
+  }
+}

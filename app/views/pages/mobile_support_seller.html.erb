@@ -1,0 +1,73 @@
+<% provide(:visfire, "true") %>
+<%= javascript_include_tag "video_page" %>
+<%= stylesheet_link_tag "video_page" %>
+<%= javascript_include_tag "jquery.fancybox" %>
+<%= stylesheet_link_tag "jquery.fancybox" %>
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<script>
+  $(document).ready(function() {
+    $(".various").fancybox({
+      maxWidth  : 800,
+      maxHeight : 600,
+      fitToView : false,
+      width   : '90%',
+      height    : '90%',
+      autoSize  : false,
+      closeClick  : false,
+      openEffect  : 'none',
+      closeEffect : 'none',
+      closeBtn : true
+    });
+  });
+</script>
+
+<div id="searc-header">
+  <%= render 'layouts/header_visfire' %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+    <div id="search-main2">
+      <h2>Welcome to TreadHunter!</h2>
+    </div>
+
+    <div id="registration-mid-part" class="clearfix">
+      <div id="registration-mid-part-left">
+        <div class="form-part" style="min-height: 180px;">
+          <a class="various fancybox.iframe" 
+              href="http://www.youtube.com/embed/vd1GofWa7gM?autoplay=1">
+              <img src="/assets/vd1GofWa7gM.png" style="width: 320px; height: 180px;">
+                <div id="banner-overlay">Click to View</div>
+              </img>
+          </a>
+        </div>
+      </div>
+      <div id="registration-mid-part-right">
+        <h3>Video Tutorial</h3>
+        <p>
+          Click the picture to the left for a video tutorial describing how to use our mobile application to list your tires on TreadHunter.
+        </p>
+
+        <h3>Written Documentation</h3>
+        <p>
+          If you prefer written documentation, click the icon below to view the latest 
+          PDF document instructing you how to use the mobile application.
+        </p>
+        <p>
+          <%= link_to image_tag("pdf_icon.png", 
+                    :style => 'max-height: 50px;'), 
+                    "http://www.treadhunter.com/HowToUseTheMobileApp.pdf" %>
+        </p>
+
+        <h3>Still have questions?</h3>
+        <p>Feel free to contact our support paths listed below:</p>
+        <p> - Call our support mailbox and leave a message at (858) 848-7323</p>
+        <p> - Send us an email at support@treadhunter.com</p>
+        <p> - Use our online form at <a href="http://www.treadhunter.com/contact_us/new">our Contact Us page</a>.</p>
+      </div>
+    </div>
+  </div>
+</div>

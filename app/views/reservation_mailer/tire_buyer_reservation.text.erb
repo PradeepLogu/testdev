@@ -1,0 +1,12 @@
+Dear <%= @reservation.name %>,
+
+Thank you for using TreadHunter.com to reserve a set of <%= @reservation.tire_listing.short_description %> at a price of $<%= @reservation.formatted_price %>.
+
+The seller of these tires will be contacting you shortly.  If you don't hear
+from the seller in 24 hours, contact them at:
+
+<%= @reservation.tire_store.visible_name %>
+<%= @reservation.tire_store.visible_phone %>
+<%= @reservation.tire_store.full_address %>
+
+Once again, we appreciate you using TreadHunter.com to find the best deals on tires in your area!

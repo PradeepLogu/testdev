@@ -1,0 +1,44 @@
+<% provide(:title, "Edit user") %>
+<% provide(:visfire, "true") %>
+
+
+<div id="search-content2" class="container-outer edit-user">
+  <div id="search-content-inner2" class="container-inner">
+    <div id="search-main2">
+      <h2>Edit Profile</h2>
+    </div>
+    
+    <%= form_for @user, :validate => true do |f| %> 
+      <div id="edit-mid-part">
+        <div id="edit-mid-part-left">
+          <div class="form-part">
+            <div class="form-heading">
+              <p>Modify your TreadHunter Profile</p>
+            </div>
+            
+            <%= f.label :first_name %>
+            <%= f.text_field :first_name %>
+            <%= f.label :last_name %>
+            <%= f.text_field :last_name %>
+
+            <%= f.label :email %>
+            <%= f.text_field :email %>
+
+            <%= f.label :phone %>
+            <%= f.text_field :phone %>
+
+            <%= f.label :password %>
+            <%= f.password_field :password %>
+
+            <%= f.label :password_confirmation, "Confirm Password" %>
+            <%= f.password_field :password_confirmation %>
+            
+            <div class="form-box-submit">
+              <%= f.submit "Update", class: "btn" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

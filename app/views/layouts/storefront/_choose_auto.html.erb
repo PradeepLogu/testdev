@@ -1,0 +1,61 @@
+<div class="infobox-full">
+ 	<div class="carpic vignette logo-left"></div>
+
+ 	<h3 style="padding-left: 370px;" class="box-title">Search for tires by vehicle</h3>
+
+  <%= form_for @tire_store, 
+        :url => tire_store_path(@tire_store), 
+        :method => :get do |f| %>     
+
+    <% params.each do |param| %>
+      <% if !["showtab", "action", "controller", 
+          "id", "utf8"].include?(param[0].downcase) %>
+        <%= hidden_field nil, param[0], {:name => param[0], :value => param[1]} %>
+      <% end %>
+    <% end %>
+    <%= hidden_field nil, "showtab", :name => "showtab", :value => "1" %>
+    <ul class="selectcar">
+      <table style="margin-top: 9px; margin-bottom: -9px;">
+        <tr>
+          <td>
+            <li>
+              <div id="auto_manufacturers" style="float:left; margin-right: 15px;">
+                <%= render :partial => 'layouts/ajax_auto_manufacturers', 
+                          :object => @auto_manufacturers, 
+                          :locals => {:f => f, :c => 'cars'} %>
+              </div>
+            </li>
+          </td>
+          <td>
+            <li>
+              <div id="auto_models" style="float:left; margin-right: 15px;">
+                <%= render :partial => 'layouts/ajax_auto_models',
+                          :object => @models,
+                          :locals => {:f => f, :c => 'cars'} %>
+              </div>
+            </li>
+          </td>
+          <td>
+            <li>
+              <div id="auto_years" style="float:left; margin-right: 15px;">
+                <%= render :partial => 'layouts/ajax_auto_years',
+                          :object => @years, 
+                          :locals => {:f => f, :c => 'cars'} %>
+              </div>
+            </li>
+          </td>
+          <td>
+            <li>
+              <div id="auto_options" style="float:left;">
+                <%= render :partial => 'layouts/ajax_auto_options',
+                          :object => @options, 
+                          :locals => {:f => f, :c => 'cars'} %>
+              </div>
+            </li>
+          </td>
+        </tr>
+      </table>
+    </ul>
+    <%= f.button "Find my tires!", :name => "auto_search", :style => 'margin-left: 232px;' %>
+	<% end %>
+</div>

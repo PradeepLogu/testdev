@@ -1,0 +1,35 @@
+      <%= yield :head %>
+        <div id="header-objects">
+          <a href="/">
+            <%= image_tag("tire_logo.png", :size=>"440x77", alt: "TreadHunter.com", id: "header-logo") %>
+          </a>
+          <ul id="navbar">
+            <% if signed_in? %>
+              <li><%= link_to "Find a Store", tire_stores_path %></li>
+              <li><a href="#"><%= current_user.first_name + ' ' + current_user.last_name %></a>
+                <ul>
+                  <li><%= link_to "Profile", current_user %></li>
+                  <li><%= link_to "Sign out", signout_path, method: "delete" %></li>
+                </ul>
+              </li>
+              <li><a href="#">Account</a>
+                <ul>
+                  <li><%= link_to(current_user.account.name, current_user.account) unless current_user.account.nil? %>
+                  </li>
+                  <li><%= link_to("All Accounts", accounts_path) if super_user? %>
+                  </li>
+                </ul>
+              </li>
+              <% if super_user? %>
+                <li><a href="#">Super User</a>
+                  <ul>
+                      <li><%= link_to("Users", users_path) %></li>
+                  </ul>
+                </li>
+              <% end %>
+            <% else %>
+                <li><%= link_to "Sign in", signin_path %></li>
+                <li><%= link_to "Find a Store", tire_stores_path %></li>
+            <% end %>
+          </ul>
+        </div>

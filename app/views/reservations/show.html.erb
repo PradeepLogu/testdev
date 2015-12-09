@@ -1,0 +1,23 @@
+<p id="notice"><%= notice %></p>
+
+
+<div style="float: left;">
+  <%= form_for(@reservation) do |f| %>
+	<% if super_user? or (signed_in? and current_user.account_id == @reservation.tire_store.account_id) %>
+		<%= button_to "Cancel this reservation", 
+				 {:action => "destroy", :id => @reservation.id },
+					:confirm => "Are you sure?", :method => :delete,
+					:class => "btn btn-warning" %>
+	<% end %>
+  <% end %>
+</div>
+<div class="clear"></div>
+
+<div class="tire-details-info">
+  <%= render :partial => 'layouts/tire_details_table', :locals => {:@tire_listing => @reservation.tire_listing} %>
+</div>
+<div class="clear"><br /></div>
+<div class="buyer-details-info">
+  <%= render :partial => 'layouts/buyer_details_table' %>
+</div>
+<div class="clear"></div>

@@ -1,0 +1,51 @@
+<hr style="border-top: 1px solid black;" />
+<div id="new-tier">
+	<%= select_tag "tire_manufacturer[]", 
+		options_from_collection_for_select(@tire_manufacturers, 'id', 'name'), 
+		{:style => 'width: 150px', :class => 'users'} %>
+
+	<script>
+		$('select#tire_manufacturer_').change(function() {
+			$(this).nextAll("div.tire_models").addClass("waiting");
+			$.ajax({
+				type: "GET",
+				dataType: "html",
+				url: "/ajax/update_tire_model_checkboxes",
+				data: {tire_manufacturer_id: $(this).attr('value')},
+				success:function(result){
+					e = $("div.waiting");
+					e.html(result);
+					e.removeClass("waiting");
+				} 
+			})
+		});
+	</script>
+	<div style="display: inline-block;">
+		<div class="rebate">
+			<%= label_tag "Min rebate $" %>
+			<%= text_field_tag("tire_manufacturer[](min_rebate)", nil, 
+					{:class => 'user', :style => 'width: 50px;'}) %>
+			<%= label_tag "Max rebate $" %>
+			<%= text_field_tag("tire_manufacturer[](max_rebate)", nil, 
+					{:class => 'user', :style => 'width: 50px;'}) %>
+		</div>
+		<div class="percent hidden">
+			<%= label_tag "% off normal price:" %>
+			<%= text_field_tag("tire_manufacturer[](percent)", nil, 
+					{:class => 'user', :style => 'width: 25px;'}) %>
+		</div>
+		<div class="amount hidden">
+			<%= label_tag "$ off normal price:" %>
+			<%= text_field_tag("tire_manufacturer[](amount)", nil, 
+					{:class => 'user', :style => 'width: 25px;'}) %>
+		</div>
+		<div class="special hidden">
+			<%= label_tag "Special price:" %>
+			<%= text_field_tag("tire_manufacturer[](special_price)", nil, 
+					{:class => 'user', :style => 'width: 100px;'}) %>
+		</div>
+	</div>
+
+	<div class="tire_models">
+	</div>
+</div>

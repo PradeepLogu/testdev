@@ -1,0 +1,66 @@
+<% provide(:title, 'Browse by Tire Brands') %>
+<% provide(:visfire, "true") %>
+
+<style>
+#fluid-title h1 {
+	width: 230px;
+}
+</style>
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="top-search-section">
+			<div id="tire-search-outer">
+				<h2>SHOP BY:</h2>
+				<%= render :partial => 'layouts/search_panel',
+						   :locals => {:id => "tire-search2"} %>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-outer">
+	<div id="browse-brands" class="container-inner">
+		<hr/>
+
+		<div id="fluid-title">
+			<h1 class="orange">Browse Brands</h1>
+			<% lc_header_seo_post = @lc.find_post_by_title_in_posts_array(@brand_seo, "Header Text") %>
+			<% if !lc_header_seo_post.nil? && !lc_header_seo_post.content_without_html.blank? %>
+				<p><%= lc_header_seo_post.content_without_html %></p>
+			<% else %>
+				<p>Lorem ipsum.</p>
+			<% end %>
+			<div class="clear"></div>
+		</div>
+		
+		<div id="manufacturers">
+			<div class="row-fluid">
+				<% i = 0 %>
+				<% @tire_brands.each do |b| %>
+					<div class="tire-brand span4">
+						<div class="logo"><%= image_tag "brand_logos/#{b.name.upcase}.png" %></div>
+						<h2 class="name"><%= b.name %> Tires</h2>
+						<% lc_seo_post = @lc.find_post_by_title_in_posts_array(@brand_seo, b.name) %>
+						<% if !lc_seo_post.nil? && !lc_seo_post.content_without_html.blank? %>
+							<p><%= lc_seo_post.content_without_html %><a href="brands/<%= b.id %>">LEARN MORE</a></p>
+						<% else %>
+							<p><a href="brands/<%= b.id %>">LEARN MORE</a></p>
+						<% end %>
+						<div class="search-link">
+							<a href="brands/<%= b.id %>" class="btn">SHOP TIRES</a>
+						</div>
+					</div>
+					<% i += 1
+					   if i == 3
+							i = 0 %>
+			</div>
+			<div class="row-fluid">
+					<% end %>
+				<% end %>
+			</div>
+		</div>
+
+	</div>
+</div>

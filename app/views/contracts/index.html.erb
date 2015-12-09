@@ -1,0 +1,41 @@
+<h1>Listing contracts</h1>
+
+<table>
+  <tr>
+    <th>Account</th>
+    <th>Expiration date</th>
+    <th>Contract amount</th>
+    <th>Can post listings</th>
+    <th>Can use mobile</th>
+    <th>Can use logo</th>
+    <th>Can use branding</th>
+    <th>Can have search portal</th>
+    <th>Can have filter portal</th>
+    <th>Max monthly listings</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @contracts.each do |contract| %>
+  <tr>
+    <td><%= contract.account_id %></td>
+    <td><%= contract.expiration_date %></td>
+    <td><%= contract.contract_amount %></td>
+    <td><%= contract.can_post_listings %></td>
+    <td><%= contract.can_use_mobile %></td>
+    <td><%= contract.can_use_logo %></td>
+    <td><%= contract.can_use_branding %></td>
+    <td><%= contract.can_have_search_portal %></td>
+    <td><%= contract.can_have_filter_portal %></td>
+    <td><%= contract.max_monthly_listings %></td>
+    <td><%= link_to 'Show', contract %></td>
+    <td><%= link_to 'Edit', edit_contract_path(contract) %></td>
+    <td><%= link_to 'Destroy', contract, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Contract', new_contract_path %>

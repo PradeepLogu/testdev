@@ -1,0 +1,275 @@
+// Styles for globally-available modal dialog boxes.
+
+.ui-dialog {
+  background-color: #f6f6f6;
+  box-shadow: 0 0 5px 2px #c9c9c9;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 16px;
+  
+  .ui-dialog-titlebar-close {
+    float: right;
+    text-indent: -99999px;
+    background: url("/assets/orange-x-close.png") no-repeat scroll 0 0 / contain;
+    width: 26px;
+    height: 24px;
+  }
+  
+  .ui-dialog-content {
+    clear: both;
+    text-align: left;
+    margin: 1px 1em 5px;
+    
+    h4, h5, h6 {
+      font-family: "HelveticaLTStd-BoldCond";
+      font-weight: normal;
+      margin-bottom: 10px;
+    }
+    h6 {
+      color: black;
+    }
+    
+    .title {
+      font-family: "HelveticaLTStd-BoldCond";
+      font-weight: normal;
+      color: #F05A29;
+      margin-bottom: 10px;
+    }
+    
+    .center-content {
+      text-align: center;
+    }
+    
+    hr {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    
+    p {
+    }
+    
+    input, select, textarea {
+      margin: 0;
+    }
+    
+    .error-msg {
+      display: none;
+      color: red;
+      margin-top: 1em;
+    }
+  }
+}
+
+.ui-widget-overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #aaaaaa;
+  opacity: 0.3;
+}
+
+
+
+#dialog-tire-size-help p,
+#dialog-auto-options-help p {
+  margin: 10px 0;
+}
+
+//Global tire size help dialog, used all over the site
+#dialog-tire-size-help {
+  text-align: left;
+  
+  .type-name {
+    font-weight: bold;
+    margin: 10px 0;
+    text-align: center;
+  }
+  p {
+    margin: 10px 0;
+  }
+  
+  .or-separator {
+    position: relative;
+    margin: 10px 0;
+    text-align: center;
+    font-weight: bold;
+    
+    span {
+      position: absolute;
+      background-color: #acacac;
+      top: 0.4em;
+      height: 1px;
+      width: 40%;
+    }
+    .line1 { left: 0; }
+    .line2 { right: 0; }
+  }
+  
+  .orange-numbered {
+    padding-left: 38px;
+    margin: 10px 0;
+    line-height: 28px;
+    background: transparent no-repeat scroll left center / contain;
+  
+    &.item1 { background-image: url("/assets/orange-circle-1.png"); }
+    &.item2 { background-image: url("/assets/orange-circle-2.png"); }
+    &.item3 { background-image: url("/assets/orange-circle-3.png"); }
+  }
+}
+
+
+#dialog-create-appointment, #dialog-stripe-info {
+  #calendar-container, .calendar-container {
+    float: left;
+    width: 60%;
+  }
+  
+  #store-hours, .store-hours {
+    float: left;
+    width: 35%;
+    margin-left: 5%;
+  }
+  
+  .btn.huge {
+    width: 50%;
+    line-height: 2;
+  }
+  
+  #svc-calendar, #svc-calendar-primary, #svc-calendar-secondary {
+    .fc-toolbar {
+      margin-bottom: 0;
+      
+      .fc-center {
+        display: block;
+      }
+      h2 {
+        color: #fff;
+        background-color: #F05A29;
+        font: normal 16px/26px "HelveticaLTStd-BlkCond";
+        padding-top: 0.5em;
+        text-transform: uppercase;
+        float: none;
+      }
+    }
+    .fc-button-group {
+      button {
+        border: none;
+        border-radius: 0;
+        outline: 0 none;
+        box-shadow: none;
+        text-shadow: none;
+        background: transparent no-repeat scroll center center / contain;
+        margin-right: 5px;
+      }
+      .fc-icon {
+        display: none;
+        content: "";
+        margin: 0;
+      }
+      .fc-prev-button { background-image: url("/assets/mini-calendar-prev.png"); }
+      .fc-next-button { background-image: url("/assets/mini-calendar-next.png"); }
+    }
+    
+    .fc-view {
+      background-color: #fafafa;
+    }
+    
+    div.fc-widget-header {
+      margin-top: 0.5em;
+    }
+    td.fc-widget-header {
+      border: none;
+    }
+    th, td.fc-day, td.fc-day-number {
+      text-align: center;
+      vertical-align: middle;
+      font-size: 16px;
+    }
+    th {
+      border: none;
+      color: #9a9a9a;
+      font-family: "HelveticaLTStd-BlkCondObl";
+      font-weight: normal;
+      text-transform: uppercase;
+    }
+    
+    .fc-basic-view tbody .fc-row {
+      min-height: 2.5em;
+    }
+    
+    td.fc-day-number {
+      color: #F05A29;
+      font-family: "HelveticaLTStd-BoldCond";
+      font-size: 18px;
+      padding-top: 0.5em;
+      cursor: pointer;
+    }
+    .fc-bg td.fc-state-highlight {
+      background-color: #F05A29;
+    }
+    td.fc-state-highlight {
+      color: #fff;
+    }
+    
+    .fc-highlight {
+      opacity: 0.5;
+    }
+  }
+  
+  #purchase-panel, #stripe-panel {
+    .tire-info {
+      .image {
+        float: left;
+        width: 15%;
+        
+        img {
+          width: 100%;
+        }
+      }
+      p {
+        float: left;
+        margin-left: 5%;
+        width: 80%;
+        line-height: 1.5;
+        
+        span {
+          font-weight: bold;
+        }
+      }
+    }
+    
+    .line-item {
+      line-height: 1.5;
+      
+      &::after {
+        clear: both;
+        display: block;
+        content: "";
+      }
+      &.indent {
+        margin-left: 20px;
+      }
+      &.total {
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .left {
+        float: left;
+      }
+      .right {
+        float: right;
+      }
+    }
+    
+    .qty {
+      display: inline;
+      color: #7e7e7e;
+      font-family: "HelveticaLTStd-Cond";
+      font-size: 13px;
+      font-weight: normal;
+      margin: 0;
+    }
+  }
+}

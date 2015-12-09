@@ -1,0 +1,62 @@
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+
+<%= javascript_include_tag "spectrum.js" %>
+<%= stylesheet_link_tag "spectrum" %>
+
+<script>
+	$(function() {
+		$( "#picker" ).dialog({
+			autoOpen: false,
+			show: "blind",
+			hide: "explode",
+			width: "auto"
+		}).find("input").click(function() {$(this).closest("#picker").dialog("close")});
+	});
+</script>
+
+<div id="picker" title="Select Colors and Font Sizes for Storefront">
+	<%= form_tag url_for(:controller => 'tire_stores', 
+			:action => 'update_colors'), 
+			:method => "post",
+			:class => "color-picker",
+			:remote => true do %>
+		<div id="color_picker" style="width: 250px; float: left; display: block;">
+			<table>
+				<% STOREFRONT_COLORS.each do |h| %>
+					<tr>
+						<td><label class="users"><%= h[:label] %></label></td>
+						<td><%= text_field("color", h[:key]) %></td>
+					</tr>
+				<% end %>
+			</table>
+		</div>
+
+		<div id="size_picker" style="width: 250px; float: right; display: block;">
+			<table>
+				<% STOREFRONT_SIZES.each do |h| %>
+					<tr>
+						<td><label class="users"><%= h[:label] %></label></td>
+						<td><%= select_tag h[:key], options_for_select(h[:choices], 
+								@tire_store.public_method(h[:key].to_sym).call), 
+								{:style => 'width: 150px',:name => "size[" + h[:key] + "]"} %>
+						</td>
+					</tr>
+				<% end %>
+			</table>
+		</div>
+		<div class="clear">
+			<%= submit_tag "Save changes", :class => 'admin-button' %>
+			<%= submit_tag "Set to defaults" %>
+		</div>
+	<% end %>
+</div>
+
+<script>
+	<% STOREFRONT_COLORS.each do |h| %>
+		$("#color_<%= h[:key] %>").spectrum({ color: "<%= @tire_store.public_method(h[:key].to_sym).call %>" })
+	<% end %>
+</script>
+
+<a href="#" onclick="$('#picker').dialog('open');" class="admin-button">Select Storefront Colors</a>

@@ -1,0 +1,16 @@
+<?xml version="1.0" ?> 
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<% @static_urls.each do |static_url| %>
+  <url>
+    <loc><%= @base_url %><%= static_url %></loc>
+    <changefreq>daily</changefreq>
+  </url>
+<% end %>
+<% @tire_stores.each do |tire_store| %>
+  <url>
+    <loc><%= @base_url %><%= url_for tire_store %></loc>
+    <lastmod><%=  Time.now.at_midnight.to_s(:w3c) %></lastmod>
+    <priority>0.9</priority>
+  </url>
+<% end %>
+</urlset>

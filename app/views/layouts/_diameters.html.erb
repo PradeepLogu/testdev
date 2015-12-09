@@ -1,0 +1,8 @@
+
+<%= collection_select(f, :diameter, @diameters, :diameter, :diameter,
+                     {:prompt   => "Width",
+                   	  :selected => session[:diameter]},
+                     {:onchange => "#{remote_function(:url  => {:action => "update_ratios", :controller => "tire_searches"},
+                       :with => "'diameter='+value")}", :style => 'width: 150px;',
+                      :class => "tires"}) %>
+<br/>

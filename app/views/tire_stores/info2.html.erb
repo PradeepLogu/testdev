@@ -1,0 +1,11 @@
+<% provide(:title, @tire_store.visible_name + " | New & Used Tires #{@tire_store.city} #{@tire_store.state} | TreadHunter") %>
+<% provide(:metadescription, "#{@tire_store.visible_name}, Category: new and used tires, tire store, #{@tire_store.city} #{@tire_store.state} #{@tire_store.zipcode}") %>
+
+<%= stylesheet_link_tag "forms" %>
+<%= stylesheet_link_tag "storefront" %>
+<%= render 'layouts/storefront/css_overrides' %>
+
+<%= render :partial => 'layouts/storefront/menu_gradient_buttonbar' %>
+
+<%= simple_format @tire_store.tabs[1] %>
+<div class="clear" />

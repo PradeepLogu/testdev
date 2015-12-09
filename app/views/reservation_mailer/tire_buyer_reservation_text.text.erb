@@ -1,0 +1,9 @@
+Text from TreadHunter.com:
+Thank you for reserving <%= @reservation.tire_listing.short_description %> at a price of $<%= @reservation.formatted_price %>.
+
+Seller Info:
+<%= @reservation.tire_store.visible_name %>
+<%= @reservation.tire_store.visible_phone %>
+<%= @reservation.tire_store.full_address %>
+
+Please contact the seller if they don't contact you within 24 hours:

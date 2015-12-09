@@ -1,0 +1,52 @@
+<div>
+  <div id="results-label">
+    <div class="search-info">
+      <%= @tire_listing.tire_store.visible_name %><p />
+      <%= @tire_listing.tire_store.full_address %><p />
+      <hr />
+    </div>
+  </div>
+  <% unless @tire_listing.tire_model.nil? %>
+    <div class="detailrow">
+      Speed rating: <%= @tire_listing.tire_model.speed_rating %>
+    </div>
+    <div class="detailrow">
+      Load index: <%= @tire_listing.tire_model.load_index %>
+    </div>
+    <div class="detailrow">
+      Temperature rating: <%= @tire_listing.tire_model.utqg_temp %>
+    </div>
+    <div class="detailrow">
+      Traction rating: <%= @tire_listing.tire_model.utqg_traction %>
+    </div>
+    <div class="detailrow">
+      Treadwear rating: <%= @tire_listing.tire_model.utqg_treadwear %>
+    </div>
+    <div class="detailrow">
+      Orig. tread: <%= @tire_listing.tire_model.tread_depth %>
+    </div>
+  <% end %>
+  <% if @tire_listing.is_new? %>
+    <div class="detailrow">
+      Condition: <%= image_tag("new_icon.png", :size=>"32x32", alt: "New!") %>
+    </div>
+  <% else %>
+    <div class="detailrow">
+      Tread life: <%= @tire_listing.treadlife %>%
+    </div>
+    <div class="detailrow">
+      Remaining tread: <%= @tire_listing.remaining_tread %>
+    </div>
+  <% end %>
+  <% unless @tire_listing.computed_savings <= 0 %>
+    <br />
+    <div class="savings">
+      <font color="black">Price:</font> $<%= @tire_listing.price %><p />
+    </div>
+    <div class="savings">
+      <font color="black">Your Savings:</font> <%= @tire_listing.computed_savings %>%
+    </div>
+  <% end %>
+  <%= image_tag @tire_listing.photo1.url(:medium) if @tire_listing.photo1.exists? %>
+  <%= image_tag @tire_listing.photo2.url(:medium) if @tire_listing.photo2.exists? %>
+</div>

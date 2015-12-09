@@ -1,0 +1,388 @@
+<% @allow_debit_card = false %>
+
+<style>
+	input[type='file'] {
+	  color: transparent;
+	}
+	#stripe-fade, #fade {
+	    display: none;
+	    position:absolute;
+	    top: 0%;
+	    left: 0%;
+	    width: 100%;
+	    height: 100%;
+	    background-color: #ababab;
+	    background: url(/assets/loading.gif) no-repeat center #fff;
+	    z-index: 1001;
+	    -moz-opacity: 0.8;
+	    opacity: .70;
+	    filter: alpha(opacity=80);
+	}
+	.upload-photos {
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+	.upload-photos a {
+		font-size: 18px;
+		text-decoration: underline;
+		color: #f05a29;
+	}
+</style>
+
+<% if !@tire_store.nil? %>
+	<% if @tire_store.new_record? %>
+		<script>
+			$(window).ready(function(){
+				document.getElementById('fade').style.display = 'none';
+				var modal = $("#dialog-lookup-store");
+
+				modal.dialog('destroy'); // in case this is our second load
+	      		modal.dialog({
+	      			width: 320,
+	      			modal: true
+	      		});
+			});
+
+			function selectItemByValue(elmnt, value) {
+				for(var i=0; i < elmnt.options.length; i++)
+				{
+					if(elmnt.options[i].text.toUpperCase() === value.toUpperCase()) {
+						elmnt.selectedIndex = i;
+						break;
+					}
+				}
+			}
+
+			function lookup_zip_and_phone() {
+				$("#phone").removeClass("highlight");
+				$("#zipcode").removeClass("highlight");
+
+				var phone = $("#phone").val().replace(/\D/g,'');
+				var zipcode = $("#zipcode").val().replace(/\D/g,'');
+
+				if (phone.length >= 10 && zipcode.length >= 5) {
+					$('div#fade').show();
+					$.ajax({
+						type: "GET",
+						dataType: "html",
+						url: '/ajax/get_store_from_phone_and_zip',
+						data: {phone: phone,
+								zipcode: zipcode},
+						success:function(result){
+							j = JSON.parse(result);
+							$('input#tire_store_name').val(j.name);
+							$('input#tire_store_address1').val(j.address1);
+							$('input#tire_store_address2').val(j.address2);
+							$('input#tire_store_city').val(j.city);
+							if (j.state.length == 2) {
+								$('select#tire_store_state').val(j.state);
+							} else {
+								selectItemByValue(document.getElementById('tire_store_state'), j.state);
+							}
+							$('input#tire_store_zipcode').val(j.zipcode);
+							$('input#tire_store_phone').val(j.phone);
+
+							$('div#fade').hide();
+							$('#dialog-lookup-store').dialog('close');
+							// $('a.ui-corner-all').click();
+						},
+						error:function(result){
+							$('div#fade').hide();
+							$('#dialog-lookup-store').dialog('close');
+							// $('a.ui-corner-all').click();
+						}
+					});
+				} else {
+					if (phone.length < 10)
+						$("#phone").addClass("highlight");
+					if (zipcode.length < 5)
+						$("#zipcode").addClass("highlight");
+				};			
+			}
+		</script>
+	<% end %>
+
+	<%= render :partial => "layouts/modal_upgrade_to_premium" %>
+
+	<div id="edit-store-form">
+		<%= render :partial => 'layouts/connect_with_stripe_modal', 
+						:locals => {:@tire_store => @tire_store} %>
+		<%= form_for @tire_store, 
+					:url => (@tire_store.new_record? ? '/tire_stores' : tire_store_path(@tire_store, :format => "json")),
+					 :html => {:multipart => true, :id => 'tire-store-edit'}, 
+					 :validate => true do |f| %>
+
+			<%= render :partial => 'layouts/connect_with_stripe_modal_hidden' %>
+
+			<div class="row-fluid first-section">
+
+				<div class="left-content span4">
+					<h5 class="edit-title">STOREFRONT DETAILS</h5>
+					
+					<% if @tire_store.account.can_use_logo? && !@branding.nil? && 
+						  !@tire_store.private_seller? %>
+						<label>Logo/Photo</label>
+						<div id="photo-upload">
+							<%= fields_for @branding do |b| %>
+								<% if !b.object.logo.nil? && b.object.logo.exists? %>
+									<%= image_tag b.object.logo.url(:medium), class: "background" %>
+								<% else %>
+									<%= image_tag "photo-placeholder.png", class: "background" %>
+								<% end %>
+								<div id="upload-btn-wrapper">
+									<%= b.file_field :logo %>
+								</div>
+							<% end %>
+						</div>
+						<% if @tire_store.has_premium_access? %>
+							<center>
+								<div class='upload-photos'>
+									<a href="#" onclick="alert('coming soon!'); return false;">
+										Add a photo or video
+									</a>
+								</div>
+							</center>
+						<% else %>
+							<center>
+								<div class='upload-photos'>
+									<a href="#" onclick="upgrade_to_premium(); return false;">
+										Add a photo or video
+									</a>
+								</div>
+							</center>
+						<% end %>
+						<p style="font-size: 13px;">Upload files in image forms (*.jpg, *.jpeg, *.png).<br/>Maximum upload file size is 2 MB.</p>
+					<% end %>
+
+					<%= hidden_field_tag :ajax_input, true %>
+					<% if @tire_store.new_record? %>
+						<%= f.hidden_field :account_id, value: @tire_store.account_id %>
+					<% end %>
+					
+					<%= f.label :name, (@tire_store.private_seller? ? "Seller Name" : "Store Name") %>
+					<%= f.text_field :name %>
+					<%= f.label :address1, "Address Line 1" %>
+					<%= f.text_field :address1 %>
+					<%= f.label :address2, "Address Line 2 (if applicable)" %>
+					<%= f.text_field :address2 %>
+					<%= f.label :city, "City" %>
+					<%= f.text_field :city %>
+					<%= f.label :state, "State" %>
+  					<%= f.select(:state, us_states, {}) %>
+  					<%= f.label :zipcode, "Zipcode" %>
+					<%= f.text_field :zipcode %>
+
+					<%= f.label :phone, "Phone" %>
+  					<%= f.telephone_field :phone %>
+					<%= f.label :contact_email, 'Contact email' %>
+  					<%= f.text_field :contact_email %>
+  					
+  					<%= f.label :short_description, "Description" %>
+  					<%= f.text_area :short_description, rows: 5 %>
+  					
+  					<br/>
+  					<br/>
+  					<label>Hours</label> (leave open/close blank for closed)
+  					<div class="day">
+  						<span>Mon:</span>
+  						<%= f.text_field :monday_open, class: "hours" %> - <%= f.text_field :monday_close, class: "hours" %>
+  						<%= check_box_tag :open_24_hrs_monday, "1", @tire_store.day_is_24_hours?(1) %>
+  						<%= label_tag :open_24_hrs_monday, "Open 24 hours" %> 
+  					</div>
+  					<div class="day">
+  						<span>Tue:</span>
+  						<%= f.text_field :tuesday_open, class: "hours" %> - <%= f.text_field :tuesday_close, class: "hours" %>
+  						<%= check_box_tag :open_24_hrs_tuesday, "1", @tire_store.day_is_24_hours?(2) %>
+  						<%= label_tag :open_24_hrs_tuesday, "Open 24 hours" %> 
+  					</div>
+  					<div class="day">
+  						<span>Wed:</span>
+  						<%= f.text_field :wednesday_open, class: "hours" %> - <%= f.text_field :wednesday_close, class: "hours" %>
+  						<%= check_box_tag :open_24_hrs_wednesday, "1", @tire_store.day_is_24_hours?(3) %>
+  						<%= label_tag :open_24_hrs_wednesday, "Open 24 hours" %> 
+  					</div>
+  					<div class="day">
+  						<span>Thu:</span>
+  						<%= f.text_field :thursday_open, class: "hours" %> - <%= f.text_field :thursday_close, class: "hours" %>
+  						<%= check_box_tag :open_24_hrs_thursday, "1", @tire_store.day_is_24_hours?(4) %>
+  						<%= label_tag :open_24_hrs_thursday, "Open 24 hours" %> 
+  					</div>
+  					<div class="day">
+  						<span>Fri:</span>
+  						<%= f.text_field :friday_open, class: "hours" %> - <%= f.text_field :friday_close, class: "hours" %>
+  						<%= check_box_tag :open_24_hrs_friday, "1", @tire_store.day_is_24_hours?(5) %>
+  						<%= label_tag :open_24_hrs_friday, "Open 24 hours" %> 
+  					</div>
+  					<div class="day">
+  						<span>Sat:</span>
+  						<%= f.text_field :saturday_open, class: "hours" %> - <%= f.text_field :saturday_close, class: "hours" %>
+  						<%= check_box_tag :open_24_hrs_saturday, "1", @tire_store.day_is_24_hours?(6) %>
+  						<%= label_tag :open_24_hrs_saturday, "Open 24 hours" %> 
+  					</div>
+  					<div class="day">
+  						<span>Sun:</span>
+  						<%= f.text_field :sunday_open, class: "hours" %> - <%= f.text_field :sunday_close, class: "hours" %>
+  						<%= check_box_tag :open_24_hrs_sunday, "1", @tire_store.day_is_24_hours?(0) %>
+  						<%= label_tag :open_24_hrs_sunday, "Open 24 hours" %> 
+  					</div>
+				</div>		<!-- left-content -->
+				
+				
+				<div class="right-content span8">
+					<h5 class="edit-title">OFFERINGS AND SERVICES</h5>
+					
+					<div class="heading">Store Offerings</div>
+					<div class="row-fluid checkboxes">
+						<div class="span6">
+							<% i = 0
+							   offerings = Offering.store_offerings(@tire_store)
+							   limit = (offerings.count + 1) / 2
+							   offerings.each do |prop, val, desc| %>
+								<div class="check">
+									<%= f.check_box prop %>
+									<%= f.label prop, desc %>
+								</div>
+								<% i += 1 
+								   if i == limit %>
+						</div>
+						<div class="span6">
+								<% end %>
+							<% end %>
+						</div>
+					</div>
+					
+					<div class="heading">Services Offered</div>
+					<div class="row-fluid checkboxes">
+						<div class="span6">
+							<% i = 0
+							   services = Offering.store_services(@tire_store)
+							   limit = (services.count + 1) / 2
+							   services.each do |prop, val, desc| %>
+								<div class="check">
+									<%= f.check_box prop %>
+									<%= f.label prop, desc %>
+								</div>
+								<% i += 1 
+								   if i == limit %>
+						</div>
+						<div class="span6">
+								<% end %>
+							<% end %>
+						</div>
+					</div>
+					
+					<hr/>
+					
+					<h5 class="edit-title">STORE DEALS</h5>
+					<p style="margin:0;">Deals</p>
+					<div id="deals">
+						<% @promotions.each_with_index do |deal, i| %>
+							<div class="deal">
+								<div class="labels">
+									<%= label_tag "Deal #{i+1}:" %>
+								</div>
+								<div class="inputs">
+									<%= text_field_tag "deals[]", deal.promo_name %>
+								</div>
+							</div>
+						<% end %>
+					</div>
+					<div>
+						<% if @tire_store.has_premium_access? %>
+							<a href="#" class="orange add-item" id="add-deal">+ Add Another</a>
+						<% else %>
+							<a href="#" onclick="upgrade_to_premium(); return false;" 
+								class="orange add-item">+ Add Another</a>
+						<% end %>
+					</div>
+				</div>		<!-- right-content -->
+			</div>
+			
+			
+			<div class="payment-section">
+				<h5 class="edit-title">STORE PAYMENT OPTIONS</h5>
+				<p>Does this store accept online payments:</p>
+				
+				<div class="checkboxes">
+					<%= radio_button_tag :online_payments, "1", true %>
+					<%= label_tag :online_payments_1, "Yes" %>
+					<%= radio_button_tag :online_payments, "0", false, {:style => "margin-left: 15px;"} %>
+					<%= label_tag :online_payments_0, "No" %>
+				</div>
+				<div id="stripe">
+					<a href="#" id="connect-with-stripe" onclick="connect_with_stripe(this);">
+						<%= image_tag "stripe-button.png", alt: "Connect with Stripe" %>
+					</a>
+					<% if @tire_store.can_do_ecomm? %>
+						<span class="nowrap">
+							<span class="connected-msg">This store is connected to Stripe</span>
+							<span class="circle-check"></span>
+						</span>
+					<% else %>
+						<span class="nowrap">
+							<span class="connected-msg">This store is NOT connected to Stripe</span>
+							<span class="circle-x"></span>
+						</span>
+					<% end %>
+				</div>
+				<!--
+				<p class="foot footnote">* Stripe is required to accept online payments</p>
+				<p class="foot">Stripe offers a simple fee structure, no hidden costs and requires no merchant bank account or other gateway,
+				   so you can start accepting credit card payments today.
+				   With Stripe, your customers will never leave the checkout flow or be required to create an account.
+				   Stripe fees apply. <a href="#" class="underlined">Learn more.</a></p>
+				-->
+			</div>
+			
+			<hr/>
+			
+			<div class="submit-section">
+				<%= f.submit "SAVE ALL CHANGES", class: "btn submit-btn" %>
+				<a href="#" class="orange" id="cancel-link" style="margin-left: 15px;">Cancel &amp; go back to my account</a>
+			</div>
+		<% end %>
+	</div>
+	
+	<script>
+		$('#edit-store-form .day input[type="checkbox"]').change(function () {
+			var $this = $(this);
+			var checked = $this.prop("checked");
+			$this.parent().find('input.hours').prop("disabled", checked);
+		});
+		
+		$('#edit-store-form .day input[type="checkbox"]').each(function () {
+			$(this).change();	//initialize things
+		});
+		
+		$("#add-deal").click(function (e) {
+			e.preventDefault();
+			var $deals = $("#deals");
+			var count = $deals.children().length;
+			if (count < 10) {
+				var clone = $deals.children().eq(0).clone();
+				clone.find("label").html("Deal " + (count+1) + ":");
+				clone.find("input").val("");
+				$deals.append(clone);
+			} else {
+				$(this).hide();
+			}
+		});
+		
+		$("#edit-store-form form").ajaxForm({
+			dataType: "json",
+			success: function (response, status) {
+				reload_current_tab();
+			},
+			error: function (response) {
+			}
+		});
+		
+		$("#cancel-link").click(function (e) {
+			e.preventDefault();
+			reload_current_tab();
+		});
+	</script>
+
+<% else %>
+	<p class="error">You are not allowed to edit this store.</p>	
+<% end %>

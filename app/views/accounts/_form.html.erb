@@ -1,0 +1,44 @@
+
+  <% if @account.errors.any? %>
+    <div id="error_explanation">
+      <%= pluralize(@account.errors.count, "error") %> prohibited this account from being saved:
+      <ul>
+        <% @account.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<%= form_for(@account) do |f| %>
+  <div class="row-fluid">
+    <div class="actions span6 offset3">
+      <p>
+        <%= f.label :name, "Account Name (e.g. Acme Tires, Inc.)" %><br />
+        <%= f.text_field :name %>
+      </p>
+      <p>
+        <%= f.label :address1 %><br />
+        <%= f.text_field :address1 %>
+      </p>
+      <p>
+        <%= f.label :address2 %><br />
+        <%= f.text_field :address2 %>
+      </p>
+      <p>
+        <%= f.label "City, State, Zipcode" %>
+        <%= f.text_field :city %>
+        <%= f.select(:state, us_states, {}, {:style => 'width: 150px'}) %>
+      </p>
+      <p>
+        <%= f.label :zipcode %>
+        <%= f.text_field :zipcode %>
+      </p>
+      <p>
+        <%= f.label :phone, "Telephone number" %>
+        <%= f.telephone_field :phone, :required=>true %>
+      </p>
+      <%= f.submit %>
+    </div>
+  </div>
+<% end %>

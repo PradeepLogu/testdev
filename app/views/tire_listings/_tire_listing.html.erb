@@ -1,0 +1,160 @@
+<% if request.fullpath.include?('searchresults') %>
+	<% cycle('column-one', '', 'end', 'column-two', '', 'end') %>
+	<% if current_cycle != '' && current_cycle != 'end' %>
+		<div class="search-column" id="<%= current_cycle %>">
+	<% end %>
+		<div class="search-item listing-detail">
+	    	<div id="list_id_<%= tire_listing.id %>">
+				<div class="pic">
+					<% if tire_listing.photo1.exists? %>
+						<%= image_tag tire_listing.photo1.url(:thumb), :size=>"100x100" %>
+					<% else %>
+						<%= image_tag "tire-sample.png", :size=>"100x100" %>
+					<% end %>
+				</div>
+				<div class="info">
+					<h2>
+						<%= tire_listing.tire_manufacturer.name %>
+						<%= tire_listing.tire_model.name unless tire_listing.tire_model.nil? %>
+					</h2>
+					<p>&nbsp;</p>
+					<p>
+			    		<b>Distance:</b>
+			    		<%= pluralize(tire_listing.distance.to_i, "mile") if tire_listing.respond_to?('distance') %>
+			    		<b>Qty:</b>
+			    		<%= tire_listing.quantity.to_i %>
+			    		<b>Cost:</b>
+			    		$<%= tire_listing.price %>
+			    		<% if tire_listing.includes_mounting %>
+			    		<font size="1"> (inc. mounting) </font>
+			    		<% end %>
+			    		<% unless tire_listing.orig_cost.nil? %>
+			    		<b>Orig. Cost:</b> <%= tire_listing.quantity * tire_listing.orig_cost %>
+			    		<% end %>
+			    	</p>
+			    	<p>
+						<% if !tire_listing.tire_model.nil? && tire_listing.tire_model.utqg_treadwear.to_s != '' %>
+							<div class="tire-model-info">
+								<b>Treadwear:</b> <%= tire_listing.tire_model.utqg_treadwear %>
+							</div>
+						<% end %>
+						<% if !tire_listing.tire_model.nil? && tire_listing.tire_model.utqg_traction.to_s != '' %>
+							<div class="tire-model-info">
+								<b>Traction:</b> <%= tire_listing.tire_model.utqg_traction %>
+							</div>
+						<% end %>
+						<% if !tire_listing.tire_model.nil? && tire_listing.tire_model.utqg_temp.to_s != '' %>
+							<div class="tire-model-info">
+								<b>Temp:</b> <%= tire_listing.tire_model.utqg_temp %>
+							</div>
+						<% end %>
+						<% if !tire_listing.tire_model.nil? && tire_listing.tire_model.utqg_traction.to_s != '' %>
+							<div class="tire-model-info">
+								<b>Traction:</b> <%= tire_listing.tire_model.utqg_traction %>
+							</div>
+						<% end %>
+						<% if !tire_listing.tire_model.nil? && tire_listing.tire_model.speed_rating.to_s != '' %>
+							<div class="tire-model-info">
+								<b>Speed Rating:</b> <%= tire_listing.tire_model.speed_rating %>
+							</div>
+						<% end %>
+						<% if !tire_listing.tire_model.nil? && !tire_listing.tire_model.tire_category.nil? && tire_listing.tire_model.tire_category.to_s != ''%>
+							<div class="tire-model-info">
+								<b>Category:</b> <%= tire_listing.tire_model.tire_category.category_type %>
+							</div>
+						<% end %>
+					</p>
+				</div>
+			</div>
+		<div class="clear"></div>
+		<% if current_cycle == 'end' %>
+			</div>
+		<% end %>
+	</div>
+<% else %>
+	<div class="row-fluid">
+		<% if !Reservation.find_by_user_id_and_tire_listing_id((signed_in? ? 
+							current_user.id : nil), tire_listing.id).nil? %>
+		<div class="span12 tireinfo reserved" id="tireinfo" >
+		<% else %>
+		<div class="span12 tireinfo" id="tireinfo">
+		<% end %>
+			<div class="span2">
+				<%= image_tag(tire_listing.tire_manufacturer.name + ".gif",
+								:alt => tire_listing.tire_manufacturer.name,
+								:title => tire_listing.tire_manufacturer.name) %> <br />
+				<font size="1">
+					<%= tire_listing.tire_model.name unless tire_listing.tire_model.nil? %>
+				</font><br />
+				<%= image_tag tire_listing.photo1.url(:thumb) if tire_listing.photo1.exists? %>
+			</div>
+	    	<div class="span1 storename">
+				<%= link_to tire_listing.tire_store.visible_name, tire_listing.tire_store %>
+				<%= render :partial => 'layouts/reserved',
+		                 :locals => {:user_id => signed_in? ? current_user.id : nil,
+		                 			 :tire_listing_id => tire_listing.id } %>
+			</div>
+			<div class="span1 distance">
+			    <%= pluralize(tire_listing.distance.to_i, "mile") if tire_listing.respond_to?('distance') %>
+			</div>
+	    	<div class="span7 listing-detail">
+	    		<div id="list_id_<%= tire_listing.id %>">
+			        <div class="tireinfo1">
+			    		<b>Qty:</b>
+			    		<%= tire_listing.quantity.to_i %>
+			    		<b>Cost:</b>
+			    		<%= tire_listing.price %>
+			    		<% if tire_listing.includes_mounting %>
+			    		<font size="1"> (inc. mounting) </font>
+			    		<% end %>
+			    		<% unless tire_listing.orig_cost.nil? %>
+			    		<b>Orig. Cost:</b> <%= tire_listing.quantity * tire_listing.orig_cost %>
+			    		<% end %>
+			    	</div>
+			    	<p />
+			    	<div class="tireinfo2">
+						<!-- <%= link_to tire_listing.teaser, tire_listing %> -->
+						<% if !tire_listing.tire_model.nil? && tire_listing.tire_model.utqg_treadwear.to_s != '' %>
+							<div class="tire-model-info">
+								<b>Treadwear:</b> <%= tire_listing.tire_model.utqg_treadwear %>
+							</div>
+						<% end %>
+						<% if !tire_listing.tire_model.nil? && tire_listing.tire_model.utqg_traction.to_s != '' %>
+							<div class="tire-model-info">
+								<b>Traction:</b> <%= tire_listing.tire_model.utqg_traction %>
+							</div>
+						<% end %>
+						<% if !tire_listing.tire_model.nil? && tire_listing.tire_model.utqg_temp.to_s != '' %>
+							<div class="tire-model-info">
+								<b>Temp:</b> <%= tire_listing.tire_model.utqg_temp %>
+							</div>
+						<% end %>
+						<% if !tire_listing.tire_model.nil? && tire_listing.tire_model.utqg_traction.to_s != '' %>
+							<div class="tire-model-info">
+								<b>Traction:</b> <%= tire_listing.tire_model.utqg_traction %>
+							</div>
+						<% end %>
+						<% if !tire_listing.tire_model.nil? && tire_listing.tire_model.speed_rating.to_s != '' %>
+							<div class="tire-model-info">
+								<b>Speed Rating:</b> <%= tire_listing.tire_model.speed_rating %>
+							</div>
+						<% end %>
+						<% if !tire_listing.tire_model.nil? && !tire_listing.tire_model.tire_category.nil? && tire_listing.tire_model.tire_category.to_s != ''%>
+							<div class="tire-model-info">
+								<b>Category:</b> <%= tire_listing.tire_model.tire_category.category_type %>
+							</div>
+						<% end %>
+						<p />
+						<%= tire_listing.teaser %>
+					</div>
+				</div>
+			</div>
+			<div class="span1 more-info" id="tl_<%= tire_listing.id %>">
+			
+			</div>
+		</div>
+	</div>
+	<div class="span12">
+		<hr />
+	</div>
+<% end %>

@@ -1,0 +1,23 @@
+<% provide(:title, @tire_store.visible_name + " | New & Used Tires #{@tire_store.city} #{@tire_store.state} | TreadHunter") %>
+<% provide(:metadescription, "#{@tire_store.visible_name}, Category: new and used tires, tire store, #{@tire_store.city} #{@tire_store.state} #{@tire_store.zipcode}") %>
+
+<%= stylesheet_link_tag "forms" %>
+<%= stylesheet_link_tag "tabbedContent" %>
+
+<%= javascript_include_tag "http://code.jquery.com/jquery-1.8.3.js" %>
+<%= javascript_include_tag "http://code.jquery.com/ui/1.9.2/jquery-ui.js" %>
+<%= stylesheet_link_tag "http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" %>
+
+<%= stylesheet_link_tag "storefront" %>
+<%= render 'layouts/storefront/css_overrides' %>
+
+<%= render :partial => 'layouts/storefront/menu_gradient_buttonbar' %>
+
+<% if @tire_search %>
+  <h3>
+    Results for <%= @tire_search.search_description %> - 
+      <%= link_to "click to see all tires for this store", request.path %>
+  </h3>
+<% end %>
+<%= render :partial => 'layouts/tire_store_listings_turbo' %>
+<div class="clear" />

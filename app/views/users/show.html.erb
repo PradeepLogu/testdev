@@ -1,0 +1,176 @@
+<% provide(:title, @user.first_name + ' ' + @user.last_name) %>
+<% provide(:visfire, "true") %>
+
+<style>
+#profile-tabs {
+	margin-bottom: 20px;
+}
+#profile-tabs .title {
+	font-family: "HelveticaLTStd-BoldCond";
+	font-weight: normal;
+	padding-top: 0.5em;
+	margin-bottom: 10px;
+}
+#profile-tabs form label {
+	font-weight: bold;
+}
+#profile-tabs form .email-checks label {
+	display: inline;
+	font-weight: normal;
+	padding-left: 0.5em;
+}
+#profile-tabs form .indent {
+	margin-left: 40px;
+}
+#profile-tabs #save-btn {
+	font-size: 16px;
+	line-height: 1.5;
+	padding-top: 0.5em;
+	font-family: "HelveticaLTStd-BoldCond";
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.form-box-submit {
+	text-align: center;
+}
+</style>
+
+<script>
+$(function() {
+	$("#page-tabs a").click(function (e) {
+		e.preventDefault();
+		var $this = $(this);
+		var id = $this.attr('id');
+		$("#page-tabs a").removeClass("activeLink");
+		$this.addClass("activeLink");
+		$(".tabcontent-1").addClass("hide");
+		$("#"+id+"-1").removeClass("hide");
+	});
+});
+</script>
+
+
+<div class="container-outer">
+	<div class="container-inner">
+		<h1 class="orange header">My Profile</h1>
+
+		<div id="page-tabs" class="page-tabs tabs4 clearfix">
+			<a href="javascript:void(0);" class="tabLink first activeLink" id="cont-1">ACCOUNT INFO</a>
+			<a href="javascript:void(0);" class="tabLink middle" id="cont-2">APPOINTMENTS</a>
+			<a href="javascript:void(0);" class="tabLink middle" id="cont-3">REVIEWS</a>
+			<a href="javascript:void(0);" class="tabLink" id="cont-4">SEARCHES</a>
+		</div>
+		
+		
+		<div id="profile-tabs">
+
+			<div class="tabcontent-1" id="cont-1-1">
+				<%= form_for @user, :validate => true do |f| %>
+					<h4 class="title orange">PERSONAL INFORMATION</h4>
+					<div class="row-fluid">
+						<div class="span4">
+							<%= f.label :first_name %>
+							<%= f.text_field :first_name %>
+							<%= f.label :last_name %>
+							<%= f.text_field :last_name %>
+						</div>
+						<div class="span4">
+							<%= label_tag :address %>
+							<%= text_field_tag :address %>
+							<%= label_tag :zipcode %>
+							<%= text_field_tag :zipcode %>
+						</div>
+					</div>
+
+					<div class="row-fluid" style="margin-top: 2em;">
+						<div class="span4">
+							<%= f.label :email %>
+							<%= f.text_field :email %>
+							<%= f.label :phone %>
+							<%= f.text_field :phone, value: @user.formatted_phone %>
+						</div>
+						<div class="span4">
+							<%= f.label :password, "Change Password" %>
+							<%= f.password_field :password %>
+							<%= f.password_field :password_confirmation %>
+						</div>
+					</div>
+
+					
+					
+					<hr/>
+					
+					<% if false %>
+					<h4 class="title orange">MY VEHICLES</h4>
+					
+					
+					<hr/>
+					<% end %>
+					
+					<h4 class="title orange">EMAIL PREFERENCES</h4>
+					<p>I would like to receive emails regarding:</p>
+					<div class="email-checks">
+						<p>
+							<%= f.check_box :email_yearly_tire_reminders %>
+							<%= label_tag :email_yearly_tire_reminders, "Yearly Tire Reminders" %>
+						</p>
+						<p>
+							<%= f.check_box :email_local_tire_deals %>
+							<%= label_tag :email_local_tire_deals, "Local Tire Deals" %>
+						</p>
+						<p>
+							<%= check_box_tag :local_shop_deals %>
+							<%= label_tag :local_shop_deals, "Local Shop Deals" %>
+						</p>
+						<p class="indent">
+							<%= check_box_tag :local_shop_deals_oil %>
+							<%= label_tag :local_shop_deals_oil, "Oil Changes" %>
+						</p>
+					</div>
+					
+					<hr/>
+					
+					<div class="form-box-submit">
+					  <%= f.submit "SAVE CHANGES", :class => "btn", :id => "save-btn" %>
+					</div>
+				<% end %>
+			</div>	<!-- tabcontent-1 -->
+			
+			
+			<div class="tabcontent-1" id="cont-2-1">
+			</div>	<!-- tabcontent-1 -->
+			
+			
+			<div class="tabcontent-1" id="cont-3-1">
+			</div>	<!-- tabcontent-1 -->
+			
+			
+			<div class="tabcontent-1" id="cont-4-1">
+			</div>	<!-- tabcontent-1 -->
+		</div>
+
+	</div>
+</div>
+
+
+
+<div id="dialog-delete-account" class="th-dialog" style="display:none;">
+	<p class="center-content">Are you sure you want to delete your account?</p>
+</div>
+
+
+
+<!--		<h3>
+				<%= @user.first_name %> <%= @user.last_name %>
+			</h3><br />
+			<p>
+				Email: <%= @user.email %><br />
+				Phone: <%= @user.formatted_phone %><br />
+				<% if not @user.account.nil? %>
+					Account: <%= link_to @user.account.name, @user.account %><br /><br />
+				<% end %>
+
+				<%= link_to 'Edit My Profile', edit_user_path(@user), :class => "btn edit-btn" %>
+			</p>
+-->

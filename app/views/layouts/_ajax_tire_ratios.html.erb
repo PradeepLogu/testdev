@@ -1,0 +1,26 @@
+<select class="tires" 
+        id="ratio" 
+        name="ratio" 
+        select_ratio_path="/ajax/update_tire_wheeldiameters">
+  <option value="">Ratio</option>
+  <% @ratios.each do |r| %>
+    <% if r.ratio == session[:ratio] %>
+      <option selected="selected" value="<%= r.ratio %>"><%= r.ratio %></option>
+    <% else %>
+      <option value="<%= r.ratio %>"><%= r.ratio %></option>
+    <% end %>
+  <% end %>
+</select>
+<script>
+  $('select#ratio').change(function() {    
+    document.getElementById('tire_wheeldiameters').innerHTML = '<select class="tires" id="wheeldiameters" name="wheeldiameter"><option value="" selected="selected">Loading...</option></select>';
+    $.ajax({
+      type: "GET",
+      dataType: "html",
+      url: $(this).attr('select_ratio_path'),
+      data: {ratio: $(this).attr('value')},
+      success:function(result){
+        $("div#tire_wheeldiameters").html(result);} 
+    })
+  });
+</script>

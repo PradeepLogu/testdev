@@ -1,0 +1,6 @@
+<h4><%= state_name.upcase %> TIRES</h4>
+<% cities.each do |city| %>
+	<div class="store"><a href="/tire-stores/?Location=<%= city %>%2C+<%= state_abbr %>"><span class="city-name"><%= city %> </span>
+		Tires</a>
+	</div>
+<% end %>

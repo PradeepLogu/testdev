@@ -1,0 +1,25 @@
+
+  .files .progress {
+    width: 230px;
+  }
+  td.name {
+    width: 150px;
+    font-size: 10px;
+    overflow:hidden;
+  }
+  td.size {
+    width: 60px;
+    font-size: 9px;
+  }
+  td.preview {
+    width: 100px;
+  }
+  td.start {
+    width: 90px;
+  }
+  td.delete {
+    width: 90px;
+  }
+  td.progbar {
+    width: 250px;
+  }

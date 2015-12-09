@@ -1,0 +1,93 @@
+<script>
+  $(document).ready(function() {
+    window.scrollTo(0, 0);
+    show_or_hide_dow();
+    show_or_hide_text_phone();
+  });
+  function show_or_hide_dow() {
+    if ($("#tire_search_saved_search_frequency").attr('value') == 'Weekly')
+    {
+      $(".dow").removeClass("hidden");
+    }
+    else
+    {
+      $(".dow").addClass("hidden");
+    }
+  };
+  function show_or_hide_text_phone() {
+    if ($("#tire_search_send_text").attr('checked') == 'checked')
+    {
+      $(".textphone").removeClass("hidden");
+    }
+    else
+    {
+      $(".textphone").addClass("hidden");
+    }
+  };
+</script>
+
+<div class="modal fade" id="saved_search_modal<%= id %>">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">&times;</a>
+    <h3>
+      Save this search to deliver new listings in your inbox or phone
+    </h3>
+    <h4>
+      <table>
+        <tr><td align="right">Size:</td><td /><td><%= tiresearch.tire_size.sizestr %></td></tr>
+      </table>
+    </h4>
+  </div>
+
+
+  <%= form_for tiresearch, :validate => true do |f| %>
+    <% if tiresearch.errors.any? %>
+      <div id="error_explanation">
+        <h3><%= pluralize(tiresearch.errors.count, "error") %> prohibited this search from being saved:</h3>
+
+        <ul>
+        <% tiresearch.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="modal-body">
+      <table>
+        <tr>
+          <td><%= f.label 'Target email' %></td>
+          <td><%= tiresearch.user.email %></td>
+        </tr>
+        <tr>
+          <td><%= f.label :saved_search_frequency %></td>
+          <td><%= f.select :saved_search_frequency, ['Daily', 'Weekly', 'None'], 
+                          {:class => 'user'} %></td>
+        </tr>
+        <tr class="dow">
+          <td><%= f.label :saved_search_dow, 'Day to receive alerts' %></td>
+          <td><%= f.select :saved_search_dow, Date::DAYNAMES.zip((0..6).to_a), :class => 'users' %></td>
+        </tr>
+        <tr>
+          <td><%= f.label :send_text, 'Get text instead of email?' %></td>
+          <td><%= f.check_box :send_text %></td>
+        </tr>
+        <tr class="textphone">
+          <td><%= f.label :text_phone, 'Text phone #' %></td>
+          <td><%= f.text_field :text_phone, :validate => { :presence => true } %></td>
+        </tr>
+        <script>
+          $('#tire_search_saved_search_frequency').change(function() {
+            show_or_hide_dow();
+          });
+          $('#tire_search_send_text').change(function() {
+            show_or_hide_text_phone();
+          });
+        </script>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+      <%= f.submit :class=>"btn" %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,115 @@
+<% provide(:title, "Select Car Version") %>
+<% provide(:visfire, "true") %>
+
+<style>
+#option-form {
+	display: none;
+}
+</style>
+
+<script>
+$(function () {
+  $("a.option-submit").click(function (e) {
+  	e.preventDefault();
+    $("#tire_search_option_id").val($(this).attr("id"))
+    $("#option-form").submit();
+  });
+  
+  $("#option-form").submit(function () {
+  	var $this = $(this);
+  	if ($this.find("#tire_search_locationstr").val() != "") {
+  	  return true;
+  	}
+  	else {
+  	  $("#dialog-zipcode").dialog({
+  	  	modal: true
+  	  });
+	  $("#zipcode-dialog-form").submit(function (e) {
+	  	e.preventDefault();
+	  	var zip = $(this).find("#dialog-locationstr").val();
+	  	if (/^\d{5}$/.test(zip)) {
+	  	  $("#zipcode-dialog-form .error-msg").hide();
+	  	  $("#dialog-zipcode").dialog("close");
+	  	  $this.find("#tire_search_locationstr").val(zip);
+	  	  $this.submit();
+	  	} else {
+	  	  $("#zipcode-dialog-form .error-msg").show();
+	  	}
+	  	return false;
+	  });
+	  return false;
+	}
+  });
+});
+</script>
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="top-search-section">
+			<div id="tire-search-outer">
+				<h2>SHOP BY:</h2>
+				<%= render :partial => 'layouts/search_panel',
+						   :locals => {:id => "tire-search2"} %>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-outer">
+	<div id="search-by-car-type" class="container-inner">
+		<hr/>
+		
+		<div id="fluid-title">
+			<h1 class="orange"><%= @car_type %> Tires</h1>
+			<p>Select your vehicle's version below to find the right <%= @car_type %> tires for you.</p>
+			
+			<div id="change-params">
+				<span>CHANGE</span>
+				<a href="/car_type">CAR TYPE</a>
+				<a href="/car_type">MAKE</a>
+				<a href="/car_model/<%= @year.auto_model.auto_manufacturer.id %>">MODEL</a>
+				<a href="/car_year/<%= @year.auto_model.id %>">YEAR</a>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<%= form_for @tire_search,
+          :html => { :id => "option-form" },
+          :url => { :action => "storeresults", 
+                    :controller => "tire_searches"} do |f| %>
+          <%= hidden_field_tag :auto_search, 'true' %>
+          <%= f.hidden_field :locationstr, value: "" %>
+          <%= f.hidden_field :auto_manufacturer_id, value: @year.auto_model.auto_manufacturer.id %>
+          <%= f.hidden_field :auto_model_id, value: @year.auto_model.id %>
+          <%= f.hidden_field :auto_year_id, value: @year.id %>
+          <%= f.hidden_field :option_id, value: "" %>
+		<% end %>
+
+		<div id="results" class="row-fluid">
+			<div class="span2 hide-mobile"></div>
+			<ul class="span3 wide">
+			
+			<%	i = 0
+				limit = ((@car_options.length + 2) / 3)
+				remain = @car_options.length
+				@car_options.each do |x| %>
+					<li><a href="#" class="option-submit" id="<%= x.id %>"><%= x.name %></a></li>
+				<%	i += 1
+					remain -= 1
+					if i == limit && remain > 0
+						i = 0 %>
+				</ul>
+				<ul class="span3 wide">
+				<%	end %>
+			<%	end %>
+			
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+<%= render :partial => 'layouts/modal_enter_zipcode',
+           :locals => {:@default_locationstr => @default_locationstr} %>
+

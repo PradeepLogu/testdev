@@ -1,0 +1,147 @@
+<% provide(:title, 'My Saved Searches') %>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+
+<script>
+  function show_or_hide_dow(element) {
+    if (element.attr('value') == 'Weekly')
+    {
+      element.parent().parent().next().removeClass("hidden");
+    }
+    else
+    {
+      element.parent().parent().next().addClass("hidden");
+    }
+  };
+  function show_or_hide_text_phone(element) {
+    if (element.attr('checked') == 'checked')
+    {
+      element.parent().parent().next().removeClass("hidden");
+    }
+    else
+    {
+      element.parent().parent().next().addClass("hidden");
+    }
+  };
+</script>
+<style>
+  .saved-search-box {
+    border: 2px solid #AAA; 
+    padding: 5px; 
+    height: 525px; 
+    border-radius: 5px;
+  }
+
+  h3 {
+    border-bottom: 1px solid #CCC;
+    padding-bottom: 4px;
+    margin-bottom: 0;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  table td, table th {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 5px;
+  }
+
+  table thead td {
+    text-align: left;
+    font-weight: bold;
+
+  }
+</style>
+
+<% @saved_searches.each do |srch| %>
+  <script>
+    $(function() {
+      $( "#dialog_<%= srch.id %>" ).dialog({
+        autoOpen: false,
+        show: "blind",
+        hide: "explode",
+        width: "auto"
+      });
+    });
+  </script>
+  <div id="dialog_<%= srch.id %>" title="Edit Search - <%= srch.search_description %>">
+    <%= form_for srch, :validate => true do |f| %>
+      <table width="100%">
+        <tr>
+          <th width="50%"></th>
+          <th width="50%"></th>
+        </tr>
+        <tr>
+          <td><%= f.label :saved_search_frequency %></td>
+          <td><%= f.select :saved_search_frequency, ['Daily', 'Weekly', 'None'], 
+                          {}, {:class => 'user freq'} %></td>
+        </tr>
+        <% showme = (srch.saved_search_frequency == 'Weekly' ? '' : 'hidden') %>
+        <tr class="dow <%= showme %>">
+          <td><%= f.label :saved_search_dow, 'Day to receive alerts' %></td>
+          <td><%= f.select :saved_search_dow, Date::DAYNAMES.zip((0..6).to_a), :class => 'users' %></td>
+        </tr>
+        <tr>
+          <td><%= f.label :send_text, 'Get text instead of email?' %></td>
+          <td><%= f.check_box :send_text, :class => 'textcheck' %></td>
+        </tr> 
+        <% showme2 = (srch.send_text ? '' : 'hidden') %>
+        <tr class="textphone <%= showme2 %>">
+          <td>
+            <%= f.label :text_phone, 'Phone number to receive text' %>
+            <label>(Enter numbers only, no dashes)</label>
+          </td>
+          <td><%= f.text_field :text_phone, :class => 'users' %></td>
+        </tr> 
+      </table>
+      <center><%= f.submit :class=>"btn" %></center>
+    <% end %>
+  </div>
+<% end %>
+<script>
+  $('select.freq').change(function() {
+    show_or_hide_dow($(this));
+  });
+  $('.textcheck').change(function() {
+    show_or_hide_text_phone($(this));
+  });
+</script>
+
+<h3>Saved Searches and Email Alerts</h3>
+<br />
+<% if @saved_searches.count > 0 %>
+  <table>
+    <thead>
+      <td></td>
+      <td>Search</td>
+      <td>Frequency</td>
+      <td></td>
+    </thead>
+    <% @saved_searches.each do |srch| %>
+      <tr>
+        <td>
+          <a href="#" onclick="$('#dialog_<%= srch.id %>').dialog('open');">Edit</a>
+          <%= link_to 'Delete', srch, method: :delete, data: { confirm: 'Are you sure you want to delete this saved search?' } %>
+        </td>
+        <td><a href='<%= srch.search_link %>'><%= srch.search_description %></a></td>
+        <td><%= srch.saved_search_frequency %></td>
+        <% if srch.saved_search_frequency == 'Weekly' %>
+          <td><%= Date::DAYNAMES[srch.saved_search_dow] %></td>
+        <% else %>
+          <td></td>
+        <% end %>
+        <% if srch.send_text? %>
+          <td>(send text to <%= number_to_phone(srch.text_phone) %>)</td>
+        <% else %>
+          <td></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  You have no saved searches.
+<% end %>
+
+<br />

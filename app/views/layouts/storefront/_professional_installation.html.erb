@@ -1,0 +1,25 @@
+<script>
+	function infoTab() {
+		$('#content').replaceWith('<%= escape_javascript(render "layouts/storefront_info/professional_installation") %>');
+		showTabNum(3);
+	}
+</script>
+<div class="infobox-full">
+ 	<div class="logo-left mechanic vignette"></div>
+	<h3 class="box-title">We Are Tire Professionals</h3>
+	<div>
+		<p>
+	  		Our knowledgeable and helpful staff will help explain how you can save money
+	  		by better fuel economy and improve your tire life, as well as improving
+	  		your car's safety and ride quality.
+	  		<br />
+	  		<br />
+	  		<p>
+	  			<a href="#" style="text-align: right;" 
+	  				onclick="infoTab()">
+	  				See the benefits of professional tire installation
+	  			</a>
+	  		</p>
+		</p>
+	</div>
+</div>

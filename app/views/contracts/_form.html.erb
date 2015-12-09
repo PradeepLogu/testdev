@@ -1,0 +1,57 @@
+<%= form_for(@contract) do |f| %>
+  <% if @contract.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@contract.errors.count, "error") %> prohibited this contract from being saved:</h2>
+
+      <ul>
+      <% @contract.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :account_id %><br />
+    <%= f.number_field :account_id %>
+  </div>
+  <div class="field">
+    <%= f.label :expiration_date %><br />
+    <%= f.date_select :expiration_date %>
+  </div>
+  <div class="field">
+    <%= f.label :contract_amount %><br />
+    <%= f.number_field :contract_amount %>
+  </div>
+  <div class="field">
+    <%= f.label :can_post_listings %><br />
+    <%= f.check_box :can_post_listings %>
+  </div>
+  <div class="field">
+    <%= f.label :can_use_mobile %><br />
+    <%= f.check_box :can_use_mobile %>
+  </div>
+  <div class="field">
+    <%= f.label :can_use_logo %><br />
+    <%= f.check_box :can_use_logo %>
+  </div>
+  <div class="field">
+    <%= f.label :can_use_branding %><br />
+    <%= f.check_box :can_use_branding %>
+  </div>
+  <div class="field">
+    <%= f.label :can_have_search_portal %><br />
+    <%= f.check_box :can_have_search_portal %>
+  </div>
+  <div class="field">
+    <%= f.label :can_have_filter_portal %><br />
+    <%= f.check_box :can_have_filter_portal %>
+  </div>
+  <div class="field">
+    <%= f.label :max_monthly_listings %><br />
+    <%= f.number_field :max_monthly_listings %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,32 @@
+<div class="hover" id="tire_ratios"> 
+  <select class="tires" 
+          id="ratio" 
+          name="ratio" 
+          select_ratio_path="/ajax/update_tire_wheeldiameters_visfire">
+    <option value="">Ratio</option>
+    <% @ratios.each do |r| %>
+      <% if r.ratio == session[:ratio] %>
+        <option selected="selected" value="<%= r.ratio %>"><%= r.ratio %></option>
+      <% else %>
+        <option value="<%= r.ratio %>"><%= r.ratio %></option>
+      <% end %>
+    <% end %>
+  </select>
+  <script>
+    $('select#ratio').change(function() {
+      v = $(this).attr('value');
+      if(typeof v == 'undefined')
+        v = $('select#ratio').val();
+      $.ajax({
+        type: "GET",
+        dataType: "html",
+        url: $(this).attr('select_ratio_path'),
+        data: {ratio: $(this).attr('value')},
+        success:function(result){
+          $("div#tire_wheeldiameters").html(result);
+          fix_select('select#wheeldiameters');
+        } 
+      })
+    });
+  </script>
+</div>

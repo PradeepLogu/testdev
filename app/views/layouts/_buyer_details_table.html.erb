@@ -1,0 +1,121 @@
+<style>
+	.buyer-details-table {
+		background-color: #ff6633;
+	}
+	.table-data {
+		padding-left: 5px;
+	}
+	.table-row-title {
+		font-size: 1.2em;
+		font-weight: bold;
+	}
+	.buyer-details-info {
+		float: left;
+	}
+	.buyer-details-table {
+		font-size: 14px;
+		color: white;
+		font-weight: bold;
+	}
+	.table-even {
+		background-color: #DBDBDB;
+	}
+	.table-odd {
+		background-color: #ECECEC;
+	}
+</style>
+
+<table class="row-no-pad">
+	<tbody>
+		<tr>
+			<td class="buyer-details-table" width="280">Buyer Info</td>
+			<td class="tire-details-table" width="340"></td>
+		</tr>
+		<tr>
+			<td width="280" valign="top">
+				<table width="280">
+					<tbody>
+						<tr class="table-even">
+							<td class="table-row-title">
+								Buyer name
+							</td>
+							<td class="table-data">
+								<%= @reservation.name %>
+							</td>
+						</tr>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								Buyer email
+							</td>
+							<td class="table-data">
+								<%= @reservation.buyer_email %>
+							</td>
+						</tr>
+						<tr class="table-even">
+							<td class="table-row-title">
+								Address
+							</td>
+							<td class="table-data">
+								<%= @reservation.address %>
+							</td>
+						</tr>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								City
+							</td>
+							<td class="table-data">
+								<%= @reservation.city %>
+							</td>
+						</tr>
+						<tr class="table-even">
+							<td class="table-row-title">
+								State
+							</td>
+							<td class="table-data">
+								<%= @reservation.state %>
+							</td>
+						</tr>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								Zip
+							</td>
+							<td class="table-data">
+								<%= @reservation.zip %>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+			<td valign="top">
+				<table width="340" valign="top">
+					<tbody>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								Phone
+							</td>
+							<td class="table-data">
+								<%= @reservation.formatted_phone %>
+							</td>
+						</tr>
+						<tr class="table-even">
+							<td class="table-row-title">
+								Expiration Date
+							</td>
+							<td class="table-data">
+								<%= @reservation.expiration_date.strftime("%m/%d/%Y") %>
+							</td>
+						</tr>
+						<tr class="table-odd">
+							<td class="table-row-title">
+								Price
+							</td>
+							<td class="table-data">
+								<strong>$<%= @reservation.formatted_price %></strong>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+	</tbody>
+</table>

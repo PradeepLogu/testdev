@@ -1,0 +1,77 @@
+<% if @account.has_a_store_with_ecomm? %>
+	<h4>Set Installation Prices for:</h4>
+	<div style="width: 200px; display: inline-table; padding: 20px;">
+		<p>
+			<a href="/installation_costs/edit?account_id=<%= @account.id %>">
+				Entire Account
+			</a>
+		</p>
+	</div>
+	<% @account.tire_stores.each do |t| %>
+		<% if t.can_do_ecomm? %>
+			<div style="width: 200px; display: inline-table; padding: 20px;">
+				<p>
+					<a href="/installation_costs/edit?tire_store_id=<%= t.id %>">
+						<%= t.name %>
+					</a>
+				</p>
+			</div>
+		<% end %>
+	<% end %>
+	<hr />
+<% end %>
+
+<!-- <div class="left-buttons">
+	<a href="#" class="btn" id="add-new-tire">ADD INDIVIDUAL TIRE</a>
+</div> -->
+
+<div class="right-buttons">
+	<span>View Store:</span>
+	<%= select_tag :tire_store_id, 
+	    options_for_select(@account.tire_stores.map{|t| [t.name, t.id]}, params[:tire_store_id]) %>
+	<script>
+	    $("#tire_store_id").change(function() {
+	        reload_current_tab($(this).val());
+	    });
+	</script>
+</div>
+
+<table id="listings-table" class="display">
+	<thead>
+		<tr>
+			<th>Action</th>
+			<th align=right>Price</th>
+			<th align=left>Condition</th>
+			<th align=right>Qty</th>
+			<th align=left>Description</th>
+			<% if @show_store %>
+				<th>Store</th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody>
+		<% @listings.each do |l| %>
+			<tr>
+				<td><%= link_to 'Edit', edit_tire_listing_path(l) %> &nbsp;|&nbsp;
+					<%= link_to "View", l %></td>
+				<% if l.is_new %>
+					<td align=right>ea @ <%= l.formatted_price %></td>
+					<td align=left>New</td>
+					<% if l.quantity >=4 %>
+						<td>&nbsp;</td>
+					<% else %>
+						<td align=right><%= l.quantity %></td>
+					<% end %>
+				<% else %>
+					<td align=right><%= l.formatted_price %></td>
+					<td align=left>Used</td>
+					<td align=right><%= l.quantity %></td>
+				<% end %>
+				<td><%= l.short_description %></td>
+				<% if @show_store %>
+					<td><%= l.tire_store.name %></td>
+				<% end %>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

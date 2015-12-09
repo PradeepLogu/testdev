@@ -1,0 +1,87 @@
+<style>
+	.total-line {
+		border-bottom: 1px solid #000;
+	}
+</style>
+
+<table>
+	<tr>
+		<th align="left">Description</th>
+		<th align="right">Quantity</th>
+		<th align="right">Price ea.</th>
+		<th align="right">Total</th>
+	</tr>
+	<tr>
+		<td align="left"><%= @order.tire_listing.short_description %></td>
+		<td align="right"><%= @order.tire_quantity %></td>
+		<td align="right"><%= number_to_currency @order.tire_ea_price %></td>
+		<td align="right"><%= number_to_currency @order.total_tire_price %></td>
+	</tr>
+	<tr>
+		<td>Sales Tax on tires</td>
+		<td></td>
+		<td></td>
+		<td align="right"><%= number_to_currency @order.sales_tax_on_tires, :unit => '' %></td>
+	</tr>
+	<tr>
+		<td align="left">Tire Installation</td>
+		<td align="right"><%= @order.tire_quantity %></td>
+		<td align="right"><%= number_to_currency @order.tire_ea_install_price %></td>
+		<td align="right"><%= number_to_currency @order.total_install_price, :unit => '' %></td>
+	</tr>
+	<tr>
+		<td>Sales Tax on installation</td>
+		<td></td>
+		<td></td>
+		<td align="right"><%= number_to_currency @order.sales_tax_on_installation, :unit => '' %></td>
+	</tr>
+
+	<tr>
+		<td>TreadHunter Consumer Convenience Fee</td>
+		<td></td>
+		<td></td>
+		<td align="right"><%= number_to_currency (@order.th_user_fee), :unit => ''  %></td>
+	</tr>
+	<tr>
+		<td>Sales Tax on TreadHunter Consumer Convenience Fee</td>
+		<td></td>
+		<td></td>
+		<td align="right"><%= number_to_currency (@order.th_sales_tax_collected), :unit => ''  %></td>
+	</tr>
+	<tr>
+		<td colspan="4" class="total-line"><span style="max-height: 1px"></span></td>
+	</tr>
+	<tr>
+		<td>Total Charged To Consumer</td>
+		<td></td>
+		<td></td>
+		<td align="right"><%= number_to_currency @order.total_order_price, :unit => '' %></td>
+	</tr>	
+	<tr>
+		<td>TreadHunter Consumer Convenience Fee</td>
+		<td></td>
+		<td></td>
+		<td align="right"><%= number_to_currency (@order.th_user_fee * -1), :unit => ''  %></td>
+	</tr>	
+	<tr>
+		<td>Sales Tax on TreadHunter Consumer Convenience Fee</td>
+		<td></td>
+		<td></td>
+		<td align="right"><%= number_to_currency (@order.th_sales_tax_collected * -1), :unit => ''  %></td>
+	</tr>
+	<tr>
+		<td>TreadHunter Retailer Processing Fee</td>
+		<td></td>
+		<td></td>
+		<td align="right"><%= number_to_currency (@order.th_processing_fee * -1), :unit => ''  %></td>
+	</tr>
+	<tr>
+		<td colspan="4" class="total-line"><span style="max-height: 1px"></span></td>
+	</tr>
+	<tr>
+		<td>Total Amount <%= @transfer_or_refund %></td>
+		<td></td>
+		<td></td>
+		<td align="right"><%= number_to_currency @order.total_retained_by_store %></td>
+	</tr>
+</table>

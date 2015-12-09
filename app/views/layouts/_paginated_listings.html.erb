@@ -1,0 +1,9 @@
+<% @listings.each do |t| %>
+    <% if t.is_generic? %>
+        <%= render :partial => 'layouts/build_generic_listing_row', 
+                    :locals => {:@tire_listing => t} %>
+    <% else %>
+		<%= render :partial => 'layouts/build_listing_row', 
+            		:locals => {:@tire_listing => t} %>
+    <% end %>
+<% end %>

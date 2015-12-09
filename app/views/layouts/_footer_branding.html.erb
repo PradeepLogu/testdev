@@ -1,0 +1,33 @@
+<style>
+	#HorizReserveBar {
+		background: #FFFFFF;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		z-index: 10;
+		height: 34px;
+	}
+</style>
+<footer>
+  <%= yield :scripts %>
+  <div id="HorizReserveBar">
+  	<table>
+  		<tr>
+  			<td width="40%" valign="top">
+				<small>
+					&nbsp;&nbsp;&copy; 2012 <a href="/">TreadHunter.com</a>
+				</small>
+			</td>
+			<td width="10%">
+			</td>
+			<td width="20%">
+				<% if content_for?(:page_specific_footer) %>
+					<%= yield(:page_specific_footer) %>
+				<% end %>
+			</td>
+			<td></td>
+		</tr>
+	</table>
+  </div>
+</footer>

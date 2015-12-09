@@ -1,0 +1,61 @@
+<div class="model-row model-result">
+	<div class="left">
+		<div class="model-img">
+			<div class="brand">
+				<%= image_tag "brand_logos/#{@model.tire_manufacturer.name.upcase}.png", alt: @model.tire_manufacturer.name %>
+			</div>
+			<% photo = @model.tire_model_info.photo1_thumbnail
+			   if !photo.blank? %>
+			   <%= image_tag photo %>
+			<% else %>
+				<%= image_tag "th_icon_128.png" %>
+			<% end %>
+		</div>
+	</div>
+	<div class="right">
+		<% if @show_tire_reviews %>
+			<%= render :partial => 'layouts/fivestar_rating',
+				   :locals => {:extra_class => "smaller-mobile", :stars => 4,
+							   :reviews_link => "#", :reviews_count => 23} %>
+	   <% end %>
+
+        <div class="model-title">
+			<h2><%= @model.tire_manufacturer.name %></h2>
+			<a href="/brands/models/<%= @model.tire_model_info_id %>">
+				<h4><%= @model.name %></h4>
+			</a>			
+		</div>
+		<h4 class="sizestr"><%= @model.tire_size.sizestr %></h4>
+		<div class="properties">
+			<ul>
+				<li><span><%= @model.tire_category.category_name if !@model.tire_category.blank? %></span></li>
+			</ul>
+		</div>
+		
+		<div class="rebate">
+		</div>
+		
+		<%= form_for @tire_search,
+					:html => { :class => "buy-form" },
+					:url => { :action => "storeresults", 
+				              :controller => "tire_searches"} do |f| %>
+			
+			<%= f.hidden_field :tire_model_id, value: @model.id %>
+			<!--<%= f.hidden_field :new_or_used, value: 'n' %>-->
+			<%= f.hidden_field :locationstr, value: '' %>
+			<%= hidden_field_tag :model_search, 'true' %>
+			
+			<div class="price"><span>$</span><%= @model.orig_cost %></div>
+			<div class="quantity">
+				<label for="tire_search[quantity]">Qty</label>
+				<%= f.select :quantity, options_for_select(TireSearch::QUANTITY_CHOICES), {}, {:class => "qty"} %>
+			</div>
+			<input type="submit" class="btn buy-btn" value="BUY NOW"/>
+			<div class="clear"></div>
+		<% end %>
+		
+		<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+</div>
+

@@ -1,0 +1,106 @@
+<% provide(:title, 'TreadHunter.com') %>
+<%= render 'shared/error_messages' %>
+<%= javascript_include_tag "prototype" %>
+
+
+  <%= render 'shared/error_messages' %>
+
+  <div id="index-forms">
+    <h1>Find used tires, from late model to hard-to-find sizes and types!</h1>
+    <p>TreadHunter.com drives down the cost of your used tire search.</p>
+  </div>
+
+
+
+  <%= form_for @tire_search,
+      :url => { :action => "searchresults", 
+                :controller => "tire_searches"}, 
+                :method => :get do |f| %>
+    <div class="search-column" id="column-one">
+      <div class="label">
+          Enter a city and state or zipcode<br/>(e.g. Atlanta, GA or 30357)
+      </div>
+      <div class="inputs">
+        <%= f.text_field :locationstr, :class=>'inputs', :value => session[:location] %>
+      </div>
+      <div class="search-item">
+        <div class="inputs">
+          Select manufacturer:
+          <div id="manufacturers">
+            <%= render :partial => 'layouts/manufacturers', 
+                      :object => @auto_manufacturers, 
+                      :locals => {:f => f} %>
+          </div>
+        </div>
+        <div class="inputs">
+          Select model:
+          <div class="inputs" id="models">
+            <%= render :partial => 'layouts/models',
+                      :object => @models,
+                      :locals => {:f => f} %>
+          </div>
+        </div>
+        <div class="inputs">
+          Select year:
+          <div class="inputs" id="years">
+            <%= render :partial => 'layouts/years',
+                      :object => @years, 
+                      :locals => {:f => f} %>
+          </div>
+        </div>
+        <div class="inputs">
+          Select options:
+          <div class="inputs" id="options">
+            <%= render :partial => 'layouts/options',
+                      :object => @options,
+                      :locals => {:f => f} %>
+          </div>
+        </div>
+        <%= f.button "Find my tires!", :class => "btn btn-large", :name => "auto_search" %>
+      </div>
+    </div>
+
+    <div class="search-column" id="column-two">
+      <div class="label">
+          <br />Search radius:
+      </div>
+      <div class="inputs">
+        <%= f.select(:radius, TireSearch::RADIUS_CHOICES, {:selected => session[:radius]}) %> miles
+      </div>
+
+      <div class="search-item">
+        <div class="inputs">
+          Select diameter:
+          <div id="diameters">
+            <%= render :partial => 'layouts/diameters',     
+                       :object => @diameters,      
+                       :locals => {:f => f} %>
+          </div>
+        </div>
+        <div class="inputs">
+          Select ratio:
+          <div id="ratios"> 
+            <%= render :partial => 'layouts/ratios',         
+                       :object => @ratios,         
+                       :locals => {:f => f} %>
+          </div>
+        </div>
+        <div class="inputs">
+          Select wheel diameter:
+          <div id="wheeldiameters">
+            <%= render :partial => 'layouts/wheeldiameters', 
+                       :object => @wheeldiameters, 
+                       :locals => {:f => f} %>
+          </div>
+        </div>  
+        <%= f.button "Find my tires!", :class => "btn btn-large", :name => "size_search" %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= image_tag("pixel.gif", :size => "1x1") %>
+<!--
+  <%= image_tag("mercedes-toyota-white.png", :size=>"960x250") %>
+</div>
+-->
+

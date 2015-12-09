@@ -1,0 +1,29 @@
+<% if @similarStoreListings.count > 0 && showSimilarStoreListingsCount > 0 %>
+	<h3>Similar tires by this seller</h3>
+	<% @similarStoreListings[0..showSimilarStoreListingsCount - 1].each do |l| %>
+		<%= link_to l.short_description, l %><br />
+		$<%= l.price %><br />
+		<%= link_to (image_tag(l.photo1.url(:thumb))), l if l.photo1.exists? %>
+		<hr />
+	<% end %>
+<% end %>
+
+<% if @otherStoreListings.count > 0 && showOtherStoreListingsCount > 0 %>
+	<h3>Other tires at <%= @tire_listing.tire_store.visible_name %></h3>
+	<% @otherStoreListings[0..showOtherStoreListingsCount - 1].each do |l| %>
+		<%= link_to l.short_description, l %><br />
+		<%= link_to (image_tag(l.photo1.url(:thumb))), l if l.photo1.exists? %>
+		<hr />
+	<% end %>
+<% end %>
+
+<% if @otherStoreSimilarListings.count > 0 && showOtherStoreSimilarListingsCount > 0 %>
+	<h3>Similar tires at TreadHunter</h3>
+	<% @otherStoreSimilarListings[0..showOtherStoreSimilarListingsCount - 1].each do |l| %>
+		<%= link_to l.short_description, l %><br />
+		$<%= l.price %><br />
+		<%= l.tire_store.visible_name %>
+		<%= link_to (image_tag(l.photo1.url(:thumb))), l if l.photo1.exists? %>
+		<hr />
+	<% end %>
+<% end %>

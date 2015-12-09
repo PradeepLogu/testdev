@@ -1,0 +1,24 @@
+<% if signed_in? and (super_user? or current_user.account_id == @tire_store.account_id) then %>
+	<div class="infobox-full full-height">
+	 	<div class="settingspic vignette logo-left"></div>
+		<h3 class="box-title">Admin Functions</h3>
+		<div><center>        
+			<a class="admin-button" 
+	              href="/tire_listings/new?tire_store_id=<%= @tire_store.id %>">
+	              Create a new listing &raquo;
+			</a>
+	        <a class="admin-button" 
+	          href="/new_multiple?tire_store_id=<%= @tire_store.id %>">
+	          Create Multiple New Tire Listings &raquo;
+	        </a>
+	        <a class="admin-button" 
+	          href="/generic_tire_listings/new?tire_store_id=<%= @tire_store.id %>">
+	          Create Bulk Used Tire Listings &raquo;
+	        </a>
+	        <br /><br />
+	        <%= link_to 'Edit Store Information', 
+	        	edit_tire_store_path(@tire_store),
+	        	:class => 'admin-button' %>
+		</center></div>
+	</div>
+<% end %>

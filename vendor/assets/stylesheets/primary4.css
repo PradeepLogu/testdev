@@ -1,0 +1,69 @@
+/* CSS Document */
+/* Home page styles for index layout */
+
+/* clear defaults */
+*{margin: 0px; padding: 0px;}
+
+body{
+	text-align: left; 
+	/* font-family: Arial, Helvetica, sans-serif; */
+
+	font: 13px "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px; 
+	color: #FFF; 
+	background: #808080 ; /* url(/assets/hex-mesh33.png) repeat; */
+	background-attachment: fixed;}
+.clear{clear: both;}
+#wrapper{width: 100%; margin: 0px; padding: 0px; top: 0px;}
+.orange{color: #F63;}
+.rust{color: #933313;}
+.gray{color: #AAA;}
+.offwhite{color: #EEE;}
+.steelblue{color: #535F6D;}
+.darksteel{color: #464c57;}
+
+/* ======== THE BODY CONTAINER ============ */
+
+#content-container{width: 1000px; margin: 72px auto 0px auto; color: #111;}
+#content-searches{background: #EEE; width: 960px; padding: 24px 20px 36px; z-index: 1000; box-shadow: 0px 0px 10px #012; -moz-border-radius: 3px; -o-border-radius: 3px; -webkit-border-radius: 3px; -ms-border-radius: 3px; border-radius: 3px;}
+.content-row{width: 100%; margin-bottom: 50px;}
+
+/* ======== THE SEARCH ============ */
+.search-column-wide{width: 940px; padding: 10px; -moz-border-radius: 3px; -o-border-radius: 3px; -webkit-border-radius: 3px; -ms-border-radius: 3px; border-radius: 3px; color: #464c57;}
+.search-column-wide .form-column{width: 450px; margin: 10px; float: left;}
+.search-column{width: 440px; margin: 10px; padding: 10px; float: left; overflow: visible; -moz-border-radius: 3px; -o-border-radius: 3px; -webkit-border-radius: 3px; -ms-border-radius: 3px; border-radius: 3px; color: #464c57;}
+.search-column:hover, .search-column-wide:hover{background: #DDD; color: #535F6D;}
+.search-item:hover{background: #933313; color: #FFF; box-shadow: 0px 0px 5px #111}
+.search-item .pic{height: 72px; width: 72px; float: left; margin-right: 10px;}
+.pic img{height: 72px; width: 72px;}
+.search-item .info{width: 440px; float: left; margin: 0px 10px}
+.search-item .arrows{width: 36px; height: 72px; padding: 10px 0px; background: url(/assets/show-info.png) center no-repeat; margin: 0px 10px; float: left; display: block; color: #FFF; font-size: 72px;}
+
+.info span{width: 280px; padding: 10px; height: 100%; background:  #914e38; margin-right: 10px; margin-left: 10px; visibility: hidden; left: -5000px; z-index: 3000;}
+.info:hover span{visibility: visible; top: 0px; left: 0px; padding-top: 96px; margin-left: 500px;}
+
+/* ======== INFO PANEL ============ */
+.info-panel{width: 300px; margin: 0px 10px; float: left;}
+.info-item{width: 280px; padding: 15px 10px 25px; margin-bottom: 0px; background: #404040; -moz-border-radius: 3px; -o-border-radius: 3px; -webkit-border-radius: 3px; -ms-border-radius: 3px; border-radius: 3px; color: #AAA;}
+#searchdata{display: none;}
+
+/* ======== FOOTER CONTAINER ============ */
+
+#footer-container{width: 100%; margin: 20px 0px 30px 0px; font-size: 12px;}
+#footer-objects{width: 960px; margin: 0px auto; text-align: center;}
+
+.alert {
+	margin-top: 50px;
+}
+
+.popover-inner {
+	background-color: #97310E;
+}
+
+.popover-content {
+	background-color: #97310E;
+}
+
+.popover-title {
+	background-color: #97310E;
+}

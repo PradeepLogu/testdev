@@ -1,0 +1,90 @@
+<script src="/assets/filter.js" type="text/javascript"></script>
+<script src="/assets/tinysort.js" type="text/javascript"></script>
+<%= javascript_include_tag "filter_listings" %>
+<%= javascript_include_tag "build_listing_row" %>
+<%= stylesheet_link_tag "tire-listings" %>
+
+<style>
+/* override for store listings */
+#results-item div.store, #results-item div.dist {
+    visibility: hidden;
+    width: 0px;
+    margin-right: 0px;
+    float: left;
+}
+#results-label div.manufacturer, #results-item div.manufacturer{margin-right: 6px; width: 105px; float: left; display: inline;}
+#results-label div.category-type, #results-item div.category-type{margin-right: 6px; width: 115px; float: left; display: inline;}
+#results-label div.tire-size, #results-item div.tire-size{margin-right: 6px; width: 150px; float: left; display: inline;}
+#results-label div.quantity, #results-item div.quantity{text-align: center; margin-right: 6px; width: 85px; float: left; display: inline;}
+#results-label div.treadlife, #results-item div.treadlife{text-align: left; margin-right: 6px; width: 140px; float: left; display: inline;}
+#results-label div.price, #results-item div.price{margin-right: 6px; width: 70px; float: left; display: inline; text-align: right;}
+div.sort {padding-top: 15px;}
+}
+</style>
+
+<script>
+    function initSettings() {
+        return {
+            filter_criteria: {
+                treadlife: ['#treadlife_list input:checkbox .EVENT.click .SELECT.:checked .TYPE.range', 
+                            'treadlife'],
+                price: ['#price_list input:checkbox .EVENT.click .SELECT.:checked .TYPE.range', 
+                            'cost_per_tire'],
+                tire_manufacturers: ['#manufacturer_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'tire_manufacturer_id'],
+                tire_categories: ['#categories_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'tire_category_id'],
+                quantities: ['#quantities_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'quantity'],
+                wheelsizes: ['#wheelsizes_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'wheelsize'],
+                condition: ['#condition_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'is_new']
+
+            },
+            and_filter_on: true
+        };
+
+    }
+
+    function initTireListings() {
+        return <%= raw @tire_listings.to_json(
+                            :root => true,
+                            :except => [:price, :teaser, :description],
+                            :include => [:tire_manufacturer, 
+                                            :tire_model, :tire_category, :tire_size], 
+                            :methods => [:store_visible_name, 
+                                            :distance, :formatted_price, :discounted_price,
+                                            :photo1_thumbnail, 
+                                            :cost_per_tire, :tire_category_id,
+                                            :to_param, :store_to_param,
+                                            :wheelsize, :has_rebate, :has_price_break]) %>;
+    }
+</script>
+
+<% if not @tire_listings.nil? %>
+    <% if @tire_listings.count > 0 %>
+        <!-- filter box -->
+        <% backtrace_log if backtrace_logging_enabled %>
+        <%= render :partial => 'layouts/listings_filter', 
+                    :locals => {:tire_listings => @tire_listings} %>
+        <!-- display results -->
+        <div class="primary-results">
+            <% if signed_in? and (super_user? or current_user.account_id == @tire_store.account_id) then %>
+                <%= render :partial => 'layouts/listings_sort',
+                        :locals => {:include_distance => false, :date_sort => true} %>
+            <% else %>
+                <%= render :partial => 'layouts/listings_sort',
+                        :locals => {:include_distance => false, :date_sort => false} %>
+            <% end %>
+            <% backtrace_log if backtrace_logging_enabled %>
+            <div id='search_results'>
+                <div id="tirelistings_list">
+                </div>
+            </div>
+            <% backtrace_log if backtrace_logging_enabled %>
+        </div>
+    <% else %>
+        <h3>No results found.</h3>
+    <% end %>
+<% end %>

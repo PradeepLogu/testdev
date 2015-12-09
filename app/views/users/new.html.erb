@@ -1,0 +1,465 @@
+<% provide(:title, 'Sign up') %>
+<% provide(:visfire, "true") %>
+
+<style>
+#registration-mid-part-left, #registration-mid-part-right {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+#store-form, #store-info {
+	display: none;
+}
+
+h1 {
+	color: #F05A29;
+}
+.form-heading h1 {
+	line-height: 25px;
+	padding-top: 10px
+}
+
+.form-part {
+	background-color: #e1e1e1;
+	border: solid 1px #7d7d7d;
+	border-radius: 5px;
+	padding: 10px;
+}
+.form-heading {
+	margin-bottom: 15px;
+}
+.form-part hr {
+	background-color: #c2c2c2;
+	margin-left: 5%;
+	margin-right: 5%;
+}
+.form-part input[type="text"], .form-part input[type="password"] {
+	width: calc(100% - 10px);	/* subtract padding+border */
+}
+.submit {
+	text-align: center;
+}
+
+
+ul.orange-check-list {
+	margin: 15px 0;
+}
+ul.orange-check-list li {
+	list-style: disc inside url("/assets/orange-check.png");
+	font-size: 16px;
+	padding-bottom: 5px;
+}
+
+
+#dialog {
+	display: none;
+	position: absolute;
+	top: 250px;
+	left: 0;
+	width: 100%;
+	z-index: 1001;
+	text-align: center;
+}
+#dialog-inner {
+	position: relative;
+	width: 800px;
+	margin: 0 auto;
+	display: table;
+	text-align: center;
+}
+#dialog-inner .big-link {
+	display: table-cell;
+	width: 45%;
+	font-size: 32px;
+	color: black;
+	height: 320px;
+	vertical-align: middle;
+	background-color: #fff;
+	border-radius: 3px;
+}
+#dialog-inner .big-link span {
+	display: block;
+	padding-top: 40px;
+}
+#dialog-inner .big-or {
+	display: table-cell;
+	width: 10%;
+	color: white;
+	font-size: 28px;
+	font-weight: bold;
+	text-shadow: 1px 1px 2px black;
+	position: relative;
+}
+#dialog-inner .big-or .or {
+	position: relative;
+	top: 80px;
+}
+#dialog-inner .big-or span {
+	position: absolute;
+	width: 1px;
+	background-color: white;
+}
+#dialog-inner .big-or .line1 {
+	top: 15px;
+	height: 50px;
+}
+#dialog-inner .big-or .line2 {
+	top: 105px;
+	height: 180px;
+}
+
+
+.ui-dialog-titlebar {
+	display: none;
+}
+.ui-dialog .register-success {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.register-success .title {
+	line-height: 1;
+	margin-bottom: -5px !important;     /* because the font is so messed up */
+}
+.register-success hr {
+	width: 80%;
+	margin: 15px auto;
+}
+.register-success .btn-cont {
+	margin: 20px 0;
+}
+.register-success .btn {
+	width: 200px;
+}
+.register-success .my-profile-link {
+	color: #F05A29;
+	text-decoration: underline;
+}
+
+
+@media screen and (max-width: 767px) {
+	#registration-mid-part-left {
+		width: 100%;
+	}
+	#registration-mid-part-right {
+		float: left;
+		width: 100%;
+	}
+	#dialog {
+		top: 150px;
+	}
+	#dialog-inner {
+		display: block;
+		width: 66%;
+		max-width: 320px;
+	}
+	#dialog-inner .big-link {
+		display: block;
+		width: auto;
+		height: auto;
+		padding: 30px 0;
+	}
+	#dialog-inner .big-link img {
+		max-width: 50%;
+	}
+	#dialog-inner .big-link span {
+		padding-top: 1em;
+	}
+	#dialog-inner .big-or {
+		display: block;
+		width: auto;
+		margin: 15px 0 10px;
+		font-size: 22px;
+		line-height: 1;
+	}
+	#dialog-inner .big-or .or {
+		position: static;
+	}
+	#dialog-inner .big-or .line1,
+	#dialog-inner .big-or .line2 {
+		height: 1px;
+		width: 40%;
+		top: 0.4em;
+	}
+	#dialog-inner .big-or .line1 {
+		left: 0;
+	}
+	#dialog-inner .big-or .line2 {
+		right: 0;
+	}
+}
+
+@media screen and (max-width: 500px) {
+	#dialog-inner .big-link {
+		font-size: 7vw;
+	}
+}
+
+</style>
+
+<%= javascript_include_tag "jquery.form.min.js" %>
+<%= javascript_include_tag "video_page" %>
+<%= stylesheet_link_tag "video_page" %>
+<%= javascript_include_tag "jquery.fancybox" %>
+<%= stylesheet_link_tag "jquery.fancybox" %>
+
+<script>
+$(function() {
+	var type = "";		//will be either "customer" or "store"
+	
+	$('<div id="dimmer"/>').appendTo("body").height($(document).height());
+	$("#dialog").show();
+	
+	$(".various").fancybox({
+      maxWidth  : 800,
+      maxHeight : 600,
+      fitToView : false,
+      width   : '90%',
+      height    : '90%',
+      autoSize  : false,
+      closeClick  : false,
+      openEffect  : 'none',
+      closeEffect : 'none',
+      closeBtn : true
+	});
+	
+	$("a.big-link").click(function (e) {
+		e.preventDefault();
+		type = $(this).attr("id");
+		
+		$(".form-part").hide();
+		$("#"+type+"-form").show();
+		$("#registration-mid-part-right .info").hide();
+		$("#"+type+"-info").show();
+		$("#dialog").hide();
+		$("#dimmer").remove();
+	});
+	
+	$(".register-form").ajaxForm({
+		dataType: "json",
+		success: function (response, status) {
+			if ("id" in response && response.id) {
+				var dlg = $("#dialog-" + type + "-success");
+				dlg.find(".my-profile-link").attr("href", "<%= users_path %>/" + response.id);
+				dlg.dialog({
+					minWidth: 400,
+					modal: true,
+					dialogClass: "register-success"
+				});
+			}
+		},
+		error: function (response) {
+			var j = JSON.parse(response.responseText);
+			var s = "<p>";
+			for (var key in j) {
+				s = s + key + ": " + j[key] + "<br />";
+			}
+			s = s + "</p>";
+			if (type == "customer") {
+				$("#user-create-errors").html(s);
+			} else {
+				//$("#seller-create-errors").show();
+				$("#seller-create-errors").html(s);
+			}
+		}
+	});
+});
+</script>
+
+
+<div id="search-content2" class="container-outer">
+  <div id="search-content-inner2" class="container-inner">
+
+    <div class="row-fluid">
+      <div id="registration-mid-part-left" class="span4">
+
+      	<div id="customer-form" class="form-part">
+          <div class="form-heading">
+          	Sign up for a
+            <h1 class="orange">FREE MEMBERSHIP</h1>
+            to start finding the best prices near you.
+          </div>
+          <%= form_for @user, :url => users_path(:format => "json"),
+                              :html => {:class => "register-form"},
+                              :validate => true do |f| %>
+            
+            <%= f.label :first_name, "First Name" %>
+            <%= f.text_field :first_name %>
+
+            <%= f.label :last_name, "Last Name" %>
+            <%= f.text_field :last_name %>
+
+            <%= f.label :email %>
+            <%= f.text_field :email %>
+       
+            <%= f.label :phone %>
+            <%= f.text_field :phone %>
+
+            <%= f.label :password %>
+            <%= f.password_field :password, :class => 'user' %>
+
+            <%= f.label :password_confirmation, "Re-enter password" %>
+            <%= f.password_field :password_confirmation, :class => 'user' %>
+            
+            <%= f.label "Zip Code" %>
+            <%= f.text_field :zipcode %>
+            
+            <div class="submit">
+              <%= f.submit "SUBMIT", :class => "btn submit-btn" %>
+            </div>
+
+            <div id="user-create-errors">
+            </div>            
+          <% end %>
+        </div>
+        
+        <div id="store-form" class="form-part">
+          <div class="form-heading">
+          	Sign up for a
+            <h1 class="orange">FREE MEMBERSHIP</h1>
+            to get started listing tires with TreadHunter.
+          </div>
+          <%= form_for @user, :url => {:controller => "pages", 
+          					  				:action => "tireseller_create", 
+          					  				:format => "json"}, 
+                              :html => {:method => :post, :class => "register-form"},
+                              :validate => true do |f| %>
+
+            <%= f.label :first_name, "First Name" %>
+            <%= f.text_field :first_name %>
+
+            <%= f.label :last_name, "Last Name" %>
+            <%= f.text_field :last_name %>
+
+            <%= f.label :email %>
+            <%= f.text_field :email %>
+
+            <%= f.label :phone %>
+            <%= f.text_field :phone %>
+            
+            <%= f.label "Zip Code" %>
+            <%= f.text_field :zipcode %>
+
+            <%= f.label :password %>
+            <%= f.password_field :password %>
+
+            <%= f.label :password_confirmation, "Re-enter password" %>
+            <%= f.password_field :password_confirmation %>
+
+            <%= label_tag "Do you have a referral code?" %>
+            <%= text_field_tag :referral_code %>
+
+            <%= label_tag "Business/Account Name" %>
+            <%= text_field_tag :account_name %>
+            
+            <p class="note">
+            	<strong>NOTE:</strong>
+            	If you have multiple stores, use the main corporate name above.  If you have
+            	a single store, you can use its name above.
+            </p>
+
+            <hr/>
+
+            <div class="submit">
+              <%= f.submit "SUBMIT", :class => "btn submit-btn" %>
+            </div>
+
+            <br />
+            <div id="seller-create-errors">
+            </div>
+          <% end %>
+        </div>
+
+      </div>
+    
+      <div id="registration-mid-part-right" class="span8">
+      	<div id="customer-info" class="info">
+	      <h1>Why TreadHunter?</h1>
+	      <p>
+	      	For most people, the process of shopping for car tires online is difficult and frustrating. That's because even when you find the tires that you're looking for, you likely have to wait several days for them to be delivered to you. Even when the tires you need are available to you immediately, you then have to find a nearby location that will install them for you, or install the tires yourself. To add, many websites that already exist don't allow you to compare
+	      	prices.
+	      </p>
+	      <h1>Why use TreadHunter to help you buy your tires?</h1>
+	      <ul class="orange-check-list">
+	        <li>Easily search for tires by location, tire size, tire brand or car type</li>
+	        <li>View the best local deals on tires</li>
+	        <li>Set up and edit appointments from your account page</li>
+	        <li>View all of your recent searches</li>
+	      </ul>
+	      <h1>How it Works</h1>
+	      <p>
+	      	<a class="various fancybox.iframe" href="http://www.youtube.com/embed/Zd0OqYBVycA?autoplay=1">
+              <img src="/assets/play-button-overlay.png" 
+              	style="width: 100%;background:transparent URL(/assets/Zd0OqYBVycA.png) no-repeat center;background-size: 100% 100%;"/>
+            </a>
+	      </p>
+        </div>
+        
+        <div id="store-info" class="info">
+          <h1>Why TreadHunter?</h1>
+	      <p>TreadHunter allows tire stores and individuals to list their new and used tires for free.
+	      	 For new tires, we collect credit card payment from consumers and transfer the funds immediately into your bank account (minus a <%= $th_processing_fee_percent %>% credit card processing and marketing charge). We also gather the consumer's preferred appointment times
+	      	 to have the tires installed, and allow you to confirm the appointment with the consumer through our application. If you prefer, you can do all this, as well as ordering tires from your distributors, from your smart phone or tablet.</p>
+	      <h1>Why use TreadHunter to help sell your tires?</h1>
+	      <ul class="orange-check-list">
+	        <li>Gives you an Internet presence with targeted marketing</li>
+	        <li>Easily promote sales and specials</li>
+	        <li>Targeted search engine experience</li>
+	        <li>Customers can make reservations online to schedule an appointment</li>
+	      </ul>
+	      <h1>How it Works</h1>
+	      <p>
+	      	<a class="various fancybox.iframe" href="http://www.youtube.com/embed/qKLdHTfjK8A?autoplay=1">
+              <img src="/assets/play-button-overlay.png" 
+              	style="width: 100%;background:transparent URL(/assets/8QGu6k0WtMQ.png) no-repeat center;background-size: 100% 100%;"/>
+            </a>
+	      </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- The big modal that covers the screen on page load -->
+<div id="dialog">
+	<div id="dialog-inner">
+		<a href="#" class="big-link" id="customer">
+			<%= image_tag "registration-icon-customer.png", alt: '' %>
+			<span>I am a <b>customer</b>.</span>
+		</a>
+		<div class="big-or">
+			<span class="line1"></span>
+			<span class="line2"></span>
+			<div class="or">OR</div>
+		</div>
+		<a href="#" class="big-link" id="store">
+			<%= image_tag "registration-icon-store.png", alt: '' %>
+			<span>I am a <b>store</b>.</span>
+		</a>
+	</div>
+</div>
+
+<div id="dialog-customer-success" class="th-dialog register-success" style="display:none;">
+	<div class="center-content">
+		<h2 class="title">WELCOME TO TREADHUNTER.COM</h2>
+		<hr/>
+		<p>Thank you for creating an account with us. You can start searching for your tires based on your location, brand, tire size, or car type, just click start searching below.</p>
+		<div class="btn-cont">
+			<%= link_to "START SEARCHING NOW", "/search", :class => "btn start-btn" %>
+		</div>
+		<%= link_to "GO TO MY ACCOUNT", users_path, :class => "my-profile-link" %>
+	</div>
+</div>
+
+<div id="dialog-store-success" class="th-dialog register-success" style="display:none;">
+	<div class="center-content">
+		<h2 class="title">WELCOME TO TREADHUNTER.COM</h2>
+		<hr/>
+		<p>Thank you for creating an account with us. To get started, create a storefront so you can start listing your tires,
+		   managing your appointments, creating promotions, and managing your reviews.</p>
+		<div class="btn-cont">
+			<%= link_to "CREATE A STOREFRONT", "/myTreadHunter?create_storefront=1", :class => "btn storefront-btn" %>
+		</div>
+		<%= link_to "GO TO MY ACCOUNT", "/myTreadHunter", :class => "my-account-link" %>
+	</div>
+</div>

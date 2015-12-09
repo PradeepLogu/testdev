@@ -1,0 +1,161 @@
+<% provide(:title, @tire_listing.tire_store.visible_name + ' - ' + @tire_listing.short_description %>
+
+<%= render :partial => 'layouts/tiresize_vehicle_modal', 
+		:locals => {:tiresize => @tire_listing.tire_size } %>
+
+<h3 align="left"><%= link_to @tire_listing.tire_store.visible_name, @tire_listing.tire_store %></h3>
+<% if super_user? or (signed_in? && current_user.account_id == @tire_listing.tire_store.account_id) %>
+	<%= link_to "Edit this listing", edit_tire_listing_path(@tire_listing) %>
+	<br />
+<% end %>
+<br />
+<% unless signed_in? and Reservation.where(:user_id => current_user.id, :tire_listing_id => @tire_listing.id).exists? %>
+
+	<%= render :partial => 'layouts/reservation_modal', 
+			:locals => {:tirelisting => @tire_listing, 
+						:reservation => Reservation.new(:user_id => signed_in? ? current_user.id : 0,
+														:tire_listing_id => @tire_listing.id,
+														:buyer_email => signed_in? ? current_user.email : '',
+														:seller_email => "cbkirick@gmail.com",
+													#   :seller_email => @tire_listing.tire_store.contact_email,
+														:name => signed_in? ? current_user.first_name + ' ' + 
+																				current_user.last_name : "",
+														:phone => signed_in? ? current_user.phone : '',
+														:address => session[:street_address],
+														:city => session[:city],
+														:state => session[:state],
+														:zip => session[:zip],
+														:phone => session[:phone]
+														) } %>
+	<a class="btn" data-toggle="modal" href="#reservation_modal" >
+		Reserve <%= @tire_listing.quantity == 1 ? 'this' : 'these' %> 
+		<%= "tire".pluralize(@tire_listing.quantity) %> for me!
+	</a>
+<% else %>
+	<img src="/assets/reserved.png")>&nbsp;You reserved 
+		<%= @tire_listing.quantity == 1 ? 'this' : 'these' %> 
+		<%= "tire".pluralize(@tire_listing.quantity) %> at
+	<%= Reservation.find_by_user_id_and_tire_listing_id(current_user.id, @tire_listing.id).created_at.utc.getlocal.to_s(:long) %>
+	<p />
+<% end %>
+<br /><p />
+<!--
+<div class="container span12">
+-->
+	<div class="span5 pull-left">
+		<div class="row-fluid">
+			<div>
+				<h4>Tire Recap:</h4>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span4">
+				Tire Size:
+			</div>
+			<div class="span8">
+				<a href="#vehicle_modal" data-toggle="modal">
+	        		<%= @tire_listing.tire_size.sizestr unless @tire_listing.tire_size.nil? %>
+	      		</a>
+	      	</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span4">
+				Location:
+			</div>
+			<div class="span8">
+				<%= @tire_listing.tire_store.address1 %><br />
+				<%= @tire_listing.tire_store.address2 if not @tire_listing.tire_store.address2.blank? %>
+				<%= @tire_listing.tire_store.city %>, 
+				<%= @tire_listing.tire_store.state %>
+				<%= @tire_listing.tire_store.zipcode %>
+	      	</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span4">
+				Phone:
+			</div>
+			<div class="span8">
+				<%= @tire_listing.tire_store.visible_phone %>
+	      	</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span4">
+				Price:
+			</div>
+			<div class="span8">
+				<%= @tire_listing.price unless @tire_listing.nil? or @tire_listing.price.nil?%>
+	      	</div>
+		</div>
+		<% if !@tire_listing.remaining_tread.nil? and 
+			@tire_listing.remaining_tread > 0 %>
+			<div class="row-fluid">
+				<div class="span4">
+					Remaining Tread:
+				</div>
+				<div class="span8">
+					<%= @tire_listing.remaining_tread %>/32s inch
+		      	</div>
+			</div>
+		<% end %>
+		<% if super_user? %>
+			<div class="row-fluid">
+				<div class="span4">
+					Source:
+				</div>
+				<div class="span8">
+					<% if @tire_listing.source == 'Randomly Generated' %>
+						<%= @tire_listing.source %>
+					<% else %>
+						<%= link_to @tire_listing.source, @tire_listing.source %>
+					<% end %>
+		      	</div>
+			</div>
+		<% end %>
+		<% if !@tire_listing.treadlife.nil? and @tire_listing.treadlife > 0 %>
+			<div class="row-fluid">
+				<div class="span4">
+					Treadlife:
+				</div>
+				<div class="span8">
+					<%= @tire_listing.treadlife %>%
+		      	</div>
+			</div>
+		<% end %>
+	</div>
+
+	<div class="span6 pull-right thumbnail">
+	<%= render :partial => 'layouts/tire_model_info', 
+			:locals => {:tire_model => @tire_listing.tire_model, :hidden => true} %> 
+	</div>
+<!--
+</div>
+-->
+<!--
+<div class="row-fluid span12">
+	<div class="span2">
+-->
+		<h3>Description</h3></tr>
+<!--
+	</div>
+	<div class="span10">
+-->
+		<%= @tire_listing.description.html_safe %>
+<!--
+	</div>
+</div>
+-->
+<br /> <br />
+<h3>Photos:</h3>
+<% if @tire_listing.photo1.exists? %>
+	<div>
+		<%= render :partial => 'layouts/tire_photo_carousel' %>
+	</div>
+<% else %>
+	<div>
+		This listing has no photos.
+	</div>
+<% end %>
+<!--
+<%= gmaps4rails(@json) %>
+-->
+

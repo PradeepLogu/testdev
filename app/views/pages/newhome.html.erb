@@ -1,0 +1,196 @@
+<% provide(:title, 'TreadHunter.com') %>
+<%= javascript_include_tag "prototype" %>
+
+  <%= render 'shared/error_messages' %>
+
+<style>
+.search-box {
+  border: 1px solid #6C7C92;
+  background: #D7E4F7;
+  margin-top: -18px;
+}
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover {
+background-color: #D7E4F7;
+border: 1px;
+border-color: #6C7C92;
+border-top-style: solid;
+border-left-style: solid;
+border-right-style: solid;
+border-bottom-style: solid;
+border-bottom-color: #D7E4F7;
+}
+</style>
+
+  <div id="index-forms">
+    <h1>Where do you want to search?</h1>
+  </div>
+
+  <div class="row">
+    <div class="span6">
+  <%= form_for @tire_search,
+      :url => { :action => "tireresults", 
+                :controller => "tire_searches"}, 
+                :method => :get do |f| %>
+    <table>
+      <tr colspan="2">
+        <td valign="bottom">
+          <label>
+            How many tires do you need?
+          </label>
+        </td>
+      </tr>
+      <tr colspan="2">
+        <td>
+          <%= f.radio_button :quantity, '', :checked => session[:quantity].blank? %>Any
+          <%= f.radio_button :quantity, '1', :checked => session[:quantity] == '1' %>1&nbsp;
+          <%= f.radio_button :quantity, '2', :checked => session[:quantity] == '2' %>2&nbsp;
+          <%= f.radio_button :quantity, '3', :checked => session[:quantity] == '3' %>3&nbsp;
+          <%= f.radio_button :quantity, '4', :checked => session[:quantity] == '4' %>4&nbsp;
+        </td>
+      </tr>
+      <tr><td colspan="2">&nbsp;</td></tr>
+      <tr>
+        <td valign="bottom">
+          <label>
+            Enter a city and state or zipcode<br/>(e.g. Atlanta, GA or 30357)
+          </label>
+        </td>
+        <td>&nbsp;&nbsp;&nbsp;</td>
+        <td valign="bottom">
+          <label>
+            Search<br/>radius:
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="inputs" id="locationstr">
+            <%= f.text_field :locationstr, :class=>'inputs', :value => session[:location] %>
+          </div>
+        </td>
+        <td></td>
+        <td>
+          <div class="inputs" id="searchradius">
+            <%= f.select(:radius, TireSearch::RADIUS_CHOICES, {:selected => session[:radius]}) %> miles
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div class="tabbable">
+      <ul class="nav-tabs nav">
+        <li class="active"><a href="#1" data-toggle="tab">Search by vehicle</a></li>
+        <li><a href="#2" data-toggle="tab">Search by tire size</a></li>
+      </ul>
+      <div class="tab-content search-box" style="width: 281px; height: 200px;">
+        <div class="tab-pane active" id="1">
+          <table style="margin-top: 15px;"> <!-- style="background-color: orange;"> -->
+            <tr>
+              <td>
+                <label><p>Make:</p></label>
+              </td>
+              <td>
+                <div id="manufacturers">
+                  <%= render :partial => 'layouts/manufacturers', 
+                            :object => @auto_manufacturers, 
+                            :locals => {:f => f} %>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label><p>Model:</p></label>
+              </td>
+              <td>
+                <div id="models">
+                  <%= render :partial => 'layouts/models',
+                            :object => @models,
+                            :locals => {:f => f} %>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label><p>Year:</p></label>
+              </td>
+              <td>
+                <div id="years">
+                  <%= render :partial => 'layouts/years',
+                            :object => @years, 
+                            :locals => {:f => f} %>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label><p>Options:</p></label>
+              </td>
+              <td>
+                <div id="options">
+                  <%= render :partial => 'layouts/options',
+                            :object => @options,
+                            :locals => {:f => f} %>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <%= f.button "Find my tires!", :class => "btn btn-large", :name => "auto_search" %>
+        </div>
+        <div class="tab-pane" id="2">
+          <table style="margin-top: 15px;"> <!-- style="background-color: orange;"> -->
+            <tr>
+              <td>
+                <label><p>Width:</p></label>
+              </td>
+              <td>
+                <div id="diameters">
+                  <%= render :partial => 'layouts/diameters',     
+                             :object => @diameters,      
+                             :locals => {:f => f} %>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label><p>Ratio:</p></label>
+              </td>
+              <td>
+                <div id="ratios"> 
+                  <%= render :partial => 'layouts/ratios',         
+                             :object => @ratios,         
+                             :locals => {:f => f} %>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label><p>Wheel Diameter:</p></label>
+              </td>
+              <td>
+                <div id="wheeldiameters">
+                  <%= render :partial => 'layouts/wheeldiameters', 
+                             :object => @wheeldiameters, 
+                             :locals => {:f => f} %>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <%= f.button "Find my tires!", :class => "btn btn-large", :name => "size_search" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+<div class="span4" style="border-left: solid; margin: 8px 8px 8px 8px; padding-left: 8px;">
+    <p>TreadHunter strives to find consumers the lowest price on the tires they need.  By allowing
+    a unique search by size or style in your area, we make searching for tires easy and fast.</p>
+    <br>
+    If you sell tires, use TreadHunter to drive customers to your door.
+    </br>
+    <br /><br /><br /><br />
+</div>
+</div>
+<!--
+  <%= image_tag("mercedes-toyota-white.png", :size=>"960x250") %>
+</div>
+-->
+

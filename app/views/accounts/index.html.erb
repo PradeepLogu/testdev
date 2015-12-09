@@ -1,0 +1,92 @@
+<% provide(:visfire, "true") %>
+<% provide(:title, "Select an Account") %>
+
+<style>
+  .pagination {
+
+  }
+</style>
+
+<script language="javascript">
+  $(function(){
+    $('form').jqTransform({imgPath:'html/images/'});
+  });
+
+  function getBindData(){
+    $("#cont-2").live($('#form01').jqTransform({imgPath:'html/images/'}));
+  }
+</script>
+
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<div id="searc-header">
+  <%= render 'layouts/header_visfire' %>
+</div>
+
+<%= stylesheet_link_tag "accounts" %>
+
+<div id="serach-content" class="clearfix">
+  <div id="search-content-inner" class="clearfix">
+    <div id="search-main">
+      <div class="search-main-left2">
+        <div class="heading">
+          <h2>Select an Account</h2>
+          <ul>
+            <li>Home /</li>
+            <li>Accounts</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="account-search">
+      <div class="src-your-store">
+        <div class="clm1">
+          <h2>Find an account</h2>
+
+          <div class="select-box">
+            <%= render :partial => 'search_visfire' %>
+          </div>
+        </div>
+      </div>
+
+      <div class="heading2">
+        <%= will_paginate :page_links => true, :container => true, 
+                  :previous_label => '<img alt="prev" src="/assets/store_pageprev.jpg">', 
+                  :next_label => '<img alt="next" src="/assets/store_pagenext.jpg">',
+                  :inner_window => 1,
+                  :outer_window => 1 %>
+      </div>
+
+      <% @accounts.each do |account| %>
+        <div class="pro-clm">
+          <div style="display:none;">
+          </div>
+          <div>
+            <h3><%= account.name %></h3>
+            <p>
+              <%= image_tag("location-icon.gif") %>
+              <span><%= account.full_address %></span>
+            </p>
+            <p>
+              <%= image_tag("phon-icon.gif") %><%= account.phone %>
+            </p>
+            <% if account.has_attribute?("distance") then %>
+              <p>
+                <%= pluralize(account.distance.to_i, "mile") %>
+              </p>
+            <% end %>
+          </div>
+          <div>
+            <%= link_to 'Edit', edit_account_path(account) if super_user? %>
+            <%= link_to 'Destroy', account, method: :delete, data: { confirm: 'Are you sure?' } if super_user? %>
+            <%= link_to('Use', :id => account, :action => 'use', :controller => 'accounts') if super_user? %>
+          </div>
+        </div>
+      <% end %>
+    </div>  
+  </div>
+  <div class="clear"></div>
+</div>

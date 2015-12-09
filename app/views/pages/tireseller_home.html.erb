@@ -1,0 +1,238 @@
+<% provide(:title, "My TreadHunter") %>
+<%= stylesheet_link_tag "tire-listings" %>
+
+<style>
+.left-column {
+	width: 320px;
+	float: left;
+}
+
+.mid-column {
+	width: 320px;
+	float: left;
+}
+
+.right-column {
+	width: 240px;
+	float: right;
+}
+
+.data-box {
+	min-height: 120px;
+	max-height: 240px;
+	overflow-y: scroll;
+	overflow-x: scroll;
+	position: relative;
+	border: 1px solid black;
+	margin: 5px;
+	padding: 5px;
+	white-space: nowrap;
+}
+.stats-box {
+	min-height: 120px;
+	border: 1px solid black;
+	margin: 5px;
+	padding: 5px;
+	height: 100%;
+}
+
+#search-options.data-box {
+	width: 280px;
+}
+
+#search-option.stats-box {
+	width: 200px;
+}
+
+.ecomm-image {
+	vertical-align: middle;
+	max-width: 25px;
+	max-height: 25px;
+}
+</style>
+
+
+<% provide(:visfire, "true") %>
+
+<div class="main-slideshow-2">
+<!--banner slider-->
+</div>
+
+<div id="searc-header">
+	<%= render 'layouts/header_visfire' %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+	<div id="search-content-inner2" class="clearfix">
+		<div id="search-main2">
+			<h2>My TreadHunter</h2>
+			<ul>
+				<li style="color: black;">Home /</li>
+				<li><a href="#">My TreadHunter</a></li>
+			</ul>
+		</div>
+		<div id="edit-mid-part" class="clearfix">
+			<%= link_to "Add Promotion", "/create_promotion", :class => "btn-vf", :style=>"display:inline-block;" %>
+			<% if @account && @account.tire_stores && @account.tire_stores.first &&
+				@account.tire_stores.first.private_seller? %>
+			<% else %>
+				&nbsp; &nbsp;
+				<p style="display:inline"><%= link_to "Need help?  Used tire dealers click here", "/ut_help" %></p>
+			<% end %>
+
+			<% if @show_calendar && false %>
+				<div class="accordion" id="cal-accordion">
+					<div class="accordion-group">
+						<div class="accordion-heading">
+							<a class="accordion-toggle" data-toggle="collapse" 
+								data-parent="#cal-accordion" href="#collapseOne">
+								Click to view calendar
+							</a>
+						</div>
+						<div id="collapseOne" class="accordion-body collapse">
+							<div class="accordion-inner">  
+								<div id='calendar-container'>
+									<div id='svc-calendar'></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			<% end %>
+
+			<div class="right-column">
+				<div class="stats-box" id="search-options">
+					<label>Searches in your area</label>
+					<% @account.searches.each do |s| %>
+						<p><%= s.sizestr %> &nbsp; <%= s.count %></p>
+					<% end %>
+				</div>
+				<% if super_user? %>
+					<div style="margin: 5px;">
+						<p>
+							<b>Current Account:</b> <%= current_user.account.name %><br />
+							<%= link_to('Select Another', accounts_path()) %>
+						</p>
+					</div>
+				<% end %>
+			</div>
+
+			<div class="data-box" id="search-options" style="width: 600px; max-height: 150px;">
+				<% if @account && @account.tire_stores && @account.tire_stores.first &&
+					@account.tire_stores.first.private_seller? %>
+					<label>Your Information</label>
+				<% else %>
+					<label style="display:inline;">Your Stores</label>
+					<% unless !@account.tire_stores.first.nil? && @account.tire_stores.first.private_seller? %>
+						<div style="display:inline;">
+							<label style="display:inline;">
+								<%= link_to 'Create a Storefront', 
+									{:controller => "tire_stores", :action => "new",
+									:account => @account.id},
+									:style => 'float: right;' %>
+							</label>
+						</div>
+					<% end %>
+				<% end %>
+				<% @account.tire_stores.each do |t| %>
+					<p>
+						<% if allow_ecomm() %>
+							<% if t.can_do_ecomm? %>
+								<% if super_user? %>
+									<a href="/pages/get_financial_data?tire_store_id=<%= t.id %>">
+										<%= image_tag("ecomm-ready.png", class: "ecomm-image", title: "Ready for eComm!") %>
+									</a>
+								<% else %>
+									<%= image_tag("ecomm-ready.png", class: "ecomm-image", title: "Ready for eComm!") %>
+								<% end %>
+							<% else %>
+								<% if super_user? %>
+									<a href="/pages/get_financial_data?tire_store_id=<%= t.id %>">
+										<%= image_tag("ecomm-not-ready.png", class: "ecomm-image", title: "Not ready for eComm :(") %>
+									</a>
+								<% else %>
+									<%= image_tag("ecomm-not-ready.png", class: "ecomm-image", title: "Not ready for eComm :(") %>
+								<% end %>
+							<% end %>
+						<% end %>
+						<%= link_to 'Create Listing', '/tire_listings/new?tire_store_id=' + t.id.to_s %>&nbsp;|&nbsp;
+						<% if !t.private_seller? %>
+							<%= link_to 'View', t %>&nbsp;|&nbsp;
+						<% end %>
+						<%= link_to 'Edit', edit_tire_store_path(t) %>&nbsp;|&nbsp;
+						<%= t.name %>&nbsp;<%= t.full_address %>
+						<%= link_to t.website.to_s %>
+					</p>
+				<% end %>
+			</div>
+
+			<% if @account.reservations.size > 0 %>
+				<div class="data-box" id="search-options"
+						style="width: 600px; max-height: 150px;">
+					<label>Your Reservations</label>
+					<% @account.reservations.each do |r| %>
+						<% begin %>
+						<p>
+							<%= link_to r.tire_listing.short_description + " (#{r.name})", r %>
+						</p>
+						<% rescue %>
+						<% end %>
+					<% end %>
+				</div>
+			<% end %>
+
+			<div class="data-box" id="search-options"
+					style="width: 600px; max-height: 150px;">
+				<label>Your Appointments</label>
+				<% @account.tire_stores.each do |t| %>
+					<% begin %>
+					<p>
+						<%= link_to(t.name, :tire_store_id => t.id, :action => :confirm_appointments, :controller => :appointments) %>					
+						| <%= t.confirmed_appointments %> confirmed | <%= t.unconfirmed_appointments %> unconfirmed
+					</p>
+					<% rescue %>
+					<% end %>
+				<% end %>
+			</div>
+
+			<div class="data-box" id="search-options" 
+					style="width: 600px; max-height: 150px;">
+				<label>Your Tire Listings</label>
+				<% @account.top_tire_listings.each do |l| %>
+					<% begin %>
+					<p>
+						$<%= l.formatted_price %>
+						&nbsp;
+						<%= link_to 'Edit', edit_tire_listing_path(l) %>
+						&nbsp;
+						<%= '(' + l.stock_number + ') ' unless l.stock_number.blank? %>
+						<%= link_to l.short_description, l %>
+					</p>
+					<% rescue Exception => e %>
+					<%= e.to_s %>
+					<% end %>
+				<% end %>
+			</div>
+			
+			<% if super_user? %>
+				<div class="data-box" id="search-options" 
+						style="width: 600px; max-height: 150px;">
+					<label>Account Users</label>
+					<% @account.users.each do |u| %>
+						<% begin %>
+							<% if u.status != 2 %>
+								<p>
+									<%= link_to 'View', u %>&nbsp;|&nbsp;
+									<%= link_to 'Edit', edit_user_path(u) %>&nbsp;|&nbsp;
+									<%= u.name %>&nbsp;<%= u.formatted_phone %>&nbsp;<%= u.email %>
+								</p>
+							<% end %>
+						<% rescue Exception => e %>
+							<%= e.to_s %>
+						<% end %>
+					<% end %>
+				</div>					
+			<% end %>
+		</div>
+	</div>
+</div>

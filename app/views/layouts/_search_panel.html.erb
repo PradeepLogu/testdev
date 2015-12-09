@@ -1,0 +1,273 @@
+<% id ||= "tire-search" %>
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+
+<script type="text/javascript">
+  function getBindData() {
+    //$("#cont-2").live($('#form01').jqTransform());
+  }
+  
+  function fix_select(selector) {
+    //var i=$(selector).parent().find('div,ul').remove().css('zIndex');
+    //$(selector).unwrap().removeClass('jqTransformHidden').jqTransSelect();
+    //$(selector).parent().css('zIndex', i);
+  }
+
+  function fix_select2(selector, zindex) {
+     // var i=$(selector).parent().find('div,ul').remove().css('zIndex');
+    /*$(selector).unwrap().removeClass('jqTransformHidden').jqTransSelect();
+    $(selector).parent().css('zIndex', zindex);
+    $("select#auto_manufacturers").parent().css('zIndex', 40);
+    $("select#tire_widths").parent().css('zIndex', 40);
+    $("select#width").parent().css('zIndex', 40);
+    $("select#tire_search_radius").parent().css('zIndex', 50);
+    $("select#tire_search_quantity").parent().css('zIndex', 60);*/
+  }
+
+  function copy_select_value_between_tabs(source_tabId, dest_tabId, element_selector) {
+    var sourceValue = $('#'+source_tabId+"-1").find('#'+element_selector).val();
+    var destSelect = $('#'+dest_tabId+"-1").find('#'+element_selector);
+
+    destSelect.val(sourceValue);
+    var destOption = destSelect.find('option[value='+sourceValue+']');
+    var ind = $('#'+dest_tabId+'-1').find('#' + element_selector + ' option').index(destOption);
+
+    destSelect.prev('ul').find('li').eq(ind).find('a').click();  
+  }
+
+  function copy_radio_value_between_tabs(source_tabId, dest_tabId, element_selector) {
+    var sourceValue = $('#'+source_tabId+"-1").find("a[rel='tire_search[" + element_selector + "]'][class~='jqTransformChecked']").next('input').val();
+    var destOldChecked = $('#'+dest_tabId+"-1").find("a[rel='tire_search[" + element_selector + "]'][class~='jqTransformChecked']");
+    destOldChecked.removeClass('jqTransformChecked');
+
+    var destNewChecked = $('#'+dest_tabId+"-1").find("input#" + element_selector + "[value=" + sourceValue + "]");
+    destNewChecked.prev('a').click();
+  }
+  
+  $(function() {
+    // $('#form1, #form2, #form3').jqTransform();
+    
+    $("#<%= id %> .tabLink").click(function() {
+    	$("#<%= id %> .tabLink").removeClass("activeLink");
+    	$("#<%= id %> .tabcontent").addClass("hide");
+        var tabId = $(this).addClass("activeLink").attr('id');
+        var tab = $("#<%= id %> #"+tabId+"-1");
+        tab.removeClass("hide");
+
+        // Set values on new tab to equal values from old tab
+        //tab.find("input#tire_search_locationstr").val($("#<%= id %> #"+otherTabId+"-1").find("input#tire_search_locationstr").val());
+        //copy_select_value_between_tabs(otherTabId, tabId, "tire_search_radius");
+        //copy_select_value_between_tabs(otherTabId, tabId, "tire_search_quantity");
+        //copy_radio_value_between_tabs(otherTabId, tabId, "new_or_used");
+
+        tab.find("input#tire_search_locationstr").removeClass("hide");
+        
+        return false;
+    });
+    
+    $("#geolocate").click(function (e) {
+		e.preventDefault();
+		if (navigator.geolocation) {
+	        navigator.geolocation.getCurrentPosition(function (position) {
+				// console.log("latlng= "+position.coords.latitude+","+position.coords.longitude);
+
+        var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        var geocoder = new google.maps.Geocoder();
+        //reverse geocode the coordinates, returning location information.
+        geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+          var result = results[0];
+          var city = '';
+          var state = position.coords.latitude+","+position.coords.longitude;
+
+          for (var i = 0, len = result.address_components.length; i < len; i++) {
+            var ac = result.address_components[i];
+
+            if (ac.types.indexOf('administrative_area_level_1') >= 0) {
+              state = ac.short_name;
+            } else if (ac.types.indexOf('locality') >= 0) {
+              city  = ac.short_name + ",";
+            }
+          }
+
+          if (city == "")
+            $("#<%= id %> #tire_search_locationstr").val(position.coords.latitude+","+position.coords.longitude);
+          else
+            $("#<%= id %> #tire_search_locationstr").val(city + " " + state);
+
+          $("#<%= id %> #form3").submit();
+        });
+			});
+	    } else {
+	        alert("Geolocation is not supported by this browser.");
+	    }
+	});
+	
+	$("#help-auto-options").click(function (e) {
+		e.preventDefault();
+		$("#dialog-auto-options-help").dialog({
+			modal: true
+		});
+	});
+	
+	$("#help-wheeldiameters").click(function (e) {
+		e.preventDefault();
+		$("#dialog-tire-size-help").dialog("open");
+	});
+  });
+</script>
+
+      <div id="<%= id %>">
+      	<% if defined?(inner_title) %>
+      	  <h2><%= inner_title %></h2>
+      	<% end %>
+      	
+        <div class="tab-box" onClick="getBindData();">
+          <div class="wrap">
+		    <a href="javascript:void(0);" class="tabLink first activeLink" id="s-panel-1">
+              <%= image_tag("homepage/location.png", alt: "tab") %>
+              <p>LOCATION</p>
+            </a>
+          </div>
+          <div class="wrap">
+            <a href="javascript:void(0);" class="tabLink" id="s-panel-2">
+              <%= image_tag("homepage/car.png", alt: "tab") %>
+              <p>CAR</p>
+            </a>
+          </div>
+          <div class="wrap">
+            <a href="javascript:void(0);" class="tabLink" id="s-panel-3">
+              <%= image_tag("homepage/wheel.png", alt: "tab") %>
+              <p>SIZE</p>
+            </a>
+          </div>
+        </div>
+        
+        
+        <div class="tabcontent" id="s-panel-1-1">
+          <%= form_tag  tire_stores_path, :method => "get",
+                        :id => "form3" do %>
+            <div class="form-box-1 field-combo">
+              <span class="th-location">
+            	 <input type="text" name="Location" id="tire_search_locationstr"
+            	       value="<%= session[:location].to_s.gsub(/"/, '') %>"
+            	       placeholder="Enter Address, Zip Code, or City and State"
+            	       /><input type="submit" value="GO"/>       
+              </span>
+            </div>
+            <div class="form-box-1 big-or">
+			  <span>OR</span>
+			  <span class="line-left"></span>
+			  <span class="line-right"></span>
+			</div>
+			<div class="form-box-1 geolocate">
+			  <input type="button" id="geolocate" value="USE YOUR LOCATION"/>
+			</div>
+            <div class="form-box-1">
+              <label class="error-msg">
+                <% flash.each do |key, value| %>
+                  <%= value %><br/>
+                <% end %>              
+              </label>
+            </div>
+          <% end %>
+        </div>
+        
+        <div class="tabcontent hide" id="s-panel-2-1">
+          <%= form_for @tire_search,
+              :validate => true,
+              :html => { :id => "form1" },
+              :url => { :action => "storeresults", 
+                        :controller => "tire_searches"} do |f| %>
+            
+            <% if defined?(tire_manufacturer_id) %>
+              <%= f.hidden_field :tire_manufacturer_id, value: tire_manufacturer_id %>
+            <% end %>
+            
+            <div class="form-box-1 nobg">
+              <%= render :partial => 'layouts/ajax_auto_manufacturers_visfire', 
+                         :object => @auto_manufacturers, 
+                         :locals => {:f => f} %>
+              <%= render :partial => 'layouts/ajax_auto_models_visfire',
+                         :object => @models,
+                         :locals => {:f => f} %>
+              <%= render :partial => 'layouts/ajax_auto_years_visfire',
+                         :object => @models,
+                         :locals => {:f => f} %>
+              <%= render :partial => 'layouts/ajax_auto_options_visfire',
+                         :object => @models,
+                         :locals => {:f => f} %>
+            </div>
+            
+            <div class="form-box-collapse">
+              <span class="th-location">
+                <%= f.text_field :locationstr, 
+                            #:class=>'jqTransformSelectWrapper tabcontent', 
+                            :value => session[:location],
+                            :placeholder => "Enter Zip Code" %>
+              </span>
+            </div>
+            <div class="form-box-submit">
+              <%= f.submit "FIND MY TIRES", :name => "auto_search" %>
+            </div>
+            <div class="clear"></div>
+            <label class="error-msg">
+              <% flash.each do |key, value| %>
+                <%= value %><br/>
+              <% end %>                
+            </label>
+          <% end %>
+        </div>
+        
+        <div class="tabcontent hide" id="s-panel-3-1">
+          <%= form_for @tire_search,
+              :validate => true,
+              :html => { :id => "form2" },
+              :url => { :action => "storeresults", 
+                        :controller => "tire_searches"} do |f| %>
+            
+            <% if defined?(tire_manufacturer_id) %>
+              <%= f.hidden_field :tire_manufacturer_id, value: tire_manufacturer_id %>
+            <% end %>
+            
+            <div class="form-box-1 tire-size nobg">
+              <%= render :partial => 'layouts/ajax_tire_width_visfire',     
+                         :object => @diameters,      
+                         :locals => {:f => f} %>
+              <%= render :partial => 'layouts/ajax_tire_ratios_visfire',         
+                         :object => @ratios,         
+                         :locals => {:f => f} %>
+              <%= render :partial => 'layouts/ajax_tire_wheeldiameters_visfire', 
+                         :object => @wheeldiameters, 
+                         :locals => {:f => f} %>
+            </div>
+            <div class="form-box-collapse">
+              <span class="th-location">
+                <%= f.text_field :locationstr, 
+                            #:class=>'jqTransformSelectWrapper tabcontent', 
+                            :value => session[:location],
+                            :placeholder => "Enter Zip Code" %>
+              </span>
+            </div>
+            <div class="form-box-submit tire-size">
+              <%= f.submit "FIND MY TIRES", :name => "size_search" %>
+            </div>
+            <div class="clear"></div>
+            <label class="error-msg">
+              <% flash.each do |key, value| %>
+                <%= value %><br/>
+              <% end %>              
+            </label>
+          <% end %>
+        </div>
+        
+        <div class="clear"></div>
+      </div>
+
+
+
+<%= render :partial => 'layouts/modal_tire_size_help' %>
+
+<div id="dialog-auto-options-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">WHAT IS MY VEHICLE STYLE?</h5>
+	<p>For example, if you have a Honda Accord, the style level could be LX, Sport, EX, EX-L, EX-L V-6 and Touring.</p>
+</div>

@@ -1,0 +1,203 @@
+<% provide(:visfire, "true") %>
+
+<style>
+  #user-account:after {
+    background: none;
+    border-left: 1px solid #dedede;
+    height: 500px;
+  }
+
+  td input {
+    /*width: 270px;*/
+    height: 42px;
+    border: 1px solid #dfdede!important;
+    background: #fafafa;
+    margin: 5px 0;
+    border-radius: 5px;
+    -o-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    font: 15px/42px proxima_nova_rgregular;
+    padding: 0 0 0 10px!important;
+  }
+
+  .jqTransformSelectWrapper ul a {
+    border-left: 1px solid #dfdede;
+    border-right: 1px solid #dfdede;
+    border-bottom: 1px solid #dfdede;
+  }
+</style>
+
+<script>
+  $(function() {
+    $('form').jqTransform();
+  });
+</script>
+
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<div id="searc-header">
+  <%= render :partial => 'layouts/header_visfire', 
+              :locals => {:@error_object => @tire_listing} %>
+</div>
+
+<%= stylesheet_link_tag "style-white-transform" %>  
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+    <div id="search-main2">
+      <h2>Bulk Tire Listings</h2>
+      <ul>
+        <li>Home /</li>
+        <li><a href="#">Bulk Tire Listings</a></li>
+      </ul>
+    </div>
+
+    <%= form_for(@tire_listing) do |f| %>
+      <div id="seller-mid-part" class="clearfix">
+        <div id="user-account">
+          <% if @tire_listing.new_record? %>
+            <h1>New bulk tire listing</h1>
+          <% else %>
+            <h1>Edit bulk tire listings</h1>
+          <% end %>
+          <div id="login-form-box" class="edit-form-box" 
+              style="background: url('/assets/tire_stack.jpg') no-repeat; background-position: right top">
+            <%= f.hidden_field :tire_store_id, :value => @tire_listing.tire_store_id %>
+            <%= f.label :quantity %>
+            <%= f.select(:quantity, { "1" => "1", "2" => "2", "3" => "3", "4+" => "4"}, {}) %>
+            <%= f.label "Size" %>
+            <%= render :partial => 'select_wheel_diameter' %>
+
+            <div class="smalltext">
+              <%= f.label "Price Per Tire" %>
+              <%= f.text_field :price, :value => f.object.price.to_s %>
+            </div>
+            <% if !@tire_listing.tire_store.private_seller? %>
+              <div class="check">
+                <%= f.label "Includes mounting?" %>
+                <%= f.check_box :includes_mounting, :class => "includes_mounting ignore" %>
+              </div>
+              <span class="mount smalltext">
+                <%= f.label "Mounting price" %>
+                <%= f.text_field :mounting_price,
+                    :value => f.object.mounting_price.to_s %>
+              </span>
+
+              <div class="smalltext">
+                <%= f.label :warranty_days %>
+                <%= f.number_field :warranty_days %>
+              </div>            
+            <% end %>
+          </div>
+        </div>
+        <div id="edit-mid-part-right" class="edit-mid-part-right-slim">
+          <h1>What Are Bulk Listings?</h1>
+          <p>
+            Bulk listings are a way to create multiple listings for used tires quickly
+            and easily.  You may create one bulk listing per wheel size; however, you 
+            may only select a single price and mounting price per bulk listing.  So if,
+            for example, your mounting price is different for 195/75R16 versus 255/50R16,
+            you will need to create two different bulk listings.
+          </p>
+        </div>
+      </div>
+      <div class="clear"></div>
+      <hr style="margin-top: 20px; margin-bottom: 20px;" />
+      <div id="seller-mid-part">
+        <p>
+          <i>
+            While not required, you should enter the typical remaining tread depth or treadlife
+            percentage.  You may enter both if applicable.
+          </i>
+        </p>
+        <div id="split-mid-part-left">
+          <h3>Remaining tread depth</h3>
+          <table>
+            <tr>
+              <td><%= f.label :remaining_tread_min, "Min tread" %></td>
+              <td>
+                <div class="smalltext smallertext">
+                  <%= f.text_field :remaining_tread_min %> 
+                </div>
+              </td>
+              <td><label class="small">/32s of inch</label></td>
+            </tr>
+            <tr>
+              <td><%= f.label :remaining_tread_max, "Max tread" %></td>
+              <td>
+                <div class="smalltext smallertext">
+                  <%= f.text_field :remaining_tread_max %> 
+                </div>
+              </td>
+              <td><label class="small">/ 32s of inch</label></td>
+            </tr>
+          </table>
+        </div>
+        <div id="split-mid-part-right">
+          <h3>Remaining tread percentage</h3>
+          <table>
+            <tr>
+              <td><%= f.label :treadlife_min, "Min remaining treadlife" %></td>
+              <td>
+                <div class="smalltext smallertext">
+                  <%= f.text_field :treadlife_min %> 
+                </div>
+              </td>
+              <td><label class="small">%</label></td>
+            </tr>
+            <tr>
+              <td><%= f.label :treadlife_max, "Max remaining treadlife" %></td>
+              <td>
+                <div class="smalltext smallertext">
+                  <%= f.text_field :treadlife_max %> 
+                </div>
+              </td>
+              <td><label class="small">%</label></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="clear"></div>
+      <div id="choose-tire-sizes"></div>
+
+      <%= f.submit @button_text, class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  function show_or_hide_mount_price() {
+    if ($("input.includes_mounting").attr('checked') == 'checked')
+    {
+      $("span.mount").addClass("hidden");
+    }
+    else
+    {
+      $("span.mount").removeClass("hidden");
+    }
+  };
+
+  $('input#generic_tire_listing_includes_mounting').change(function() {
+    show_or_hide_mount_price();
+  });
+</script>
+
+<% if !@tire_listing.new_record? && !@tire_listings.nil? && @tire_listings.count > 0 %>
+  <script>
+    $(function () {
+      $('select#wheeldiameter').val(<%= @tire_listings.first.tire_size.wheeldiameter.to_s.to_i %>);
+      $('select#wheeldiameter').change();
+      show_or_hide_mount_price();
+    });
+  </script>
+<% else %>
+  <script>
+    $(function () {
+      show_or_hide_mount_price();
+    });
+  </script>
+<% end %>

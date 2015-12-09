@@ -1,0 +1,100 @@
+<script>
+$(document).ready(function () {      
+     $('.listing-detail div').click(function (event) {
+        if ($(this).attr('id').substr(0, 8) == 'list_id_') {
+            var listing_id = $(this).attr('id').substr(8);
+            var path = '/tire_listings/' + listing_id;
+            window.open(path, '_self', false); 
+        };
+     });
+ });
+
+function bindLiveEvents() {
+    $("div.tireinfo").hover(
+        function () {
+            $(this).addClass('highlighted');
+        }, 
+        function () {
+            $(this).removeClass('highlighted');
+        }
+    );
+    $("div.more-info").hover(
+        function (event) {
+            $.ajax({url:"/tire_listings/ajax/" + event.target.id,success:function(result){
+                $("#tirepreviewpane").removeClass("hidden");
+                $("#navigator-inner").addClass("hidden");
+                $("#tirepreviewpane").html(result);
+            }});
+        },
+        function (event) {
+            //$("#navigator").html("");
+            $("#tirepreviewpane").addClass("hidden");
+            $("#navigator-inner").removeClass("hidden");
+        }
+    );
+}
+
+$(document).ready(function() {
+  window.scrollTo(0, 0);
+  bindLiveEvents();
+})
+
+//$$('#tireinfo').invoke('observe', 'mouseout', function(event) {
+//    alert('here');
+    // this.up('tbody').childElements()[4].childElements()[0].toggle();
+//});
+</script>
+
+<div class="row-fluid">
+    <div class="span12">
+    	<%= @tire_search.auto_year.modelyear unless @tire_search.auto_year.nil? %>
+    	<%= @tire_search.auto_manufacturer.name unless @tire_search.auto_manufacturer.nil? %>
+    	<%= @tire_search.auto_model.name unless @tire_search.auto_model.nil? %>
+    	<%= @tire_search.auto_option.name unless @tire_search.auto_option.nil? %>
+    	<a href="#vehicle_modal" data-toggle="modal">
+    		<%= @tire_search.tire_size.sizestr unless @tire_search.tire_size.nil? %>
+    	</a>
+    	for  <%= @tire_search.geo_level %>
+    </div>
+</div>
+
+<% if not @tire_search.tirelistings.nil? %>
+    <% if @tire_search.tirelistings.count > 0 %>
+        <div class="row-fluid">
+            <div class="span9">
+                <div id='search_results'>
+        	       <%= render @tire_search.paginated_tirelistings(params) %>
+                </div>
+                <p />
+                <div class="pagination">
+                    <div clas="page_info">
+                        <%= page_entries_info @tire_search.paginated_tirelistings(params) %>
+                    </div>
+                    <%= will_paginate @tire_search.paginated_tirelistings(params), :container => false %>
+                </div>
+            </div>
+            <div class="span3" id="navigator">
+                <div id="navigator-inner">
+                    <div id="facetbox" class="borderbox dropshadow">
+                        <div class="category">
+                            <div class="facet-title" title="Price">
+                                Price
+                            </div>
+                            <div class="facets" style="display: block; overflow-y: hidden;">
+                                <div class="facet-items scrollable">
+                                    <div class="facet-item">
+                                        <input type="checkbox" name="high50">&nbsp;Max $50</input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tirepreviewpane" class="hidden">
+                </div>
+            </div>
+        </div>
+    <% else %>
+    	<h3>No results found.</h3>
+    <% end %>
+<% end %>

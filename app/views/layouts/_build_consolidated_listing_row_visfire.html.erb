@@ -1,0 +1,34 @@
+<div class="search-content-left-<%=@store%>inner" style="border: 2px solid black;">
+	<div class="search-content-left-<%=@store%>inner-a">
+		<% @tire_listing.manufacturers.each do |m| %>
+			<img src="/assets/<%= m %>.gif"
+				 alt="<%= m %>" style="padding: 10px;">
+		<% end %>
+	</div>
+	<div class="search-content-left-<%=@store%>inner-b">
+		<div class="search-right">
+			<h3><%= @tire_listing.tire_store.visible_name %></h3>
+			<ul>
+				<% if @tire_listing.respond_to?(:distance) %>
+					<li>Distance:
+						<span><%= pluralize(@tire_listing.distance.to_f.floor, 'mile') %></span>
+					</li>
+				<% end %>
+				<li><%= @tire_listing.num_listings %> listings</li>
+			</ul>
+		</div>
+		<div class="search-right-b">
+			<p>from</p>
+			<h4>$<%= @tire_listing.min_price %></h4>
+			<p>to</p>
+			<h4>$<%= @tire_listing.max_price %></h4>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="arrowlistmenu">
+		<h2 class="menuheader expandable" headerindex="0h">
+			<span class="accordprefix"></span>
+			Viewing summary of store's listings - click to expand
+			<span class="accordsuffix"></span>
+		</h2>
+		<div class="categoryitems" contentindex="0c" style="display: none;">

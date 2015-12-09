@@ -1,0 +1,90 @@
+<% provide :title, "TreadHunter Registration Complete!" %>
+
+<style>
+	h1 {
+		color: #f05a29;
+		font-style: bold;
+		font-size: 36px;
+		margin-top: 25px;
+		margin-bottom: 10px;
+		text-align: center;
+		text-transform: uppercase;
+	}
+	h2 {
+		color: #f05a29;
+		font-size: 24px;
+		margin-top: 25px;
+		margin-bottom: 10px;
+		text-align: center;
+	}
+	h3 {
+		font-style: bold;
+		font-size: 18px;
+		margin-left: 100px;
+		margin-right: 100px;
+	}
+	.thanks {
+		text-align: center;
+		font-style: bold;
+		font-size: 18px;
+		line-height: 30px;
+		margin-left: 100px;
+		margin-right: 100px;
+	}
+	hr {
+		margin-left: 150px;
+		margin-right: 150px;
+	}
+	.account-btn {
+		margin-top: 25px;
+		margin-bottom: 25px;
+	}
+	.account-btn img {
+		max-height: 24px;
+	}
+	ul.orange-check-list li {
+    	list-style: disc inside url("/assets/orange-check.png");
+    	font-size: 16px;
+    	padding-bottom: 5px;
+		margin-left: 125px;
+		margin-right: 100px;
+	}
+</style>
+
+<h1>Welcome To TreadHunter!</h1>
+<div class="thanks">
+	Thank you for creating an account with us.  You can start selling your tires and increasing sales, while solidifying your online presence.
+</div>
+<center>
+	<a href="#" class="btn submit-btn account-btn" 
+		onclick="window.location.href = '/myTreadHunter';">
+		GO TO MY ACCOUNT
+		<img src="/assets/gear.png" />
+	</a>
+</center>
+
+<hr />
+
+<h2>Sign up for our <b>Premium Plan</b> to access great features!</h2>
+<h3>Our Premium Plan features include:</h3>
+<ul class="orange-check-list">
+	<li>Top listing in search results, highlighted with a Premium Plan badge.</li>
+	<li>Access to a promotion in your listing and more photos and videos.</li>
+	<li>The ability to reply to positive and negative reviews.</li>
+	<li>Creating an AD listing on your competitor's pages on TreadHunter.</li>
+	<li>Links to your website and social media accounts right from your TreadHunter page!</li>
+	<li>An unlimited number of promotions.</li>
+	<li>Access to our Premium Mobile App that allows you to update inventory quantities, approve and receive notifications for new customer orders and appointment requests while on the go, plus many more benefits!</li>
+	<li>A 24/7 customer support help desk.</li>
+</ul>
+
+<center>
+	<% if false %>
+		<%= link_to 'UPGRADE NOW', {:controller => "tire_stores", 
+									:action => "upgrade_to_premium",
+									:tire_store_id => @tire_store.id},
+					class: "btn submit-btn account-btn" %>
+	<% else %>
+		<a href="#" onclick="alert('Coming soon!'); return false;" class="btn submit-btn account-btn">UPGRADE NOW</a>
+	<% end %>
+</center>

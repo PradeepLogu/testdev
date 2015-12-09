@@ -1,0 +1,464 @@
+<% provide :title, "Complete Order" %>
+
+<% provide :visfire, "true" %>
+
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript" src="http://stripe.github.io/jquery.payment/lib/jquery.payment.js"></script>
+
+<%= stylesheet_link_tag "bootstrap", media: "all" %>
+<%= javascript_include_tag "jquery.maskedinput.min" %>
+
+<% @breakout_sales_tax = @order.breakout_sales_tax %>
+
+<script>
+  function validateEmail(email) { 
+      var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+  };
+
+  function validatePhone(phone) {
+    if (phone == "")
+      return false;
+    else
+      return true;
+  }
+
+  Stripe.setPublishableKey("<%= stripe_public_key %>");
+
+  $.fn.toggleInputError = function(erred) {
+    this.toggleClass('has-error', erred);
+    return this;
+  };
+
+  function stripeResponseHandler(status, response) {
+    var $form = $('#payment-form');
+
+    $form.find('input#commit').prop('disabled', false);
+    $('#loading-indicator').hide();
+
+    if (response.error) {
+      // Show the errors on the form
+      $form.find('.payment-errors').text(response.error.message);
+      $form.find('input#commit').prop('disabled', false);
+    } else {
+      // response contains id and card, which contains additional card details
+      var token = response.id;
+      // Insert the token into the form so it gets submitted to the server
+      $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+      $form.append($('<input type="hidden" name="tire_listing_id" />').val(<%= @tire_listing.id %>));
+      $form.append($('<input type="hidden" name="order_id" />').val(<%= @order.id %>));
+      $form.append($('<input type="hidden" name="email" />').val($("#buyer_email").val()));
+      $form.append($('<input type="hidden" name="phone" />').val($("#buyer_phone").val()));
+
+      bNotifyViaText = $("#notify_via_text").is(":checked");
+      $form.append($('<input type="hidden" name="notify_buyer_via_text" value="' + bNotifyViaText + '"" />'));
+
+      // and submit
+      $form.get(0).submit();
+    }
+  }
+
+  jQuery(function($) {
+    $("#buyer_phone").mask("(999) 999-9999");
+
+    $('#payment-form').submit(function(event) {
+      var $form = $(this);
+
+      event.preventDefault();
+
+      var validEmail = validateEmail($('#buyer_email').val());
+      var validPhone = validatePhone($('#buyer_phone').val());
+      var validCC = $.payment.validateCardNumber($('#cardNumber').val());
+      var validExpire = $.payment.validateCardExpiry($('#cardExpMonth').val(),
+                                                $('#cardExpYear').val());
+      var validCVC = $.payment.validateCardCVC($('#cardCVC').val());
+
+      var validName = $('#cardName').val().length > 5;
+      var validAddress = $('#cardAddress').val().length > 5;
+      var validCity = $('#cardCity').val().length > 5;
+      var validState = $('#cardState').val().length >= 2;
+      var validZip = $('#cardZip').val().length == 5;
+
+      var anyErrors = !(validCC && validExpire && validCVC && validName && validAddress &&
+                      validCity && validState && validZip && validEmail);
+
+      $('#cardNumber').toggleInputError(!validCC);
+      $('#cardExpMonth').toggleInputError(!validExpire);
+      $('#cardExpYear').toggleInputError(!validExpire);
+      $('#cardCVC').toggleInputError(!validCVC);
+
+      $('#cardName').toggleInputError(!validName);
+      $('#cardAddress').toggleInputError(!validAddress);
+      $('#cardCity').toggleInputError(!validCity);
+      $('#cardState').toggleInputError(!validState);
+      $('#cardZip').toggleInputError(!validZip);
+
+      $('#buyer_email').toggleInputError(!validEmail);
+      $('#buyer_phone').toggleInputError(!validPhone);
+
+      if (validCC == false) {
+        $form.find('.payment-errors').text("Invalid Credit Card number.");
+        $('#loading-indicator').hide();
+        $('#payment-form').find('input#commit').prop('disabled', false);
+        return false;
+      } else if (Stripe.card.validateCardNumber($('#cardNumber').val()) == false) {
+        $form.find('.payment-errors').text("Invalid Credit Card number.");
+        $('#loading-indicator').hide();
+        $('#payment-form').find('input#commit').prop('disabled', false);
+        return false;
+      } else if (validExpire == false) {
+        $form.find('.payment-errors').text("Invalid expiration date.");
+        $('#loading-indicator').hide();
+        $('#payment-form').find('input#commit').prop('disabled', false);
+        return false;
+      } else if (validCVC == false) {
+        $form.find('.payment-errors').text("Invalid CVC.");
+        $('#loading-indicator').hide();
+        $('#payment-form').find('input#commit').prop('disabled', false);
+        return false;
+      } else if (validEmail == false) {
+        $form.find('.payment-errors').text("Invalid email.");
+        $('#loading-indicator').hide();
+        $('#payment-form').find('input#commit').prop('disabled', false);
+        return false;
+      } else if (validPhone == false) {
+        $form.find('.payment-errors').text("Invalid phone.");
+        $('#loading-indicator').hide();
+        $('#payment-form').find('input#commit').prop('disabled', false);
+      } else if (anyErrors) {
+        $('#loading-indicator').hide();
+        $('#payment-form').find('input#commit').prop('disabled', false);
+        return false;
+      }
+
+      // Disable the submit button to prevent repeated clicks
+      $form.find('input#commit').prop('disabled', true);
+      $('#loading-indicator').show();
+
+      Stripe.card.createToken($form, stripeResponseHandler);
+
+      // Prevent the form from submitting with the default action
+      return false;
+    });
+
+    $('#cardNumber').payment('formatCardNumber');
+    $('#cardCVC').payment('formatCardCVC');    
+  });  
+</script>
+
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<style>
+  .stripe-button-el {
+    margin-left: 25px;
+  }
+
+  th {
+    text-align: left;
+  }
+
+  .currency {
+    text-align: right;
+  }
+
+  .total-line {
+    border-bottom: 1px solid #000;
+  }
+
+  #registration-mid-part-right table tbody tr td p,
+    #registration-mid-part-right table tbody tr th p  {
+    padding: 0px 0px 0px 10px;
+  }
+
+  .full {
+    width: 96%;
+  }
+
+  .half {
+    width: 48%;
+  }  
+
+  .fourth {
+    width: 24%;
+  }
+
+  .data-table-inline {
+    padding-right: 10px;
+  }
+
+  #loading-indicator {
+    position: relative; left: 50%; top: 50%; display: none;
+  }
+  
+  .has-error {
+    border-width: 2px;
+    border-color: red!important;
+  }
+
+  .payment-errors {
+    color: red;
+  }
+</style>
+
+<div id="searc-header">
+  <%= render :partial => 'layouts/header_visfire', :locals => {:@error_object => @order} %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+    <div id="search-main2">
+      <h2>Complete Tire Order</h2>
+      <ul>
+        <li>Home /</li>
+        <li><a href="#">Complete Order</a></li>
+      </ul>
+    </div>
+
+    <div id="registration-mid-part" class="clearfix">
+      <div id="registration-mid-part-left">
+        <form method="POST" id="payment-form" action="/order/create">
+          <div class="form-row">
+            <label>
+              <span><p>Name on Card</p></span>
+              <% if @order.user.nil? %>
+                <input type="text" size="50" data-stripe="name" class="full" id="cardName"/>
+              <% else %>
+                <input type="text" size="50" data-stripe="name" class="full" id="cardName" value="<%= @order.user.name %>"/>
+              <% end %>
+            </label>
+          </div>
+
+          <div class="form-row">
+            <table>
+              <tr>
+                <th width="40%"></th>
+                <th width="40%"></th>
+                <th width="20%"></th>
+              </tr>
+              <tr>
+                <td>
+                  <label>
+                    <span><p>Email</p></span>
+                  </label>
+                </td>
+                <td>
+                  <label>
+                    <span><p>Phone</p></span>
+                  </label>
+                </td>
+                <td>
+                  <label>
+                    <span><p>Contact me<br />via text?</p></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td class="data-table-inline">
+                  <% if @order.user.nil? %>
+                    <input type="text" size="50" class="full" id="buyer_email"/>
+                  <% else %>
+                    <input type="text" size="50" class="full" id="buyer_email" 
+                            value="<%= @order.user.email %>" />
+                  <% end %>
+                </td>
+                <td class="data-table-inline">
+                  <% if @order.user.nil? %>
+                    <input type="text" size="50" class="full" id="buyer_phone"/>
+                  <% else %>
+                    <input type="text" size="50" class="full" id="buyer_phone" 
+                            value="<%= @order.user.phone %>" />
+                  <% end %>
+                </td>
+                <td class="data-table-inline">
+                  <center><input type="checkbox" size="50" class="full" id="notify_via_text"/></center>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="form-row">
+            <label>
+              <span><p>Address Line 1</p></span>
+              <input type="text" size="50" data-stripe="address_line1" class="full" id="cardAddress"/>
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label>
+              <span><p>Address Line 2</p></span>
+              <input type="text" size="50" data-stripe="address_line2" class="full"/>
+            </label>
+          </div>
+
+          <div class="form-row">
+            <table>
+              <tr>
+                <th width="50%"></th>
+                <th width="20%"></th>
+                <th width="30%"></th>
+              </tr>
+              <tr>
+                <td>
+                  <label>
+                    <span><p>City</p></span>
+                  </label>
+                </td>
+                <td>
+                  <label>
+                    <span><p>State</p></span>
+                  </label>
+                </td>
+                <td>
+                  <label>
+                    <span><p>Zip</p></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td class="data-table-inline">
+                  <input class="full" type="text" size="20" data-stripe="address_city" id="cardCity"/>
+                </td>
+                <td class="data-table-inline">
+                  <% if false %>
+                    <input class="full" type="text" size="20" data-stripe="address_state" id="cardState"/>
+                  <% else %>
+                    <%= select_tag :cardState, options_for_select(us_states, ""), 
+                        {"data-stripe" => "address_state"} %>
+                  <% end %>
+                </td>
+                <td class="data-table-inline">
+                  <input class="full" type="text" size="20" data-stripe="address_zip" id="cardZip"/>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="form-row">
+            <table>
+              <tr>
+                <th width="70%"></th>
+                <th width="30%"></th>
+              </tr>
+              <tr>
+                <td>
+                  <label>
+                    <span><p>Card Number</p></span>
+                  </label>
+                </td>
+                <td>
+                  <label>
+                    <span><p>CVC</p></span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td class="data-table-inline">
+                  <input class="full" type="text" size="20" data-stripe="number" id="cardNumber" />
+                </td>
+                <td class="data-table-inline">
+                  <input class="full" type="text" size="4" data-stripe="cvc" id="cardCVC" />
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="form-row">
+            <label style="display: inline;">
+              <span><p>Expiration (MM/YY)</p></span>
+              <% if false %>
+                <input type="text" size="2" data-stripe="exp-month" 
+                      style="width: 20%" id="cardExpMonth"/>
+              <% else %>
+                <%= select_tag(:cardExpMonth, options_for_select(@ar_months),
+                        {'data-stripe' => "exp-month", :style => 'width: 58%; max-width: 150px'}) %>
+              <% end %>
+            </label>
+            <span style="display: inline;"> / </span>
+            <% if false %>
+              <input type="text" size="4" data-stripe="exp-year" 
+                    style="width: 30%" id="cardExpYear"/>
+            <% else %>
+                <%= select_tag(:cardExpYear, options_for_select(@ar_years),
+                        {'data-stripe' => "exp-year", :style => 'width: 35%; max-width: 75px'}) %>
+            <% end %>
+          </div>
+
+          <input class="btn btn-small btn-primary" name="commit" type="submit" value="Submit Payment" data-validate="true">
+          <img src="/assets/loading.gif" id="loading-indicator" style="display:none" />
+          <br /><br /><span class="payment-errors"></span>
+        </form>
+      </div>
+
+      <div id="registration-mid-part-right" class="clearfix">
+        <table>
+          <th><p>Description</p></th>
+          <th class="currency"><p>Price</p></th>
+          <th class="currency"><p>Qty</p></th>
+          <th class="currency"><p>Item Total</p></th>
+          <tr>
+            <td><p><%= @order.tire_listing.short_description %></p></td>
+            <td class="currency"><p><%= number_to_currency @order.tire_ea_price %></p></td>
+            <td class="currency"><p><%= @order.tire_quantity %></p></td>
+            <td class="currency"><p><%= number_to_currency @order.total_tire_price %></p></td>
+          </tr>
+          <% if @breakout_sales_tax %>
+            <tr>
+              <td><p>Sales Tax on tires</p></td>
+              <td></td>
+              <td></td>
+              <td class="currency"><p><%= number_to_currency @order.sales_tax_on_tires, :unit => '' %></p></td>
+            </tr>
+            <tr>
+              <td><p>Tire Installation</p></td>
+              <td class="currency"><p><%= number_to_currency @order.tire_ea_install_price %></p></td>
+              <td class="currency"><p><%= @order.tire_quantity %></p></td>
+              <td class="currency"><p><%= number_to_currency @order.total_install_price, :unit => '' %></p></td>
+            </tr>
+            <tr>
+              <td><p>Sales Tax on installation</p></td>
+              <td></td>
+              <td></td>
+              <td class="currency"><p><%= number_to_currency @order.sales_tax_on_installation, :unit => '' %></p></td>
+            </tr>
+          <% else %>
+            <tr>
+              <td><p>Tire Installation</p></td>
+              <td class="currency"><p><%= number_to_currency @order.tire_ea_install_price %></p></td>
+              <td class="currency"><p><%= @order.tire_quantity %></p></td>
+              <td class="currency"><p><%= number_to_currency @order.total_install_price, :unit => '' %></p></td>
+            </tr>
+            <tr>
+              <td><p>Sales Tax on order</p></td>
+              <td></td>
+              <td></td>
+              <td class="currency"><p><%= number_to_currency @order.sales_tax_collected, :unit => '' %></p></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td><p>Convenience Fee (<%= $th_user_fee_percent %>% of tire total)</p></td>
+            <td class="currency"></td>
+            <td class="currency"></td>
+            <td class="currency"><p><%= number_to_currency @order.th_user_fee, :unit => ''  %></p></td>
+          </tr>
+          <tr>
+            <td><p>Sales tax on Convenience Fee</p></td>
+            <td class="currency"></td>
+            <td class="currency"></td>
+            <td class="currency"><p><%= number_to_currency @order.th_sales_tax_collected, :unit => ''  %></p></td>
+          </tr>
+          <tr>
+            <td colspan="4" class="total-line"><span style="max-height: 1px"></span></td>
+          </tr>
+          <tr>
+            <td><p>Total Order</p></td>
+            <td></td>
+            <td></td>
+            <td class="currency"><p><%= number_to_currency @order.total_order_price %></p></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

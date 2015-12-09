@@ -1,0 +1,20 @@
+<font size="1">
+<a href="#" 
+	id="sidewall-popover"
+	rel="popover" 
+	title="Sidewall" 
+	data-content="<%= render :file => '/layouts/_sidewall_info_content.rhtml'%>">
+	<% if defined?(icon_black) %>
+		<i class="icon-question-sign icon-black"></i>
+	<% else %>
+		<i class="icon-question-sign icon-white"></i>
+	<% end %>
+</a>
+</font>
+<script>
+	$(function()
+		{
+			$("#sidewall-popover").popover();
+		}
+	);
+</script>

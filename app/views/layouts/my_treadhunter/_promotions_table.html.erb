@@ -1,0 +1,66 @@
+<% unless !@account.tire_stores.first.nil? && @account.tire_stores.first.private_seller? %>
+	<div class="add-promotion"><%= link_to "Create New Promotion", "/create_promotion", :class => "btn-vf", 
+			:style=>"display:inline-block;" %></div>
+<% end %>
+
+<script>
+	$(function() {
+		$( "#promotions_dialog" ).dialog({
+			autoOpen: false,
+			show: "blind",
+			closeOnEscape: true,
+			resizable: true,
+			maxHeight: 365,
+			height: 365
+		});
+	});
+
+	function load_and_show_promotion(promotion_id) {
+		$("div#promotions_dialog").html('<center><br /><img src="/assets/loading.gif"><br /><p>Loading...</p></center>');
+		$('#promotions_dialog').dialog('open');
+
+		$.ajax({
+			type: "GET",
+			dataType: "html",
+			url: '/ajax/ajax_promotion_details',
+			data: {promotion_id: promotion_id},
+			success:function(result){
+				$("div#promotions_dialog").html(result);
+				ddaccordion.init(ddaccordionsetting);
+			},
+			error:function(result){
+				$("div#promotions_dialog").html('Error loading promotion');
+			}
+		});
+	}
+</script>
+
+<div id="promotions_dialog" title="Current Promotions">
+	<div id='promotionsDiv'>
+	</div>
+</div>
+
+<table id="promotions-table" class="display">
+	<thead>
+		<tr>
+			<th align=left>Start Date</th>
+			<th align=left>End Date</th>
+			<th align=left>Level</th>
+			<th align=left>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @promotions.each do |p| %>
+			<tr>
+				<td align=left><%= p.start_date %></td>
+				<td align=left><%= p.end_date %></td>
+				<td align=left><%= p.promotion_level_text %></td>
+				<td align=left>
+					<a href="#" onclick="load_and_show_promotion(<%= p.id %>)">
+						<%= p.text_description %>
+					</a>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

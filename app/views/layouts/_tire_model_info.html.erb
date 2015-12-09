@@ -1,0 +1,112 @@
+<div id='tire_model_info'>
+  <% unless tire_model.nil? || hidden %>
+
+    <%= render :partial => 'layouts/treadwear_info_modal' %>
+    <%= render :partial => 'layouts/temperature_info_modal' %>
+    <%= render :partial => 'layouts/traction_info_modal' %>
+    <%= render :partial => 'layouts/sidewall_info_modal' %>
+    <%= render :partial => 'layouts/load_index_info_modal' %>
+    <%= render :partial => 'layouts/speed_rating_info_modal' %>
+
+    <div class="row-fluid">
+      <div class="span12">
+        <h4>Information about  <%= tire_model.tire_manufacturer.name %>  
+          <%= tire_model.name %></h4>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span4">
+        Treadwear:
+      </div>
+      <div class="span8 hidden-desktop">
+        <a href="#treadwear_modal" data-toggle="modal">
+          <%= tire_model.utqg_treadwear %>
+        </a>
+      </div>
+      <div class="span8 visible-desktop">
+        <%= tire_model.utqg_treadwear %>
+        <%= render :partial => 'layouts/treadwear_info_popover' %>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span4">
+        Temp Rating:
+      </div>
+      <div class="span8 hidden-desktop">
+        <a href="#temperature_modal" data-toggle="modal">
+          <%= tire_model.utqg_temp %>
+        </a>
+      </div>
+      <div class="span8 visible-desktop">
+        <%= tire_model.utqg_temp %>
+        <%= render :partial => 'layouts/temperature_info_popover' %>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span4">
+        Traction:
+      </div>
+      <div class="span8 hidden-desktop">
+        <a href="#traction_modal" data-toggle="modal">
+          <%= tire_model.utqg_traction %>
+        </a>
+      </div>
+      <div class="span8 visible-desktop">
+        <%= tire_model.utqg_traction %>
+        <%= render :partial => 'layouts/traction_info_popover' %>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span4">
+        Sidewall:
+      </div>
+      <div class="span8 hidden-desktop">
+        <a href="#sidewall_modal" data-toggle="modal">
+          <%= tire_model.sidewall %>
+        </a>
+      </div>
+      <div class="span8 visible-desktop">
+        <%= tire_model.sidewall %>
+        <%= render :partial => 'layouts/sidewall_info_popover' %>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span4">
+        Load Index:
+      </div>
+      <div class="span8 hidden-desktop">
+        <a href="#load_index_modal" data-toggle="modal">
+          <%= tire_model.load_index %>
+        </a>
+      </div>
+      <div class="span8 visible-desktop">
+        <%= tire_model.load_index %>
+        <%= render :partial => 'layouts/load_index_info_popover' %>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span4">
+        Original Tread Depth<br /> <font size="1">(in 1/32s of an inch)</font>
+      </div>
+      <div class="span8">
+        <%= tire_model.tread_depth %>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span4">
+        Speed Rating:
+      </div>
+      <div class="span8 hidden-desktop">
+        <a href="#speed_rating_modal" data-toggle="modal">
+          <%= tire_model.load_index %>
+        </a>
+      </div>
+      <div class="span8 visible-desktop">
+        <%= tire_model.speed_rating %>
+        <%= render :partial => 'layouts/speed_rating_info_popover' %>
+      </div>
+    </div>
+    <br />
+  <% end %>
+</div>
+</div>

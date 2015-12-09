@@ -1,0 +1,23 @@
+<% if review_author.blank? %>
+  <div class="upper">
+    <span class="location"><%= store_name %>, <%= location %></span>
+    <span class="rating"></span>
+  </div>
+  <p class="text">
+    <%= review_text %>
+  </p>
+  <div class="read-more">
+
+  </div>
+<% else %>
+  <div class="upper">
+    <span class="location"><%= store_name %>, <%= location %></span>
+    <span class="rating"></span>
+  </div>
+  <p class="text">
+    <%= review_text %> -- <%= review_author %>
+  </p>
+  <div class="read-more">
+    <a href="<%= review_url %>" target="_blank">READ MORE</a>
+  </div>
+<% end %>

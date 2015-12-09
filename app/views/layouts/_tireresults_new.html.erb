@@ -1,0 +1,42 @@
+
+<script>
+$(document).ready(function () {      
+     $('.listing-detail div').click(function (event) {
+        if ($(this).attr('id').substr(0, 8) == 'list_id_') {
+            var listing_id = $(this).attr('id').substr(8);
+            var path = '/tire_listings/' + listing_id;
+            window.open(path, '_self', false); 
+        };
+     });
+ });
+</script>
+
+    <div id="search-forms">
+        <h1>Your search results for:
+            <h3>
+        <%= @tire_search.auto_year.modelyear unless @tire_search.auto_year.nil? %>
+        <%= @tire_search.auto_manufacturer.name unless @tire_search.auto_manufacturer.nil? %>
+        <%= @tire_search.auto_model.name unless @tire_search.auto_model.nil? %>
+        <%= @tire_search.auto_option.name unless @tire_search.auto_option.nil? %>
+        <a href="#vehicle_modal" data-toggle="modal">
+            <%= @tire_search.tire_size.sizestr unless @tire_search.tire_size.nil? %>
+        </a>
+        for  <%= @tire_search.geo_level %>
+            </h3>
+        </h1>
+
+        <% if not @tire_search.tirelistings.nil? %>
+            <% if @tire_search.tirelistings.count > 0 %>
+                <!--
+                <%= will_paginate @tire_search.paginated_tirelistings(params) %>
+                -->
+                <%= will_paginate @tire_search.paginated_tirelistings(params), 
+                        :page_links => false, :container => true %><p /><p />
+                <br /><p />
+        	    <%= render @tire_search.paginated_tirelistings(params) %>
+            <% else %>
+            	<h3>No results found.</h3>
+            <% end %>
+        <% end %>
+    </div>
+    

@@ -1,0 +1,36 @@
+<div id="dialog-tire-size-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">HOW TO FIND YOUR TIRE SIZE</h5>
+	<p>Most tires will indicate the size on the sidewall in the following order:</p>
+	<hr/>
+	
+	<div class="type-name">HIGH-FLOTATION TIRES</div>
+	<%= image_tag "tire-size-help-high-flot.jpg" %>
+	<p>High-flotation tires will indicate the size on the sidewall in the following order:</p>
+	<div class="orange-numbered item1">Overall Diameter (35 in this example)</div>
+	<div class="orange-numbered item2">Section Width (12.5 or 1250 in this example)</div>
+	<div class="orange-numbered item3">Rim Diameter (17 in this example)</div>
+	
+	<div class="or-separator">
+		<span class="line1"></span>
+		<span class="line2"></span>
+		<div class="or">OR</div>
+	</div>
+	
+	<div class="type-name">PASSENGER TIRES</div>
+	<%= image_tag "tire-size-help-passenger.jpg" %>
+	<p>Passenger tires will indicate the size on the sidewall in the following order:</p>
+	<div class="orange-numbered item1">Overall Diameter (215 in this example)</div>
+	<div class="orange-numbered item2">Section Width (60 in this example)</div>
+	<div class="orange-numbered item3">Rim Diameter (16 in this example)</div>
+</div>
+
+<script>
+	//var mobile = ($(document).width() < 400);
+	
+	//Initialize the dialog with a width
+	$("#dialog-tire-size-help").dialog({
+		autoOpen: false,
+		modal: true,
+		width: 400
+	});
+</script>

@@ -1,0 +1,246 @@
+.infobox-full
+{
+  height: 161px; /*Specify Height*/
+  width:  924px; /*Specify Width*/
+  background-repeat:no-repeat;
+  background-position:90% 10%;
+  border-radius: 20px;
+  margin-top: 24px;
+}
+
+.half-height
+{
+  height: 80px;
+}
+
+div.results-item {
+  width: 650px;
+}
+
+div.secondary-results {
+  width: 234px;
+}
+
+h2.orange-letters {
+  font-size: 1.15em;
+}
+
+div#header-brand {
+  width: 90%;
+}
+
+.infobox-half
+{
+  height: 128px; /*Specify Height*/
+  width:  440px; /*Specify Width*/
+  background-repeat:no-repeat;
+  background-position:90% 10%;
+  border-radius: 20px ;
+  margin-top: 24px;
+}
+
+.first-letter{
+  font-size: 3.0em;
+  font-style: italic;
+  font-weight: bold;
+  margin-right: -5px;
+  text-transform: uppercase;
+}
+
+.rest-of-word {
+  margin-left: -4px;
+  font-size: 2.0em;
+  font-style: italic;
+  font-weight: bold;
+  /*font-family: cursive;*/
+}
+
+.logo-banner
+{
+  height: 200px;
+  background: #FFFFFF url('/assets/logo_banner.jpg');
+  font-family: Verdana,Arial,Helvetica,sans-serif;
+  font-size: 1.5em;
+  margin-top: 0px;
+}
+
+.inforow
+{
+  width: 924px;
+}
+
+.infocol-left
+{
+  float: left; 
+  display: inline;
+}
+
+.infocol-right
+{
+  float: right; 
+  display: inline;
+}
+
+.clear{clear: both;}
+
+.textbox {
+  background-image: -ms-radial-gradient(center, circle farthest-corner, #FFFFFF 0%, #EFEFEF 100%);
+  background-image: -moz-radial-gradient(center, circle farthest-corner, #FFFFFF 0%, #EFEFEF 100%);
+  background-image: -o-radial-gradient(center, circle farthest-corner, #FFFFFF 0%, #EFEFEF 100%);
+  background-image: -webkit-gradient(radial, center center, 0, center center, 505, color-stop(0, #FFFFFF), color-stop(1, #EFEFEF));
+  background-image: -webkit-radial-gradient(center, circle farthest-corner, #FFFFFF 0%, #EFEFEF 100%);
+  background-image: radial-gradient(circle farthest-corner at center, #FFFFFF 0%, #EFEFEF 100%);
+}
+
+.mechanic {
+  background: #FFFFFF url('/images/mechanic_only.png');
+  width: 352px; height: 161px;
+}
+
+.street-map {
+  background: #FFFFFF url('/images/street_map.jpg');
+  width: 128px; height: 128px;
+}
+
+.tirelogo {
+  background: #FFFFFF url('/assets/th_icon_128.png');
+  width: 128px; height: 128px;
+}
+
+.carpic {
+  background: #FFFFFF url('/assets/car.png');
+  width: 180px; height: 120px;
+}
+
+.settingspic {
+  background: #FFFFFF url('/assets/settings.png');
+  width: 80px; height: 80px;
+}
+
+.vignette {
+  border-radius: 20px ;
+  margin-left: 0px; 
+  float: left;
+  -webkit-box-shadow:
+            inset 0 0 50px #FFF,
+                inset 0 0 50px #FFF,
+                inset 0 0 50px #FFF;
+   
+     -moz-box-shadow:
+            inset 0 0 50px #FFF,
+                inset 0 0 50px #FFF,
+                inset 0 0 50px #FFF;
+   
+          box-shadow:
+            inset 0 0 50px #FFF,
+                inset 0 0 50px #FFF,
+                inset 0 0 50px #FFF;
+}
+
+body .infobox-full div p, body .infobox-full  h3 {
+  padding-bottom: 0;
+  padding-left: 380px;
+  padding-right: 30px;
+  /* font-size: 1.0em; */
+  width: 500px;
+}
+
+body .infobox-half p, body .infobox-half h3 {
+  padding-bottom: 0;
+  padding-left: 10px;
+  /* font-size: 1.0em; */
+}
+
+body .text-left p {
+  padding-right: 140px;
+}
+
+body .text-right p {
+  padding-left: 140px;
+}
+
+.logo-right{
+  float: right;
+}
+
+.logo-left{
+  float: left;
+}
+
+div.inforow select.tires {
+  width: 95px;
+}
+
+div.inforow select.cars {
+  width: 165px;
+}
+
+.secondary{width: 300px; margin-right: 40px; font-size: 12px; text-align: left; float: left;}
+.primary{width: 584px; float: right;}
+.primary-results{width: 584px; float: left; margin-right: 40px; z-index: 1000}
+.secondary-results{width: 300px; font-size: 12px; text-align: left; float: right; z-index: 100}
+
+label {
+  margin-bottom: 5px;
+}
+
+.check-options ul {
+  margin-top: -5px;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+/*
+select.tires, select.cars {
+  height: 1.8em;
+  font-size: 0.7em;
+}
+*/
+
+ul.selecttire, ul.selectcar {
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+ul.selecttire table {
+  margin-top: 3px; 
+  margin-bottom: -9px;
+}
+
+h3.box-title {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+div.text-right form ul.selecttire {
+  padding-left: 100px;
+}
+
+div.inforow button {
+  padding:2px 4px;
+  font-size:12px;
+  line-height:normal;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  border-radius:5px;
+}
+
+div.inforow select.tires, div.inforow select.cars {
+  height: 1.8em;
+  font-size: 1.4em;
+}
+
+div.tire-details-info {
+  width: 100%;
+}
+
+div.footer {
+  padding: 30px;
+}
+
+.ui-tabs .ui-tabs-panel {
+  padding: 0px;
+}

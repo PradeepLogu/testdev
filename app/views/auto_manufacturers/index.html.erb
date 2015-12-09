@@ -1,0 +1,21 @@
+<h1>Listing auto_manufacturers</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @auto_manufacturers.each do |auto_manufacturer| %>
+  <tr>
+    <td><%= link_to 'Show', auto_manufacturer %></td>
+    <td><%= link_to 'Edit', edit_auto_manufacturer_path(auto_manufacturer) %></td>
+    <td><%= link_to 'Destroy', auto_manufacturer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Auto manufacturer', new_auto_manufacturer_path %>

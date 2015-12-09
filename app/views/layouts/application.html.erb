@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <% if !Rails.env.production? %>
+      <meta name="robots" content="noindex">
+    <% end %>
+    <title><%= yield(:title) %></title>
+    <meta name="description" content="<%= yield(:metadescription) %>" />
+    <% if !yield(:metakeywords).blank? %>
+      <meta name="keywords" content="<%= yield(:metakeywords) %>" />
+    <% end %>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!--<meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; width=device-width"/>-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="content-language" content="en-us">
+
+    <%= javascript_include_tag "application" %>
+    <%= stylesheet_link_tag "application", media: "all" %>
+    <%= javascript_include_tag "mobile_layout.js" %>
+
+    <%= javascript_include_tag "smooth-scroll.js" %>
+    <%= javascript_include_tag "mobilemenu2.js" %>
+    <!--mobile menu -->
+    <%= javascript_include_tag "jquery.jqtransform.js" %>
+
+    <%= csrf_meta_tags %>
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <%= analytics_init if Rails.env.production? %>
+  </head>
+  <% if in_storefront? %>
+    <%= stylesheet_link_tag "storefront" %>
+    <%= render 'layouts/storefront/css_overrides' %>
+    <body>
+	  <section id="outer-wrapper" class="clearfix">
+        <%= render 'layouts/storefront/header' %>
+
+        <% flash.each do |key, value| %>
+          <div class="alert alert-<%= key %>">
+            <div><%= value %></div>
+          </div>
+        <% end %>
+        <%= yield %>
+        <%= render 'layouts/storefront/footer' %>
+      </section>
+    </body>
+  <% else %>
+    <body>
+      <section id="outer-wrapper" class="clearfix">
+		<%= render 'layouts/header_visfire' %>
+        <%= yield %>
+        <% if yield(:nofooter).blank? %>
+          <%= render 'layouts/footer_visfire' %>
+        <% end %>
+      </section>
+    </body>
+    <script>
+        smoothScroll.init({
+          speed: 500, 
+          easing: 'Linear',
+          updateURL: false,
+          offset: 0,
+          callbackBefore: function ( toggle, anchor ) {}, 
+          callbackAfter: function ( toggle, anchor ) {} 
+        });  
+  </script>
+  <% end %>
+</html>

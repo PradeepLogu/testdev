@@ -1,0 +1,192 @@
+<% provide :title, "Add Markups" %>
+
+<style>
+	.markup-body {
+		padding-left: 20px;
+		margin-bottom: 40px;
+	}
+	h3 {
+		color: #f05a29;
+		font-style: bold;
+		font-size: 36px;
+		margin-top: 25px;
+		margin-bottom: 10px;
+	}
+	.markup-num {
+		display:inline;
+	}
+	.markup-size {
+		display: inline;
+	}
+	.markup-manu {
+		font-size: 18px;
+		font-weight: bold;
+		font-style: bold;
+		display: inline;
+		margin-right: 15px;
+	}
+	.markup-pct {
+		display: inline;
+		margin-right: 15px;
+	}
+	.markup-category {
+		display: inline;
+	}
+	.markup-model {
+		display: inline;
+	}
+	.markup-pct input {
+		width: 30px;
+	}
+	.markup-add {
+		display: inline;
+	}
+	.markup-add a, .markup-more-control a {
+		color: #f05a29;
+	}
+	.markup-even {
+		background: none;
+		padding-top: 15px;
+		padding-bottom: 15px;
+	}
+	.markup-odd {
+		background-color: #EBEBEB;
+		padding-top: 15px;
+		padding-bottom: 15px;
+	}
+	.sub-markup {
+		padding-left: 25px;
+		padding-bottom: 25px;
+	}
+</style>
+<script>
+	function delete_markup(e) {
+		var markup_element = $(e).parent();
+		markup_element.remove();
+		renumber_sub_markups();
+	}
+	function add_markup(manu_id) {
+		var new_node = $("#manu-" + manu_id + "-div").find("div#new-markup-" + manu_id).clone();
+		new_node.find(".skip").remove();
+		$("#manu-" + manu_id + "-div").append(new_node.html());
+		renumber_sub_markups();
+	}
+	function need_more_control(e, manu_id) {
+		$(e).parent().hide();
+		add_markup(manu_id);
+	}
+	function renumber_sub_markups() {
+		$("div.markup-even").each(function(index) {
+			var i = 1;
+			var my_parent = $(this);
+			my_parent.find("div.markup-more-control").show();
+			my_parent.find("div.markup-add").hide();
+			$(this).find("div.sub-markup").each(function(index2) {
+				if (!$(this).parent().hasClass("hidden")) {
+					// if we have at least one reverse these
+					my_parent.find("div.markup-more-control").hide();
+					my_parent.find("div.markup-add").show();
+					$(this).find("div.markup-num").html((i) + ".");
+					i = i + 1;
+				}
+			});
+		});
+		$("div.markup-odd").each(function(index) {
+			var i = 1;
+			var my_parent = $(this);
+			my_parent.find("div.markup-more-control").show();
+			my_parent.find("div.markup-add").hide();
+			$(this).find("div.sub-markup").each(function(index2) {
+				if (!$(this).parent().hasClass("hidden")) {
+					// if we have at least one reverse these
+					my_parent.find("div.markup-more-control").hide();
+					my_parent.find("div.markup-add").show();
+					$(this).find("div.markup-num").html((i) + ".");
+					i = i + 1;
+				}
+			});
+		});		
+	}
+	$( document ).ready(function() {
+		renumber_sub_markups();
+	});
+</script>
+<div class="markup-body">
+	<h3>TIRE PRICING</h3>
+	<p>
+		Our records indicate you are a customer of <b><%= @distributor.distributor_name.upcase %></b> from <b><%= @warehouse.city.upcase %>, <%= @warehouse.state.upcase %></b>.  Your pricing structure is at <%= @distributor_import.distributor_tier %>. TreadHunter will automatically create listings for each of the brands listed below. You should now set the markup percentage above your <%= @distributor_import.distributor_tier %> pricing.
+	</p>
+	<br />
+	<br />
+	<%= form_tag "/tire_store_markups/edit_multiple", :method => :post do %>
+		<%= hidden_field_tag :tire_store_id, @tire_store.id %>
+		<%= hidden_field_tag :warehouse_id, @warehouse.id %>
+		<% if params[:register] %>
+			<%= hidden_field_tag :next, "stripe" %>
+		<% end %>
+		<% @manu_markup_hash.each do |manu, markups| %>
+			<div class="<%= cycle('markup-even', 'markup-odd') %>" id="manu-<%= manu.id %>-div">
+				<% markups.each_with_index do |markup, i| %>
+					<% if markup.manu_level_markup %>
+						<div class="markup-manu"><%= manu.name %></div>
+						<% if markup.new_record? %>
+							<% markup_fields = "new_markups[]" %>
+						<% else %>
+							<% markup_fields = "markups[]" %>
+						<% end %>
+						<%= fields_for markup_fields, markup do |f| %>
+							<%= f.hidden_field :id, multiple: true %>
+							<%= f.hidden_field :new_record?, multiple: true %>
+							<%= f.hidden_field :tire_manufacturer_id , multiple: true%>
+							<div class="markup-pct">
+								<% if markup.markup_pct % 1 == 0 %>
+									<%= f.text_field :markup_pct, 
+										:value => markup.markup_pct.to_i, 
+										multiple: true %> %
+								<% else %>
+									<%= f.text_field :markup_pct, multiple: true %> %
+								<% end %>
+							</div>
+							<div class="markup-add">
+								<a href="#" onclick="add_markup(<%= manu.id %>); return false;">
+									Add a New Tire Price
+								</a>
+							</div>
+						<% end %>
+						<div class="markup-more-control">
+							<a href="#" 
+								onclick="need_more_control(this, <%= manu.id %>); return false;">
+								Need More Control +
+							</a>
+						</div>
+					<% end %>
+				<% end %>
+				<% markups.each_with_index do |markup, i| %>
+					<% if !markup.manu_level_markup %>
+						<%= render :partial => "non_manu_markup", 
+								:locals => {:manu => manu, :markup => markup, :i => i,
+											:@tire_categories => @manu_tire_category_hash[manu],
+											:@tire_models => @manu_tire_model_hash[manu],
+											:@tire_sizes => @manu_tire_size_hash[manu]} %>
+					<% end %>
+				<% end %>
+				<div id="new-markup-<%= manu.id %>" class="hidden">
+					<%= render :partial => "non_manu_markup", 
+							:locals => {:manu => manu, 
+										:markup => TireStoreMarkup.new(:tire_manufacturer_id => manu.id, :markup_type => 0, :markup_pct => 20.0, 
+											:markup_tire_size_id => 20.0,
+											:markup_tire_model_info_id => 20.0,
+											:markup_tire_category_id => 20.0,
+											:skip => true),
+										:i => 0,
+										:@tire_categories => @manu_tire_category_hash[manu],
+										:@tire_models => @manu_tire_model_hash[manu],
+										:@tire_sizes => @manu_tire_size_hash[manu]} %>
+				</div>
+			</div>
+		<% end %>
+		<center>
+			<%= submit_tag "SET TIRE PRICING", :class => 'btn-primary btn btn-large' %>
+		</center>
+	<% end %>
+</div>

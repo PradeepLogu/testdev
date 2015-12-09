@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Thank you for using TreadHunter.com, <%= @reservation.name %></h1>
+    <p>Dear <%= @reservation.name %>,
+
+Thank you for using TreadHunter.com to reserve a set of <%= @reservation.tire_listing.short_description %> at a price of $<%= @reservation.formatted_price %>.<p/>
+
+The seller of these tires will be contacting you shortly.  If you do not hear
+from the seller in 24 hours, contact them at:<p />
+
+<%= @reservation.tire_store.visible_name %><br />
+<%= @reservation.tire_store.visible_phone %><br />
+<%= @reservation.tire_store.full_address %><p />
+
+Once again, we appreciate you using TreadHunter.com to find the best deals on tires in your area!
+    </p>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+<% if @content == '1' %>
+	<% @article = render 'layouts/storefront_info/tire_inflation' %>
+<% elsif @content == '2' %>
+	<% @article = render 'layouts/storefront_info/tread_depth' %>
+<% elsif @content == '3' %>
+	<% @article = render 'layouts/storefront_info/professional_installation' %>
+<% elsif @content == '4' %>
+	<% @article = render 'layouts/storefront_info/tire_information' %>
+<% else %>
+	<% @article = render 'layouts/storefront_info/index' %>
+<% end %>
+
+$("#content").replaceWith('<%= escape_javascript(@article) %>');

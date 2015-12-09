@@ -1,0 +1,19 @@
+      <div class="inputs">
+        <label>SEARCH</label>
+        <%= f.select(:new_or_used, TireSearch::ALT_NEW_OR_USED_CHOICES, 
+                            {:selected => session[:new_or_used]},
+                            {:style => "height: 30px; margin-bottom: 0px;", :class => "users"}) %>              
+        <label>QTY</label>
+        <%= f.select(:quantity, TireSearch::QUANTITY_CHOICES, 
+                {:selected => session[:quantity]}, 
+                {:style => "height: 30px; margin-bottom: 0px;", :class=>"users"}) %>
+
+        <br />
+        <label>LOCATION</label>
+        <%= f.text_field :locationstr, :class=>'user', :size => 50,  
+                        :value => session[:location] %>
+        <%= f.select(:radius, TireSearch::RADIUS_CHOICES, 
+                  {:selected => session[:radius]}, 
+                  {:style => "height: 30px; margin-bottom: 0px;", :class => "users"}) %> miles
+
+      </div>

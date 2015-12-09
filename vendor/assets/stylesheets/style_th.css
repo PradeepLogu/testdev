@@ -1,0 +1,1302 @@
+/*
+#storeheading{float: left;}
+#storeheading img {max-width: 30%; margin-left: 10%;}   
+*/
+#storeheading {width: 1220px; margin: 50px auto;}
+#storeheading img {max-width: 40%;}
+
+.follow-box ul {width: 240px;}
+
+/* add required field asterisk */
+label.required:after {
+    content: " *";
+}
+
+/* -------------
+ * Checkboxes
+ * ------------- */
+span.jqTransformCheckboxWrapper{
+    display:block;float:left;
+    margin-top:5px;
+}
+a.jqTransformCheckbox {
+    background: transparent url(/assets/checkbox.gif) no-repeat center top;
+    vertical-align: middle;
+    height: 19px;
+    width: 18px;
+    display:block;/*display: -moz-inline-block;*/
+}
+
+/* -------------
+ * Inputs
+ * ------------- */
+.jqTransformInputWrapper {
+    background: transparent url(/assets/homepage/select.gif) repeat left top;
+    height: 38px;
+    padding: 0px;
+    float:left;
+    margin: 30px 0 0 10px;
+    width: 45%;
+}
+
+.jqTransformInputInner {
+    background: transparent url(/assets/homepage/select.gif) repeat top right;
+    padding: 0px;
+    margin: 0px;
+}
+
+.jqTransformInputInner div {
+    height: 38px;
+    margin:0px 0px 0px 8px;
+}
+
+.jqTransformInputInner div input {
+    font:16px/25px 'proxima_nova_rgregular';
+    color:#fff;  
+    vertical-align: middle;
+    height: 38px;
+    border: none;
+    padding: 0px 0px 0px 0px;
+    margin: 0px;
+    background:transparent;
+}
+
+
+* html .jqTransformInputInner div input {
+    padding: 6px 0 0 0;
+    margin: 0 0 0 -8px;
+    height:24px;
+}
+
+*+ html .jqTransformInputInner div input {
+    padding: 6px 0 0 0;
+    margin-left:-10px;
+    height:24px;
+}
+
+/*hover*/
+.jqTransformInputWrapper_hover{ background-position: left -31px ;}
+.jqTransformInputWrapper_hover div.jqTransformInputInner{ background-position: right -31px ;}
+
+/*focus*/
+.jqTransformInputWrapper_focus{ background-position: left -62px ;}
+.jqTransformInputWrapper_focus div.jqTransformInputInner{ background-position: right -62px ;}
+
+.feature-right ul li img{ max-width:17%;}
+
+
+/* -------------
+ * Textarea
+ * ------------- */
+table.jqTransformTextarea td#jqTransformTextarea-mm textarea{
+    font-size: 12px;
+    line-height: 16px;
+}
+
+table.jqTransformTextarea td{
+font-size: 1px;
+line-height: 1px;
+width: 5px;
+height: 5px;
+margin: 0;
+padding: 0;
+}
+table.jqTransformTextarea{}
+table.jqTransformTextarea tr{
+/*border: 1px solid red;*/
+
+}
+table.jqTransformTextarea textarea{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    /*background: none;*/
+}
+table.jqTransformTextarea td#jqTransformTextarea-tl{background: url(/assets/textarea_tl.gif) no-repeat top left;}
+table.jqTransformTextarea td#jqTransformTextarea-tm{background: url(/assets/textarea_tm.gif) repeat-x top left;}
+table.jqTransformTextarea td#jqTransformTextarea-tr{background: url(/assets/textarea_tr.gif) no-repeat top left;}
+
+table.jqTransformTextarea td#jqTransformTextarea-ml{background: url(/assets/textarea_ml.gif) repeat-y top left;}
+table.jqTransformTextarea td#jqTransformTextarea-mm{background: url(/assets/textarea-mm.gif) repeat;}
+table.jqTransformTextarea td#jqTransformTextarea-mr{background: url(/assets/textarea_mr.gif) repeat-y top left;}
+
+table.jqTransformTextarea td#jqTransformTextarea-bl{background: url(/assets/textarea_bl.gif) no-repeat top left;}
+table.jqTransformTextarea td#jqTransformTextarea-bm{background: url(/assets/textarea_bm.gif) repeat-x top left;}
+table.jqTransformTextarea td#jqTransformTextarea-br{background: url(/assets/textarea_br.gif) no-repeat top left;}
+
+/*hover*/
+table.jqTransformTextarea-hover td#jqTransformTextarea-tl{background-position:0px -5px;}
+table.jqTransformTextarea-hover td#jqTransformTextarea-tm{background-position:0px -5px;}
+table.jqTransformTextarea-hover td#jqTransformTextarea-tr{background-position:0px -5px;}
+table.jqTransformTextarea-hover td#jqTransformTextarea-ml{background-position:-5px 0px;}
+table.jqTransformTextarea-hover td#jqTransformTextarea-mm{background-image: url(/assets/textarea-mm-hover.gif);}
+table.jqTransformTextarea-hover td#jqTransformTextarea-mr{background-position:-5px 0px;}
+table.jqTransformTextarea-hover td#jqTransformTextarea-bl{background-position:0px -5px;}
+table.jqTransformTextarea-hover td#jqTransformTextarea-bm{background-position:0px -5px;}
+table.jqTransformTextarea-hover td#jqTransformTextarea-br{background-position:0px -5px;}
+
+/*focus*/
+table.jqTransformTextarea-focus td#jqTransformTextarea-tl{background-position:0px -10px;}
+table.jqTransformTextarea-focus td#jqTransformTextarea-tm{background-position:0px -10px;}
+table.jqTransformTextarea-focus td#jqTransformTextarea-tr{background-position:0px -10px;}
+table.jqTransformTextarea-focus td#jqTransformTextarea-ml{background-position:-10px 0px;}
+table.jqTransformTextarea-focus td#jqTransformTextarea-mm{background-image: url(/assets/textarea-mm-focus.gif);}
+table.jqTransformTextarea-focus td#jqTransformTextarea-mr{background-position: -10px 0px;}
+table.jqTransformTextarea-focus td#jqTransformTextarea-bl{background-position:0px -10px;}
+table.jqTransformTextarea-focus td#jqTransformTextarea-bm{background-position:0px -10px;}
+table.jqTransformTextarea-focus td#jqTransformTextarea-br{background-position:0px -10px;}
+
+table.jqTransformTextarea .jqTransformSafariTextarea div {
+    position: relative;
+    overflow: hidden;
+    border: 0px solid red;
+}
+
+table.jqTransformTextarea .jqTransformSafariTextarea textarea{
+    background: none;
+    position: absolute;
+    top:-10px;
+    left:-10px;
+    padding: 10px 10px 10px 10px;
+    resize: none;
+}
+
+.jqtransformdone textarea {
+    color: black;
+    background: white;
+}
+
+form.jqtransformdone label.error-msg{
+    float: right;
+    display: block;
+    margin-right: 20px;
+    color: red;
+    max-width: 400px;
+    max-width: 33%;
+}
+
+/* -------------
+ * Checked - Used for both Radio and Checkbox
+ * ------------- */
+a.jqTransformChecked { background-position: center bottom;}
+
+
+.jqTransformHidden { display: none }
+.form-box-1 .option-list .jqTransformSelectWrapper div span {
+    cursor: pointer;
+    float: none;
+    height: 31px;
+    line-height: 15px;
+    overflow: hidden;
+    padding: 0px 0 0 7px;
+    position: absolute;
+    white-space: nowrap;
+    font: 15px/25px 'proxima_nova_rgregular';
+}
+.select-box form.jqtransformdone label {
+    display: block;
+    float: left;
+    margin: 20px 0 0 10px;
+    font: 16px/39px 'proxima_nova_rgregular';
+    text-align: left;
+    color: #000;
+}
+
+.clm1 .select-box .jqTransformSelectWrapper{ width: 8% !important;}
+.clm1 .select-box .jqTransformInputWrapper{width: 22%; margin: 10px 13px 0 0;}
+.clm1 .select-box .jqtransformdone label{color: white; margin: 10px 13px 0 0;}
+
+.clm1 .jqTransformInputInner div input {width:100%;}
+
+.heading2 ul li + li + li + li + li + li + li {
+    font: 12px/12px 'proxima_novasemibold';
+    float: left;
+    padding: 9px 9px;
+    background: #f6f7f7;
+    float: left;
+    border-left: 1px solid #dedede;
+}
+
+.store-search .heading2 ul li + li + li + li + li + li + li {
+    padding: 9px 7px;
+}
+
+.heading2 ul > li.next_page {
+    padding: 0!important;
+}
+
+.clm1 button.jqTransformButton {
+    width: 10%;
+}
+
+.heading2 ul > li.active {
+    background: darkgrey!important;
+}
+
+.store-search .heading2 ul li + li {
+    padding: 9px 9px;
+}
+
+.heading2 ul li + li + li + li + li + li + li {
+    padding: 9px 9px;
+}
+
+/*
+#header-inner {
+    margin-top: 5px;
+}
+*/
+
+.search-content-right-box h3, .search-content-right-box label,
+.search-content-right-store-box h3, .search-content-right-store-box label {
+    font-family: 'proxima_nova_rgregular';
+    font-size: 15px;
+    color: #393c41;
+    float: left;
+    width: 100%;
+    padding: 20px 0 0px 25px;
+}
+
+.search-img img {
+    margin: 16px;
+    max-height: 154px;
+    max-width: 154px;
+}
+
+.search-right {
+    width: 250px;
+}
+
+.search-right-b {
+    width: 170px;
+    padding-right: 20px;
+}
+
+/* store page price */
+.tabcontent-1 .search-right-b h4, .search-right-b h4 {
+    padding: 0;
+}
+
+/* store page model name */
+.search-text h3 {
+    width: initial;
+}
+
+.search-right-b p {
+    padding: 12px 0 0 80px;
+    text-align: right;
+    margin-right: 5px;
+}
+
+.search-right-b h4 {
+    text-align: right;
+    padding-left: 0px;
+}
+
+.search-right h3, .details-right h3 {
+    padding: 12px 0 5px 50px;
+    background: url(/assets/h3-left.png) 35px 16px no-repeat;    
+}
+
+.search-right-b-img {
+    width: 134px;
+    float: right;
+}
+
+.alert {
+    padding: 8px 35px 8px 14px;
+    /*margin-bottom: 18px;*/
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    background-color: #fcefd4;
+    border: 1px solid #fae1c6;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    color: #eca918;
+    margin-right: 25%;
+}
+
+.alert-danger, .alert-error {
+    background-color: #fadfdd;
+    border-color: #f8d0d4;
+    color: #df382c;
+}
+
+#header-messages {
+    height: 45px;
+    padding: 10px 0 0 100px;
+    font:13px/15px  'proxima_novasemibold'; color:yellow;
+    width: 90%;
+}
+
+#header-inner-nav ul li a:hover { color: #fff }
+#header-inner-nav  ul li a:hover{ background:#EC4832; color:#fff;}
+#header-inner-nav ul li:hover{ background-color:#252322;}
+#header-inner-nav2 ul li:last-child {
+    float: left;
+    font: 13px/46px  'proxima_novasemibold';
+    color: #fff;
+    text-align: center;
+    background: #ec4832;
+}
+
+#header-inner-nav2 ul li:last-child a {
+    text-decoration: none;
+    color: #fff;
+    text-transform: uppercase;
+    display: block;
+    padding: 7px 33px 0 30px;
+    float: left;
+}
+
+#header-inner-nav2 ul li:last-child a:hover { color: #fff }
+
+.tab-box-small a {
+    height: 50px;
+    width: 60px;
+}
+
+.tab-box-small a img {
+    padding: 0px;
+}
+
+.tab-box-small {
+    margin: 5px 0 0 0;
+}
+.tab-box-small a#cont-1 img {padding: 0px;}
+
+
+/********* dropdown menus *********/
+#header-inner-nav ul li ul {
+display: none; 
+}
+
+#header-inner-nav ul li:hover ul, #nav li.hover ul {
+display: block;
+position: absolute;
+margin: 0;
+padding: 0; 
+background: #edeced;
+}
+
+#header-inner-nav ul li:hover li, #nav li.hover li {
+float: none; 
+background: #edeced;
+}
+
+#header-inner-nav ul li:hover li a, 
+#header-inner-nav ul li.hover li a, 
+#header-inner-nav ul  li.hover li a:hover {
+color: #000;
+}
+
+#header-inner-nav ul  li:hover li a, #header-inner-nav ul li.hover li a {
+border-bottom: 1px solid #fff;
+color: #000; 
+}
+
+.heading h2 {
+    text-transform: none;
+}
+
+form.jqtransformdone label:first-child {
+    margin-top: 0px;
+}
+
+.select-box form.jqtransformdone label {
+    margin: 20px 0 0 10px;
+}
+
+.search-main-right h2 {
+    font-size: 20px;
+}
+
+
+.form-heading {
+    padding: 0 10px 15px 10px;
+    border-bottom: 1px solid #666666;
+}
+.form-heading h3 {
+    font: 30px proxima_novasemibold;
+    color: #e74631;
+    text-transform: uppercase;
+}
+.form-heading p {
+    font: 13px proxima_nova_rgregular;
+    color: #939698;
+    font-style: italic;
+}
+/*
+.form-part input {
+    border: none;
+    width: 296px;
+    height: 40px;
+    background: #FFFFFF;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -o-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    margin: 5px 0 10px 15px;
+}
+*/
+.form-part label {
+    font: 14px proxima_nova_rgregular;
+    color: #fff;
+    width: 100%;
+    float: left;
+    margin: 10px 0 0px 15px;
+}
+.form-part label.message {
+    color: red;
+    margin-left: 50px;
+}
+.form-part input[type="submit"] {
+    width: 113px;
+    height: 52px;
+    background: #e74630;
+    font: 18px proxima_novasemibold;
+    text-align: center;
+    color: #FFFFFF;
+    cursor: pointer;
+    text-transform: uppercase;
+    -webkit-appearance: none;
+}
+#free-trial-offer {
+    width: 215px;
+    float: right;
+    background: #f4f4f4;
+    padding: 40px 30px;
+    font: 15px/22px proxima_nova_rgregular;
+    color: #484d52;
+    margin: 0 0 0 5px;
+    border-radius: 3px;
+    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border: 1px solid #eeecec;
+}
+
+#free-trial-offer h5 {
+    font: 25px proxima_novasemibold;
+    color: #e74631;
+    padding: 0 0 15px 0;
+}
+
+#registration-mid-part, #details-mid-part, #edit-mid-part {
+    width: 1159px;
+    margin: 0 auto;
+    padding: 50px 29px 0 30px;
+    height: auto;
+}
+
+#edit-mid-part-right {
+    padding: 20px 0 0 20px;
+}
+
+#registration-mid-part-right p, #details-mid-part-right p, #split-mid-part-left p, #split-mid-part-right p, #edit-mid-part-right p {
+    font: 14px/22px proxima_nova_rgregular;
+    color: #484d52;
+    padding: 5px 10px 5px 10px;
+}
+
+#registration-mid-part-right h3, #edit-mid-part-right h3 {
+    background: url(/assets/h3-border.jpg) no-repeat left center;
+}
+
+#registration-mid-part-right h3, #details-mid-part-right h3, #edit-mid-part-right h3 {
+    font: 17px/25px proxima_novasemibold;
+    color: #393c41;
+    padding: 5px 0 5px 10px;
+}
+
+#edit-mid-part-left {
+    background: #252a2f;
+    padding-bottom: 10px;
+}
+
+#registration-mid-part-left, #details-mid-part-left, #edit-mid-part-left {
+    float: left;
+    width: 400px;
+}
+
+.edit-mid-part-right-slim {
+    width: 625px!important;
+}
+
+#split-mid-part-right {
+    width: 48%;
+    float: right;
+}
+
+#split-mid-part-left h3, #split-mid-part-right h3 {
+    font: 21px/30px proxima_nova_rgregular;
+    padding: 5px 0 5px 5px;
+}
+
+#split-mid-part-left {
+    float: left;
+    width: 48%;
+}
+
+/* last menu item not orange */
+#header-inner-nav ul li + li + li + li + li + li {
+    background: inherit;
+}
+#header-inner-nav ul li + li + li + li + li + li a {
+    color: #252322;
+    font-size: 11px;
+}
+
+/* refine search results store page */
+.tabcontent-1 .search-main-right-store h2 {
+    font-size: 25px;
+}
+
+/* bullets on tire listing */
+.search-right ul li, .details-right ul li {
+    font: 15px/15px 'proxima_nova_rgregular';
+    padding: 10px 0px 0 50px;
+    color: #2b2e33;
+    background: url(/assets/liii.png) 35px 15px no-repeat;
+}
+/* bold the bullet points */
+.details-right ul li span {
+    font: 15px/15px 'proxima_nova_rgbold';
+}
+.lidual {
+    display: inline;
+    font: 15px/35px 'proxima_nova_rgregular'!important;
+}
+li.lidual + li.lidual {
+    margin-left: -25px;
+}
+div.dual {
+    margin-top: -10px;
+}
+
+/* tire listing */
+.pricead {
+    color: black;
+    font: 15px/25px 'proxima_nova_rgregular';
+}
+.price {
+    color: green;
+    font: 30px/40px 'proxima_nova_rgregular';
+    margin-left: 10px;
+}
+.savings {
+    color: black;
+    font: 25px/30px 'proxima_nova_rgbold';
+}
+
+/* prevents bootstrap from goofing up menu */
+#header-inner-nav ul {
+    margin: 0px!important;
+    z-index: 99;
+}
+
+/*
+ul, ol {
+    margin: 0!important;
+}
+*/
+.store-search .pro-clm div + div + div a, .btn-vf {
+    background: url(/assets/btn-bg.gif) 0 0 repeat-x; 
+    width:134px; height:43px;  
+    font-family: 'proxima_novasemibold'; 
+    font-size:14px; color:#fff; 
+    display:block; 
+    border-radius:4px; 
+    text-transform:uppercase; 
+    padding:0 0 0 10px; 
+    line-height:43px; 
+    text-shadow: 2px 2px 2px #da422d;
+}
+
+.store-search .pro-clm div + div + div a, .btn-vf {
+    width: 100%;
+    max-width: 154px;
+}
+
+span.promotions { 
+    font: 12px/15px 'proxima_novasemibold'; 
+    line-height: 15px; 
+    color: green;
+    text-align: right;
+    float: right;
+    margin-top: 5px;
+}
+
+#registration-mid-part-right h3, #edit-mid-part-right h3 {
+    background: url(/assets/h3-border.jpg) no-repeat left center;
+}
+
+#registration-mid-part-right, #details-mid-part-right, #edit-mid-part-right {
+    width: 725px;
+    float: right;
+}
+
+#user-account {
+    float: left;
+    width: 540px;
+    padding: 20px 0 0 20px;
+    position: relative;
+}
+
+.edit-form-box {
+    width: 100%!important;
+}
+
+#seller-mid-part {
+    width: 100%; /*1159px;*/
+    margin: 0;
+    padding: 0;
+    /*height: inherit;*/
+}
+
+/* homepage */
+.testimonial-box {
+    width: inherit;
+}
+.flexslider ul.slides li{ background:url('http://s3.amazonaws.com/THImages/TH_header_02.jpg') center top no-repeat; width:100%; height:775px; text-indent:-9999em;}
+.flexslider ul.slides li + li{background:url('http://s3.amazonaws.com/THImages/TH_header_01.jpg') center top no-repeat; width:100%; height:775px; display:none; text-indent:-9999em;}
+.flexslider ul.slides li + li + li{ background:url('http://s3.amazonaws.com/THImages/TH_header_02.jpg') center top no-repeat; width:100%; height:775px; text-indent:-9999em;}
+.flexslider ul.slides li + li + li + li{background:url('http://s3.amazonaws.com/THImages/TH_header_01.jpg') center top no-repeat; width:100%; height:775px; display:none; text-indent:-9999em;}
+
+.tabcontent {position: relative!important;}
+#cont-2-1 {top: inherit;}
+
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+    line-height: normal;
+}
+
+
+/* ksi 06/13 */
+.search-heading {
+    height: 100px;
+    width: 500px;
+    margin: 0px 0px 0px 10px;
+}
+
+.search-heading > .tab-box a {
+    height: auto;
+    background: url(../images/tab-bg.gif) left top repeat-x;
+    height: 44px;
+    width: 100%;
+    position: relative;
+    margin-right: 1%;
+    text-align: left;
+}
+
+.search-heading > .tab-box a p, 
+.search-heading > .tab-box a.activeLink p {
+    background: none;
+    line-height: 44px;
+    padding-left: 5px;
+}
+
+.search-heading > .tab-box a img {
+    display: none;
+}
+
+.search-heading > .tab-box a.activeLink {
+    background: #e84631;
+    border-bottom: 0;
+    padding: 0px 0px;
+    position: relative;
+}
+
+.search-heading > .tab-box a.activeLink:after {
+    display: none;
+}
+
+/*.search-heading, */
+.search-heading > .tab-box {
+    margin: 0px;
+}
+
+.search-heading > .tab-box {
+    width: 15%;
+}
+
+.inlinesizecontent > form > .form-box-1 {
+    width: 100%;
+}
+
+.manu-and-model > div > .jqTransformSelectWrapper,
+    .year-and-option > div > .jqTransformSelectWrapper,
+    .width-and-ratio > div > .jqTransformSelectWrapper,
+    .wheel-diameter > div > .jqTransformSelectWrapper
+{
+    width: 90%!important;
+    margin: 0px 0px 0px 0px;    
+}
+
+.inlinesizecontent > form > .form-box-1 > div > .hover {
+    padding: 0px;
+    margin: 0px;
+    height: 38px;
+    width: 45%;
+    margin-left: 2%;
+}
+
+.inlinesizecontent > form > .form-box-1 > button.jqTransformButton {
+    width: 10%;
+    max-width: 50px;
+    margin: 0px;
+}
+
+.inlinesizecontent > form > .form-box-1 {
+    float:none;
+    height: 100%;
+}
+
+.manu-and-model, .year-and-option, .width-and-ratio, .wheel-diameter {
+    width: 75%;
+}
+
+.manu-and-model, .width-and-ratio {
+    margin: 0px 0px 0px 0px;
+}
+
+.year-and-option, .wheel-diameter {
+    margin: 10px 0px 0px 0px;
+}
+
+.manu-and-model, .year-and-option, .width-and-ratio, .wheel-diameter { float: left; height: 38px;}
+
+.search-heading ul li, 
+    .search-heading ul li + li, 
+    .search-heading ul li + li + li, 
+    .search-heading ul li + li + li + li,
+    .search-heading ul li + li + li + li + li,
+    .search-heading ul li + li + li + li + li + li,
+    .search-heading ul li + li + li + li + li + li + li {
+    width: 90%;
+    background: black;
+}
+.search-heading ul li a {
+    color: white;
+}
+
+.search-text img {
+    display: block;
+}
+
+#storeheading-1 h2 {
+    padding-top: 30px;
+}
+
+#header-messages {
+    padding-left: 0px;
+    position: absolute;
+}
+
+/************************************************************/
+/* 01/05/15 move changes from style_final to style_th       */
+.faeture-right ul li img{ width:13%;}
+
+/*
+#tire_wheeldiameters div div span { font-size: 10px;}
+#tire_wheeldiameters.hover { width: 25%!important;}
+*/
+
+/************************************************************/
+    
+@media screen and (max-width: 1200px) {    
+    #storeheading img {margin-left: auto;}
+    #storeheading {margin: initial; width: 100%;}
+
+    .store-search .pro-clm div + div p + p {
+        float: left;
+        margin-right: 20px;
+    }
+
+    .search-img img {
+        margin: 8px;
+        max-width: 100%;
+    }
+
+    .heading h2 {
+        width: 97%;
+        font-size: 15px;
+    }
+    
+    .search-right-b {
+        width: 40%;
+        padding-right: 2%;
+    }
+    .search-right, .search-content-left-store-inner1 .search-right {
+        width: 58%;
+    }
+    #registration-mid-part, #details-mid-part, #edit-mid-part {
+        width: 96%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    #registration-mid-part-left, #details-mid-part-left, #edit-mid-part-left {
+        width: 40%;
+    }
+    
+    #registration-mid-part-right, #edit-mid-part-right {
+        width: 55%;
+        float: right;
+    }
+    #details-mid-part-left {
+        width: 40%;
+        margin-right: 5%;
+    }
+    #details-mid-part-right {
+        width: 55%;
+    }
+    #user-account {
+        width: 52%;
+    }
+    .edit-mid-part-right-slim {
+        width: 40%!important;
+    }
+    
+    /* 06/13 ksi */
+    .search-heading {
+        width: 50%;
+    }
+    
+    #search-content-inner {
+        top: -40px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .form-part label {
+        margin-left: 2%;
+        width: 98%;
+    }
+    .search-heading {
+        width: 53%;
+    }
+    .search-main-left-store .inline-select-box {
+        width: 45%;
+        right: -40px;
+    }
+
+    #footer{height:auto;}
+    .follow-box p{float:left;}    
+}
+
+@media screen and (max-width: 1000px) {
+    .form-part input {
+        width: 96%;
+        margin-left: 2%;
+        margin-right: 0;
+    }
+}
+
+@media screen and (max-width: 980px) {
+    .tabcontent-1 .search-main-right-store h2 {
+        font-size: 22px;
+        padding-left: 3%;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .search-right-b-img {
+        width: 68%;
+        float: right;
+    }
+
+    /* store page model */
+    .tabcontent-1 h1, .tabcontent-1 h2, .tabcontent-1 h3, .tabcontent-1 h4, 
+    .tabcontent-1 h5, .tabcontent-1 h6 {
+        padding-left: 0;
+    }
+    .search-heading {
+        width: 58%;
+    }
+    .search-main-left-store .inline-select-box {
+        width: 40%;
+    }
+
+    /* 01/05/15 ksi */
+    .content-left h2 { 
+        font-size:33px;
+    }
+    .faeture-right ul li img { 
+        width:17%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .search-content-right-box-2 h3, 
+    .search-content-right-store-box-2 h3, 
+    .search-content-right-box-2 label, 
+    .search-content-right-store-box-2 label {
+        font-family: 'proxima_novasemibold';
+        font-size: 15px;
+        color: #393c41;
+        float: left;
+        width: 95%;
+        padding: 20px 0 0px 5px;
+    }
+    .search-right-b-img {
+        width: 100%;
+    }
+    #free-trial-offer {
+        width: 98%;
+        padding-left: 2%;
+        padding-right: 0;
+    }
+    .search-main-right-store h2.form {
+        background: url(/assets/ss.jpg) repeat scroll 0 0 transparent;
+        border-radius: 3px 3px 3px 3px;
+        color: #FFFFFF;
+        cursor: pointer;
+        display: block;
+        float: left;
+        font-size: 17px;
+        height: 44px;
+        margin: 2% 0 0 3%;
+        padding: 5px 3px 0;
+        text-align: center;
+        width: 150px;
+    }    
+    .search-main-right-store h2.form span {
+        color: #fff;
+        font-size: 15px;
+    }
+    #popupContact {
+        background: none repeat scroll 0 0 #999999;
+        border-radius: 5px 5px 5px 5px;
+        display: none;
+        font-size: 13px;
+        height: auto;
+        left: 5% !important;
+        padding: 0;
+        position: fixed;
+        /* top: 10% !important; */
+        top: 50px!important;
+        width: 90%;
+        z-index: 999;
+    }
+    .search-content-right-box-2 ul li, .search-content-right-store-box-2 ul li {
+        font: 12px/20px 'proxima_nova_rgregular';
+        padding: 10px 0px 0 25px;
+        color: #27292b;
+        width: 28%;
+        float: left;
+    }
+
+    /* ksi 06/13 */
+    .search-main-left-store .inline-select-box {
+        top: 102px;
+        right: 0;
+    }
+    .search-heading {
+        width: 100%;
+    }
+
+    .search-heading > .tab-box {
+        padding-top: 10px;
+    }
+
+    .manu-and-model, .width-and-ratio, .inlinesizecontent > form > .form-box-1 > button.jqTransformButton {
+        margin: 10px 0px 0px 0px;
+    }
+
+    .search-main-left .select-box {
+        right: 0px;
+        width: 55%;
+    }
+
+    /* 1/5/15 ksi header spanning too many lines on tire details */
+    #search-main2 h2 {
+        font-size: 16px;
+        padding: 5px 0 0 5px;
+        line-height: 20px;
+    }
+    #search-main2 ul {
+        margin-left: 5px;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .clm1 .select-box .jqTransformInputWrapper {
+        width: 42% !important;
+    }
+    .clm1 .select-box .jqTransformSelectWrapper {
+        width: 15% !important;
+    }
+    .clm1 button.jqTransformButton {
+        width: 121px;
+    }
+    #registration-mid-part-right p, 
+    #details-mid-part-right p, 
+    #split-mid-part-right p, 
+    #edit-mid-part-right p {
+        padding-left: 0px;
+    }
+    #registration-mid-part-right h3, 
+    #details-mid-part-right h3, 
+    #split-mid-part-right h3, 
+    #edit-mid-part-right h3 {
+        padding-left: 0px;
+    }
+    #user-account {
+        width: 98%;
+        padding-left: 0;
+        border-bottom: 1px solid #666666;
+        padding-bottom: 15px;
+    }
+
+    span.th-radius > .jqTransformSelectWrapper {
+        width: 18%!important;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    #storeheadingsearch-2 .tab-box-small {
+        margin: 5px 0 0 0!important;
+    }
+    #registration-mid-part-right, #edit-mid-part-right {
+        width: 58%;
+    }
+    #registration-mid-part-right h3, 
+    #details-mid-part-right h3, 
+    #split-mid-part-right h3, 
+    #edit-mid-part-right h3 {
+        background: none;
+    }
+    .form-heading h3 {
+        font-size: 24px;
+    }
+
+    #registration-mid-part-right, #edit-mid-part-right, #edit-mid-part-right-slim {
+        width: 100%!important;
+    }
+    span.th-location > .jqTransformInputWrapper {
+        width: 35%;
+    }
+    span.th-radius > .jqTransformSelectWrapper {
+        width: 25%!important;
+    }
+
+    /* 06/13 ksi */
+    /*
+    .search-main-left-store .select-box {
+        top: 120px;
+        width: 100%;
+    }
+    */
+    .search-main-left-store .inline-select-box {
+        width: 63%;
+        right: -40px;
+    }
+    .search-main-left-store {
+        width: 95%;
+        font-size:13px;
+    }
+    .search-main-left {
+        width: 100%;
+    }
+
+    div.form-box-1.tire-size .hover {
+        width: 25%;
+    }
+
+    #tire_wheeldiameters span,
+    #tire_ratios span,
+    #tire_widths span { font-size: 10px;}
+
+}
+
+@media screen and (max-width:630px) {
+    div.dual {
+        margin-top: 0;
+    }
+    .lidual {
+        display: block;
+        margin-top: 0px;
+        margin-bottom:-10px;
+        padding: 0px 0px 0px 50px!important;
+    }
+    li.lidual + li.lidual {
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width:600px) { 
+    .price {
+        color: green;
+        font: 25px/30px 'proxima_nova_rgregular';
+        margin-left: 10px;
+    }
+    .savings {
+        color: black;
+        font: 20px/25px 'proxima_nova_rgbold';
+    }
+    #heading-part h1{ font-size:25px; }
+
+
+    ::-webkit-input-placeholder { font-size: 10px; }
+    ::-moz-placeholder { font-size: 10px; } /* firefox 19+ */
+    :-ms-input-placeholder { font-size: 10px; } /* ie */
+    input:-moz-placeholder { font-size: 10px; }
+}
+
+@media screen and (max-width: 500px) { 
+    #registration-mid-part, #details-mid-part, #edit-mid-part {
+        width: 85%;
+        border: none;
+    }
+    .form-part label { font-size: 12px }
+
+    .price {
+        color: green;
+        font: 21px/25px 'proxima_nova_rgregular';
+        margin-left: 10px;
+    }
+    .savings {
+        color: black;
+        font: 17px/20px 'proxima_nova_rgbold';
+    }
+
+    .form-part label{ font-size:12px;} .store-search .pro-clm div h3 {   font-size: 18px;}
+    .store-search .pro-clm div + div + div{ float:left;}
+
+    .clm1 .select-box .jqTransformSelectWrapper, .clm1 .select-box .jqTransformSelectWrapper + .jqTransformSelectWrapper,.clm1 .select-box .jqTransformSelectWrapper + .jqTransformSelectWrapper + .jqTransformSelectWrapper {
+        width: 42% !important;
+    }
+
+    .clm1 .select-box .jqTransformInputWrapper {
+        width: 72% !important;
+    }
+  
+    .select-box {
+        right: 0%;
+        width: 60%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .form-part {
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    #registration-mid-part-right, 
+    #details-mid-part-right, 
+    #split-mid-part-right, 
+    #edit-mid-part-right {
+        width: 100%;
+        float: left;
+    }
+    #registration-mid-part-left, 
+    #details-mid-part-left, 
+    #split-mid-part-left, 
+    #edit-mid-part-left, 
+    .pricead {
+        width: 100%;
+    }
+    #registration-mid-part, #details-mid-part, #edit-mid-part {
+        width: 98%;
+        border: none;
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 25px;
+    }
+    .tabcontent {
+        margin-top: 1%;
+        height: auto;
+        width: 97%;
+    }
+    .tabcontent {
+        margin-top: 1%!important;
+        height: auto!important;
+        width: 97%!important;
+    }
+    span.th-location > .jqTransformInputWrapper {
+        width: 300px;
+        margin: 0;
+    }
+    span.th-radius > .jqTransformSelectWrapper {
+        width: 50px;
+        margin: 0;
+    }
+    .inlinesizecontent > form > .form-box-1 > .hover {
+        width: initial;
+    }
+    #storeheading img {max-height: 95px; width: auto;}
+
+    /* 01/05/15 ksi */
+    .select-box {
+        right: 0%;
+        width: 60%!important;
+    }
+    .select-box .jqTransformSelectWrapper { width: 56%!important; }
+
+    .select-box form label { font-size: 12px!important;}
+
+    .select-box form div.jqTransformSelectWrapper { margin-left: 0px; width: 65%!important;}
+
+    #storeheading-1 h2 {padding-left: 10px; font-size: 24px;}
+    #storeheading-1 p {padding-left: 10px;}
+
+    span.th-radius > .jqTransformSelectWrapper {
+        width: 20%!important;
+    }
+
+    div.form-box-1 .hover {
+        width: 31%;
+    }
+}
+
+@media screen and (max-width: 479px) { 
+    div#tire_sizes >table >tbody >tr >td >p {
+        font-size: 12px!important;
+    }
+    .src-your-store .clm1 h2 {
+        font: 36px/40px 'proxima_novalight';
+    }
+    .search-heading > .tab-box {
+        width: 15%;
+    }
+    .manu-and-model, .year-and-option, .width-and-ratio, .wheel-diameter {
+        width: 75%;
+    }
+    .search-heading > .tab-box a p, .search-heading > .tab-box a.activeLink p {
+        padding-left: 5px;
+    }
+
+    form.jqtransformdone label.error-msg{
+        max-width: 100%;
+    }
+    span.th-radius > .jqTransformSelectWrapper {
+        width: 50%!important;
+    }
+    ::-webkit-input-placeholder { font-size: inherit; }
+    ::-moz-placeholder { font-size: inherit; } /* firefox 19+ */
+    :-ms-input-placeholder { font-size: inherit; } /* ie */
+    input:-moz-placeholder { font-size: inherit; }    
+}
+
+@media screen and (max-width: 420px) {
+    div#tire_sizes >table >tbody >tr >td >p {
+        font-size: 11px!important;
+    }
+}
+
+
+@media screen and (max-width: 419px) {
+    .content-left h2 { 
+        font-size:24px;
+    }
+
+    .select-box span {
+        font-size: 11px;
+    }
+}

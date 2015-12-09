@@ -1,0 +1,24 @@
+<select class="tires" 
+        id="tire_model" 
+        name="tire_model" 
+        select_model_path="/ajax/get_sizes_for_model">
+  <option value="">Model</option>
+  <% @tire_models.each do |m| %>
+    <option value="<%= m.name %>"><%= m.name %></option>
+  <% end %>
+</select>
+<script>
+  $('select#tire_model').change(function() {   
+    $.ajax({
+      type: "GET",
+      dataType: "html",
+      url: $(this).attr('select_model_path'),
+      data: {tire_model_name: $(this).attr('value'),
+            tire_manufacturer_id: $('select#tire_manufacturers').attr('value'),
+            tire_store_id: <%= @tire_store_id %>,
+            report_mode: "<%= @report_mode %>"},
+      success:function(result){
+        $("div#choose-tire-sizes").html(result);} 
+    })
+  });
+</script>

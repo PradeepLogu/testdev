@@ -1,0 +1,13 @@
+<div id="slider-wrapper">
+	<div id="previmg" class="chevron-left"></div>
+		<div class="feature-right">
+			<ul class="slides">
+				<% deals.each do |ld| %>
+					<li>
+						<%= render 'promotion_display', :promotion => ld %>
+					</li>
+				<% end %>
+			</ul>
+		</div>
+    <div id="nextimg" class="chevron-right"></div>
+</div>

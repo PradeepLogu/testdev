@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Thank you for using TreadHunter.com, <%= @reservation.name %></h1>
+    <p>Dear <%= @reservation.name %>,<p />
+
+We regret that the buyer below has cancelled their reservation for <%= @reservation.tire_listing.short_description %>.  
+<% unless @reservation.tire_listing.stock_number.blank? %>
+	Stock #:<%= @reservation.tire_listing.stock_number %> <p/>
+<% end %>
+
+<%= @reservation.name %><br />
+<%= @reservation.buyer_email %><br />
+<%= @reservation.formatted_phone %><br />
+<%= @reservation.address %><br />
+<%= @reservation.city %>, <%= @reservation.state %> <%= @reservation.zip %><p />
+    </p>
+  </body>
+</html>

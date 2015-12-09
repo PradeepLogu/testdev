@@ -1,0 +1,55 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Account:</b>
+  <%= @contract.account_id %>
+</p>
+
+<p>
+  <b>Expiration date:</b>
+  <%= @contract.expiration_date %>
+</p>
+
+<p>
+  <b>Contract amount:</b>
+  <%= @contract.contract_amount %>
+</p>
+
+<p>
+  <b>Can post listings:</b>
+  <%= @contract.can_post_listings %>
+</p>
+
+<p>
+  <b>Can use mobile:</b>
+  <%= @contract.can_use_mobile %>
+</p>
+
+<p>
+  <b>Can use logo:</b>
+  <%= @contract.can_use_logo %>
+</p>
+
+<p>
+  <b>Can use branding:</b>
+  <%= @contract.can_use_branding %>
+</p>
+
+<p>
+  <b>Can have search portal:</b>
+  <%= @contract.can_have_search_portal %>
+</p>
+
+<p>
+  <b>Can have filter portal:</b>
+  <%= @contract.can_have_filter_portal %>
+</p>
+
+<p>
+  <b>Max monthly listings:</b>
+  <%= @contract.max_monthly_listings %>
+</p>
+
+
+<%= link_to 'Edit', edit_contract_path(@contract) %> |
+<%= link_to 'Back', contracts_path %>

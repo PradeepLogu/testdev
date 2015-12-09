@@ -1,0 +1,34 @@
+<% if !defined?(target); target=""; end %>
+<% if !defined?(stars_only) %>
+	<div class="ratings <%= extra_class if defined?(extra_class) %>">
+<% end
+   stars ||= 0
+   stars = stars.to_f.round
+   stars_limit = (stars > 5 ? 5 : stars.to_i)
+   i = 0
+   while i < stars_limit
+     i += 1
+	 %>
+		<span><%= image_tag("star.png", alt: "*", title: "#{stars} out of 5 stars") %></span>
+<% end
+   while i < 5
+     i += 1
+	 %>
+		<span><%= image_tag("star-off.png", alt: "", title: "#{stars} out of 5 stars") %></span>
+<% end %>
+<% if !defined?(stars_only) %>
+	<% if defined?(reviews_link) && defined?(reviews_count) %>
+		<span class="reviews-count">
+		  <% if reviews_link.blank? && reviews_count.to_i == 0 %>
+		  	0 Reviews
+		  <% else %>
+		  	<a href="<%= reviews_link %>" target="<%= target %>">
+		  		<%= reviews_count.to_i == 0 ? "Be the first to write a review" : (reviews_count.to_i == 1 ? "1 Review" : "#{reviews_count} Reviews") %>
+		  	</a>		  
+		  <% end %>
+		</span>
+	<% elsif defined?(review_time) %>
+		<span class="review-time"><%= review_time %></span>
+	<% end %>
+	</div>
+<% end %>

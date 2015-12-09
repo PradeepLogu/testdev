@@ -1,0 +1,13 @@
+Dear <%= @order.buyer_name %>,
+
+This message is to inform you that we attempted to bill your credit card but it was unsuccessful.
+
+This is in reference to your card ending in: <%= @card_last_4 %>
+
+The failure message is:
+<%= @msg %>
+
+We will try once more in a little while.  If the charge is unsuccessful again, the order will be cancelled and the seller will be notified.
+
+Thank you,
+TreadHunter

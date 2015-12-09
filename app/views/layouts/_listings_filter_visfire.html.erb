@@ -1,0 +1,390 @@
+<% if !tire_listings.nil? && tire_listings.size == 0%>
+	<!--<script>
+		$(".search-content-right-store").hide();
+	</script>-->
+<% else %>
+<% if @box == "" %>
+    <script>
+        var FilterQS = "<%= @tire_search.nil? ? (@search_query.nil? ? '' : @search_query) : @tire_search.url_params('_filter') %>";
+        function hide_siblings(el) {
+            var siblings = el.parentNode.parentNode.childNodes;
+            for (var i = 0; i < siblings.length; i++) {
+                if (siblings[i].firstChild != null && 
+                        siblings[i].firstChild.nextSibling.id != el.id) {
+                    jQuery(siblings[i]).addClass('hide');
+                }
+            }
+        }
+
+        function show_siblings(el) {
+            var siblings = el.parentNode.parentNode.childNodes;
+            for (var i = 0; i < siblings.length; i++) {
+                if (siblings[i].firstChild != null && 
+                        siblings[i].firstChild.nextSibling.id != el.id) {
+                    jQuery(siblings[i]).removeClass('hide');
+                }
+            }
+        }
+
+        function filter_results(filter, el) {
+            if (el.checked) {
+                hide_siblings(el);
+                FilterQS = FilterQS + (FilterQS == "" ? "" : "&") + filter + "_filter=" + el.value;
+            } else {
+                show_siblings(el);
+                FilterQS = removeQSParam(FilterQS, filter + "_filter");
+            };
+            reload_data();
+        };
+
+        function reload_data() {
+            $('#tirelistings_list').html('');
+            async_mode = false;
+            pageCount = 1;
+            $('#search-main').trigger('reset.infiniteScrollHelper');
+            $('#search-main').trigger('scroll.infiniteScrollHelper');
+        }
+
+        function sort_results(sort_order) {
+            FilterQS = removeQSParam(FilterQS, 'sort');
+            FilterQS = FilterQS + "&" + "sort=" + sort_order
+            reload_data();
+        }
+
+        function min_max_filter_results(filter, el, min_val, max_val) {
+            if (el.checked) {
+                hide_siblings(el);
+                FilterQS = FilterQS + "&" + filter + "_min_filter=" + min_val + '&' + filter + "_max_filter=" + max_val;
+            } else {
+                show_siblings(el);
+                FilterQS = removeQSParam(FilterQS, filter + "_min_filter");
+                FilterQS = removeQSParam(FilterQS, filter + "_max_filter");
+            }
+            reload_data();
+        };
+
+        function removeQSParam(url, param) {
+            var prefix= encodeURIComponent(param)+'=';
+            var pars= url.split(/[&;]/g);
+            for (var i=pars.length; i-- > 0;) {
+                if (pars[i].indexOf(prefix, 0)==0)
+                    pars.splice(i, 1);
+            }
+            if (pars.length > 0)
+                return pars.join('&');
+            else
+                return '';
+        };
+        
+        $(function() {
+			$(".search-content-right-<%= @store %>box<%= @box %> .control").click(function (e) {
+				e.preventDefault();
+				$(this).parent().toggleClass("closed");
+			});
+			
+			$(".search-content-right-<%= @store %>box<%= @box %> .control .help").click(function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				var dialog = $("#dialog-" + $(this).attr("id"));
+				if (dialog.length)
+					dialog.dialog({ modal: true }).dialog("open");
+			});
+		});
+    </script>
+<% end %>
+
+<% if @conditions.count > 0 && false %>
+<div class="search-content-right-<%= @store %>box<%= @box %> inputs closed">
+<% else %>
+<div class="search-content-right-<%= @store %>box<%= @box %> inputs hide">
+<% end %>
+    <a class="control" href="#">Condition <div class="help" id="filter-condition-help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+        <span class="check-options">
+            <ul id="xxcondition_list" class="check-options">
+                <% if @new_mode %>
+                    <% @conditions.each do |key, cnt| %>
+                        <li>
+                            <input id="condition_<%= key[0] %>"
+                                   value="<%= key[0] %>" type="checkbox"
+                                   onclick="filter_results('is_new', this);"/>
+                            <span><%= key[1] %> (<%= cnt %>)</span>
+                        </li>
+                    <% end %>
+                <% else %>
+                    <% @conditions.each do |t| %>
+                        <li>
+                            <input id="condition_<%= t[0][:val] %>"
+                                   value="<%= t[0][:val] %>" type="checkbox"
+                                   onclick="filter_results('is_new', this);"/>
+                            <span><%= t[0][:type] %> (<%= t[1] %>)</span>
+                        </li>
+                    <% end %>
+                <% end %>
+            </ul>
+        </span>
+    </div>
+</div>
+<% if @pictures && @pictures.count > 1 %>
+<div class="search-content-right-<%= @store %>box<%= @box %>  inputs closed">
+<% else %>
+<div class="search-content-right-<%= @store %>box<%= @box %>  inputs hide">
+<% end %>
+    <a class="control" href="#">Listings with Pictures <div class="help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+        <span class="check-options">
+            <ul id="xxpictures_required_list" class="check-options">
+                <% unless @pictures.nil? %>
+                    <% @pictures.each do |t| %>
+                        <li>
+                            <input id="pictures_<%= t[0][:val] %>" 
+                                    value="<%= t[0][:val] %>" 
+                                    type="checkbox" 
+                                    onclick="filter_results('photos', this);"/>
+                            <span><%= t[0][:type] %> (<%= t[1] %>)</span>
+                        </li>
+                    <% end %>
+                <% end %>
+            </ul>
+        </span>
+    </div>
+</div>
+<% if @sellers.count > 1 %>
+<div class="search-content-right-<%= @store %>box<%= @box %>  inputs closed">
+<% else %>
+<div class="search-content-right-<%= @store %>box<%= @box %>  inputs hide">
+<% end %>
+    <a class="control" href="#">Types of Sellers <div class="help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+        <span class="check-options">
+            <ul id="xxseller_types_list">
+                <% @sellers.each do |t| %>
+                    <li>
+                        <input id="seller_type_<%= t[0][:val] %>" 
+                                value="<%= t[0][:val] %>" 
+                                type="checkbox" 
+                                onclick="filter_results('seller', this);"/>
+                        <span><%= t[0][:type] %> (<%= t[1] %>)</span>  
+                    </li>
+                <% end %>
+            </ul>
+        </span>
+    </div>
+</div>
+<% if @quantities.count > 0 && false %>
+<div class="search-content-right-<%= @store %>box<%= @box %>  inputs closed">
+<% else %>
+<div class="search-content-right-<%= @store %>box<%= @box %>  inputs hide">
+<% end %>
+    <a class="control" href="#">Quantity <div class="help" id="filter-quantity-help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+        <span class="check-options">
+            <ul id="xxquantities_list">
+                <% if @new_mode %>
+                    <% @quantities.each do |key, cnt| %>
+                        <li>
+                            <input id="quantity_<%= key[0] %>" 
+                                    value="<%= key[0] %>" 
+                                    type="checkbox" 
+                                    onclick="filter_results('quantity', this);"/>
+                            <span><%= key[1] %> (<%= cnt %>)</span>   
+                        </li>
+                    <% end %>
+                <% else %>
+                    <% @quantities.each do |t| %>
+                        <li>
+                            <input id="quantity_<%= t[0][:qty] %>" 
+                                    value="<%= t[0][:qty] %>" 
+                                    type="checkbox" 
+                                    onclick="filter_results('quantity', this);"/>
+                            <span><%= t[0][:qty] %> (<%= t[1] %>)</span>
+                        </li>
+                    <% end %>
+                <% end %>
+            </ul>
+        </span>
+    </div>
+</div>
+<% if @wheelsizes && @wheelsizes.count > 0 %>
+<div class="search-content-right-<%= @store %>box<%= @box %>  inputs closed">
+<% else %>
+<div class="search-content-right-<%= @store %>box<%= @box %>  inputs hide">
+<% end %>
+    <a class="control" href="#">Size <div class="help" id="tire-size-help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+        <span class="check-options">
+            <ul id="xxwheelsizes_list">
+                <% if @wheelsizes %>
+                    <% if @new_mode %>
+                        <% @wheelsizes.each do |key, cnt| %>
+                            <li>
+                                <input id="wheelsize_<%= key[0] %>" 
+                                        value="<%= key[0] %>" 
+                                        type="checkbox" 
+                                        onclick="filter_results('wheeldiameter', this);"/>
+                                <span><%= key[1] %>" (<%=cnt %>)</span>
+                            </li>
+                        <% end %>
+                    <% else %>
+                        <% @wheelsizes.each do |t| %>
+                            <li>
+                                <input id="wheelsize_<%= t[0][:qty] %>" 
+                                        value="<%= t[0][:qty] %>" 
+                                        type="checkbox" 
+                                        onclick="filter_results('wheeldiameter', this);"/>
+                                <span><%= t[0][:qty] %>" (<%= t[1] %>)</span>
+                            </li>
+                        <% end %>
+                    <% end %>
+                <% end %>
+            </ul>
+        </span>
+    </div>
+</div>
+<div class="search-content-right-<%= @store %>box<%= @box %>  inputs closed">
+    <a class="control" href="#">Manufacturers <div class="help" id="filter-manufacturer-help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+        <span class="check-options">
+            <ul id="xxmanufacturer_list">
+                <% if @new_mode %>
+                    <% @tire_manufacturers.each do |key, cnt| %>
+                        <li>
+                            <input id="tire_manufacturer_<%= key[0] %>" 
+                                   value="<%= key[0] %>" type="checkbox" 
+                                   onclick="filter_results('tire_manufacturer_id', this);"/>
+                            <span><%= key[1] %> (<%= cnt %>)</span>
+                        </li>
+                    <% end %>
+                <% else %>
+                    <% @tire_manufacturers.each do |t| %>
+                        <li>
+                            <input id="tire_manufacturer_<%= t[0][:id] %>" 
+                                   value="<%= t[0][:id] %>" 
+                                   type="checkbox" 
+                                   onclick="filter_results('tire_manufacturer_id', this);"/>
+                            <span><%= t[0][:name] %> (<%= t[1] %>)</span>
+                        </li>
+                    <% end %>
+                <% end %>
+            </ul>
+        </span>
+    </div>
+</div>
+<% if @categories.count > 0 %>
+<div class="search-content-right-<%= @store %>box<%= @box %>  inputs closed">
+<% else %>
+<div class="search-content-right-<%= @store %>box<%= @box %>  inputs hide">
+<% end %>
+    <a class="control" href="#">Tire Type <div class="help" id="filter-type-help"></div><div class="clear"></div></a>
+    <span class="check-options">
+        <div class="filter-item">
+            <ul id="xxcategories_list">
+                <% if @new_mode %>
+                    <% @categories.each do |key, cnt| %>
+                        <li>
+                            <input id="tire_category_<%= key[0] %>" value="<%= key[0] %>" 
+                                   type="checkbox" onclick="filter_results('tire_category_id', this);"/>
+                            <span><%= key[1] %> (<%= cnt %>)</span>
+                        </li>
+                    <% end %>
+                <% else %>
+                    <% @categories.each do |t| %>
+                        <li>
+                            <input id="tire_category_<%= t[0][:id] %>" 
+                                   value="<%= t[0][:id] %>" 
+                                   type="checkbox" 
+                                   onclick="filter_results('tire_category_id', this);"/>
+                            <span><%= t[0][:category] %> (<%= t[1] %>)</span>
+                        </li>
+                    <% end %>
+                <% end %>
+            </ul>
+        </div>
+    </span>
+</div>
+<div class="search-content-right-<%= @store %>box<%= @box %>  inputs closed">
+    <a class="control" href="#">Cost Per Tire <div class="help" id="filter-cost-help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+    <span class="check-options">
+        <ul id="xxprice_list" class="check-options">
+            <li>
+                <input type="checkbox" value="below-50" id="price_1"
+                       onclick="min_max_filter_results('cost_per_tire', this, 0, 50)"/>
+                <span>Below $50 per tire</span>
+            </li>
+            <li>
+                <input type="checkbox" value="50-100" id="price_2"
+                       onclick="min_max_filter_results('cost_per_tire', this, 50, 100)"/>
+                <span>$50-$100 per tire</span>
+            </li>
+            <li>
+                <input type="checkbox" value="100-150" id="price_3"
+                       onclick="min_max_filter_results('cost_per_tire', this, 100, 150)"/>
+                <span>$100-$150 per tire</span>
+            </li>
+            <li>
+                <input type="checkbox" value="150-above" id="price_4"
+                       onclick="min_max_filter_results('cost_per_tire', this, 150, 99999)"/>
+                <span>$150+ per tire</span>
+            </li>
+        </ul>
+    </span>
+    </div>
+</div>
+<% if false %>
+<div class="search-content-right-<%= @store %>box<%= @box %>  inputs closed">
+    <a class="control" href="#">Treadlife <div class="help" id="filter-treadlife-help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+    <span class="check-options">
+        <ul id="xxtreadlife_list" class="check-options">
+            <li>
+                <input type="checkbox" value="below-25" id="treadlife_1"
+                       onclick="min_max_filter_results('treadlife', this, 0, 25)"/>
+                <span>Below 25%</span>
+            </li>
+            <li>
+                <input type="checkbox" value="25-50" id="treadlife_2"
+                       onclick="min_max_filter_results('treadlife', this, 25, 50)"/>
+                <span>25-50%</span>
+            </li>
+            <li>
+                <input type="checkbox" value="50-75" id="treadlife_3"
+                       onclick="min_max_filter_results('treadlife', this, 50, 75)"/>
+                <span>50-75%</span>
+            </li>
+            <li>
+                <input type="checkbox" value="75-above" id="treadlife_4"
+                       onclick="min_max_filter_results('treadlife', this, 75, 100)"/>
+                <span>Above 75%</span>
+            </li>
+        </ul>
+    </span>
+    </div>
+</div>
+<% end %>
+<% end %>
+
+
+
+<div id="dialog-filter-cartype-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">FILTER BY CAR TYPE</h5>
+	<p>Search by categories of the type of car that you have. Example: Car, Minivan, Crossover, CUV, SUV, Truck, Pickup</p>
+</div>
+
+<div id="dialog-filter-type-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">FILTER BY TIRE TYPE</h5>
+	<p><span class="bold">All-Terrain Tires</span> are built to help provide tough traction for on- and off-road driving.</p>
+	<p><span class="bold">Fuel-Efficient Tires</span> can help save money on gas while still offering wet and dry traction.</p>
+	<p><span class="bold">Run on Flat Tires</span> let you drive up to 50mi. on a deflating tire with top a speed of 50 mph.</p>
+	<p><span class="bold">Sports Performance Tires</span> are meant for high-performance tires that help provide handling and traction in both dry and wet conditions.</p>
+</div>
+
+<div id="dialog-filter-manufacturer-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">FILTER BY BRAND</h5>
+	<p>Search by the brand of tire you’re interested in. Example: GoodYear</p>
+</div>
+
+<div id="dialog-filter-cost-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">FILTER BY PRICE</h5>
+	<p>This lets you select tires within a specific price range such as $75-$100.</p>
+</div>

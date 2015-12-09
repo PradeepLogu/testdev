@@ -1,0 +1,250 @@
+<% provide(:title, 'Create an account') %>
+<% provide(:visfire, "true") %>
+
+<!-- Google Code for New Account page Conversion Page -->
+<script type="text/javascript">
+	/* <![CDATA[ */
+	var google_conversion_id = 992255746;
+	var google_conversion_language = "en";
+	var google_conversion_format = "3";
+	var google_conversion_color = "ffffff";
+	var google_conversion_label = "6SASCJ7a8wcQgr6S2QM";
+	var google_conversion_value = 50;
+	var google_remarketing_only = false;
+	/* ]]> */
+</script>
+
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script>
+
+<noscript>
+	<div style="display:inline;">
+		<img height="1" 
+			width="1" 
+			style="border-style:none;" 
+			alt=""
+			src="//www.googleadservices.com/pagead/conversion/992255746/?value=50&amp;label=6SASCJ7a8wcQgr6S2QM&amp;guid=ON&amp;script=0"/>
+	</div>
+</noscript>
+
+<script>
+	var buttonClicked = false;
+	var checkbox = document.getElementById('createStore');
+	
+	$(function() {
+		//$('div#state').jqTransform();
+
+		checkbox = document.getElementById('createStore');
+		var create_store_div = document.getElementById('create_storefront');
+		var no_store_div = document.getElementById('no_storefront');
+		checkbox.onchange = function() {
+			if(this.checked) {
+				create_store_div.style['display'] = 'block';
+				no_store_div.style['display'] = 'none';
+			} else {
+				create_store_div.style['display'] = 'none';
+				no_store_div.style['display'] = 'block';
+			}
+		};
+	});
+
+	ClientSideValidations.callbacks.form.pass = function(form, eventData) {
+        eventData.preventDefault();
+        eventData.stopImmediatePropagation();
+		if (checkbox.checked)
+			$('#store_type_modal').modal('show');
+		buttonClicked = false;
+	};
+	
+    function validateFormAndPopup() {
+		//$('form.new_account').trigger('submit.ClientSideValidations');
+		$('form.new_account').trigger('ajax:beforeSend.ClientSideValidations');
+    };
+</script>
+
+<style>
+	.form-part input[type="button"] {
+		width: 113px;
+		height: 52px;
+		background: #e74630;
+		font: 18px proxima_novasemibold;
+		text-align: center;
+		color: #FFFFFF;
+		cursor: pointer;
+		text-transform: uppercase;
+		-webkit-appearance: none;
+	}
+	
+	.modal { width: 320px;}
+
+	#create_storefront, #no_storefront {
+		padding-bottom: 20px;
+	}
+
+	@media screen and (max-width: 767px) {
+	  input {
+	  	width: calc(100% - 28px);
+	  }
+	}
+</style>
+
+<div id="search-content2" class="container-outer">
+	<div id="search-content-inner2" class="container-inner">
+		<div id="search-main2">
+			<% if @private_seller %>
+				<h1>Get started selling with TreadHunter</h1>
+			<% else %>
+				<h1>Almost done - enter account contact information</h1>
+			<% end %>
+		</div>
+
+		<div id="edit-mid-part" class="clearfix">
+			<div id="edit-mid-part-left">
+				<%= form_for @account, :validate => true do |f| %>
+					<div class="form-part">
+						<div class="form-heading">
+							<h3>Free Membership</h3>
+							<p>To get started listing tires with TreadHunter</p>
+						</div>
+						<%= hidden_field_tag :type, params[:type] %>
+						<% if @private_seller %>
+							<%= f.label :name, "Your name" %>
+						<% else %>
+							<%= f.label :name, "Account Name (e.g. Acme Tires, Inc.)" %>
+						<% end %>
+						<%= f.text_field :name %>
+						<%= f.label :address1, "Address" %>
+						<%= f.text_field :address1 %>
+
+						<% if !@private_seller %>
+							<%= f.label :address2, "'Suite 103', etc. (ok if blank)" %>
+							<%= f.text_field :address2 %>
+						<% end %>
+						<div id="city">
+							<%= f.label :city, "City" %>
+							<%= f.text_field :city %>
+						</div>
+						<div id="state">
+							<%= f.label :state, "State" %>
+							<%= f.select(:state, us_states, {}) %>
+						</div>
+						<div id="zipcode">
+							<%= f.label :zipcode, "Zip" %>
+							<%= f.text_field :zipcode %>
+						</div>
+						<div id="phone">
+							<%= f.label :phone, "Telephone number" %>
+							<%= f.telephone_field :phone %>
+						</div>
+
+						<% if @private_seller %>
+							<%= hidden_field_tag :type, 'private' %>
+							<div class="check">
+								<label for="hide_phone">Hide your phone number from buyers?</label>
+								<%= check_box_tag :hide_phone, 'yes', true %>
+							</div>
+						<% else %>
+							<%= f.label :billing_email, "Billing Email" %>
+							<%= f.email_field :billing_email %><p />
+							<hr/>
+							<div id="createStoreForAccount" class="check">
+								<label for="createStore">Automatically create a store with the same information? </label>
+								<%= check_box_tag :createStore, 'yes', true %>
+								<label>If you have a store at the address above, leave this checked. If not, you'll need to create a store location to begin listing tires.</label>
+							</div>
+							<p>&nbsp;</p>
+							<hr style="margin:10px"/>
+							<div id="domain" style="display: none;">
+								<table>
+									<tr>
+										<td></td>
+										<td><label for="domain">Website address</label></td>
+									</tr>
+									<tr>
+										<td><label style="margin: 0;">http://</label></td>
+										<td><%= text_field_tag :domain, nil,
+												{:style=>"margin: 0;"} %></td>
+										<td><label style="margin: 0;">.treadhunter.com</label></td>
+									</tr>
+								</table>
+								<br/>
+								<br/>
+								<label>Website address cannot contain spaces or any punctuation except for a hyphen.</label>
+							</div>
+						<% end %>
+
+						<div class="modal fade" id="store_type_modal">
+							<div class="modal-header">
+								<a class="close" data-dismiss="modal">&times;</a>
+								<h3>Select Tire Type to List Today</h3>
+							</div>
+							<div class="modal-body">
+								<p>
+									Wait!  You will have a storefront on TreadHunter, but to fully realize
+									the benefit of TreadHunter you should add some tires to your inventory today.
+									<br/><br/>
+									If you sell used tires, the easiest way to add inventory is through
+									bulk listings.  This is when you have a stack of various branded tires of
+									a particular size for the customer to choose from at a set price.
+								</p>
+							</div>
+							<div class="modal-footer">
+								<%= f.submit "Used", :style => "width: 75px; float: left; margin: 5px;", :name => "used" %>
+								<%= f.submit "New", :style => "width: 75px; float: left; margin: 5px;", :name => "new" %>
+								<%= f.submit "Not Today", :style => "width: 110px; float: right; margin: 5px;" %>
+							</div>
+						</div>
+						
+						<div id="create_storefront">
+							<center>
+								<% if @private_seller %>
+									<%= f.submit "Create Account", :style => "width: 200px", :class => 'btn huge' %>
+								<% else %>
+									<input class="btn huge" type="button" value="Create Account" 
+											style="width: 200px;"
+											onclick="validateFormAndPopup();" />
+											<% end %>
+							</center>
+						</div>
+						<div id="no_storefront" style="display:none;">
+							<center>
+								<%= f.submit "Create Account", :style => "width: 200px", :class => 'btn huge' %>
+							</center>
+						</div>
+					</div>
+				<% end %>
+			</div>
+			<div id="edit-mid-part-right">
+				<% if @private_seller %>
+					<h3>Enter your physical address</h3>
+					<p>
+						Here is where you need to specify the <i><b>physical address</b></i>
+						where the tires are located.  This is important because TreadHunter
+						uses a radius search for the potential buyer - they want to find 
+						tires as close to their address as possible.<br/><br/>
+						<b>Your privacy is important to us.</b> We will not share your 
+						address with the buyers or anyone else.  Your phone number is also
+						protected - if you check the "Hide Phone From Buyers?" box, we will
+						not show your telephone number at all, you will receive emails when
+						users would like to reserve or request more information about your
+						tires.  If you uncheck the box, we will show your phone number
+						as a graphical image so it cannot be seen by automated web bots.
+					</p>
+				<% else %>
+					<h3>Account Information</h3>
+					<p>
+						The Account information is how we'll get in touch with you, but is 
+						not necessarily the information you will present to the public.
+						Most tire sellers will have the same contact information for the
+						account as their store; however, if you manage multiple store 
+						fronts, you may wish to 'uncheck' the box to the left and create
+						separate store fronts with their unique contact information.
+						<br/><br/>
+						Leaving the box checked is the quickest and easiest way to get
+						started, as we will create a default store front using the address
+						and phone number entered here.
+					</p>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>

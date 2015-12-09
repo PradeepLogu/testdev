@@ -1,0 +1,61 @@
+<h1>Edit Tire Models</h1>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+
+<% if params[:only_missing] %>
+	<%= link_to "Show All Models", tire_model_infos_path %>
+<% else %>
+	<%= link_to "Show Only Missing Models", tire_model_infos_path + "?only_missing=true" %>
+<% end %>
+
+<br /><br />
+
+<% @models.each do |m| %>
+	<script>
+	$(function() {
+		$( "#dialog_<%= m.id %>" ).dialog({
+			autoOpen: false,
+			show: "blind",
+			hide: "explode",
+			width: "auto"
+		});
+	});
+	</script>
+
+	<% if m.tire_manufacturer.nil? || m.tire_manufacturer.name.nil? %>
+		<div id="dialog_<%= m.id %>" 
+			title="Edit Tire Model Info - <%= 'No manufacturer ' + m.tire_model_name %>">
+	<% elsif m.tire_model_name.nil? %>
+		<div id="dialog_<%= m.id %>" 
+			title="Edit Tire Model Info - <%= m.tire_manufacturer.name + ' No Model Name' %>">
+	<% else %>
+		<div id="dialog_<%= m.id %>" 
+			title="Edit Tire Model Info - <%= m.tire_manufacturer.name + ' ' + m.tire_model_name %>">
+	<% end %>
+		<%= form_for m, :validate => true do |f| %>
+			<%= f.label :photo1_url, "URL for tire model image" %>
+			<%= f.text_field :photo1_url %>
+  			<center><%= f.submit :class=>"btn" %></center>
+		<% end %>
+	</div>
+<% end %>
+
+<table>
+	<% @models.each do |m| %>
+		<tr>
+			<td>
+				<% if m.stock_photo1.exists? %>
+					<%= image_tag m.stock_photo1.url(:thumb) %>
+				<% else %>
+					<a href="#" onclick="$('#dialog_<%= m.id %>').dialog('open');">Edit</a>
+				<% end %>
+			</td>
+			<td>&nbsp;<%= m.tire_manufacturer.name %></td>
+			<td>&nbsp;<%= m.tire_model_name %></td>
+			<td>&nbsp;<%= m.listings_count_no_photos %></td>
+		</tr>
+	<% end %>
+</table>
+

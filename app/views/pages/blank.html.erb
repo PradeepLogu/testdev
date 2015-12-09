@@ -1,0 +1,1365 @@
+<% provide(:title, "Register") %>
+<style>
+	#store_city, #password, #password_confirmation, #account_phone {
+		border:1px solid red;
+	}
+	ul.orange-check-list li {
+    	list-style: disc inside url("/assets/orange-check.png");
+    	font-size: 16px;
+    	padding-bottom: 5px;
+	}
+</style>
+<script>
+	$(".various").fancybox({
+      maxWidth  : 800,
+      maxHeight : 600,
+      fitToView : false,
+      width   : '90%',
+      height    : '90%',
+      autoSize  : false,
+      closeClick  : false,
+      openEffect  : 'none',
+      closeEffect : 'none',
+      closeBtn : true
+	});
+</script>
+<% if false %>
+	<div id="registration-mid-part-left" class="span5">
+		<h1><u>Register With TreadHunter</u></h1>
+		<h2>User Information</h2>
+		<%= label_tag "First Name" %><%= text_field_tag :first_name, "Bob" %>
+		<%= label_tag "Last Name" %><%= text_field_tag :last_name, "Smith" %>
+		<%= label_tag "Email" %><%= text_field_tag :first_name, "bob.smith@smithtires.com" %>
+		<%= label_tag "Password" %><%= text_field_tag :password, "" %>
+		<%= label_tag "Password Confirmation" %><%= text_field_tag :password_confirmation, "" %>
+
+		<h2>Store Information</h2>
+		<%= label_tag "Store Name" %><%= text_field_tag :store_name, "Smith Tires" %>
+		<%= label_tag "Store Address" %><%= text_field_tag :store_address1, "1250 Main Street" %>
+		<%= label_tag "" %><%= text_field_tag :store_address2, "Suite 15" %>
+		<%= label_tag "City" %><%= text_field_tag :store_city, "" %>
+		<%= label_tag "State" %><%= select_tag 'State', options_for_select(us_states, "OK"), {} %>
+		<%= label_tag "Zip" %><%= text_field_tag :store_zip, "99999" %>
+		<%= label_tag "Store Phone" %><%= text_field_tag :store_phone, "212-555-1212" %>
+
+		<h2>Account Information</h2>
+		<%= label_tag "Account Name" %><%= text_field_tag :store_name, "Smith Tires" %>
+		<%= label_tag "Account Address" %><%= text_field_tag :store_address1, "1250 Main Street" %>
+		<%= label_tag "" %><%= text_field_tag :store_address2, "Suite 15" %>
+		<%= label_tag "City" %><%= text_field_tag :store_city, "Oklahoma City" %>
+		<%= label_tag "State" %><%= select_tag 'State', options_for_select(us_states, "OK"), {} %>
+		<%= label_tag "Zip" %><%= text_field_tag :store_zip, "99999" %>
+		<%= label_tag "Account Contact Phone" %><%= text_field_tag :account_phone, "212-555-1212" %>
+		<%= label_tag "Account Contact Email" %><%= text_field_tag :account_phone, "" %>
+		<br />
+		<button class="btn">Register With Treadhunter</button>
+		<br />
+	</div>
+	<div id="registration-mid-part-right" class="span7">
+        <div id="store-info" class="info">
+			<h1>Why TreadHunter?</h1>
+			<p>TreadHunter allows tire stores and individuals to list their new and used tires for free.
+				 For new tires, we collect credit card payment from consumers and transfer the funds immediately into your bank account (minus a <%= $th_processing_fee_percent %>% credit card processing and marketing charge). We also gather the consumer's preferred appointment times
+				 to have the tires installed, and allow you to confirm the appointment with the consumer through our application. If you prefer, you can do all this, as well as ordering tires from your distributors, from your smart phone or tablet.</p>
+			<h1>Why use TreadHunter to help sell your tires?</h1>
+			<ul class="orange-check-list">
+			<li>Gives you an Internet presence with targeted marketing</li>
+			<li>Easily promote sales and specials</li>
+			<li>Targeted search engine experience</li>
+			<li>Customers can make reservations online to schedule an appointment</li>
+			</ul>
+			<h1>How it Works</h1>
+			<p>
+				<a class="various fancybox.iframe" 
+					href="http://www.youtube.com/embed/qKLdHTfjK8A?autoplay=1">
+			  		<img src="/assets/play-button-overlay.png" 
+			  			style="width: 100%;background:transparent URL(/assets/qKLdHTfjK8A.png) no-repeat center;background-size: 100% 100%;"/>
+				</a>
+			</p>
+		</div>
+	</div>
+<% elsif false %>
+	<h1>
+		<u>Pricing Markups</u>
+	</h1>
+	<p>
+		Our records indicate you are a customer of <b>ACME DISTRIBUTORS</b> from <b>DALLAS, TX</b>.  Your pricing structure is at Tier 2.  TreadHunter will automatically create listings for each of the brands listed below.  You should now set the markup percentage above your Tier 2 pricing:
+	</p>
+	<% ["BF Goodrich", "Bridgestone", "Goodyear", "Michelin", "Toyo", "Yokohama"].each_with_index do |manu, i| %>
+		<%= manu %>&nbsp;&nbsp;<%= text_field_tag :percent, "10", {style: "width: 30px"} %>%
+		<% if i == 0 %>
+			<button class="btn">Use for all</button>
+		<% end %>
+		<br />
+	<% end %>
+	<br />
+	<button class="btn">Set Markups</button>
+	<br />
+<% elsif false %>
+	<div id="registration-mid-part-left" class="span5">
+		<% @tire_store = TireStore.first %>
+		<% @branding = Branding.new %>
+		<% @promotions = [] %>
+		<div id="account-main">
+			<div id="stripe">
+				<a href="#" id="connect-with-stripe">
+					<img alt="Connect with Stripe" src="/assets/stripe-button.png">
+				</a>
+			</div>
+			<hr />
+			<h3>Logo/Photo</h3>
+			<div id="photo-upload">
+				<%= fields_for @branding do |b| %>
+					<% if !b.object.logo.nil? && b.object.logo.exists? %>
+						<%= image_tag b.object.logo.url(:medium), class: "background" %>
+					<% else %>
+						<%= image_tag "photo-placeholder.png", class: "background" %>
+					<% end %>
+					<div id="upload-btn-wrapper">
+						<%= b.file_field :logo %>
+					</div>
+				<% end %>
+			</div>
+			<p style="font-size: 13px;">Upload files in image forms (*.jpg, *.jpeg, *.png).<br/>Maximum upload file size is 2 MB.</p>
+			<hr />
+			<h3>Hours Of Operation</h3>
+			<div class="day">
+				<span>Mon:</span>
+				<%= text_field_tag :monday_open, "", :style => "width: 50px" %> - <%= text_field_tag :monday_close, "", :style => "width: 50px"  %>
+				<%= check_box_tag :open_24_hrs_monday, "1", @tire_store.day_is_24_hours?(1) %>
+				<%= label_tag :open_24_hrs_monday, "Open 24 hours", :style=>"display: inline;" %> 
+				<br />
+				<span>Tue:</span>
+				<%= text_field_tag :monday_open, "", :style => "width: 50px" %> - <%= text_field_tag :monday_close, "", :style => "width: 50px"  %>
+				<%= check_box_tag :open_24_hrs_monday, "1", @tire_store.day_is_24_hours?(1) %>
+				<%= label_tag :open_24_hrs_monday, "Open 24 hours", :style=>"display: inline;" %> 
+				<br />
+				<span>Wed:</span>
+				<%= text_field_tag :monday_open, "", :style => "width: 50px" %> - <%= text_field_tag :monday_close, "", :style => "width: 50px"  %>
+				<%= check_box_tag :open_24_hrs_monday, "1", @tire_store.day_is_24_hours?(1) %>
+				<%= label_tag :open_24_hrs_monday, "Open 24 hours", :style=>"display: inline;" %> 
+				<br />
+				<span>Thu:</span>
+				<%= text_field_tag :monday_open, "", :style => "width: 50px" %> - <%= text_field_tag :monday_close, "", :style => "width: 50px"  %>
+				<%= check_box_tag :open_24_hrs_monday, "1", @tire_store.day_is_24_hours?(1) %>
+				<%= label_tag :open_24_hrs_monday, "Open 24 hours", :style=>"display: inline;" %> 
+				<br />
+				<span>Fri:</span>
+				<%= text_field_tag :monday_open, "", :style => "width: 50px" %> - <%= text_field_tag :monday_close, "", :style => "width: 50px"  %>
+				<%= check_box_tag :open_24_hrs_monday, "1", @tire_store.day_is_24_hours?(1) %>
+				<%= label_tag :open_24_hrs_monday, "Open 24 hours", :style=>"display: inline;" %> 
+				<br />
+				<span>Sat:</span>
+				<%= text_field_tag :monday_open, "", :style => "width: 50px" %> - <%= text_field_tag :monday_close, "", :style => "width: 50px"  %>
+				<%= check_box_tag :open_24_hrs_monday, "1", @tire_store.day_is_24_hours?(1) %>
+				<%= label_tag :open_24_hrs_monday, "Open 24 hours", :style=>"display: inline;" %> 
+				<br />
+				<span>Sun:</span>
+				<%= text_field_tag :monday_open, "", :style => "width: 50px" %> - <%= text_field_tag :monday_close, "", :style => "width: 50px"  %>
+				<%= check_box_tag :open_24_hrs_monday, "1", @tire_store.day_is_24_hours?(1) %>
+				<%= label_tag :open_24_hrs_monday, "Open 24 hours", :style=>"display: inline;" %> 
+				<br />
+			</div>
+		</div>
+	</div>
+	<div id="registration-mid-part-right" class="span7">
+        <div id="store-info" class="info">
+			<h1>Why are we asking for this financial information?</h1>
+			<p>
+				When a consumer purchases tires online from TreadHunter, we <i>immediately</i>
+				transfer the money to your bank account through our partners at Stripe.com (minus a 3.9% processing fee).
+			</p>
+			<h1>What if I'm uneasy providing this information?</h1>
+			<p>
+				Well, the good news is that you are already registered with TreadHunter, and can
+				enter this information at any point in the future by logging in and clicking "My Account" in the upper right corner, then choosing "My Stores" and "Edit".
+			</p>
+			<h1>OK, you've convinced me.  What now?</h1>
+			<p>
+				Once your bank account number has been entered, we will automatically generate thousands of tire listings on TreadHunter, using the pricing information provided by your distributor (<b>Acme Distributors</b>) and the price markup information you entered on the previous screen.
+			</p>
+			<p>
+				Now you just wait for people to buy tires.  When they do, you will receive an email indicating the order has been complete, and one with the consumer's preferred appointment times.  On the My Account screen you'll see an Appointments tab, where you can approve the consumer's appointment times, which will email the consumer that the appointment is confirmed.
+			</p>
+		</div>
+	</div>
+<% else %>
+<h3>Search results for 2001 Acura CL</h3>
+
+
+<div id="search-content">
+	    <div id="search-content-inner">
+	      
+	      <div id="search-main">
+	        <!---->
+			
+	
+	        <div class="tabcontent-1" id="cont-1-1">
+	          <!---->
+	          
+		      <div class="row-fluid">
+		        <div class="search-main-right-store span3">
+		          
+		          <div id="show-filters">
+		            <a href="#" class="btn">FILTER RESULTS</a>
+		          </div>
+		          
+		          <div id="search-filters-wrapper">
+		            <h2 class="filter-title">FILTER BY</h2>
+		            <div class="search-content-right-store">
+		                  <script>
+        var FilterQS = "";
+        function hide_siblings(el) {
+            var siblings = el.parentNode.parentNode.childNodes;
+            for (var i = 0; i < siblings.length; i++) {
+                if (siblings[i].firstChild != null && 
+                        siblings[i].firstChild.nextSibling.id != el.id) {
+                    jQuery(siblings[i]).addClass('hide');
+                }
+            }
+        }
+
+        function show_siblings(el) {
+            var siblings = el.parentNode.parentNode.childNodes;
+            for (var i = 0; i < siblings.length; i++) {
+                if (siblings[i].firstChild != null && 
+                        siblings[i].firstChild.nextSibling.id != el.id) {
+                    jQuery(siblings[i]).removeClass('hide');
+                }
+            }
+        }
+
+        function filter_results(filter, el) {
+            if (el.checked) {
+                hide_siblings(el);
+                FilterQS = FilterQS + (FilterQS == "" ? "" : "&") + filter + "_filter=" + el.value;
+            } else {
+                show_siblings(el);
+                FilterQS = removeQSParam(FilterQS, filter + "_filter");
+            };
+            reload_data();
+        };
+
+        function reload_data() {
+            $('#tirelistings_list').html('');
+            async_mode = false;
+            pageCount = 1;
+            $('#search-main').trigger('reset.infiniteScrollHelper');
+            $('#search-main').trigger('scroll.infiniteScrollHelper');
+        }
+
+        function sort_results(sort_order) {
+            FilterQS = removeQSParam(FilterQS, 'sort');
+            FilterQS = FilterQS + "&" + "sort=" + sort_order
+            reload_data();
+        }
+
+        function min_max_filter_results(filter, el, min_val, max_val) {
+            if (el.checked) {
+                hide_siblings(el);
+                FilterQS = FilterQS + "&" + filter + "_min_filter=" + min_val + '&' + filter + "_max_filter=" + max_val;
+            } else {
+                show_siblings(el);
+                FilterQS = removeQSParam(FilterQS, filter + "_min_filter");
+                FilterQS = removeQSParam(FilterQS, filter + "_max_filter");
+            }
+            reload_data();
+        };
+
+        function removeQSParam(url, param) {
+            var prefix= encodeURIComponent(param)+'=';
+            var pars= url.split(/[&;]/g);
+            for (var i=pars.length; i-- > 0;) {
+                if (pars[i].indexOf(prefix, 0)==0)
+                    pars.splice(i, 1);
+            }
+            if (pars.length > 0)
+                return pars.join('&');
+            else
+                return '';
+        };
+        
+        $(function() {
+			$(".search-content-right-store-box .control").click(function (e) {
+				e.preventDefault();
+				$(this).parent().toggleClass("closed");
+			});
+			
+			$(".search-content-right-store-box .control .help").click(function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				var dialog = $("#dialog-" + $(this).attr("id"));
+				if (dialog.length)
+					dialog.dialog({ modal: true }).dialog("open");
+			});
+		});
+    </script>
+
+<div class="search-content-right-store-box  inputs closed">
+    <a class="control" href="#">Manufacturers <div class="help" id="filter-manufacturer-help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+        <span class="check-options">
+            <ul id="xxmanufacturer_list">
+                        <li>
+                            <input id="tire_manufacturer_28" value="28" type="checkbox" onclick="filter_results('tire_manufacturer_id', this);">
+                            <span>BFGoodrich (304)</span>
+                        </li>
+                        <li>
+                            <input id="tire_manufacturer_4" value="4" type="checkbox" onclick="filter_results('tire_manufacturer_id', this);">
+                            <span>Continental (1)</span>
+                        </li>
+                        <li>
+                            <input id="tire_manufacturer_6" value="6" type="checkbox" onclick="filter_results('tire_manufacturer_id', this);">
+                            <span>Dunlop (30)</span>
+                        </li>
+                        <li>
+                            <input id="tire_manufacturer_10" value="10" type="checkbox" onclick="filter_results('tire_manufacturer_id', this);">
+                            <span>Goodyear (173)</span>
+                        </li>
+                        <li>
+                            <input id="tire_manufacturer_11" value="11" type="checkbox" onclick="filter_results('tire_manufacturer_id', this);">
+                            <span>Hankook (436)</span>
+                        </li>
+                        <li>
+                            <input id="tire_manufacturer_24" value="24" type="checkbox" onclick="filter_results('tire_manufacturer_id', this);">
+                            <span>Kelly (28)</span>
+                        </li>
+                        <li>
+                            <input id="tire_manufacturer_13" value="13" type="checkbox" onclick="filter_results('tire_manufacturer_id', this);">
+                            <span>Kumho (12)</span>
+                        </li>
+                        <li>
+                            <input id="tire_manufacturer_114" value="114" type="checkbox" onclick="filter_results('tire_manufacturer_id', this);">
+                            <span>Maxxis (92)</span>
+                        </li>
+                        <li>
+                            <input id="tire_manufacturer_14" value="14" type="checkbox" onclick="filter_results('tire_manufacturer_id', this);">
+                            <span>Michelin (437)</span>
+                        </li>
+                        <li>
+                            <input id="tire_manufacturer_54" value="54" type="checkbox" onclick="filter_results('tire_manufacturer_id', this);">
+                            <span>Milestar (1)</span>
+                        </li>
+                        <li>
+                            <input id="tire_manufacturer_15" value="15" type="checkbox" onclick="filter_results('tire_manufacturer_id', this);">
+                            <span>Pirelli (173)</span>
+                        </li>
+                        <li>
+                            <input id="tire_manufacturer_113" value="113" type="checkbox" onclick="filter_results('tire_manufacturer_id', this);">
+                            <span>Riken (3)</span>
+                        </li>
+                        <li>
+                            <input id="tire_manufacturer_19" value="19" type="checkbox" onclick="filter_results('tire_manufacturer_id', this);">
+                            <span>Uniroyal (159)</span>
+                        </li>
+            </ul>
+        </span>
+    </div>
+</div>
+<div class="search-content-right-store-box  inputs closed">
+    <a class="control" href="#">Speed Rating <div class="help" id="tire-size-help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+        <span class="check-options">
+            <ul id="xxwheelsizes_list">
+                            <li>
+                                <input id="wheelsize_12" value="12" type="checkbox" onclick="filter_results('wheeldiameter', this);">
+                                <span>S (1)</span>
+                            </li>
+                            <li>
+                                <input id="wheelsize_13" value="13" type="checkbox" onclick="filter_results('wheeldiameter', this);">
+                                <span>T (2)</span>
+                            </li>
+                            <li>
+                                <input id="wheelsize_14" value="14" type="checkbox" onclick="filter_results('wheeldiameter', this);">
+                                <span>Z (2)</span>
+                            </li>
+            </ul>
+        </span>
+    </div>
+</div>
+<div class="search-content-right-store-box  inputs closed">
+    <a class="control" href="#">Treadwear <div class="help" id="tire-size-help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+        <span class="check-options">
+            <ul id="xxwheelsizes_list">
+                            <li>
+                                <input id="wheelsize_12" value="12" type="checkbox" onclick="filter_results('wheeldiameter', this);">
+                                <span>&lt; 200 (1)</span>
+                            </li>
+                            <li>
+                                <input id="wheelsize_13" value="13" type="checkbox" onclick="filter_results('wheeldiameter', this);">
+                                <span>200-400 (3)</span>
+                            </li>
+                            <li>
+                                <input id="wheelsize_14" value="14" type="checkbox" onclick="filter_results('wheeldiameter', this);">
+                                <span>400-600 (2)</span>
+                            </li>
+                            <li>
+                                <input id="wheelsize_14" value="14" type="checkbox" onclick="filter_results('wheeldiameter', this);">
+                                <span>600+ (1)</span>
+                            </li>
+            </ul>
+        </span>
+    </div>
+</div>
+<div class="search-content-right-store-box  inputs closed">
+    <a class="control" href="#">Temperature <div class="help" id="tire-size-help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+        <span class="check-options">
+            <ul id="xxwheelsizes_list">
+                            <li>
+                                <input id="wheelsize_12" value="12" type="checkbox" onclick="filter_results('wheeldiameter', this);">
+                                <span>A (2)</span>
+                            </li>
+                            <li>
+                                <input id="wheelsize_13" value="13" type="checkbox" onclick="filter_results('wheeldiameter', this);">
+                                <span>B (3)</span>
+                            </li>
+                            <li>
+                                <input id="wheelsize_14" value="14" type="checkbox" onclick="filter_results('wheeldiameter', this);">
+                                <span>C (2)</span>
+                            </li>
+            </ul>
+        </span>
+    </div>
+</div>
+<div class="search-content-right-store-box  inputs closed">
+    <a class="control" href="#">Tire Type <div class="help" id="filter-type-help"></div><div class="clear"></div></a>
+    <span class="check-options">
+        <div class="filter-item">
+            <ul id="xxcategories_list">
+                        <li>
+                            <input id="tire_category_33" value="33" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>All Season (481)</span>
+                        </li>
+                        <li>
+                            <input id="tire_category_34" value="34" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>All Terrain (55)</span>
+                        </li>
+                        <li>
+                            <input id="tire_category_50" value="50" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>All Terrain Winter (20)</span>
+                        </li>
+                        <li>
+                            <input id="tire_category_27" value="27" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>High Performance Summer (245)</span>
+                        </li>
+                        <li>
+                            <input id="tire_category_44" value="44" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>Highway/Regional (7)</span>
+                        </li>
+                        <li>
+                            <input id="tire_category_35" value="35" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>Mud Terrain (5)</span>
+                        </li>
+                        <li>
+                            <input id="tire_category_45" value="45" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>Off Road (4)</span>
+                        </li>
+                        <li>
+                            <input id="tire_category_42" value="42" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>On/Off Road (18)</span>
+                        </li>
+                        <li>
+                            <input id="tire_category_4" value="4" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>Performance All-Season (472)</span>
+                        </li>
+                        <li>
+                            <input id="tire_category_46" value="46" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>Performance Touring All Season (82)</span>
+                        </li>
+                        <li>
+                            <input id="tire_category_6" value="6" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>Standard Touring All-Season (414)</span>
+                        </li>
+                        <li>
+                            <input id="tire_category_47" value="47" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>Touring Summer (11)</span>
+                        </li>
+                        <li>
+                            <input id="tire_category_2" value="2" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>Ultra High Performance All-Season (1)</span>
+                        </li>
+                        <li>
+                            <input id="tire_category_43" value="43" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>Winter (10)</span>
+                        </li>
+                        <li>
+                            <input id="tire_category_0" value="0" type="checkbox" onclick="filter_results('tire_category_id', this);">
+                            <span>n/a (24)</span>
+                        </li>
+            </ul>
+        </div>
+    </span>
+</div>
+<div class="search-content-right-store-box  inputs closed">
+    <a class="control" href="#">Cost Per Tire <div class="help" id="filter-cost-help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+    <span class="check-options">
+        <ul id="xxprice_list" class="check-options">
+            <li>
+                <input type="checkbox" value="below-50" id="price_1" onclick="min_max_filter_results('cost_per_tire', this, 0, 50)">
+                <span>Below $50 per tire</span>
+            </li>
+            <li>
+                <input type="checkbox" value="50-100" id="price_2" onclick="min_max_filter_results('cost_per_tire', this, 50, 100)">
+                <span>$50-$100 per tire</span>
+            </li>
+            <li>
+                <input type="checkbox" value="100-150" id="price_3" onclick="min_max_filter_results('cost_per_tire', this, 100, 150)">
+                <span>$100-$150 per tire</span>
+            </li>
+            <li>
+                <input type="checkbox" value="150-above" id="price_4" onclick="min_max_filter_results('cost_per_tire', this, 150, 99999)">
+                <span>$150+ per tire</span>
+            </li>
+        </ul>
+    </span>
+    </div>
+</div>
+
+
+
+<div id="dialog-filter-cartype-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">FILTER BY CAR TYPE</h5>
+	<p>Search by categories of the type of car that you have. Example: Car, Minivan, Crossover, CUV, SUV, Truck, Pickup</p>
+</div>
+
+<div id="dialog-filter-type-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">FILTER BY TIRE TYPE</h5>
+	<p><span class="bold">All-Terrain Tires</span> are built to help provide tough traction for on- and off-road driving.</p>
+	<p><span class="bold">Fuel-Efficient Tires</span> can help save money on gas while still offering wet and dry traction.</p>
+	<p><span class="bold">Run on Flat Tires</span> let you drive up to 50mi. on a deflating tire with top a speed of 50 mph.</p>
+	<p><span class="bold">Sports Performance Tires</span> are meant for high-performance tires that help provide handling and traction in both dry and wet conditions.</p>
+</div>
+
+<div id="dialog-filter-manufacturer-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">FILTER BY BRAND</h5>
+	<p>Search by the brand of tire you’re interested in. Example: GoodYear</p>
+</div>
+
+<div id="dialog-filter-cost-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">FILTER BY PRICE</h5>
+	<p>This lets you select tires within a specific price range such as $75-$100.</p>
+</div>
+
+		            </div>
+		          </div>
+		        </div>
+		        <div class="search-content-left-store span9">
+		          
+		            <div class="select-box inline-select-box">
+  <form>
+    <label>Sort by:</label>
+    <select id="sort-order" class="users" onchange="OnSortChange()">
+      <!-- <option>Select a sort order</option> -->
+      <option id="priceasc" value="priceasc">Price - Low to High</option>
+      <option id="quantity" value="quantity">Quantity</option>
+      <option id="type" value="type">Type</option>
+      <option id="treadlife" value="treadlife">Treadlife</option>
+      <option id="pricedesc" value="pricedesc">Price - High to Low</option>
+    </select>
+    <noscript>&lt;input type="submit" value="Go" name="sort"&gt;</noscript>
+  </form>
+</div>
+  <script>
+    function OnSortChange() {  
+      if(typeof deleteCompressedNodes == 'function')
+          deleteCompressedNodes();
+      if ($('select#sort-order').attr('value') == 'quantity')
+        sort_results('qty');
+      else if ($('select#sort-order').attr('value') == 'type')
+        sort_results('type');
+      else if ($('select#sort-order').attr('value') == 'treadlife')
+        sort_results('treadd');
+      else if ($('select#sort-order').attr('value') == 'distance') {
+        sort_results('distance');
+        if(typeof createCompressedNodes == 'function')
+          createCompressedNodes(last_known_result);
+      }
+      else if ($('select#sort-order').attr('value') == 'priceasc')
+        sort_results('cost');
+      else if ($('select#sort-order').attr('value') == 'pricedesc') 
+        sort_results('costd');
+    };
+  </script>
+
+		            
+		            <div id="tirelistings_list">
+			          	        
+<div class="search-content-inner search-content-left-inner">
+	<div class="left-content">
+		<div class="search-img">
+			<div class="logo">
+				<img alt="" src="/assets/brand_logos/MICHELIN-18ce091ffa2501e8e4248eefe6dc27c9.png">
+			</div>
+			<a href="/brands/models/4938">
+						<img alt="Mn_pilot_super_sport_l" src="http://s3.amazonaws.com/TirePictures/tire_model_infos/stock_photo1s/000/004/739/medium/mn_pilot_super_sport_l.jpg">	
+			</a>
+		</div>
+	</div>
+	<div class="right-content">
+		
+
+        <div class="search-text">
+			<h2>Michelin</h2>
+				<a href="/brands/models/4938">
+					<h4>XZE</h4>
+</a>		</div>
+		
+		<div class="rebate">
+		</div>
+		<div class="search-right-b">
+			<span style="line-height: 4px;">from</span>
+			<h1><span>$</span>152.38</h1>
+
+
+			<a class="btn view-tire-btn search-right-b-img" href="/tire_listings/723212-4-245-70r19-5-michelin-xze-245-70-19-5-midtown-tire-sugarloaf-lawrenceville-ga" id="723212">STORES NEAR ME</a>
+        </div>
+        
+	    <div class="search-right">
+				<h3>205/55R16</h3>
+			<ul class="orange-bullets">
+			</ul>
+			<ul class="orange-bullets">
+					<li><span>Speed Rating: <span>Z</span>
+					<li><span>Treadwear: <span>350</span>
+					<li><span>Temperature: <span>A</span>
+					<!--<img alt="New" src="/assets/new_icon-de1d715faf11f3cb8282a4ecaed16a5d.png" />--></span></li>
+			</ul>
+		</div>
+		
+	  </div>
+</div>
+
+
+<!------------------------------------------------------------------>
+<div id="listing" style="margin-left: 125px; margin-right: 125px">
+	<div class="store">
+		<div class="row-fluid">
+			<div class="info span4">
+				<h5>1. Tire Warehouse &amp; Wheels Inc</h5>
+				<div>6460 Buford Hwy NE # 1A</div>
+				<div></div>
+				<div>Atlanta, GA 30340</div>
+				<div>Phone: (678) 966-9296</div>
+
+				<div class="hours">Open today 8:00 am - 6:00 pm</div>
+				<div class="distance">
+						3.88 miles
+				</div>
+			</div>
+			
+			<div class="description span4">
+						<div class="ratings smaller-mobile">
+		<span><img alt="*" src="/assets/star.png" title="4 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="4 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="4 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="4 out of 5 stars"></span>
+		<span><img alt="" src="/assets/star-off.png" title="4 out of 5 stars"></span>
+		<span class="reviews-count">
+		  	<a href="" target="">
+		  		11 Reviews
+		  	</a>		  
+		</span>
+	</div>
+
+
+					<p class="summary"></p>
+					
+					<div class="services">
+						<span>
+							<img alt="Wifi" class="not-available" src="/assets/icon-wifi.png" title="Wifi">
+						</span>
+						<span>
+							<img alt="Coffee" class="not-available" src="/assets/icon-coffee.png" title="Free Coffee">
+						</span>
+						<span>
+							<img alt="Air" class="" src="/assets/icon-air.png" title="Free Air">
+						</span>
+						<span>
+							<img alt="Overnight" class="not-available" src="/assets/icon-overnight.png" title="Leave Overnight">
+						</span>
+					</div>
+					<a href="/tire_stores/33163-tire-warehouse-wheels-inc-atlanta-ga#cont-2-1" class="read-more-link underlined">Read More</a>
+				<div class="clear"></div>
+			</div>
+			
+			<div class="mobile-btn-container"></div>
+			<div class="search-right-b" style="float: right">
+			<span style="line-height: 4px;">Price:</span>
+			<h1><span>$</span>152.38</h1>
+			<a class="btn view-tire-btn search-right-b-img" href="/tire_listings/723212-4-245-70r19-5-michelin-xze-245-70-19-5-midtown-tire-sugarloaf-lawrenceville-ga" id="723212">BUY NOW</a>
+        	</div>
+
+		</div>
+		<hr style="border-top: dotted 1px;" />
+	</div>
+		
+	<div class="store">
+		<div class="row-fluid">
+			<div class="info span4">
+				<h5>2. M G Wheels</h5>
+				<div>6704 Buford Hwy NE</div>
+				<div></div>
+				<div>Atlanta, GA 30340</div>
+				<div>Phone: (770) 446-7860</div>
+
+				<div class="hours">Open today 8:00 am - 6:00 pm</div>
+				<div class="distance">
+						4.0 miles
+				</div>
+			</div>
+			
+			<div class="description span4">
+						<div class="ratings smaller-mobile">
+		<span><img alt="*" src="/assets/star.png" title="4 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="4 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="4 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="4 out of 5 stars"></span>
+		<span><img alt="" src="/assets/star-off.png" title="4 out of 5 stars"></span>
+		<span class="reviews-count">
+		  	<a href="/tire_stores/write_review?tire_store_id=33162" target="_blank">
+		  		Be the first to write a review
+		  	</a>		  
+		</span>
+	</div>
+
+
+					<p class="summary"></p>
+					
+					<div class="services">
+						<span>
+							<img alt="Wifi" class="not-available" src="/assets/icon-wifi.png" title="Wifi">
+						</span>
+						<span>
+							<img alt="Coffee" class="not-available" src="/assets/icon-coffee.png" title="Free Coffee">
+						</span>
+						<span>
+							<img alt="Air" class="" src="/assets/icon-air.png" title="Free Air">
+						</span>
+						<span>
+							<img alt="Overnight" class="not-available" src="/assets/icon-overnight.png" title="Leave Overnight">
+						</span>
+					</div>
+					<a href="/tire_stores/33162-m-g-wheels-atlanta-ga#cont-2-1" class="read-more-link underlined">Read More</a>
+				<div class="clear"></div>
+			</div>
+			
+			<div class="mobile-btn-container"></div>
+			<div class="search-right-b" style="float: right">
+			<span style="line-height: 4px;">Price:</span>
+			<h1><span>$</span><%= ((15238 + Random.rand(2500)) / 100.00).to_money %></h1>
+			<a class="btn view-tire-btn search-right-b-img" href="/tire_listings/723212-4-245-70r19-5-michelin-xze-245-70-19-5-midtown-tire-sugarloaf-lawrenceville-ga" id="723212">BUY NOW</a>
+        	</div>
+
+		</div>
+		<hr style="border-top: dotted 1px;" />
+	</div>
+		
+	<div class="store">
+		<div class="row-fluid">
+			<div class="info span4">
+				<h5>3. Georgia Industrial Tire Inc</h5>
+				<div>2875 Humphries Way</div>
+				<div></div>
+				<div>Atlanta, GA 30360</div>
+				<div>Phone: (770) 446-6467</div>
+
+				<div class="hours">Open today 8:00 am - 6:00 pm</div>
+				<div class="distance">
+						4.05 miles
+				</div>
+			</div>
+			
+			<div class="description span4">
+						<div class="ratings smaller-mobile">
+		<span><img alt="*" src="/assets/star.png" title="2 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="2 out of 5 stars"></span>
+		<span><img alt="" src="/assets/star-off.png" title="2 out of 5 stars"></span>
+		<span><img alt="" src="/assets/star-off.png" title="2 out of 5 stars"></span>
+		<span><img alt="" src="/assets/star-off.png" title="2 out of 5 stars"></span>
+		<span class="reviews-count">
+		  	<a href="/tire_stores/write_review?tire_store_id=33158" target="_blank">
+		  		Be the first to write a review
+		  	</a>		  
+		</span>
+	</div>
+
+
+					<p class="summary"></p>
+					
+					<div class="services">
+						<span>
+							<img alt="Wifi" class="not-available" src="/assets/icon-wifi.png" title="Wifi">
+						</span>
+						<span>
+							<img alt="Coffee" class="not-available" src="/assets/icon-coffee.png" title="Free Coffee">
+						</span>
+						<span>
+							<img alt="Air" class="" src="/assets/icon-air.png" title="Free Air">
+						</span>
+						<span>
+							<img alt="Overnight" class="not-available" src="/assets/icon-overnight.png" title="Leave Overnight">
+						</span>
+					</div>
+					<a href="/tire_stores/33158-georgia-industrial-tire-inc-atlanta-ga#cont-2-1" class="read-more-link underlined">Read More</a>
+				<div class="clear"></div>
+			</div>
+			
+			<div class="mobile-btn-container"></div>
+			<div class="search-right-b" style="float: right">
+			<span style="line-height: 4px;">Price:</span>
+			<h1><span>$</span><%= ((15238 + Random.rand(2500)) / 100.00).to_money %></h1>
+			<a class="btn view-tire-btn search-right-b-img" href="/tire_listings/723212-4-245-70r19-5-michelin-xze-245-70-19-5-midtown-tire-sugarloaf-lawrenceville-ga" id="723212">BUY NOW</a>
+        	</div>
+
+		</div>
+		<hr style="border-top: dotted 1px;" />
+	</div>
+		
+	<div class="store">
+		<div class="row-fluid">
+			<div class="info span4">
+				<h5>4. K &amp; J New &amp; Used Tires Inc</h5>
+				<div>6864 Buford Hwy NE</div>
+				<div></div>
+				<div>Atlanta, GA 30340</div>
+				<div>Phone: (770) 729-0008</div>
+
+				<div class="hours">Open today 8:00 am - 6:00 pm</div>
+				<div class="distance">
+						4.16 miles
+				</div>
+			</div>
+			
+			<div class="description span4">
+						<div class="ratings smaller-mobile">
+		<span><img alt="*" src="/assets/star.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="5 out of 5 stars"></span>
+		<span class="reviews-count">
+		  	<a href="" target="">
+		  		10 Reviews
+		  	</a>		  
+		</span>
+	</div>
+
+
+					<p class="summary"></p>
+					
+					<div class="services">
+						<span>
+							<img alt="Wifi" class="not-available" src="/assets/icon-wifi.png" title="Wifi">
+						</span>
+						<span>
+							<img alt="Coffee" class="not-available" src="/assets/icon-coffee.png" title="Free Coffee">
+						</span>
+						<span>
+							<img alt="Air" class="" src="/assets/icon-air.png" title="Free Air">
+						</span>
+						<span>
+							<img alt="Overnight" class="not-available" src="/assets/icon-overnight.png" title="Leave Overnight">
+						</span>
+					</div>
+					<a href="/tire_stores/33161-k-j-new-used-tires-inc-atlanta-ga#cont-2-1" class="read-more-link underlined">Read More</a>
+				<div class="clear"></div>
+			</div>
+			
+			<div class="mobile-btn-container"></div>
+			<div class="search-right-b" style="float: right">
+			<span style="line-height: 4px;">Price:</span>
+			<h1><span>$</span><%= ((15238 + Random.rand(2500)) / 100.00).to_money %></h1>
+			<a class="btn view-tire-btn search-right-b-img" href="/tire_listings/723212-4-245-70r19-5-michelin-xze-245-70-19-5-midtown-tire-sugarloaf-lawrenceville-ga" id="723212">BUY NOW</a>
+        	</div>
+		</div>
+		<hr style="border-top: dotted 1px;" />
+	</div>
+		
+	<div class="store">
+		<div class="row-fluid">
+			<div class="info span4">
+				<h5>5. A &amp; C Used Tires</h5>
+				<div>6721 Peachtree Industrial Blvd</div>
+				<div></div>
+				<div>Atlanta, GA 30360</div>
+				<div>Phone: (404) 483-1583</div>
+
+				<div class="hours">Open today 8:00 am - 6:00 pm</div>
+				<div class="distance">
+						4.25 miles
+				</div>
+			</div>
+			
+			<div class="description span4">
+						<div class="ratings smaller-mobile">
+		<span><img alt="*" src="/assets/star.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="5 out of 5 stars"></span>
+		<span class="reviews-count">
+		  	<a href="/tire_stores/write_review?tire_store_id=33155" target="_blank">
+		  		8 Reviews
+		  	</a>		  
+		</span>
+	</div>
+
+
+					<p class="summary"></p>
+					
+					<div class="services">
+						<span>
+							<img alt="Wifi" class="not-available" src="/assets/icon-wifi.png" title="Wifi">
+						</span>
+						<span>
+							<img alt="Coffee" class="not-available" src="/assets/icon-coffee.png" title="Free Coffee">
+						</span>
+						<span>
+							<img alt="Air" class="" src="/assets/icon-air.png" title="Free Air">
+						</span>
+						<span>
+							<img alt="Overnight" class="not-available" src="/assets/icon-overnight.png" title="Leave Overnight">
+						</span>
+					</div>
+					<a href="/tire_stores/33155-a-c-used-tires-atlanta-ga#cont-2-1" class="read-more-link underlined">Read More</a>
+				<div class="clear"></div>
+			</div>
+			
+			<div class="mobile-btn-container"></div>
+			<div class="search-right-b" style="float: right">
+			<span style="line-height: 4px;">Price:</span>
+			<h1><span>$</span><%= ((15238 + Random.rand(2500)) / 100.00).to_money %></h1>
+			<a class="btn view-tire-btn search-right-b-img" href="/tire_listings/723212-4-245-70r19-5-michelin-xze-245-70-19-5-midtown-tire-sugarloaf-lawrenceville-ga" id="723212">BUY NOW</a>
+        	</div>
+
+		</div>
+		<hr style="border-top: dotted 1px;" />
+	</div>
+		
+	<div class="store">
+		<div class="row-fluid">
+			<div class="info span4">
+				<h5>6. Atlanta Commercial Tire Doraville</h5>
+				<div>6590 Button Gwinnett Dr</div>
+				<div></div>
+				<div>Atlanta, GA 30340</div>
+				<div>Phone: (770) 825-8050</div>
+
+				<div class="hours">Open today 8:00 am - 6:00 pm</div>
+				<div class="distance">
+						4.32 miles
+				</div>
+			</div>
+			
+			<div class="description span4">
+						<div class="ratings smaller-mobile">
+		<span><img alt="*" src="/assets/star.png" title="4 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="4 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="4 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star.png" title="4 out of 5 stars"></span>
+		<span><img alt="" src="/assets/star-off.png" title="4 out of 5 stars"></span>
+		<span class="reviews-count">
+		  	<a href="/tire_stores/write_review?tire_store_id=33160" target="_blank">
+		  		12 Reviews
+		  	</a>		  
+		</span>
+	</div>
+
+
+					<p class="summary"></p>
+					
+					<div class="services">
+						<span>
+							<img alt="Wifi" class="not-available" src="/assets/icon-wifi.png" title="Wifi">
+						</span>
+						<span>
+							<img alt="Coffee" class="not-available" src="/assets/icon-coffee.png" title="Free Coffee">
+						</span>
+						<span>
+							<img alt="Air" class="" src="/assets/icon-air.png" title="Free Air">
+						</span>
+						<span>
+							<img alt="Overnight" class="not-available" src="/assets/icon-overnight.png" title="Leave Overnight">
+						</span>
+					</div>
+					<a href="/tire_stores/33160-atlanta-commercial-tire-doraville-atlanta-ga#cont-2-1" class="read-more-link underlined">Read More</a>
+				<div class="clear"></div>
+			</div>
+			
+			<div class="mobile-btn-container"></div>
+			<div class="search-right-b" style="float: right">
+			<span style="line-height: 4px;">Price:</span>
+			<h1><span>$</span><%= ((15238 + Random.rand(2500)) / 100.00).to_money %></h1>
+			<a class="btn view-tire-btn search-right-b-img" href="/tire_listings/723212-4-245-70r19-5-michelin-xze-245-70-19-5-midtown-tire-sugarloaf-lawrenceville-ga" id="723212">BUY NOW</a>
+        	</div>
+		</div>
+		<hr style="border-top: dotted 1px;" />
+	</div>
+</div>
+
+
+<!--------------------------------------------------->			
+
+
+
+
+
+
+
+
+
+
+	        
+<div class="search-content-inner search-content-left-inner">
+	<div class="left-content">
+		<div class="search-img">
+			<div class="logo">
+				<img alt="" src="/assets/brand_logos/MICHELIN-18ce091ffa2501e8e4248eefe6dc27c9.png">
+			</div>
+			<a href="/brands/models/4739">
+						<img alt="Mn_pilot_super_sport_l" src="http://s3.amazonaws.com/TirePictures/tire_model_infos/stock_photo1s/000/004/739/medium/mn_pilot_super_sport_l.jpg">					
+			</a>
+		</div>
+	</div>
+	<div class="right-content">
+		
+
+        <div class="search-text">
+			<h2>Michelin</h2>
+				<a href="/brands/models/4739">
+					<h4>Pilot Super Sport</h4>
+</a>		</div>
+		
+		<div class="rebate">
+		</div>
+		<div class="search-right-b">
+			<span style="line-height: 4px;">from</span>
+			<h1><span>$</span>206.40</h1>
+
+			<a class="btn view-tire-btn search-right-b-img" href="/tire_listings/718688-2-235-30r19-michelin-pilot-super-sport-235-30-19-midtown-tire-sugarloaf-lawrenceville-ga" id="718688">STORES NEAR ME</a>
+        </div>
+        
+	    <div class="search-right">
+				<h3>205/55R16</h3>
+			<ul class="orange-bullets">
+					<li><span>High Performance Summer</span></li>
+			</ul>
+			<ul class="orange-bullets">
+					<li><span>Speed Rating: <span>Y</span>
+					<li><span>Treadwear: <span>250</span>
+					<li><span>Temperature: <span>A</span>
+					<!--<img alt="New" src="/assets/new_icon-de1d715faf11f3cb8282a4ecaed16a5d.png" />--></span></li>
+			</ul>
+		</div>
+		
+	  </div>
+</div>
+
+	        
+<div class="search-content-inner search-content-left-inner">
+	<div class="left-content">
+		<div class="search-img">
+			<div class="logo">
+				<img alt="" src="/assets/brand_logos/MICHELIN-18ce091ffa2501e8e4248eefe6dc27c9.png">
+			</div>
+			<a href="/brands/models/4729">
+						<img class="lazy" src="http://s3.amazonaws.com/TirePictures/tire_model_infos/stock_photo1s/000/004/729/medium/mn_pilot_sport_as_3_l.jpg" data-original="http://s3.amazonaws.com/TirePictures/tire_model_infos/stock_photo1s/000/004/729/medium/mn_pilot_sport_as_3_l.jpg" style="display: inline;">
+						<noscript>
+							&lt;img alt="Mn_pilot_sport_as_3_l" src="http://s3.amazonaws.com/TirePictures/tire_model_infos/stock_photo1s/000/004/729/medium/mn_pilot_sport_as_3_l.jpg" /&gt;
+						</noscript>
+			</a>
+		</div>
+	</div>
+	<div class="right-content">
+		
+
+        <div class="search-text">
+			<h2>Michelin</h2>
+				<a href="/brands/models/4729">
+					<h4>Pilot Sport A/S 3</h4>
+</a>		</div>
+		
+		<div class="rebate">
+		</div>
+		<div class="search-right-b">
+			<span style="line-height: 4px;">from</span>
+			<h1><span>$</span>255.89</h1>
+
+			<a class="btn view-tire-btn search-right-b-img" href="/tire_listings/718680-4-205-55r16-michelin-pilot-sport-a-s-3-205-55-16-midtown-tire-sugarloaf-lawrenceville-ga" id="718680">STORES NEAR ME</a>
+        </div>
+        
+	    <div class="search-right">
+				<h3>205/55R16</h3>
+			<ul class="orange-bullets">
+					<li><span>Performance All-Season</span></li>
+			</ul>
+			<ul class="orange-bullets">
+					<li><span>Speed Rating: <span>W</span>
+					<li><span>Treadwear: <span>300</span>
+					<li><span>Temperature: <span>A</span>
+					<!--<img alt="New" src="/assets/new_icon-de1d715faf11f3cb8282a4ecaed16a5d.png" />--></span></li>
+			</ul>
+		</div>
+		
+	  </div>
+</div>
+
+	  
+	        
+	        <div class="tabcontent-1 hide" id="cont-2-1">
+	          <div class="row-fluid" style="margin-bottom: 20px;">
+	            <div class="store-desc span8">
+	              <h3>MIDTOWN TIRE SUGARLOAF</h3>
+	              <p></p><p></p><p></p>
+	            </div>
+	            <div class="store-hours span4">
+	              <h3>STORE HOURS</h3>
+	              <p>
+	                		Mon: Open 7:00 am - 6:00 pm<br>
+	                		Tue: Open 7:00 am - 6:00 pm<br>
+	                		Wed: Open 7:00 am - 6:00 pm<br>
+	                		Thu: Open 7:00 am - 6:00 pm<br>
+	                		Fri: Open 7:00 am - 6:00 pm<br>
+	                		Sat: Open 8:00 am - 5:00 pm<br>
+	                		Sun: Closed<br>
+	              </p>
+	            </div>
+	          </div>
+	          <div class="clear"></div>
+	          
+			  <div class="panel-group" id="info-accordion">
+			      <div class="panel panel-default">
+			          <div class="panel-heading">
+			              <a class="panel-title" data-toggle="collapse" data-parent="#info-accordion" href="#collapseOne">STORE OFFERINGS <span class="arrow"></span></a>
+			          </div>
+			          <div id="collapseOne" class="panel-collapse collapse in">
+			              <div class="panel-body">
+			                  <div class="mobile-title">Store offerings</div>
+			                  <ul class="two-column collapse-mobile">
+				                  		<li>Check and fill tire air pressure with any service</li>
+				                  		<li>ASE-certified technicians</li>
+			                  </ul>
+			              </div>
+			          </div>
+			      </div>
+			      <div class="panel panel-default">
+			          <div class="panel-heading">
+			              <a class="panel-title collapsed" data-toggle="collapse" data-parent="#info-accordion" href="#collapseTwo">SERVICES OFFERED <span class="arrow"></span></a>
+			          </div>
+			          <div id="collapseTwo" class="panel-collapse collapse">
+			              <div class="panel-body">
+			                  <div class="mobile-title">Services Offered</div>
+			                  <ul class="three-column collapse-mobile">
+			                  			<li>Air Conditioning</li>
+			                  			<li>Batteries</li>
+			                  			<li>Belts &amp; Hoses</li>
+			                  			<li>Brake Systems Repair</li>
+			                  			<li>Electrical Systems</li>
+			                  			<li>Engine Diagnostics</li>
+			                  			<li>Headlamps &amp; Bulbs</li>
+			                  			<li>Heating &amp; Coolant Systems</li>
+			                  			<li>Mufflers &amp; Exhaust</li>
+			                  			<li>Oil, Lube &amp; Filter Services</li>
+			                  			<li>Preventative Maintenance</li>
+			                  			<li>Packages</li>
+			                  			<li>Shocks &amp; Struts</li>
+			                  			<li>Starting &amp; Charging Systems</li>
+			                  			<li>Steering &amp; Suspension Systems</li>
+			                  			<li>Timing Belts</li>
+			                  			<li>Tire Installation</li>
+			                  			<li>Tire Pressure Monitoring</li>
+			                  			<li>Systems</li>
+			                  			<li>Tire Repair</li>
+			                  			<li>Tire Rotation</li>
+			                  			<li>Tune Ups</li>
+			                  			<li>Wheel Alignment</li>
+			                  			<li>Wheel and Tire Balancing</li>
+			                  			<li>Wiper Blades</li>
+			                  </ul>
+			              </div>
+			          </div>
+			      </div>
+			      <div class="panel panel-default">
+			          <div class="panel-heading">
+			              <a class="panel-title collapsed" data-toggle="collapse" data-parent="#info-accordion" href="#collapseThree">DEALS <span class="arrow"></span></a>
+			          </div>
+			          <div id="collapseThree" class="panel-collapse collapse">
+			              <div class="panel-body">
+			                  <div class="mobile-title">Deals</div>
+			                <ul>
+		                        <li><u>Today's Detour</u> Receive a $70 Visa® Prepaid Card with the purchase of four Continental
+passenger and light truck tires from 10/2/2015–11/2/2015.
+
+Go to www.continentaltirerebates.com to enter your claim online by 12/2/2015. Late submissions will not be accepted.
+
+Online submissions are processed faster.
+• No mail in form required
+• Processing updates available online and via email
+• Must have a valid email address to submit online</li>
+		                        <li><u>Cooper Tires Fall Event Prepaid Visa Offer</u> Get up to a $70 Cooper Tires Visa Prepaid Card when you buy a set of 4 qualifying new tires.</li>
+		                    </ul>
+			              </div>
+			          </div>
+			      </div>
+			  </div>
+	        </div>	<!-- tabcontent-1 -->
+	
+	
+	        <div class="tabcontent-1 hide" id="cont-3-1">
+	          <div id="other-reviews">
+	            <h3 class="title">OTHER LOCAL TIRE SHOPS</h3>
+		        		<div class="review">
+		        			<h3 class="store-name">Suburban Tire Co.</h3>
+		              			<div class="ratings smaller">
+		<span><img alt="" src="/assets/star-off-a559e30d216ced8f56b0522f194aafaf.png" title="0 out of 5 stars"></span>
+		<span><img alt="" src="/assets/star-off-a559e30d216ced8f56b0522f194aafaf.png" title="0 out of 5 stars"></span>
+		<span><img alt="" src="/assets/star-off-a559e30d216ced8f56b0522f194aafaf.png" title="0 out of 5 stars"></span>
+		<span><img alt="" src="/assets/star-off-a559e30d216ced8f56b0522f194aafaf.png" title="0 out of 5 stars"></span>
+		<span><img alt="" src="/assets/star-off-a559e30d216ced8f56b0522f194aafaf.png" title="0 out of 5 stars"></span>
+		<span class="reviews-count">
+		  	<a href="/tire_stores/write_review?tire_store_id=13797" target="">
+		  		2 Reviews
+		  	</a>		  
+		</span>
+	</div>
+
+                         	<div class="content">
+                         			"These guys are fantastic. They operate like an old fashion service station. No bull! They had the best prices on tires I could find in Atlanta! I searched online and by phone all day for a specific tire. Some of their competitors would not even return a phone call. No one else could find the tire. I asked them if they could get the tires, they said yes, and could have them by the next day! And $300 cheaper than anywhere else! I won't go anywhere else form now on. Later, I had a shock fall off my truck and Suburban Tire Co., fixed it for free! Very nice people. " --
+                         			David Erickson
+                         		
+                         	</div>
+                         	<div class="see-more">
+                         		<a href="/tire_stores/13797-suburban-tire-co-lawrenceville-ga">See More</a>
+                         	</div>
+		        		</div>
+		        		<div class="review">
+		        			<h3 class="store-name">Global Tires Plus</h3>
+		              			<div class="ratings smaller">
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span class="reviews-count">
+		  	<a href="/tire_stores/write_review?tire_store_id=13681" target="">
+		  		32 Reviews
+		  	</a>		  
+		</span>
+	</div>
+
+                         	<div class="content">
+                         			"Just wanted to share an experience I had with a tire shop in my area to make everyone aware. Global Tires Plus
+
+Two weeks ago I went to get some tires mounted on some German made wheels I've been trying to source for about 4 months now.
+So I finally get tires mounted on my mint exip wheels. Every thing is hunkadory until I get home and I realize there are two small dings on the outer lip. My fault for not thoroughly inspecting the wheels before leaving.  I recommend every one to thoroughly inspect your wheels before leaving this shop and it's almost necessary to take pictures before you visit the shop as well.
+
+ I immediately call/send pictures to the owner of the shop and go in the next day to let him inspect the wheels.
+When leaving that day we make a handshake agreement that he will pay half of charges for fixing the wheels plus refund me my mounting charges. (I know I should have got this in writing)  This was fair enough for me
+
+So he later mentions that he has a wheel repair machine at his shop and his friend at the machine shop is making a special fitting so he can attempt to massage the dings.
+I was okay with this being that if I got the two wheels refinished they would not match the other two being that these wheels are 20 years old. He then tells me I will have to get the tires removed at another shop because he doesn't want to be held reliable for any more damages. I told him I would be fine with that as long as I am reimbursed for the charges.
+
+He then says I am taking advantage of the situation and there is no way his shop damaged the wheels. When a small business owner goes back on his handshake I feel like it's bad practice.
+Small businesses thrive off of the service they offer over a chain.
+Long story short please be cautious when using this shop so you don't go through the same experience I have.  " --
+                         			Guy G
+                         		
+                         	</div>
+                         	<div class="see-more">
+                         		<a href="/tire_stores/13681-global-tires-plus-lawrenceville-ga">See More</a>
+                         	</div>
+		        		</div>
+	          </div>
+	          
+	          <div id="main-reviews">
+	            	<div id="review-form">
+	            			<h2>POST YOUR REVIEW ON GOOGLE BUSINESS</h2>
+	            			<a target="_blank" href="/tire_stores/write_review?tire_store_id=13700">Click here to review</a>
+	            	</div>
+	            
+	            <hr>
+	            
+	            <div id="reviews">
+	              			<div class="review ">
+	              				<h3>Jeff B</h3>
+		                			<div class="ratings smaller-mobile">
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span class="review-time">Reviewed September 3, 2013</span>
+	</div>
+
+				                <div class="clear"></div>
+		                		<div class="content">
+		                  			<p>This place is great. Brakes, engines, mileage service they treat you right. I loved the ethics here so much I made this my permanent shop for everything other than oil changes.  You can still get quicker service of you need just an oil change at a place that sells only oil changes.  Everything else you can't go wrong with Midtown Tire. </p>
+		                		</div>
+		                		<div class="clear"></div>
+	              			</div>
+	              			<div class="review ">
+	              				<h3>paula reese</h3>
+		                			<div class="ratings smaller-mobile">
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span class="review-time">Reviewed June 14, 2014</span>
+	</div>
+
+				                <div class="clear"></div>
+		                		<div class="content">
+		                  			<p>The diagnostic is definitely worth it. I
+nstead of throwing parts at the engine this tells you exactly what is wrong with what ever problem you are trying to handle. work also comes with a warranty and the staff is great !</p>
+		                		</div>
+		                		<div class="clear"></div>
+	              			</div>
+	              			<div class="review ">
+	              				<h3>A Google User</h3>
+		                			<div class="ratings smaller-mobile">
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="2 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="2 out of 5 stars"></span>
+		<span><img alt="" src="/assets/star-off-a559e30d216ced8f56b0522f194aafaf.png" title="2 out of 5 stars"></span>
+		<span><img alt="" src="/assets/star-off-a559e30d216ced8f56b0522f194aafaf.png" title="2 out of 5 stars"></span>
+		<span><img alt="" src="/assets/star-off-a559e30d216ced8f56b0522f194aafaf.png" title="2 out of 5 stars"></span>
+		<span class="review-time">Reviewed July 8, 2011</span>
+	</div>
+
+				                <div class="clear"></div>
+		                		<div class="content">
+		                  			<p>I went to goodyear because my check engine light and check coolant light was on. They said there was no coolant leak, and just refiled it, and it was now fine. But there was somethibg wrong with the engine ($250 worth) I don't remember what it was. The very next day my check coolant light was on again. I went back and they said there was a leak in the coolant. They fixed it and my check engine light has NEVER came back on since, even though they said that needed to be fixed right away. They have NO idea what they are talking about and just want to rip you off. And they charge $95 JUST TO tell you what's wrong with it. DO NOT waste your money here!</p>
+		                		</div>
+		                		<div class="clear"></div>
+	              			</div>
+	              			<div class="review ">
+	              				<h3>A Google User</h3>
+		                			<div class="ratings smaller-mobile">
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span><img alt="*" src="/assets/star-2c86ea381ac64bab12daa4574ddd8692.png" title="5 out of 5 stars"></span>
+		<span class="review-time">Reviewed March 11, 2011</span>
+	</div>
+
+				                <div class="clear"></div>
+		                		<div class="content">
+		                  			<p>I love this place</p>
+		                		</div>
+		                		<div class="clear"></div>
+	              			</div>
+	            </div>
+	            
+	          </div>
+	          <div class="clear"></div>
+	        </div>	<!-- tabcontent-1 -->
+	        
+	      </div>
+	    </div>
+	  </div>
+<% end %>
+<div class="clear"></div>

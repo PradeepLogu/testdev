@@ -1,0 +1,30 @@
+<style type="text/css">
+label {
+    display: inline;
+    font-size: 0.9em;
+	overflow:hidden;
+}
+<% manu_per_row = 12 %>
+</style>
+<p />
+<form>
+	<% manuCount = 0 %>
+	<% @manufacturers.each do |m| %>
+		<% if manuCount.remainder(manu_per_row) == 0 %>
+			<div class="row-fluid span12">
+		<% end %>
+				<input value="<%= m.name %>"
+						id="<%= m.name %>"
+						name="manufacturer[]"
+						type="checkbox" 
+						align="right" 
+						checked="checked"/>
+				<label for="<%= m.name %>"><%= m.name %></label>
+		<% if manuCount.remainder(manu_per_row) == manu_per_row - 1 %>
+			</div>
+		<% end %>
+		<% manuCount += 1 %>
+	<% end %>
+	<input type="submit" value="Filter" />
+</form>
+<p />

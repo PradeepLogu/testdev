@@ -1,0 +1,30 @@
+Dear <%= @appointment.buyer_name %><br />
+<br />
+Your appointment to have tires installed has been confirmed by the seller for <b><%= @appointment.confirmed_time %></b>.<br />
+<br />
+
+<% if @paid_for == true %>
+	Tires: <%= @tire_listing.full_order_description(@order, @appointment) %> - PAID <br />
+	Installation: PAID <br />
+	<% if @appointment.services_list.size > 0 %>
+		Other Services Requested: <%= @appointment.services_list.join(", ") %>: *** NOT PAID *** <br />
+	<% end %>
+<% else %>
+	Tires: <%= @tire_listing.full_order_description(@order, @appointment) %> - *** NOT PAID *** <br />
+	Installation: *** NOT PAID *** <br />
+	<% if @appointment.services_list.size > 0 %>
+		Other Services Requested: <%= @appointment.services_list.join(", ") %>: *** NOT PAID *** <br />
+	<% end %>
+<% end %>
+<br />
+Any unpaid products or services listed above will need to be paid for when the service is rendered.<br />
+<br />
+Store Name: <%= @tire_store.name %><br />
+Store Address: <%= @tire_store.full_address %><br />
+Store Phone: <%= @tire_store.visible_phone %><br />
+<br />
+<br />
+Thank you for letting TreadHunter find your tires!<br />
+<br />
+Sincerely,<br />
+The TreadHunter Team<br />

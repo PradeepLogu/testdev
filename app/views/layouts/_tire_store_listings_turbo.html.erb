@@ -1,0 +1,140 @@
+<script src="/assets/filter.js" type="text/javascript"></script>
+<script src="/assets/tinysort.js" type="text/javascript"></script>
+<%= stylesheet_link_tag "tire-listings" %>
+<% if @ajax_mode %>
+    <%= javascript_include_tag "filter_listings_turbo_ajax" %>
+    <%= javascript_include_tag "jquery.infinite-scroll-helper.js" %>
+    <script>
+            $(function() {
+                var pageCount;
+                var async_mode = true;
+                
+                $('#search_results').infiniteScrollHelper({
+                    
+                    loadMore: function(page) {
+                        pageCount = page;
+                        $('div#loader').html('<center><img src="/assets/loading.gif"></center>');
+                        <% if @tire_search.nil? %>
+                            ajax_url = "/ajax/load_storelisting_records/?id=<%= @tire_store.id %>&" + FilterQS + "&page=" + page
+                        <% else %>
+                            ajax_url = "/ajax/load_storelisting_records/<%= raw @tire_search.url_params('_filter') %>&id=<%= @tire_store.id %>&" + FilterQS + "&page=" + page
+                        <% end %>
+                        $.ajax({url: ajax_url,
+                            success:function(result) {
+                                $('div#loader').html('');
+                                // if we didn't get anything back, we're out of data.
+                                if (result.length == 0) {
+                                    //$('#search_results').infiniteScrollHelper('destroy');
+                                    //$('div#next-page').text('');
+                                }
+                                else {
+                                    // insert the data here
+                                    // Need to insert our compressible node here.
+                                    $('div#tirelistings_list').append(result);
+                                    bindLiveEvents();
+                                }
+                            }, 
+                            error: function(result) {
+                                $('div#loader').html('');
+                            },
+                            async: async_mode});
+                    },
+                    
+                    doneLoading: function(pageCount) {
+                        // $('#search_results').infiniteScrollHelper('destroy');
+                        //alert("done - " + pageCount);
+                        async_mode = true;
+                        return true;
+                    },
+                    
+                    bottomBuffer: 80
+                })
+            });
+    </script>
+<% else %>
+    <%= javascript_include_tag "filter_listings_turbo" %>
+<% end %>
+
+<style>
+/* override for store listings */
+#results-item div.store, #results-item div.dist {
+    visibility: hidden;
+    width: 0px;
+    margin-right: 0px;
+    float: left;
+}
+#results-label div.manufacturer, #results-item div.manufacturer{margin-right: 6px; width: 105px; float: left; display: inline;}
+#results-label div.category-type, #results-item div.category-type{margin-right: 6px; width: 115px; float: left; display: inline;}
+#results-label div.tire-size, #results-item div.tire-size{margin-right: 6px; width: 150px; float: left; display: inline;}
+#results-label div.quantity, #results-item div.quantity{text-align: center; margin-right: 6px; width: 85px; float: left; display: inline;}
+#results-label div.treadlife, #results-item div.treadlife{text-align: left; margin-right: 6px; width: 140px; float: left; display: inline;}
+#results-label div.price, #results-item div.price{margin-right: 6px; width: 70px; float: left; display: inline; text-align: right;}
+div.sort {padding-top: 15px;}
+}
+</style>
+
+<% if not @tire_listings.nil? %>
+    <% if @tire_listings.count > 0 %>
+        <!-- filter box -->
+        <% Rack::MiniProfiler.step("Listings filter") do %>
+            <% if @ajax_mode %>
+                <%= render :partial => 'layouts/paginated_listings_filter_turbo', 
+                            :locals => {:tire_listings => @tire_listings} %>
+            <% else %>
+                <%= render :partial => 'layouts/listings_filter', 
+                            :locals => {:tire_listings => @tire_listings} %>
+            <% end %>
+        <% end %>
+        <!-- display results -->
+        <div class="primary-results">
+            <% Rack::MiniProfiler.step("listings sort") do %>
+                <% if @ajax_mode %>
+                    <% if signed_in? and 
+                        (super_user? or current_user.account_id == @tire_store.account_id) then %>
+                        <%= render :partial => 'layouts/listings_sort_ajax',
+                                :locals => {:include_distance => false, :date_sort => true} %>
+                    <% else %>
+                        <%= render :partial => 'layouts/listings_sort_ajax',
+                                :locals => {:include_distance => false, :date_sort => false} %>
+                    <% end %>
+                <% else %>
+                    <% if signed_in? and 
+                        (super_user? or current_user.account_id == @tire_store.account_id) then %>
+                        <%= render :partial => 'layouts/listings_sort',
+                                :locals => {:include_distance => false, :date_sort => true} %>
+                    <% else %>
+                        <%= render :partial => 'layouts/listings_sort',
+                                :locals => {:include_distance => false, :date_sort => false} %>
+                    <% end %>
+                <% end %>
+            <% end %>
+            <div id='search_results'>
+                <% if @ajax_mode %>
+                    <div id="tirelistings_list">
+                        <%= render :partial => 'layouts/paginated_listings',
+                                    :locals => {:@listings => 
+                                                @tire_store.paginated_tirelistings(1)} %>
+                        <div id="next-page"></div>
+                    </div>
+                    <div id="loader-wrap">
+                        <div id="loader"></div>
+                    </div>
+                <% else %>
+                    <div id="tirelistings_list">
+                        <% @tire_store.find_tirelistings.each do |t| %>
+                            <% if t.is_generic? %>
+                                <%= render :partial => 'layouts/build_generic_listing_row', 
+                                            :locals => {:@tire_listing => t} %>
+                            <% else %>
+                                <%= render :partial => 'layouts/build_listing_row',
+                                            :locals => {:@tire_listing => t} %>
+                            <% end %>
+                        <% end %>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    <% else %>
+        <h3>No results found.</h3>
+    <% end %>
+<% end %>

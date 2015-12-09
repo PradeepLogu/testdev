@@ -1,0 +1,217 @@
+<div class="secondary-results">
+    <h2 class="orange-letters">Refine Your Search Results</h2>
+    <div id="search-options">
+        <% if @conditions && @conditions.count > 1 %>
+        <div class="inputs">
+        <% else %>
+        <div class="inputs hidden">
+        <% end %>
+            <label for="checkboxes">Condition</label>
+            <div class="filter-item">
+                <span class="check-options">
+                    <ul id="condition_list" class="check-options">
+                        <% @conditions.each do |t| %>
+                            <li>
+                                <input id="condition_<%= t[0][:val] %>" value="<%= t[0][:val] %>" 
+                                        type="checkbox" checked="checked">
+                                <span><%= t[0][:type] %> (<%= t[1] %>)</span>
+                            </li>
+                        <% end %>
+                    </ul>
+                </span>
+            </div>
+        </div>
+        <% if @pictures && @pictures.count > 1 %>
+        <div class="inputs">
+        <% else %>
+        <div class="inputs hidden">
+        <% end %>
+            <label for="checkboxes">Listings with Pictures</label>
+            <div class="filter-item">
+                <span class="check-options">
+                    <ul id="pictures_required_list" class="check-options">
+                        <% unless @pictures.nil? %>
+                            <% @pictures.each do |t| %>
+                                <li>
+                                    <input id="pictures_<%= t[0][:val] %>" value="<%= t[0][:val] %>" 
+                                            type="checkbox" checked="checked">
+                                    <span><%= t[0][:type] %> (<%= t[1] %>)</span>
+                                </li>
+                            <% end %>
+                        <% end %>
+                    </ul>
+                </span>
+            </div>
+        </div>
+        <% if @sellers && @sellers.count > 1 %>
+        <div class="inputs">
+        <% else %>
+        <div class="inputs hidden">
+        <% end %>
+            <label for="checkboxes">Types of Sellers</label>
+            <div class="filter-item">
+                <span class="check-options">
+                    <ul id="seller_types_list">
+                        <li>
+                            <input id="seller_types_all" value="all" type="checkbox">
+                            <span >All (<%= tire_listings.count %>)</span>
+                        </li>
+                        <% @sellers.each do |t| %>
+                            <li>
+                                <input id="seller_type_<%= t[0][:val] %>" value="<%= t[0][:val] %>" type="checkbox">
+                                <span><%= t[0][:type] %> (<%= t[1] %>)</span>
+                            </li>
+                        <% end %>
+                    </ul>
+                </span>
+            </div>
+        </div>
+        <% if @quantities && @quantities.count > 1 %>
+        <div class="inputs">
+        <% else %>
+        <div class="inputs hidden">
+        <% end %>
+            <label for="checkboxes">Quantity</label>
+            <div class="filter-item">
+                <span class="check-options">
+                    <ul id="quantities_list">
+                        <li>
+                            <input id="quantities_all" value="all" type="checkbox">
+                            <span >All (<%= tire_listings.count %>)</span>
+                        </li>
+                        <% @quantities.each do |t| %>
+                            <li>
+                                <input id="quantity_<%= t[0][:qty] %>" value="<%= t[0][:qty] %>" type="checkbox">
+                                <span><%= t[0][:qty] %> (<%= t[1] %>)</span>
+                            </li>
+                        <% end %>
+                    </ul>
+                </span>
+            </div>
+        </div>
+        <% if @wheelsizes && @wheelsizes.count > 1 %>
+        <div class="inputs">
+        <% else %>
+        <div class="inputs hidden">
+        <% end %>
+            <label for="checkboxes">Wheel Size</label>
+            <div class="filter-item">
+                <span class="check-options">
+                    <ul id="wheelsizes_list">
+                        <li>
+                            <input id="wheelsizes_all" value="all" type="checkbox">
+                            <span >All (<%= tire_listings.count %>)</span>
+                        </li>
+                        <% if @wheelsizes %>
+                            <% @wheelsizes.each do |t| %>
+                                <li>
+                                    <input id="wheelsize_<%= t[0][:qty] %>" value="<%= t[0][:qty] %>" type="checkbox">
+                                    <span><%= t[0][:qty] %>" (<%= t[1] %>)</span>
+                                </li>
+                            <% end %>
+                        <% end %>
+                    </ul>
+                </span>
+            </div>
+        </div>
+        <div class="inputs">
+            <label for="checkboxes">Manufacturers</label>
+            <div class="filter-item">
+                <span class="check-options">
+                    <ul id="manufacturer_list">
+                        <li>
+                            <input id="tire_manufacturer_all" value="all" type="checkbox">
+                            <span >All (<%= tire_listings.count %>)</span>
+                        </li>
+                        <% @tire_manufacturers.each do |t| %>
+                            <li>
+                                <input id="tire_manufacturer_<%= t[0][:id] %>" value="<%= t[0][:id] %>" type="checkbox">
+                                <span><%= t[0][:name] %> (<%= t[1] %>)</span>
+                            </li>
+                        <% end %>
+                    </ul>
+                </span>
+            </div>
+        </div>
+        <% if @categories && @categories.count > 1 %>
+        <div class="inputs">
+        <% else %>
+        <div class="inputs hidden">
+        <% end %>
+            <label for="checkboxes">Tire Types</label>
+            <span class="check-options">
+                <div class="filter-item">
+                    <ul id="categories_list">
+                        <li>
+                            <input id="tire_category_all" 
+                                    value="all" type="checkbox">
+                            <span >All (<%= tire_listings.count %>)</span>
+                        </li>
+                        <% @categories.each do |t| %>
+                            <li>
+                                <input id="tire_category_<%= t[0][:id] %>" value="<%= t[0][:id] %>" type="checkbox">
+                                <span><%= t[0][:category] %> (<%= t[1] %>)</span>
+                            </li>
+                        <% end %>
+                    </ul>
+                </div>
+            </span>
+        </div>
+        <label for="checkboxes">Cost Per Tire</label>
+        <div class="inputs">
+            <span class="check-options">
+                <ul id="price_list" class="check-options">
+                    <li>
+                        <input type="checkbox" value="below-50" checked="checked"></input>
+                        <span>Below $50 per tire</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" value="50-100" checked="checked"></input>
+                        <span>$50-$100 per tire</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" value="100-150" checked="checked"></input>
+                        <span>$100-$150 per tire</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" value="150-above" checked="checked"></input>
+                        <span>$150+ per tire</span>
+                    </li>
+                </ul>
+            </span>
+        </div>
+        <label for="checkboxes" style="margin-top: 20px;">Treadlife</label>
+        <div class="inputs">
+            <!--
+            <label id="treadlife_range_label">0-100</label>
+            <div id="treadlife_slider"></div>
+            <input type="hidden" id="treadlife_filter"></input>
+            <div id='treadlife_list'>
+                <input type="checkbox" value="below-30" checked="checked"></input>
+                <input type="checkbox" value="30-50" checked="checked"></input>
+                <input type="checkbox" value="50-above" checked="checked"></input>
+            </div>
+            -->
+            <span class="check-options">
+                <ul id="treadlife_list" class="check-options">
+                    <li>
+                        <input type="checkbox" value="below-25" checked="checked"></input>
+                        <span>Below 25%</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" value="25-50" checked="checked"></input>
+                        <span>25-50%</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" value="50-75" checked="checked"></input>
+                        <span>50-75%</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" value="75-above" checked="checked"></input>
+                        <span>Above 75%</span>
+                    </li>
+                </ul>
+            </span>
+        </div>
+    </div>
+</div>

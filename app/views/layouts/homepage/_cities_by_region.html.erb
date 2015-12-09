@@ -1,0 +1,30 @@
+<div class="region-listing span3">
+	<h4><%= region_name.upcase %> TIRES</h4>
+	<% ar_cities1.each do |city, state| %>
+		<% if !city.nil? %>
+			<div class="store"><span class="city-name"><%= city %> </span>
+				<a href="/tire-stores/?Location=<%= city %>%2C+<%= state %>">Tires</a>
+			</div>	
+		<% end %>
+	<% end %>
+</div>
+<div class="region-listing span3">
+	<h4></h4>
+	<% ar_cities2.each do |city, state| %>
+		<% if !city.nil? %>
+			<div class="store"><a href="/tire-stores/?Location=<%= city %>%2C+<%= state %>"><span class="city-name"><%= city %> </span>
+				Tires</a>
+			</div>	
+		<% end %>
+	<% end %>
+</div>
+<div class="region-listing span3">
+	<h4></h4>
+	<% ar_cities3.each do |city, state| %>
+		<% if !city.nil? %>
+			<div class="store"><a href="/tire-stores/?Location=<%= city %>%2C+<%= state %>"><span class="city-name"><%= city %> </span>
+				Tires</a>
+			</div>	
+		<% end %>
+	<% end %>
+</div>

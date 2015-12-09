@@ -1,0 +1,98 @@
+<!-- bxSlider -->
+<%= javascript_include_tag "jquery.bxslider.min.js" %>
+<script type="text/javascript">
+  $(function() {
+	
+    $('.feature-right ul').bxSlider({
+		auto: false,
+		autoControls: false,
+		pager: false,
+		minSlides: 1,
+		maxSlides: 4,
+		slideWidth: 200,
+		slideMargin: 10,
+		adaptiveHeight: true,
+		moveSlides: 1,
+		nextSelector: '#nextimg',
+		prevSelector: '#previmg',
+		nextText: '>',
+		prevText: '<'
+	});
+  });
+</script>
+
+<div id="learning-center">
+	<% provide(:title, "Learning Center") %>
+	<h1>Learning Center</h1>
+	<div class="categories-container">
+		<div class="post-showcase">
+			<% if !@most_recent_post.nil? %>
+				<a href="<%= @most_recent_post.url %>">
+					<h3 class="rtcorner-bg"><%= @most_recent_post.title %></h3>
+				</a>
+			<% end %>
+		</div>
+		<div class="learning-categories">
+			<h4 class="learning-category-title"><a href="<%= faq_learning_center_path %>">FAQ<%= image_tag("chevron-right-orange-small.png", alt: "go", class: "chevron") %></a></h4>
+			<hr>
+			<h4 class="learning-category-title"><a href="<%= glossary_learning_center_path %>">Glossary<%= image_tag("chevron-right-orange-small.png", alt: "go", class: "chevron") %></a></h4>
+			<hr>
+			<h4 class="learning-category-title"><a href="<%= tire_size_learning_center_path %>">How to Find My Tire Size<%= image_tag("chevron-right-orange-small.png", alt: "go", class: "chevron") %></a></h4>
+		</div>
+	</div>
+
+	<div class="learning-container">
+		<hr/>
+		<h2>What Tire Size is Right for Me?</h2>
+		<% if !@local_deals.blank? %>
+			<span class="view-all">View All</span>
+		<% end %>
+
+		<% if @local_deals.blank? %>
+			<p>No Posts at this Time!</p>
+		<%else%>
+			<div class="film-strip">
+				<div class="film-strip-items">
+					<!-- < %= render(:partial => 'promotion_slides', :locals => {:deals => @local_deals})%> -->
+				</div>
+			</div>
+		<% end %>
+	</div>
+
+	<hr/>
+	<div class="learning-container">
+		<h2>Tips and Tricks</h2>
+		<% if !@local_deals.blank? %>
+			<span class="view-all">View All</span>
+		<% end %>
+
+		<% if @national_deals.blank? %>
+			<p>No Tips at this Time!</p>
+		<%else%>
+			<div class="film-strip">
+				<div class="film-strip-items">
+					<!-- < %= render(:partial => 'promotion_slides', :locals => {:deals => @national_deals})%> -->
+				</div>
+			</div>
+		<% end %>
+	</div>
+
+
+	<hr/>
+	<div class="learning-container">
+		<h2>Category 3</h2>
+		<% if !@local_deals.blank? %>
+			<span class="view-all">View All</span>
+		<% end %>
+
+		<% if @treadhunter_deals.blank? %>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		<%else%>
+			<div class="film-strip">
+				<div class="film-strip-items">
+					<!-- < %= render(:partial => 'promotion_slides', :locals => {:deals => @treadhunter_deals})%> -->
+				</div>
+			</div>
+		<% end %>
+	</div>
+</div> 

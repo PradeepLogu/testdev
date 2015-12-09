@@ -1,0 +1,56 @@
+
+<div class="feature-right faeture-right">
+  <ul class="slides">
+    <% if @show_michelin %>
+      <li>
+        <%= image_tag("homepage/bw_brands/bfg.png", alt: "BF Goodrich") %>
+      </li>
+      <li>
+        <%= image_tag("homepage/bw_brands/michelin.png", alt: "Michelin") %>
+      </li>
+      <li>
+        <%= image_tag("homepage/bw_brands/conti.png", alt: "Continental") %>
+      </li>
+      <li>
+        <%= image_tag("homepage/bw_brands/hankook.png", alt: "Hankook") %>
+      </li>
+      <li>
+        <%= image_tag("homepage/bw_brands/pirelli.png", alt: "Pirelli") %>
+      </li>
+      <li>
+        <%= image_tag("homepage/bw_brands/maxxis.png", alt: "Maxxis") %>
+      </li>
+      <li>
+        <%= image_tag("homepage/bw_brands/riken.png", alt: "Riken") %>
+      </li>
+      <li>
+        <%= image_tag("homepage/bw_brands/general.png", alt: "General") %>
+      </li>
+      <li>
+        <%= image_tag("homepage/bw_brands/yoko.png", alt: "Yokohama") %>
+      </li>
+    <% else %>
+      <li>
+        <%= image_tag("homepage/bw_brands/conti.png", alt: "Continental") %>
+      </li>
+      <li>
+        <%= image_tag("homepage/bw_brands/hankook.png", alt: "Hankook") %>
+      </li>
+      <li>
+        <%= image_tag("homepage/bw_brands/pirelli.png", alt: "Pirelli") %>
+      </li>
+      <li>
+        <%= image_tag("homepage/bw_brands/general.png", alt: "General") %>
+      </li>
+      <li>
+        <%= image_tag("homepage/bw_brands/yoko.png", alt: "Yokohama") %>
+      </li>
+      <li>
+        <%= image_tag("homepage/bw_brands/maxxis.png", alt: "Maxxis") %>
+      </li>
+      <li>
+        <%= image_tag("homepage/bw_brands/riken.png", alt: "Riken") %>
+      </li>
+    <% end %>
+  </ul>
+</div>

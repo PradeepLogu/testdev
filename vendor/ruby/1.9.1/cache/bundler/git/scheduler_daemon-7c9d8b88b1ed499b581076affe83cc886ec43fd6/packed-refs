@@ -1,0 +1,13 @@
+# pack-refs with: peeled 
+17cbc6c0202fc7b55cdbf6f1fe211a5e6e7396db refs/heads/log_dir
+53d1062ed6a07ca25308cdec42ed9063e0f55df9 refs/heads/master
+8b6b645273924742cea540ec1372b8e71face1d5 refs/heads/rails2-2
+4d7d94ec5a2adf48f2c3507ac5263b33724cb4f3 refs/heads/rails2-3
+966a6fa4ae740196609315225e85fc2a0200d295 refs/heads/rails3
+4d7f2331747ff184b12f423e0eb0fb3e6e56d80d refs/tags/v0.2.0
+ef04ffe0666b5359250eb4011c322ac54ed2cb39 refs/tags/v0.3.0
+25b61fd8d1a6be859f3803ce55b276c3f70f965f refs/tags/v0.3.1
+a92137eea8c76ddb6028c2d03d6ab6fb71ca04cb refs/tags/v0.4.0
+dae5ae923a5c80fad58759ddc63be5b150fc2c8e refs/tags/v0.4.1
+fb446c90d403366ae59825d9091f761bae845bc3 refs/tags/v1.1.0
+966a6fa4ae740196609315225e85fc2a0200d295 refs/tags/v1.1.1

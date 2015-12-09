@@ -1,0 +1,16 @@
+<font size="1">
+<a href="#" 
+	id="traction-popover"
+	rel="popover" 
+	title="Traction" 
+	data-content="<%= render :file => '/layouts/_traction_info_content.rhtml'%>">
+	<i class="icon-question-sign icon-glass"></i>
+</a>
+</font>
+<script>
+	$(function()
+		{
+			$("#traction-popover").popover();
+		}
+	);
+</script>

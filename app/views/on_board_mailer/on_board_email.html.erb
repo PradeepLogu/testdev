@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+		</head>
+		<body>
+			<p>Dear <%= @user.name %>,<p />
+				Thank you for using TreadHunter.com to list your tires for <%= @tire_store.name %>.<br />
+				<%= render 'on_board_instructions' %>
+			</p>
+		</body>
+	</html>

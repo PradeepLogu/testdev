@@ -1,0 +1,5 @@
+<% if @primary %>
+	<%= select_tag :request_hour_primary, options_for_select(@hours) %>
+<% else %>
+	<%= select_tag :request_hour_secondary, options_for_select(@hours) %>
+<% end %>

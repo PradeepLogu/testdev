@@ -1,0 +1,77 @@
+/* CSS Document */
+
+/* ======= HEADER OBJECTS AND NAVIGATION ========= */
+#header-container{width: 100%; height: 60px; top: 0px; position:fixed; z-index:5000;}
+#header-objects{width: 980px; margin: 0px auto;}
+#header-nav{width: auto; margin: 0px 10px; float: right; text-align: right; box-shadow: 0px 0px 5px #000;}
+#header-logo{width: 440px; margin: 3px 10px 0px; float: left;}
+ul.headernav{list-style-type: none; display: block; height: 49px; clear: right;}
+/*
+.headernav li
+	{
+		float: right; 
+		height: 49px; 
+		width: 100px; 
+		background: url(/assets/header-button.png) top repeat-x;
+		display: block;}
+
+li a, li a:link, li a:visited{width: 100px !important; height: 20px; padding: 10px 0px 19px 0px; font-family: Impact, "Lucida Sans Unicode", "Lucida Grande", sans-serif; font-size: 20px; color: #DDD; text-shadow: 0px -1px 1px #333; text-decoration: none; text-align: center; border-right: 1px solid #556; border-left: 1px solid #111; display: block;}
+*/
+li a:focus, li a:hover
+{
+	/* background: url(/assets/header-button.png) bottom repeat-x; */
+	color: #F63; text-shadow: 1px 1px 2px #222; 
+	display: block;
+}
+li.urhere{width: 100px !important; height: 20px; padding: 10px 0px 19px 0px;  background: url(./assets/header-urhere.png) top repeat-x; font-family: Impact, "Lucida Sans Unicode", "Lucida Grande", sans-serif; font-size: 20px; color: #DDD; text-shadow: 0px -1px 1px #333; text-decoration: none; text-align: center; border-right: 1px solid #556; border-left: 1px solid #111; display: block;}
+
+#content-nav{width: 100%;  height: auto; margin: 0px auto;}
+ul.content-navs{list-style-type: none; float: right; height: 30px; display: block;}
+.content-navs li{width: auto; padding: 5px 5px 15px; margin-right: 20px; font-size: 18px; font-family: "Arial Black", Gadget, sans-serif; float: right; color: #EEE; text-align: center; text-transform: capitalize; text-shadow: 0px 0px 3px #000;}
+
+
+#navbar {
+  margin: 0;
+  padding: 0;
+  height: 1em; }
+#navbar li {
+  list-style: none;
+  float: right; }
+#navbar li a {
+  display: block;
+  padding: 3px 8px;
+  /*background-color: #5e8ce9;*/
+  color: #fff;
+  text-decoration: none; }
+#navbar li ul {
+  display: none; 
+  width: 10em; /* Width to help Opera out */
+  /* background-color: #69f;*/	
+}
+#navbar li:hover ul {
+	display: block;
+	position: absolute;
+	margin: 0;
+	padding: 0; }
+#navbar li:hover li {
+	float: none; }
+#navbar li:hover li a {
+	/* background-color: #69f; */
+	border-bottom: 1px solid #fff;
+	color: #fff; }
+#navbar li li a:hover 
+{
+	/*background-color: #8db3ff; */
+}
+
+.nav-tabs {
+border-bottom: 1px #DDD;
+}  
+
+.pagination { padding: 3px; margin: 3px; } 
+.pagination a { padding: 2px 5px 2px 5px; margin: 2px; border: 1px solid #aaaadd; text-decoration: none; color: #000099; } 
+.pagination a:hover, 
+.pagination a:active { border: 1px solid #000099; color: #000; } 
+.pagination a { line-height: 10px; }
+.pagination span.current { padding: 2px 5px 2px 5px; margin: 2px; border: 1px solid #000099; font-weight: bold; background-color: #000099; color: #FFF; } 
+.pagination span.disabled { padding: 2px 5px 2px 5px; margin: 2px; border: 1px solid #eee; color: #ddd; }

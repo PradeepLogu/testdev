@@ -1,0 +1,73 @@
+<% provide(:title, "Select Tire Section Width") %>
+<% provide(:visfire, "true") %>
+
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="top-search-section">
+			<div id="tire-search-outer">
+				<h2>SHOP BY:</h2>
+				<%= render :partial => 'layouts/search_panel',
+						   :locals => {:id => "tire-search2"} %>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-outer">
+	<div id="search-by-tire-size" class="container-inner">
+		<hr/>
+		
+		<div id="fluid-title">
+			<h1 class="orange"><%= @wheeldiameter %> Inch Tires</h1>
+			<p>TreadHunter has a wide selection of <%= @wheeldiameter %>" tires. Select the section width to find the tires you need locally.</p>
+			<div class="clear"></div>
+		</div>
+		
+		<div class="instructions">Select the <span class="orange">Section Width</span> as highlighted below.</div>
+		<div id="change-params"><span>CHANGE</span> <a href="/tire_size">RIM DIAMETER</a></div>
+		<div class="clear"></div>
+		
+		<hr/>
+
+		<div id="tire-sections">
+			<div class="tire-section">
+				<div class="title">High-Flotation Tires</div>
+				<%= image_tag "section-width-high-flot.jpg" %>
+			</div>
+			
+			<div id="big-or">
+				<span class="line1"></span>
+				<span class="line2"></span>
+				<div class="or">OR</div>
+			</div>
+			
+			<div class="tire-section">
+				<div class="title">Passenger Tires</div>
+				<%= image_tag "section-width-passenger.jpg" %>
+				
+				<div id="results" class="row-fluid">
+					<ul class="first">
+					
+					<%	i = 0
+						limit = ((@widths.length + 3) / 4)
+						remain = @widths.length
+						@widths.each do |x| %>
+							<li><a href="/tire_size/<%= "#{@wheeldiameter}/#{x.diameter}" %>"><%= x.diameter %> mm</a></li>
+						<%	i += 1
+							remain -= 1
+							if i == limit && remain > 0
+								i = 0 %>
+						</ul>
+						<ul class="">
+						<%	end %>
+					<%	end %>
+					
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>

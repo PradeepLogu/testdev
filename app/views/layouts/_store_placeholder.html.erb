@@ -1,0 +1,43 @@
+<% if @tire_listings.size > 0 %>
+	<div id="results-item" style="background: #FFF">
+		<a href="/tire-stores/<%= @tire_listings.first.tire_store.to_param %>?tire_size_id=<%= @tire_listings.first.tire_size_id %>">
+			<div class="tire-manufacturer" style="width: 268px;">
+				<% @tire_manufacturers.first(6).each do |m| %>
+					<% if m[0][:name] != 'Unspecified' %>
+						<img src="/assets/<%= m[0][:name] %>.gif" style="float: left; padding-right: 15px; padding-bottom: 15px; background: none; max-height: 25px;"/>
+					<% end %>
+				<% end %>
+			</div>
+			<div class="tire-image" style="width: 0px;">
+			</div>
+			<div class="tire-details">
+				<div class="tire-store">
+					<%= @tire_listings.first.tire_store.name %><br />
+				</div>
+				<div style="visibility: hidden; float: left;">&nbsp;</div>
+				<div class="distance"><%= @distance %></div>
+				<div></div>
+				<div style="bottom: 0;">
+					<div class="qty-treadlife">
+						<div class="tire-quantity">&nbsp;</div>
+						<div class="tire-treadlife">&nbsp;</div>
+					</div>
+					<div class="tire-price">
+						<p>from</p>
+						<span class="price-data">$<%= @min_price %></span>
+						<p>to</p>
+						<span class="price-data">$<%= @max_price %></span>
+					</div>
+				</div>
+			</div>
+		</a>
+		<div>
+			<a id="toggleDetails" onClick="toggleStoreDisplay($(this))">
+				<img src='/assets/see_more.png' valign="center" height="16" 
+					width="16" style="float:left; padding-right: 10px;" />
+				<div style="font-size: 1.5em">Viewing summary of store's listings - click to expand</div>
+			</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+<% end %>

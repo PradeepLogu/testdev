@@ -1,0 +1,17 @@
+<div class="sort-box select-box">
+  <form>
+    <label>Sort by:</label>
+    <select id="sort-order" class="users" onchange="OnSortChange()">
+      <option value="type">Type</option>
+      <option value="size">Size - Ascending</option>
+      <option value="sized">Size - Descending</option>
+      <option value="cost">Price - Low to High</option>
+      <option value="costd">Price - High to Low</option>
+    </select>
+  </form>
+</div>
+<script>
+function OnSortChange() {
+	sort_results($('select#sort-order').attr('value'));
+};
+</script>

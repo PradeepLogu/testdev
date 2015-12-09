@@ -1,0 +1,65 @@
+<script>
+	var allTerms = <%= raw @alphabet_array %>;
+	function showTerms(letter) {
+		var arSelectedTerms = [];
+		for (i=0; i < allTerms.length; i++) {
+			if (allTerms[i][0] == letter) {
+				arSelectedTerms = allTerms[i][1];
+				break;
+			};
+		};
+		var newTermsHTML = "<h1>" + letter + "</h2>";
+		for (i=0; i < arSelectedTerms.length; i++) {
+			newTermsHTML = newTermsHTML + "<h2>" + arSelectedTerms[i][0] + "</h2>";
+			newTermsHTML = newTermsHTML + "<p>" + arSelectedTerms[i][1] + "</p>";
+		}
+		$("#terms-list").html(newTermsHTML);
+	};
+
+	window.onload = function() {
+		showTerms("A");
+	};
+</script>
+<div id="glossary" class="learning-center-page">
+	<% provide(:title, "Learning Center") %>
+	<h1>Learning Center / <span class="title">Glossary</span></h1>
+	<div class="learning-categories">
+		<h4 class="learning-category-title"><a href="<%= faq_learning_center_path %>">FAQ<%= image_tag("chevron-right-orange-small.png", alt: "go", class: "chevron") %></a></h4>
+		<h4 class="learning-category-title active"><a href="<%= glossary_learning_center_path %>">Glossary<%= image_tag("chevron-right-orange-small.png", alt: "go", class: "chevron") %></a></h4>
+		<h4 class="learning-category-title"><a href="<%= tire_size_learning_center_path %>">How to Find My Tire Size<%= image_tag("chevron-right-orange-small.png", alt: "go", class: "chevron") %></a></h4>
+	</div>
+	<div class="about-glossary">
+		<div class="about-glossary-text">
+			<%= raw @glossary.header_text %>
+		</div>
+	</div>
+	<hr>
+	<div class="topic-container" style="margin: auto; width: 100%;">
+		<div class="alphabet" name="top">
+			<% if false %>
+				<ul><li><a href="#A">A</a></li><li><a href="#B">B</a></li><li><a href="#C">C</a></li><li><a href="#D">D</a></li><li><a href="#E">E</a></li><li><a href="#F">F</a></li><li><a href="#G">G</a></li><li><a href="#H">H</a></li><li><a href="#I">I</a></li><li><a href="#J">J</a></li><li><a href="#K">K</a></li><li><a href="#L">L</a></li><li><a href="#M">M</a></li><li><a href="#N">N</a></li><li><a href="#O">O</a></li><li><a href="#P">P</a></li><li><a href="#Q">Q</a></li><li><a href="#R">R</a></li><li><a href="#S">S</a></li><li><a href="#T">T</a></li><li><a href="#U">U</a></li><li><a href="#V">V</a></li><li><a href="#W">W</a></li><li><a href="#X">X</a></li><li><a href="#Y">Y</a></li><li><a href="#Z">Z</a></li></ul>
+			<% else %>
+				<ul>
+					<% @alphabet_array.each do |ar| %>
+						<li><a style="cursor: pointer;" onclick="showTerms('<%= ar[0] %>')"><%= ar[0] %></li>
+					<% end %>
+				</ul>
+			<% end %>
+		</div>
+		<div class="glossary-entries">
+			<% if false %>
+				<div class="letter" id="A" name="A">
+					<h1>A</h1>
+					<div class="glossary-entry">
+						<h2>Alignment</h2>
+						<p>Adjusting the vehicle's wheels, steering, and suspension components to manufacturer's specifications. When wheels are in alignment, they are in the optimal position relative to the road and each other. Impacts like driving over a curb or hitting a pothole can cause misalignment.</p>
+					</div>
+				</div>
+			<% else %>
+				<div class="letter" id="terms-list">
+				</div>
+			<% end %>
+			<a href="#top"><img src="/assets/circle-up-arrow.png"></a>
+		</div>
+	</div>
+</div>

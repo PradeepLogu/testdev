@@ -1,0 +1,30 @@
+<div id="tire_manufacturers">
+  <select class="cars" 
+          id="tire_manufacturers" 
+          name="tire_manufacturer_id"
+          style="width: 180px;">
+    <option value="">Select a Tire Mfr.</option>
+    <% @tire_manufacturers.each do |m| %>
+      <% if !@tire_listing.nil? && @tire_listing.tire_manufacturer_id == m.id %>
+        <option selected="selected" value="<%= m.id %>"><%= m.name %></option>
+      <% else %>
+        <option value="<%= m.id %>"><%= m.name %></option>
+      <% end %>
+    <% end %>
+  </select>
+</div>
+<script>
+  $('select#tire_manufacturers').change(function() {
+    $.ajax({
+      type: "GET",
+      dataType: "html",
+      url: "/ajax/update_tire_models_no_size",
+      data: {tire_manufacturer_id: $(this).attr('value'),
+            tire_store_id: <%= @tire_store_id %>,
+            report_mode: "<%= @report_mode %>"},
+      success:function(result){
+      	$("div#tire_models").html(result);
+      } 
+    })
+  });
+</script>

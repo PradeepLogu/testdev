@@ -1,0 +1,25 @@
+<%= form_tag("/accounts", :method => "get") do %>
+	<table>
+		<tr>
+			<th align="left">State:</th>
+			<th width="20" />
+			<th align="left">Keywords</th>
+			<th />
+		</tr>
+		<tr>
+			<td>
+				<%= select_tag 'State', options_for_select(us_states, @state), 
+							{:style => 'width: 150px', :class => 'users'} %>
+			</td>
+			<td />
+			<td>
+				<%= text_field_tag 'Keywords', params[:keywords], :id => 'keywords', 
+									:value => params["Keywords"], 
+									:class => 'user', 
+									:placeholder => "Tire Kingz, Firestone, etc." %>
+				<%= submit_tag "Search", :class => 'btn btn-medium' %> 
+			<td>
+			<td />
+		</tr>
+	</table>
+<% end %> 

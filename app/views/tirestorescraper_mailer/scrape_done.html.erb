@@ -1,0 +1,14 @@
+<p>Your scrape is done.</p>
+<br />
+<p>Status: <%= @status %></p>
+<br />
+<p>Google URL: <%= @google_url %></p>
+<p>YP URL: <%= @yp_url %></p>
+<p>Cities:</p>
+<% @cities.each do |city| %>
+	<%= city %>, <%= @state %><br />
+<% end %>
+<br />
+<% @log.each do |l| %>
+	<%= l %><br />
+<% end %>

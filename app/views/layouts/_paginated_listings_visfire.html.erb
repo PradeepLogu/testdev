@@ -1,0 +1,42 @@
+<% @cur_consolidated = nil %>
+<% @consolidated_count = 0 %>
+<% if @listings.size == 0 %>
+	<% if page_no.blank? || (!page_no.nil? && page_no.to_i <= 1) %>
+		<!--<script>
+			$(".search-main-right-store").hide();
+			$(".search-content-left-store").hide();
+			$(".select-box").hide();
+		</script>-->
+	<% end %>
+<% else %>
+	<% rec_count = 0 %>
+	<% @listings.each do |t| %>
+		<% 
+		rec_count += 1
+		if !@cur_consolidated.nil? && @cur_consolidated.num_listings <= @consolidated_count
+			@cur_consolidated = nil
+			@consolidated_count = 0
+		%>
+		</div></div></div>
+		<% end %>
+	    <% if t.is_generic? %>
+	        <%= render :partial => 'layouts/build_generic_listing_row_visfire', 
+	                    :locals => {:@tire_listing => t, 
+									:@cur_consolidated => @cur_consolidated,
+									:@consolidated_count => @consolidated_count} %>
+			<% @consolidated_count += 1 %>
+		<% elsif t.is_a?(ConsolidatedTireListing) %>
+			<% @cur_consolidated = t %>
+			<% @consolidated_count = 0 %>
+	        <%= render :partial => 'layouts/build_consolidated_listing_row_visfire', 
+	                    :locals => {:@tire_listing => t, :@store=>""} %>
+	    <% else %>
+	        <%= render :partial => 'layouts/build_listing_row_visfire', 
+	                    :locals => {:@tire_listing => t, :@store=>"", 
+									:@cur_consolidated => @cur_consolidated,
+									:@lazy_off => (rec_count <= 2),
+									:@consolidated_count => @consolidated_count} %>
+			<% @consolidated_count += 1 %>
+	    <% end %>
+	<% end %>
+<% end %>

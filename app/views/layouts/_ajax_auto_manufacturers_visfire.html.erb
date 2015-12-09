@@ -1,0 +1,56 @@
+<div id="auto_manufacturers">
+  <select id="auto_manufacturers" 
+          name="auto_manufacturer_id">
+    <option value="">Make</option>
+    <% @manufacturers.each do |m| %>
+      <% if m.id == session[:manufacturer_id] %>
+        <option selected="selected" value="<%= m.id %>"><%= m.name %></option>
+      <% else %>
+        <option value="<%= m.id %>"><%= m.name %></option>
+      <% end %>
+    <% end %>
+  </select>
+  <script>
+    $('select#auto_manufacturers').change(function() {
+      v = $(this).attr('value');
+      if(typeof v == 'undefined')
+        v = $('select#auto_manufacturers').val();
+      $.ajax({
+        type: "GET",
+        dataType: "html",
+        url: "/ajax/update_auto_models_visfire",
+        data: {manufacturer_id: v, c: $(this).attr('class')},
+        success:function(result){
+          $("div#auto_models").html(result);
+          $("div#auto_models").find("script").each(function(i) {
+			eval($(this).text());
+          });
+          fix_select2('select#auto_models', 30);
+        } 
+      });
+      $.ajax({
+        type: "GET",
+        dataType: "html",
+        url: "/ajax/update_auto_years_visfire",
+        data: {model_id: 0, c: $(this).attr('class')},
+        success:function(result){
+          $("div#auto_years").html(result);
+          $("div#auto_years").find("script").each(function(i) {
+			eval($(this).text());
+          });
+          fix_select2('select#auto_years', 20);
+        } 
+      });
+      $.ajax({
+        type: "GET",
+        dataType: "html",
+        url: "/ajax/update_auto_options_visfire",
+        data: {auto_year_id: 0, c: $(this).attr('class')},
+        success:function(result){
+          $("div#auto_options").html(result);
+          fix_select2('select#auto_options', 10);
+        } 
+      });
+    });
+  </script>
+</div>

@@ -1,0 +1,401 @@
+<% provide(:visfire, "true") %>
+<% provide(:title, "Schedule Vehicle Service") %>
+<%= stylesheet_link_tag "style-wide-form" %>
+
+<%= stylesheet_link_tag "fullcalendar/fullcalendar" %>
+<%= javascript_include_tag "fullcalendar/moment.min" %>
+<%= javascript_include_tag "fullcalendar/fullcalendar" %>
+<%= javascript_include_tag "fullcalendar/hashtable" %>
+
+<%= stylesheet_link_tag "bootstrap" %>
+
+<script>
+  ClientSideValidations.callbacks.form.after = function(form, eventData) {
+    var path_val = document.getElementById('appointment_preferred_contact_path').value;
+    var phone_val = document.getElementById('appointment_buyer_phone').value.trim();
+    var email_val = document.getElementById('appointment_buyer_email').value.trim();
+
+    var err_element;
+    var err_msg;
+    var is_err = false;
+
+    if (path_val == 1 && email_val == "") {
+      err_element = document.getElementById('appointment_buyer_email');
+      err_msg = "You must provide an email if you select email contact path."
+      is_err = true;
+    } else if (phone_val == "") {
+      err_element = document.getElementById('appointment_buyer_phone');
+      err_msg = "You must provide a phone # if you select phone or text contact path."
+      is_err = true;
+    }
+
+    if (is_err) {
+      var elementHTML = err_element.outerHTML;
+      elementHTML = '<div class="field_with_errors">' + elementHTML + '<label class="message">' + err_msg + '</label></div>';
+      err_element.outerHTML = elementHTML;
+      form.trigger('form:validate:fail');
+      //elementContainer.append('</pre><div id="validation-error">' + errorMsg + '</div><pre>');
+    } 
+  }
+
+  $(document).ready(function() {
+    var event_colors = {};
+    var ht = <%= raw(@appointments.to_json) %>;
+
+    $('#svc-calendar').fullCalendar({
+      height: 480,
+      dayRender: function(date, cell) {
+        var dt = date.format('YYYY-MM-DD').toString();
+        var color_and_desc = ht[dt];
+        if (color_and_desc !== undefined) {
+          var new_color = color_and_desc.toString().split(",")[0];
+          var desc = color_and_desc.toString().split(",")[1];
+          cell.css("background-color", new_color);
+          cell.prepend('<span class="cal-event"><br/>' + desc + '</span>');
+        }
+      },
+      dayClick: function(date, jsEvent, view) {
+        var month=date.format('M');
+        var day=date.format('D');
+        var year=date.format('YYYY');
+        
+        document.getElementById('appointment_request_date_primary_1i').value=year;
+        document.getElementById('appointment_request_date_primary_2i').value=month;
+        document.getElementById('appointment_request_date_primary_3i').value=day;
+
+        $('#collapseOne').collapse('hide');
+
+        $('#appointment_request_date_primary_3i').trigger("change");
+      }
+    });
+  });
+</script>
+
+<style>
+  .form-part input {
+    height: 20px;
+  }
+
+  .form-part label {
+    margin-top: 0px;
+  }
+
+  #edit-mid-part-right {
+    padding: 0px 0px 20px 0px;
+  }
+
+  .data-field {
+    display: block;
+    clear: both;
+  }
+
+  .data-field label {
+    width: 20%;
+    text-align: right;
+    padding-top: 5px;
+  }
+
+  .data-field label.message {
+    width: 70%;
+    text-align: left;
+  }
+
+  .long-label {
+    width: 30%;
+  }
+
+  .data-field input {
+    width: 60%;
+  }
+
+  .data-field textarea {
+    width: 96%;
+    margin-left: 1%;
+    margin-right: 1%;
+  }
+
+  input.short {
+    max-width: 100px;
+  }
+
+  input.medium {
+    max-width: 200px;
+  }
+
+  div.data-field select {
+    margin: 5px 0 10px 15px;
+  }
+
+  .form-part > h3 {
+    color:white!important; 
+    text-decoration: underline!important; 
+    background: none!important;
+    font-size: 22px!important;
+  }
+
+  #calendar-container {
+    width: 320px;
+  }
+
+  .cal-event {
+    font-size: 0.7em;
+    text-align: center;
+  }
+
+  #primary-hour, #secondary-hour {
+    display: inline;
+  }
+
+  label.message {
+    color: red; 
+    display: block;
+    margin-left: 20%!important;
+    padding-left: 40px;
+    margin-top: -10px;
+  }
+
+  .data-field-date .field_with_errors {
+    display: inline;
+  }
+
+  .data-field-date .field_with_errors label.message {
+    width: 100%;
+  }
+</style>
+
+<div class="container-outer">
+  <div class="container-inner">
+    <div id="search-main2">
+      <h2>Schedule Vehicle Service</h2>
+    </div>
+    <%= form_for(@appointment, :url => { :action => "create" }, 
+                                :html => { :method => :post },
+                                :validate => true) do |f| %>  
+      <%= f.hidden_field :tire_store_id, :value => @tire_store.id %>
+      <%= f.hidden_field :tire_listing_id, :value => @appointment.tire_listing_id %>
+      <% if !@order.nil? %>
+        <%= f.hidden_field :order_id, :value => @order.id %>
+      <% end %>
+      <div id="edit-mid-part" class="clearfix">
+        <div id="edit-mid-part-left">
+          <div class="form-part">
+            <h3>Contact Information</h3>
+            <div class="data-field">
+              <%= f.label "Name", :class => 'required' %>
+              <%= f.text_field :buyer_name %>
+            </div>
+
+            <div class="data-field">
+              <%= f.label "Phone" %>
+              <%= f.text_field :buyer_phone, :validate => true %>
+            </div>
+
+            <div class="data-field">
+              <%= f.label "Email" %>
+              <%= f.text_field :buyer_email, :validate => true %>
+            </div>
+
+            <div class="data-field">
+              <%= f.label "Address" %>
+              <%= f.text_field :buyer_address %>
+            </div>
+
+            <div class="data-field">
+              <%= f.label "City" %>
+              <%= f.text_field :buyer_city %>
+            </div>
+
+            <div class="data-field">
+              <%= f.label "State" %>
+              <%= f.select(:buyer_state, us_states, :selected => @appointment.buyer_state) %>
+            </div>
+
+            <span class="data-field">
+              <%= f.label "Zip" %>
+              <%= f.text_field :buyer_zip, :class => "short" %>
+            </span>
+
+            <div class="data-field">
+              <%= f.label "Contact By" %>
+              <%= f.select :preferred_contact_path, 
+                options_for_select([["Phone", 0], ["Email", 1], ["Text", 2]], @appointment.preferred_contact_path) %>
+            </div>
+
+            <% if @tire_listing && @order.nil? %>
+              <div class="data-field">
+                <%= f.label "Quantity Desired:" %>
+                <%= f.select :quantity, 
+                  options_for_select([["1", 1], ["2", 2], ["3", 3], ["4", 4]], 
+                      "4") %>
+              </div>
+            <% end %>
+
+            <h3>Vehicle Information (Optional)</h3>
+            <p style="color: lightgray">You do not have to provide the vehicle information, but doing so will help the
+              tire store ensure that you have purchased the right tires for your car.</p>
+            <table style="width:90%">
+              <tr>
+                <td>
+                  <div class="data-field">
+                    <%= f.label "Manufacturer" %>
+                    <%= render :partial => 'layouts/ajax_auto_manufacturers_visfire', 
+                              :object => @auto_manufacturers, 
+                              :locals => {:f => f} %>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="data-field">
+                    <%= f.label "Model" %>
+                    <%= render :partial => 'layouts/ajax_auto_models_visfire',
+                              :object => @models,
+                              :locals => {:f => f} %>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="data-field">
+                    <%= f.label "Year" %>
+                    <%= render :partial => 'layouts/ajax_auto_years_visfire',
+                              :object => @years,
+                              :locals => {:f => f} %>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="data-field">
+                    <%= f.label "Option" %>
+                    <%= render :partial => 'layouts/ajax_auto_options_visfire',
+                              :object => @options,
+                              :locals => {:f => f} %>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="data-field">
+                    <%= f.label "Mileage" %>
+                    <%= f.text_field :vehicle_mileage, :class => "short" %>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div id="edit-mid-part-right">
+          <div class="accordion" id="cal-accordion">
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" 
+                    data-parent="#cal-accordion" href="#collapseOne">
+                  Click to view calendar
+                </a>
+              </div>
+              <div id="collapseOne" class="accordion-body collapse">
+                <div class="accordion-inner">  
+                  <div id='calendar-container'>
+                    <div id='svc-calendar'></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-part">
+            <h3>Appointment Times</h3>
+            <div class="data-field data-field-date">
+              <%= f.label "1st Choice", :class => 'required long-label' %>
+              <%= f.date_select(:request_date_primary,
+                                {:default => 1.days.from_now,
+                                  :start_year => Time.now.year,
+                                  :end_year => (Time.now + 2.months).year},
+                                {:class => "primary-date-select"}) %>
+              <div id="primary-hour">
+                <%= f.select :request_hour_primary, 
+                      options_for_select(@primary_hours, @appointment.request_hour_primary) %>
+              </div>
+            </div>
+            <div class="data-field data-field-date">
+              <%= f.label "2nd Choice", :class => 'required long-label' %>
+              <%= f.date_select(:request_date_secondary,
+                                {:default => 2.days.from_now,
+                                  :start_year => Time.now.year,
+                                  :end_year => (Time.now + 2.months).year},
+                                {:class => "secondary-date-select"}) %>
+              <div id="secondary-hour">
+                <%= f.select :request_hour_secondary, 
+                      options_for_select(@secondary_hours, @appointment.request_hour_secondary) %>
+              </div>
+            </div>
+
+            <script>
+              $('select.primary-date-select').change(function() {   
+                $.ajax({
+                  type: "GET",
+                  dataType: "html",
+                  url: "/ajax/update_hours_for_store",
+                  data: {primary: "true",
+                        selected_year: $("select#appointment_request_date_primary_1i").attr('value'),
+                        selected_month: $("select#appointment_request_date_primary_2i").attr('value'),
+                        selected_day:   $("select#appointment_request_date_primary_3i").attr('value'),
+                        tire_store_id: "<%= @tire_store.id %>"},
+                  success:function(result){
+                    $("div#primary-hour").html(result);} 
+                })
+              }); 
+              $('select.secondary-date-select').change(function() {   
+                $.ajax({
+                  type: "GET",
+                  dataType: "html",
+                  url: "/ajax/update_hours_for_store",
+                  data: {secondary: "true",
+                        selected_year: $("select#appointment_request_date_secondary_1i").attr('value'),
+                        selected_month: $("select#appointment_request_date_secondary_2i").attr('value'),
+                        selected_day:   $("select#appointment_request_date_secondary_3i").attr('value'),
+                        tire_store_id: "<%= @tire_store.id %>"},
+                  success:function(result){
+                    $("div#secondary-hour").html(result);} 
+                })
+              }); 
+            </script>
+
+            <div class="accordion" id="svc-accordion" style="clear: left">
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" 
+                      style="display: inline;"
+                      data-parent="#svc-accordion" href="#collapseTwo">
+                    Click to add more services
+                  </a>
+                  <font color="white">(will not be billed until performed)</font>
+                </div>
+                <div id="collapseTwo" class="accordion-body collapse">
+                  <div class="accordion-inner"> 
+                    <% Service.all.each do |s| %>
+                      <div style="width: 200px; display: inline-table;">
+                        <%= check_box_tag "services[]", s.id, 
+                                (@appointment.has_service?(s.id)), class: "service-check" %>
+                        <span style="padding-left: 10px;">
+                          <font color="white"><%= s.service_name %></font>
+                        </span>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="data-field">
+              <%= f.label "Additional Notes" %>
+              <%= f.text_area :notes %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <center><%= f.submit :class => "btn btn-small btn-primary" %></center>
+    <% end %>
+  </div>
+</div>

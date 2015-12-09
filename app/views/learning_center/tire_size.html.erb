@@ -1,0 +1,37 @@
+<div id="glossary" class="learning-center-page">
+	<% provide(:title, "Learning Center") %>
+	<h1>Learning Center / <span class="title">How to Find My Tire Size</span></h1>
+	<div class="learning-categories">
+		<h4 class="learning-category-title"><a href="<%= faq_learning_center_path %>">FAQ<%= image_tag("chevron-right-orange-small.png", alt: "go", class: "chevron") %></a></h4>
+		<h4 class="learning-category-title"><a href="<%= glossary_learning_center_path %>">Glossary<%= image_tag("chevron-right-orange-small.png", alt: "go", class: "chevron") %></a></h4>
+		<h4 class="learning-category-title active"><a href="<%= tire_size_learning_center_path %>">How to Find My Tire Size<%= image_tag("chevron-right-orange-small.png", alt: "go", class: "chevron") %></a></h4>
+	</div>
+	<div class="topic-container">
+		<div class="topic-info">
+			Your tire size can be found on the sidewall of your tires. Your sidewall should look similar to one of these two images. 
+		</div>
+		<div class="tire-size-container">
+			<div class="high-flotation tire-type">
+				<h2>High-Flotation Tires</h2>
+				<img src="/assets/tire-size-help-high-flot.jpg">
+				<p>High-flotation tires will indicate the size on the sidewall in the following order:</p>
+				<ul>
+					<li class="first">Overall Diameter (35 in this example)</li>
+					<li class="second">Section Width (12.5 or 1250 in this example)</li>
+					<li class="third">Rim Diameter (17 in this example)</li>
+				</ul>
+			</div>
+			<div class="passenger tire-type">
+				<h2>Passenger Tires</h2>
+				<img src="/assets/tire-size-help-passenger.jpg">
+				<p>Passenger tires will indicate the size on the sidewall in the following order:</p>
+				<ul>
+					<li class="first">Overall Diameter (215 in this example)</li>
+					<li class="second">Section Width (60 in this example)</li>
+					<li class="third">Rim Diameter (16 in this example)</li>
+				</ul>
+			</div>
+		</div>
+		<button><a href="../search/">Search by Tire Size</a></button>
+	</div>
+</div>

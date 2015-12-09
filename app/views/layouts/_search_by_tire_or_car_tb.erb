@@ -1,0 +1,105 @@
+<div id="tabs">
+  <ul>
+    <li id="tab1"><a href="#choosebycar">CHOOSE BY CAR</a></li>
+    <li id="tab2"><a href="#choosebytire">SEARCH BY SIZE</a></li>
+  </ul>
+
+  <div id="choosebycar">
+    <%= render :partial => 'layouts/search_location_tb', :locals => {:f => f} %>  
+    <ul>
+      <table style="width: 100%;">
+        <tr>
+          <td>
+            <li>
+              <div id="auto_manufacturers">
+                <%= render :partial => 'layouts/ajax_auto_manufacturers', 
+                          :object => @auto_manufacturers, 
+                          :locals => {:f => f, :c => 'cars'} %>
+              </div>
+            </li>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <li>
+              <div id="auto_models">
+                <%= render :partial => 'layouts/ajax_auto_models',
+                          :object => @models,
+                          :locals => {:f => f, :c => 'cars'} %>
+              </div>
+            </li>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <li>
+              <div id="auto_years">
+                <%= render :partial => 'layouts/ajax_auto_years',
+                          :object => @years, 
+                          :locals => {:f => f, :c => 'cars'} %>
+              </div>
+            </li>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <li>
+              <div id="auto_options">
+                <%= render :partial => 'layouts/ajax_auto_options',
+                          :object => @options, 
+                          :locals => {:f => f, :c => 'cars'} %>
+              </div>
+            </li>
+          </td>
+        </tr>
+      </table>
+    </ul>
+    <br />
+    <%= f.button "Find my tires!", :class => "btn btn-large btn-primary", 
+              :name => "auto_search" %>
+    <br /><br />
+  <!-- close id choosebycar -->
+  </div>
+  <div id="choosebytire">
+    <%= render :partial => 'layouts/search_location_tb', :locals => {:f => f} %>    
+    <ul class="selecttire">
+      <table style="margin-top: 9px; margin-bottom: -9px;">
+        <tr>
+          <td>
+            <li>
+              <div id="tire_widths" style="float:left; margin-right: 15px;">
+                <%= render :partial => 'layouts/ajax_tire_width',     
+                           :object => @diameters,      
+                           :locals => {:f => f} %>
+              </div>
+            </li>
+          </td>
+          <td>
+            <li>
+              <div id="tire_ratios" style="float:left; margin-right: 15px;"> 
+                <%= render :partial => 'layouts/ajax_tire_ratios',         
+                           :object => @ratios,         
+                           :locals => {:f => f} %>
+              </div>
+            </li>
+          </td>
+          <td>
+            <li>
+              <div id="tire_wheeldiameters" style="float:left;">
+                <%= render :partial => 'layouts/ajax_tire_wheeldiameters', 
+                           :object => @wheeldiameters, 
+                           :locals => {:f => f} %>
+              </div>
+            </li>
+          </td>
+        </tr>
+      </table>
+    </ul>
+    <br />
+    <%= f.button "Find my tires!", :class => "btn btn-large btn-primary", 
+              :name => "size_search" %>
+    <!-- close id choosebytire -->
+    <br /><br />
+  </div>
+</div>
+

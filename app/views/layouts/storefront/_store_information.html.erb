@@ -1,0 +1,45 @@
+<% if !@tire_store.branding.nil? && @tire_store.branding.logo.exists? %>
+  <div class="logo">
+    <%= image_tag(@tire_store.branding.logo.url, :style => 'max-width: 100%;') %>
+  </div>
+<% else %>
+  <div class="infobox-full logo-banner">
+    <table width="924px">
+      <tbody>
+        <tr>
+          <td>
+            <div style="margin-left: 20px; margin-right: auto; line-height: 40px; margin-top: 20px;">
+              <% @tire_store.name.split(' ').each do |w| %>
+                <div style="display: inline; white-space: nowrap;">
+                  <span class="first-letter"><%= w[0] %></span>
+                  <span class="rest-of-word"><%= w[1..w.size - 1] %></span>&nbsp;
+                </div>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      	<tr>
+      		<td valign="top" width="33%">
+            <% if @tire_store.private_seller? %>
+              <%= @tire_store.full_address %><br />
+              <img src="<%= @phone_image %>">
+            <% else %>
+              <div style="margin-left: 20px; margin-right: auto; text-align: left; line-height: 40px; margin-top: 10px;">
+                <div style="font-size: 1em; margin-top: -25px; letter-spacing: -1px;">
+            			<%= @tire_store.address1 %>
+            			<%= '/' + @tire_store.address2 if not @tire_store.address2.blank? %>
+            			<%= @tire_store.city %>, 
+            			<%= @tire_store.state %>
+            			<%= @tire_store.zipcode %>
+                </div>
+                <div style="font-size: 2em; letter-spacing: -3px; margin-top: 20px;">
+                  <%= @tire_store.visible_phone %>
+                </div>
+              </div>
+            <% end %>
+      		</td>
+      	<tr>
+      </tbody>
+    </table>
+  </div>
+<% end %>

@@ -1,0 +1,38 @@
+<% provide(:title, @master_promotion.promo_name) %>
+
+<%= javascript_include_tag "ddaccordian.js" %>
+
+<script type="text/javascript">
+	var ddaccordionsetting = {
+		headerclass: "promo-header",
+		contentclass: "content",
+		revealtype: "click",
+		mouseoverdelay: 200,
+		collapseprev: true,
+		defaultexpanded: [1],
+		onemustopen: false,
+		animatedefault: false,
+		persiststate: true,
+		toggleclass: ["", "openheader"],
+		togglehtml: ["prefix", "", ""],
+		animatespeed: "fast",
+		oninit:function(headers, expandedindices){
+			//do nothing
+		},
+		onopenclose:function(header, index, state, isuseractivated) {
+			//do nothing
+		}
+	}
+
+	ddaccordion.init(ddaccordionsetting);	
+</script>
+
+<%= stylesheet_link_tag "promotion_details" %>
+
+<div id="deals">
+	<h1>
+		DEALS / <span class="black-title"><%= @master_promotion.promo_name %></span>
+		<span class="orange-right"><a href="/deals">< View All Deals</a></span>
+	</h1>
+	<%= render :partial => "promo_details", :locals => {:promotion => @master_promotion, :tire_store => @tire_store} %>
+</div>

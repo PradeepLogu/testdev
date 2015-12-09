@@ -1,0 +1,66 @@
+<h3>Tire Info</h3>
+<div class="details-right">
+	<ul>
+		<li>Quantity: 
+			<span>
+				<% if @tire_listing.quantity > 0 && @tire_listing.quantity < 4 %>
+					<%= @tire_listing.quantity.to_s %>
+				<% else %>
+					4+
+				<% end %>
+			</span>
+		</li>
+		<li>Size:
+			<span>
+				<%= @tire_listing.tire_size.sizestr unless @tire_listing.tire_size.nil?  %>
+			</span>
+		</li>
+		<% unless @tire_listing.tire_model.nil? ||
+						@tire_listing.tire_model.tire_category.nil? %>
+			<li>Category:
+				<span>
+					<%= @tire_listing.tire_model.tire_category.category_name %>
+				</span>
+			</li>
+		<% end %>
+	</ul>
+</div>
+<div class="clear"></div>
+<h3>Seller Info</h3>
+<div class="details-right">
+	<ul>
+		<li>Seller:
+			<span>
+				<% if @tire_listing.tire_store.private_seller? %>
+					Private Seller
+				<% else %>
+					<%= link_to @tire_listing.tire_store.visible_name, 
+							url_for(@tire_listing.tire_store) + "?tire_size_id=#{@tire_listing.tire_size_id}",
+							:style => "font-size: 1.2em; font-weight: bold;" %>
+				<% end %>
+			</span>
+		</li>
+		<li>Address:
+			<span>
+				<% if @tire_listing.tire_store.private_seller? %>
+					<%= @tire_listing.tire_store.full_address %>
+				<% else %><%= @tire_listing.tire_store.address1 %><br /><%= @tire_listing.tire_store.address2 unless @tire_listing.tire_store.address2.blank? %><% unless @tire_listing.tire_store.address2.blank? %><br/><% end %><%= @tire_listing.tire_store.city %>, <%= @tire_listing.tire_store.state %>&nbsp;<%= @tire_listing.tire_store.zipcode %>
+				<% end %>
+			</span>
+		</li>
+		<li>Phone:
+			<span>
+				<% if @tire_listing.tire_store.private_seller? %>
+					<img src="<%= @phone_image %>">
+				<% else %>
+					<%= @tire_listing.tire_store.visible_phone %>
+				<% end %>
+			</span>
+		</li>
+		<li>Description:
+			<span>
+				<%= @tire_listing.gendesc %>
+			</span>
+		</li>
+	</ul>
+</div>

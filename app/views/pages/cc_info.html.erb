@@ -1,0 +1,73 @@
+<%= provide(:title, "Enter Credit Card Information") %>
+
+<% provide(:visfire, "true") %>
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<style>
+  .stripe-button-el {
+    margin-left: 25px;
+  }
+</style>
+
+<div id="searc-header">
+  <%= render 'layouts/header_visfire' %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+    <div id="search-main2">
+      <h2>Sell Tires with TreadHunter</h2>
+      <ul>
+        <li>Home /</li>
+        <li><a href="#">Seller Registration</a></li>
+      </ul>
+    </div>
+
+    <div id="registration-mid-part" class="clearfix">
+      <p>
+        <% if collect_cc_upfront && !free_trial_verbiage.nil? %>
+          <%= render 'pages/cc_info/free_trial_cc_upfront' %>
+        <% elsif collect_cc_upfront %>
+          <%= render 'pages/cc_info/no_free_trial_cc_upfront' %>
+        <% else %>
+          <% if !@account.current_contract.nil? %>
+            <% if @account.current_contract.is_free_trial_plan? %>
+              <%= render :partial => 'pages/cc_info/active_free_trial' %>
+            <% else %>
+              <% if !@account.stripe_customer_record.nil? %>
+                <% if @account.stripe_customer_record.delinquent %>
+                  <%= render :partial => 'pages/cc_info/last_charge_failed' %>
+                <% elsif @account.need_to_get_credit_card %>
+                  <%= render :partial => 'pages/cc_info/no_cc_on_file' %>
+                <% else %>
+                  <%= render :partial => 'pages/cc_info/replace_existing_cc' %>
+                <% end %>
+              <% else %>
+                We are having trouble updating your information with our credit card processor.  If you
+                continue to see this message, please contact customer service to ensure uninterrupted
+                service with TreadHunter.
+                <br /><br />
+                <%= link_to('/myTreadHunter', "Return to My TreadHunter") %>
+              <% end %>
+            <% end %>
+          <% else %>
+            We are having trouble creating a contract for your account.  Please contact customer service
+            if you continue to see this message.
+            <br /><br />
+            <%= link_to('/myTreadHunter', "Return to My TreadHunter") %>
+          <% end %>
+        <% end %>
+      </p>
+    </div>
+  </div>
+</div>
+
+<form action="<%= url_for(:controller => 'charges', :action => 'cc_entered') %>" method="get">
+  <script src="https://checkout.stripe.com/v2/checkout.js" 
+        class="stripe-button"
+        data-label="<%= @button %>"
+        data-key="<%= Rails.configuration.stripe[:publishable_key] %>">
+  </script>
+</form>

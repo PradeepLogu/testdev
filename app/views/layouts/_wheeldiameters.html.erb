@@ -1,0 +1,7 @@
+
+<%= collection_select(f, :wheeldiameter, @wheeldiameters, 
+						:wheeldiameter, :wheeldiameter,
+                     {:prompt   => "Wheel Diameter",
+                   	  :selected => session[:wheeldiameter]}, {:style => 'width: 150px;', 
+                   	  	:class => "tires"}) %>
+<br/>

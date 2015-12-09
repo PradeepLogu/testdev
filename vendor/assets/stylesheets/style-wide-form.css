@@ -1,0 +1,64 @@
+#edit-mid-part-left {
+	width: 45%;
+}
+
+.form-part {
+	width: 95%;
+	padding-top: 10px;
+}
+
+#edit-mid-part-right {
+	width: 50%;
+}
+
+#edit-mid-part-right p label {
+	color:black;
+}
+
+table.jqTransformTextarea {
+	margin-left: 10px;
+}
+
+.jqTransformInputWrapper, .jqTransformSelectWrapper {
+	margin-top: 10px;
+	width: 75%!important;
+}
+
+.jqTransformSelectWrapper div span {
+	color: white;
+}
+
+.form-part label {
+	margin-top: 25px;
+}
+label.message {
+	margin-top: 5px;
+}
+
+@media screen and (max-width: 1024px) {
+	#edit-mid-part-left {width: 55%;}
+	#edit-mid-part-right {width: 40%;}
+}
+
+@media screen and (max-width: 768px) {
+	#edit-mid-part-left {
+		width: 70%;
+	}
+	#edit-mid-part-right {
+		width: 28%;
+	}
+	.jqTransformInputWrapper, .jqTransformSelectWrapper {
+		width: 90%!important;
+	}
+}
+
+@media screen and (max-width: 700px) {
+	#edit-mid-part-left {
+		width: 98%;
+	}
+    #edit-mid-part-right {
+        width: 98%;
+        float: left;
+        padding-left: 0;
+    }
+}

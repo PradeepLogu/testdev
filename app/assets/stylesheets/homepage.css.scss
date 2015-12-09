@@ -1,0 +1,10 @@
+// Styles for the new homepage.
+
+@import "responsive-font-size";
+
+
+//Special piece of text with a scaling image background
+#how-it-works h1 {
+  @include responsive-font-size(14px, 36px, 480px, 1100px, 1px);
+}
+

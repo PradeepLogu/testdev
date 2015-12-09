@@ -1,0 +1,41 @@
+<% if @photos %>
+	<style>
+		h3.box-title {
+			margin-top: 10px;
+		}
+
+		.carousel, .carousel img {
+			height: 162px;
+			width: 480px;
+			border-bottom-left-radius: 20px;
+			border-top-left-radius: 20px;
+		}
+
+		.carousel-caption {
+			position: absolute;
+			padding: 0px;
+			border-bottom-left-radius: 20px;
+		}
+
+		.carousel-caption h4 {
+			padding-left: 20px;
+		}
+
+		/*
+		.ui-widget-content a {
+			color: #aaaaaa;
+		}
+		*/
+	</style>
+
+	<div class="infobox-full">
+	 	<div class="logo-right" style="width: 420px;">
+	 		<h1><%= @slogan %></h1>
+	 		<%= @slogan_description %>
+	 	</div>
+		<div>
+			<%= render :partial => 'layouts/storefront/storefront_carousel',
+			          :locals => {:@photos => @photos} %>
+		</div>
+	</div>
+<% end %>

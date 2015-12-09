@@ -1,0 +1,21 @@
+Dear <%= @order.buyer_name %>
+
+TreadHunter has successfully refunded your credit card ending in <%= @card_last_4 %> in the amount of <%= number_to_currency @order.total_order_price %>.  The reason given is:
+<%= @msg %>
+
+A breakout of the original charges is shown below:
+
+Description                          Quantity     Price ea.      Total
+<%= @order.tire_listing.short_description.truncate(35).ljust(35) %> <%= @order.tire_quantity.to_s.rjust(9) %> <%= (number_to_currency @order.tire_ea_price).rjust(13) %> <%= (number_to_currency @order.total_tire_price).rjust(10) %>
+<%= "Tire Installation".ljust(35) %> <%= @order.tire_quantity.to_s.rjust(9) %> <%= (number_to_currency @order.tire_ea_install_price).rjust(13) %> <%= (number_to_currency @order.total_install_price, :unit => '').rjust(10) %>
+<%= "Sales Tax on order".ljust(35) %> <%="".rjust(9) %> <%= ("").rjust(13) %> <%= (number_to_currency @order.sales_tax_collected, :unit => '').rjust(10) %>
+<%= "Convenience Fee".ljust(35) %> <%="".rjust(9) %> <%= ("").rjust(13) %> <%= (number_to_currency @order.th_user_fee, :unit => '').rjust(10) %>
+<%= "Sales tax on Convenience Fee".ljust(35) %> <%="".rjust(9) %> <%= ("").rjust(13) %> <%= (number_to_currency @order.th_sales_tax_collected, :unit => '').rjust(10) %>
+----------------------------------------------------------------------
+<%= "Total Order".ljust(35) %> <%="".rjust(9) %> <%= ("").rjust(13) %> <%= (number_to_currency @order.total_order_price).rjust(10) %>
+
+
+Thank you for using TreadHunter and keep us in mind whenever you need tires!
+
+Sincerely,
+The TreadHunter Team

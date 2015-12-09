@@ -1,0 +1,72 @@
+<% provide(:title, 'Create multiple new tire listings') %>
+<% provide(:visfire, "true") %>
+
+<%= stylesheet_link_tag "new_multiple" %>
+
+<style>
+	div#choose-tire-sizes {font: 12px/24px proxima_nova_rgregular;}
+</style>
+
+
+<script language="javascript">
+	$(function(){
+		//$('form').jqTransform({imgPath:'html/images/'});
+	});
+</script>	
+
+<%= form_tag('/create_multiple') %>
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="search-main2">
+			<h2>Create Multiple Listings</h2>
+		</div>
+		<h5>
+			<br/>
+			<%= hidden_field_tag :tire_store_id, @tire_store_id %>
+			<div id="inc_mounting">
+				<label style="display: inline;">Price includes mounting?</label>
+				<%= check_box_tag('inc_mounting') %>
+			</div>
+			<br /><br />
+			<!--
+			<label style="display:inline;">Warranty (days)</label>
+			<%= text_field_tag('warranty', '', :style => 'width: 30px;', :class => 'user') %>
+			<br />
+			-->
+		</h5>			
+
+		<div id="seller-mid-part" class="clearfix">
+			<div id="split-mid-part-left" style="background: url(/assets/or.jpg) no-repeat;">
+				<h3>Enter prices for all sizes in a selected model</h3>
+
+				<div id="choose-by-model">
+					<div id="tire_manufacturers">
+						<%= render :partial => 'layouts/ajax_tire_manufacturers_no_size', 
+						          :object => @tire_manufacturers %>
+					</div>
+					<div id="tire_models">
+						<%= render :partial => 'layouts/ajax_tire_models_no_size',
+						          :object => @tire_models,
+						          :locals => {:@tire_store_id => @tire_store_id} %>
+					</div>
+				</div>
+			</div>
+			<div id="split-mid-part-right">
+				<h3>Enter prices for all models in a selected size</h3>
+				<div id="choose-by-size">
+					<div id="tire_sizes">
+						<%= render :partial => 'layouts/ajax_tire_sizes_no_mfr', 
+						          :object => @tire_manufacturers,
+						          :locals => {:@tire_store_id => @tire_store_id} %>
+					</div>
+				</div>					
+			</div>
+		</div>
+	</div>
+
+	<hr style="border-color: black;" />
+	<div id="choose-tire-sizes">
+	</div>
+	<div id="choose-tire-models">
+	</div>		
+</div>

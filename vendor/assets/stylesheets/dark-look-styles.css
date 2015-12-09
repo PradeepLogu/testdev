@@ -1,0 +1,33 @@
+/* CSS Document */
+/* Home page styles for index layout */
+
+/* clear defaults */
+*{margin: 0px; padding: 0px;}
+
+body{text-align: left; font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #FFF; background: #000 url(background-tires.jpg) top right no-repeat; background-attachment: fixed;}
+.clear{clear: both;}
+#wrapper{width: 100%; margin: 0px; padding: 0px; top: 0px;}
+.orange{color: #F63;}
+.gray{color: #AAA;}
+.offwhite{color: #EEE;}
+.steelblue{color: #535F6D;}
+.darksteel{color: #122;}
+
+/* ======== THE BODY CONTAINER ============ */
+#cars{width: 960px; margin: 0px auto;}
+#content-container{width: 960px; margin: 0px auto 0px 0px; background: url(hex-mesh.png) repeat; padding: 72px 10px 96px; border-right: 1px solid #122; border-bottom: 1px solid #122; z-index: 1000; box-shadow: 0px 0px 10px #012;}
+
+/* ======== THE SEARCH RESULTS ============ */
+.search-column{width: 460px; margin: 0px 10px; float: left;}
+.search-item{width: 418px; padding: 15px 20px 25px; margin-bottom: 25px; background: #535F6D; border: 1px solid #122; -moz-border-radius: 5px; -o-border-radius: 5px; -webkit-border-radius: 5px; -ms-border-radius: 5px; border-radius: 5px; color: #EEE;}
+.search-item h2{color: #F63;}
+.search-item:hover h2{color: #EEE;}
+.search-item:hover{background: #F63; color: #122;}
+.search-item .pic{height: 72px; width: 72px; float: left; margin-right: 10px;}
+.pic img{height: 72px; width: 72px;}
+.search-item .info{width: 320px; float: right;}
+
+/* ======== FOOTER CONTAINER ============ */
+
+#footer-container{width: 100%; margin: 20px 0px 30px 0px; font-size: 12px;}
+#footer-objects{width: 1000px; margin: 0px auto; text-align: center;}

@@ -1,0 +1,131 @@
+Dear <%= @tire_store.contact_email %><br />
+<br />
+TreadHunter has successfully transferred funds to your <%= @account_type %><%= @card_last_4.nil? ? "" : " ending in (#{@card_last_4})" %> in the amount of <%= number_to_currency @order.transfer_amount %> for order # <%= @order.id %>.  Please note that it may take up to 48 hours before the funds are available.  A breakout of the transfer is shown below:<br />
+<br />
+Store Name: <%= @tire_store.name %><br />
+Store Address: <%= @tire_store.full_address %><br />
+<br />
+<style>
+	.total-line {
+		border-bottom: 1px solid #000;
+	}
+</style>
+
+<% @breakout_sales_tax = @order.breakout_sales_tax %>
+
+<table>
+	<tr>
+		<th align="left">Description</th>
+		<th align="right">Quantity</th>
+		<th align="right">Price ea.</th>
+		<th align="right">Total</th>
+	</tr>
+	<% if @breakout_sales_tax %>
+		<tr>
+			<td align="left"><%= @order.tire_listing.short_description %></td>
+			<td align="right"><%= @order.tire_quantity %></td>
+			<td align="right"><%= number_to_currency @order.tire_ea_price %></td>
+			<td align="right"><%= number_to_currency @order.total_tire_price %></td>
+		</tr>
+		<tr>
+			<td>Sales Tax on tires</td>
+			<td></td>
+			<td></td>
+			<td align="right"><%= number_to_currency @order.sales_tax_on_tires, :unit => '' %></td>
+		</tr>
+		<tr>
+			<td align="left">Tire Installation</td>
+			<td align="right"><%= @order.tire_quantity %></td>
+			<td align="right"><%= number_to_currency @order.tire_ea_install_price %></td>
+			<td align="right"><%= number_to_currency @order.total_install_price, :unit => '' %></td>
+		</tr>
+		<tr>
+			<td>Sales Tax on installation</td>
+			<td></td>
+			<td></td>
+			<td align="right"><%= number_to_currency @order.sales_tax_on_installation, :unit => '' %></td>
+		</tr>
+	<% else %>
+		<tr>
+			<td align="left"><%= @order.tire_listing.short_description %></td>
+			<td align="right"><%= @order.tire_quantity %></td>
+			<td align="right"><%= number_to_currency @order.tire_ea_price %></td>
+			<td align="right"><%= number_to_currency @order.total_tire_price %></td>
+		</tr>
+		<tr>
+			<td align="left">Tire Installation</td>
+			<td align="right"><%= @order.tire_quantity %></td>
+			<td align="right"><%= number_to_currency @order.tire_ea_install_price %></td>
+			<td align="right"><%= number_to_currency @order.total_install_price, :unit => '' %></td>
+		</tr>
+		<tr>
+			<td>Sales Tax on order</td>
+			<td></td>
+			<td></td>
+			<td align="right"><%= number_to_currency @order.sales_tax_collected, :unit => '' %></td>
+		</tr>
+	<% end %>
+	<tr>
+		<td>TreadHunter Processing Fee</td>
+		<td></td>
+		<td></td>
+		<td align="right"><%= number_to_currency (@order.th_processing_fee * -1), :unit => ''  %></td>
+	</tr>
+	<tr>
+		<td colspan="4" class="total-line"><span style="max-height: 1px"></span></td>
+	</tr>
+	<tr>
+		<td>Total Amount Transferred</td>
+		<td></td>
+		<td></td>
+		<td align="right"><%= number_to_currency @order.transfer_amount %></td>
+	</tr>
+</table>
+<br />
+<br />
+The tires being installed are:<br />
+<b><%= @tire_listing.stock_number.blank? ? "" : "Stock #: #{@tire_listing.stock_number} " %>
+	<%= @order.tire_quantity %> <%= @tire_listing.sizestr %> <%= @tire_listing.tire_manufacturer_name %> <%= @tire_listing.tire_model_name %> <%= @tire_listing.tire_model.manu_part_num.blank? ? "" : "Part#: #{@tire_listing.tire_model.manu_part_num}" %>
+</b>
+<br />
+The buyer is:<br />
+Name: <%= @order.buyer_name %><br />
+Phone: <%= @order.formatted_phone %><br />
+Email: <%= @order.buyer_email %><br />
+<br />
+<% if !@appointment.nil? %>
+	<% if !@appointment.confirmed_flag? %>
+		The user has requested an appointment to have these tires installed.  The times requested are:<br />
+		<br />
+		<%= @appointment.primary_request_time %><br/>
+		<br />
+		<%= @appointment.secondary_request_time %><br />
+		<br />
+		<b>It is very important that you do the following as soon as possible:
+			<ul>
+				<li>Confirm one of the user's requested appointment times, and</li>
+				<li>Ensure that you have the requested tires in stock at that time</li>
+			</ul>
+		</b>
+		<br />
+		To confirm the appointment, use the following link: <%= @confirm_appt_link %><br />
+	<% else %>
+		You have confirmed their requested appointment time of: <b><%= @appointment.confirm_time %>.  It is very important that you do the following as soon as possible:
+			<ul>
+				<li>Ensure that you have the requested tires in stock at the requested appointment time</li>
+			</ul>
+		</b>
+	<% end %>
+	<% if !@appointment.services_list.join(", ").blank? %>
+		In addition, the customer has requested the following services for their vehicle.  These services <b>have not</b> been paid for so you should collect payment upon rendering the services.<br />
+		<br />
+		<%= @appointment.services_list.join(", ") %><br />
+	<% end %>
+<% else %>
+	The user has not yet requested an appointment to have these tires installed.  If you do not receive an appointment request from TreadHunter soon, you should contact the customer via email or telephone to make the appointment.<br />
+<% end %>
+<br />
+Thank you for letting TreadHunter find customers for your store.  Please let us know if there is any way we can make things even better for you.<br />
+<br />
+Sincerely,<br />
+The TreadHunter Team<br />

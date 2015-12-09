@@ -1,0 +1,87 @@
+<% provide(:title, 'Edit image assets') %>
+
+<%= stylesheet_link_tag "lightbox" %>
+<%= javascript_include_tag "lightbox" %>
+
+<div style="background-color: #F63;">
+  <h3 style="color: white;">
+    Editing image assets
+  </h3>
+</div>
+<style>
+	td {
+		 vertical-align: bottom;
+	}
+</style>
+
+<table class="table-striped" 
+		style="table-layout:fixed; width: 960px;">
+	<tr>
+		<th style="width: 110px;">
+			Image
+		</th>
+		<th style="width: 230px;">
+			Caption
+		</th>
+		<th style="width: 230px;">
+			URL
+		</th>
+		<th style="width: 150px;">
+			Usage
+		</th>
+		<th style="width: 170px;">
+		</th>
+	</tr>
+	<% @assets.each do |a| %>
+		<%= form_for a do |f| %>
+			<tr style="height: 50px;">
+				<td>
+					<%= link_to image_tag(a.image.url(:thumb), 
+							:style => 'max-height: 50px;'), 
+							a.image.url(:original),
+							:rel => "lightbox" %>
+				</td>
+				<td>
+					<%= f.text_field(:caption, 
+						{:class => 'user', :style => "width: 220px;"}) %>
+				</td>
+				<td>
+					<%= f.text_field(:url,
+						{:class => 'user', :style => "width: 220px;"}) %>
+				</td>
+				<td style="padding-bottom: 10px;">
+					<% a.valid_uses.each do |u| %>
+						<%= check_box_tag 'usage[]', u, 
+							a.has_usage(u) %><%= u %><br />
+					<% end %>
+				</td>
+				<td style="padding-bottom: 10px;">
+					<%= f.submit "Save Changes",
+						{:controller => :assets,
+	      				:action => 'update', 
+	      				:class => 'btn btn-primary',
+	      				:id => a.id} %>
+	      			<%= link_to 'Delete', asset_path(a), :confirm => "Are you sure?", :method => :delete %>
+				</td>
+			</tr>
+		<% end %>
+	<% end %>
+</table>
+<br />
+Note: URL and Caption is used to create a link to a page and describe a picture when appropriate (such as storefront pages).
+<hr />
+<h2>Storefront text</h2>
+<%= form_for @branding, 
+	:url => { :action => "update", :controller => "brandings"} do |f| %>
+	<%= fields_for @tire_store do |t| %>
+		<%= t.hidden_field :id %>
+	<% end %>
+	<%= f.label(:slogan, "Header", {:style => "display: inline;"}) %>
+	<%= f.text_field(:slogan, {:placeholder => "Featured Tires"}) %><br />
+	<%= f.label(:slogan_description, "Body text", 
+		{:style => "display: inline;"}) %>
+	<%= f.text_area(:slogan_description, {:cols => 10, :rows => 5, :placeholder => "Here are some of the tires we feature at #{@tire_store.name}."}) %><br />
+	<%= f.submit %>
+<% end %>
+<hr />
+<%= render :partial => "layouts/asset_upload" %>

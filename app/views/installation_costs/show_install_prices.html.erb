@@ -1,0 +1,82 @@
+<% provide(:title, 'Installation Prices') %>
+
+<% provide(:visfire, "true") %>
+
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<style>
+	td, th {color: black; padding-left: 10px;}
+	.num {
+		text-align: right;
+	}
+	.ctr {
+		text-align: center;
+	}
+</style>
+
+<div id="serach-content2" class="clearfix">
+	<div id="search-content-inner2" class="clearfix">
+		<div id="search-main2">
+			<div id="details-mid-part-left" style="width:100%">
+	        	<h2>Installation Prices</h2>
+				<% if @account_wide_prices && @account_wide_prices.size > 0 %>
+					<br /><br /><br /><br />
+					<h3>Account-Wide Installation Charges</h3>
+
+		        	<table>
+		        		<thead>
+		        			<tr>
+	        					<th class="num"><p>Wheel Size</p></th>
+		        				<th class="num"><p>Install Price Ea.</p></th>
+		        			</tr>
+		        		</thead>
+		        		<tbody>
+						<% @account_wide_prices.each do |p| %>
+	        				<tr style="color: white;">
+	        					<td class="max ctr">
+	        						<p>
+	        							<%= p.min_wheel_diameter %>&quot;
+	        						</p>
+	        					</td>
+	        					<td class="num">
+        							<%= p.ea_install_price.to_money %>
+	        					</td>
+	        				</tr>
+	        			<% end %>
+		        		</tbody>
+		        	</table>
+				<% end %>
+
+				<% if !@tire_store_override_stores.nil? %>
+					<% @tire_store_override_stores.each do |t| %>
+						<h3><%= t.name %></h3>
+			        	<table>
+			        		<thead>
+			        			<tr>
+		        					<th class="num"><p>Wheel Size</p></th>
+			        				<th class="num"><p>Install Price Ea.</p></th>
+			        			</tr>
+			        		</thead>
+			        		<tbody>
+							<% @tire_store_override_prices[@tire_store_override_stores.find_index(t)].each do |p| %>
+		        				<tr style="color: white;">
+		        					<td class="max ctr">
+		        						<p>
+		        							<%= p.min_wheel_diameter %>&quot;
+		        						</p>
+		        					</td>
+		        					<td class="num">
+	        							<%= p.ea_install_price.to_money %>
+		        					</td>
+		        				</tr>
+		        			<% end %>
+			        		</tbody>
+			        	</table>
+					<% end %>
+				<% end %>
+	        </div>
+		</div>
+	</div>
+</div>

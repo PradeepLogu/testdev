@@ -1,0 +1,15 @@
+Dear <%= @reservation.tire_store.contact_email %>,
+
+We regret that the buyer below has cancelled their reservation for <%= @reservation.tire_listing.short_description %>.
+
+<% unless @reservation.tire_listing.blank? %>
+Stock #:<%= @reservation.tire_listing.stock_number %> 
+<% end %>
+
+<%= @reservation.name %>
+<%= @reservation.buyer_email %>
+<%= @reservation.formatted_phone %>
+<%= @reservation.address %>
+<%= @reservation.city %>, <%= @reservation.state %> <%= @reservation.zip %>
+
+Thank you for using TreadHunter.com to help connect with your customers!

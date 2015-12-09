@@ -1,0 +1,27 @@
+<div class="search-content-left-<%=@store%>inner">
+	<div class="search-content-left-<%=@store%>inner-a">
+		<div class="search-img">
+			<img src="/assets/th_icon_128.png">
+		</div>
+			<h3>No results found for <%= @tire_search.tire_size.sizestr %></h3>
+	</div>
+	<div class="search-content-left-<%=@store%>inner-b">
+		<div class="search-right">
+			<h2><b>Your Store Here!</b></h2>
+			<p>
+				If you manage a tire store in the <b><%= @tire_search.locationstr %></b> area, your store could be the
+				first showing tires on this page.  Sign up today!
+			</p>
+	        <% if !free_trial_verbiage.nil? %>
+				<ul>
+					<li>
+		            	Limited Offer - Get <%= free_trial_verbiage %> of our Gold package for free
+					</li>
+				</ul>
+			<% end %>
+		</div>
+		<div class="search-right-b">	
+			<a class="search-right-b-img" href="/th_landing">SIGN UP</a>
+		</div>
+	</div>
+</div>

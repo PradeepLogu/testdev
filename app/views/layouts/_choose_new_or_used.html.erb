@@ -1,0 +1,45 @@
+<% if params[:direct].blank? && session[:store_type].blank? %>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+	<style>
+		.ui-widget-header {
+			background: #E74731 50% 50% repeat-x;
+			
+		}
+		button.jqTransformButton {
+			margin: 0;
+			width: 80px;
+		}
+
+		.opaque { opacity: 0.5 }
+		
+		#dialog { opacity: 1.0; }
+	</style>
+	<script>
+		$(function() {
+			$( "#outer-wrapper").addClass('opaque');
+			$( "#dialog" ).dialog({
+				beforeClose: function( event, ui ) { $("#outer-wrapper").removeClass('opaque');}
+			});
+		});
+	</script>
+
+	<div id="dialog" title="Select A Store Type">
+		<p>
+			<h3>Are you primarily interested in increasing sales for New tires or Used?</h3>
+		</p>
+		<br />
+		<center>
+			<%= form_tag params.merge(:action=>"set_store_type"), :style => "display: inline;" do %>
+				<button id="" name="new" type="submit" class="jqTransformButton">
+					<span>New</span>
+				</button>
+			<% end %>
+			<%= form_tag params.merge(:action=>"set_store_type"), :style => "display: inline;" do %>
+				<button id="" name="used" type="submit" class="jqTransformButton">
+					<span>Used</span>
+				</button>
+			<% end %>
+		</center>
+	</div>
+
+<% end %>

@@ -1,0 +1,186 @@
+<% provide(:title, "Edit Seller Information") %>
+<% provide(:visfire, "true") %>
+
+<style>
+    .check {clear: both;}
+    .check span, .check label { display: block; float: left;}
+    .check label {width: 70%;}
+</style>
+
+<script>
+	$(function() {
+		//$('form').jqTransform();
+		//$('div').jqTransform();
+		window.scrollTo(0, 0);
+		show_or_hide_text_phone();
+		setTooltips();
+	});
+	function show_or_hide_text_phone() {
+		if ($("#tire_store_send_text").attr('checked') == 'checked')
+		{
+			$(".textphone").removeClass("hide");
+		}
+		else
+		{
+			$(".textphone").addClass("hide");
+		}
+	};
+</script>
+
+<%= stylesheet_link_tag "style-wide-form" %>
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="search-main2">
+			<% if @tire_store.private_seller? %>
+				<h2>Editing seller information</h2>
+			<% else %>
+				<h2>Editing Storefront</h2>
+			<% end %>
+		</div>
+		<%= form_for(@tire_store, :html => {:multipart => true}, 
+						:validate => true) do |f| %>	
+			<div id="edit-mid-part" class="clearfix">
+				<div id="heading-part">
+					<% if @tire_store.private_seller? %>
+						<h1>Edit your seller information on <span>TreadHunter</span></h1>
+						<h5>
+							Use this page to set up the information about you that will be
+							displayed to buyers on TreadHunter.
+						</h5>
+					<% else %>
+						<h1>Set up your storefront on <span>TreadHunter</span></h1>
+						<h5>
+							Use this page to change the way your storefront appears on TreadHunter.
+							Upload your logo, change your store information, even customize
+							the color scheme shown to potential buyers.
+						</h5>
+					<% end %>
+				</div>
+		        <div id="edit-mid-part-left">
+					<div class="form-part">
+						<%= hidden_field_tag "account_id", @tire_store.account_id %>
+						<% if @tire_store.private_seller? %>
+							<%= f.label :name, "Seller name" %>
+						<% else %>
+							<%= f.label :name, "Store name" %>
+						<% end %>
+    					<%= f.text_field :name %>
+    					<%= f.label :address1, "Address Line 1" %>
+    					<%= f.text_field :address1 %>
+    					<%= f.label :address2, "Address Line 2 (if applicable)" %>
+    					<%= f.text_field :address2 %>
+    					<%= f.label "City" %>
+    					<%= f.text_field :city %>
+						<%= f.label "State" %>
+      					<%= f.select(:state, us_states, {}) %>
+      					<%= f.label :zipcode %>
+						<%= f.text_field :zipcode %>
+
+						<%= f.label :phone, "Telephone number" %>
+      					<%= f.telephone_field :phone %>
+						<%= f.label :contact_email, 'Contact email' %>
+      					<%= f.text_field :contact_email %>
+
+      					<% if (!f.object.new_record? && f.object.private_seller) %>
+      						<div class="check">
+    							<%= f.label :check_box_tag, "Hide phone from buyers?" %>
+    							<%= f.check_box :hide_phone %>
+    						</div>
+      					<% end %>
+
+      					<div class="check">
+							<%= f.label :send_text, 'Text instead of email?' %>
+							<%= f.check_box :send_text %>
+						</div>
+
+						<div class="textphone">
+      						<%= f.label :text_phone, 'Text phone #' %>
+        					<%= f.text_field :text_phone, 
+                  				:validate => { :minimum => 10, :maximum => 12 } %>
+        					<%= f.label :text_phone, 'New reservations will be sent to this number via text message' %>
+
+        					<script>
+          						$('#tire_store_send_text').change(function() {
+            						show_or_hide_text_phone();
+          						});
+        					</script>
+        				</div>
+					</div>
+				</div>
+				<div id="edit-mid-part-right">
+					<% if @tire_store.account.can_use_logo? && !@branding.nil? && 
+						!@tire_store.private_seller? %>
+  						<div class="divider">
+							<%= fields_for @branding do |b| %>
+								<h3>Logo</h3>
+								<% if !b.object.logo.nil? && b.object.logo.exists? %>
+									<p>
+										<%= b.check_box :delete_logo %> Delete?<br />
+										<%= image_tag(b.object.logo.url(:medium)) %>
+									</p>
+								<% end %>
+								<p><%= b.file_field :logo %></p>
+							<% end %>
+							<p>
+								If you have a picture file of your store logo, you can upload
+								it here and it will display on your storefront page.
+							</p>
+						</div>
+					<% end %>
+  					<% if !@tire_store.private_seller? %>
+  						<div class="divider">
+	  						<h3>
+	  							Tabs and Store Hours
+	  						</h3>
+	  						<p >
+	  							You can set up different tabs (or pages) of information about
+	  							your store.  For example, you might have a tab for the history 
+	  							of your store and its service in the community. This is also
+	  							how you can set your store hours.
+  							</p>
+	  						<button class='jqTransformButton' style="margin: 0px;">
+								<%= link_to 'Edit Storefront Tabs', '/storefront/' + 
+										@tire_store.id.to_s + '/edit' %>
+							</button>
+  						</div>
+  						<% if @allow_craigslist_usage %> 
+							<% if !@tire_store.cl_template.nil? %>
+	  							<div class="divider">
+									<h3>
+										Craigslist Template
+									</h3>
+									<p>
+										The Craigslist template functionality lets you set up
+										how your ads will be posted to Craigslist when using our
+										mobile app.
+									</p>
+									<button class='jqTransformButton' style="margin: 0px;">
+										<%= link_to 'Edit Craigslist template', '/cl_templates/' + @tire_store.id.to_s + '/edit' %>
+									</button>
+								</div>
+							<% end %>
+						<% end %>
+						<% if !@tci.nil? %>
+  							<div class="divider">
+								<h3>
+									TCI Import Info
+								</h3>
+								<p>
+									By entering your TCI API credentials, we can automatically
+									import the tire and pricing data from TCI to populate your
+									listings in an instant.
+								</p>
+								<button class="jqTransformButton" style="margin: 0px">
+									<%= link_to 'Edit TCI Import Info', 
+										edit_tire_stores_distributors_path(:tire_store_id => @tire_store.id, :distributor_id => @tci.id) %>
+								</button>
+							</div>
+						<% end %>
+  					<% end %>
+				</div>
+			</div>
+			<%= f.submit "Update" %>
+		<% end %>
+	</div>
+</div>

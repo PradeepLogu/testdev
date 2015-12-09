@@ -1,0 +1,23 @@
+<select class="tires" 
+        id="wheeldiameter" 
+        name="wheeldiameter" 
+        select_wheeldiameter_path="/generic_tire_listings/get_sizes_for_wheeldiameter">
+  <option value="">Wheel Size</option>
+  <% @wheeldiameters.each do |d| %>
+    <option value="<%= d %>"><%= d %></option>
+  <% end %>
+</select>
+<script>
+  $('select#wheeldiameter').change(function() {    
+    //document.getElementById('tire_wheeldiameters').innerHTML = '<select class="tires" id="wheeldiameters" name="wheeldiameter"><option value="" selected="selected">Loading...</option></select>';
+    $.ajax({
+      type: "GET",
+      dataType: "html",
+      url: $(this).attr('select_wheeldiameter_path'),
+      data: {wheeldiameter: $(this).attr('value'),
+              id: <%= @tire_listing.new_record? ? "0" : @tire_listing.id %>},
+      success:function(result) {
+        $("div#choose-tire-sizes").html(result);} 
+    })
+  });
+</script>

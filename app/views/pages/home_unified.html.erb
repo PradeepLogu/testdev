@@ -1,0 +1,91 @@
+<% provide(:title, 
+    'TREADHUNTER | Your Source for Finding New & Used Tires') %>
+<% provide(:metadescription, 'New and used tires search engine') %>
+<%= javascript_include_tag "tabs" %>
+
+<%= render 'shared/error_messages' %>
+
+<%= stylesheet_link_tag "tabs" %>
+
+<div class="secondary">
+  <h1 class="orange" style="font-size: 24px; line-height: 24px;">About Us</h1>
+  <p>&nbsp;</p>
+  <p>TreadHunter strives to find you the lowest price on the new or used tire you need. You can compare hundreds of new &amp; used tire stores, private sellers and their prices, all at once!</p>
+  <p>&nbsp;</p>
+  <p>Our unique search and proprietary technology gets you the best deals in your area, whether you are looking by size or by the type of car you drive.</p>
+  <p>&nbsp;</p>
+  <p>If you sell tires, TreadHunter drives the customer right to your door!  Just click <a style='color: red; font-size: 1.4em;' href='/tireseller_registration'>here</a> to begin registration to sell tires on TreadHunter.</p>
+</div>
+
+<div class="primary">
+  <%= form_for @tire_search,
+      :url => { :action => "tireresults", 
+                :controller => "tire_searches"} do |f| %>
+    <div class="inputs">
+      <table>
+        <tr style="vertical-align: bottom;">
+          <td width="12%">
+            <label style="margin-bottom: 0px; font-size: 14px;">SEARCH
+            </label>
+          </td>
+          <td width="8%">
+            <label style="margin-bottom: 0px; font-size: 14px;">QTY</label>
+          </td>
+          <td width="55%">
+            <label style="margin-bottom: 0px; font-size: 14px; margin-left: 10px;">LOCATION
+            </label>
+          </td>
+          <td width="15%">
+          </td>
+        </tr>
+        <tr style="vertical-align: bottom;">
+          <td>
+            <%= f.select(:new_or_used, TireSearch::NEW_OR_USED_CHOICES, 
+                                {:selected => session[:new_or_used]},
+                                {:style => "height: 30px; margin-bottom: 0px;", :class => "users"}) %>
+          </td>
+          <td>
+            <%= f.select(:quantity, TireSearch::QUANTITY_CHOICES, 
+                    {:selected => session[:quantity]}, 
+                    {:style => "height: 30px; margin-bottom: 0px;", :class=>"users"}) %>
+          </td>
+          <td>
+            <%= f.text_field :locationstr, :class=>'user', :size => 60, 
+                            :style => "width: 325px; margin-left: 10px; margin-bottom: 0px; vertical-align: top;", 
+                            :value => session[:location] %>
+          </td>
+          <td>
+            <%= f.select(:radius, TireSearch::RADIUS_CHOICES, 
+                      {:selected => session[:radius]}, 
+                      {:style => "height: 30px; margin-bottom: 0px;", :class => "users"}) %> miles
+          </td>
+        </tr>
+        <tr>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+            <div class="field-caption" style="margin-left: 10px;">
+              CITY AND STATE OR ZIP CODE (E.G. ATLANTA, GA OR 30357)
+            </div>
+          </td>
+          <td>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="home-form-containers">
+      <%= render :partial => 'layouts/search_by_tire_or_car', :locals => {:f => f} %>
+    </div>
+  <% end %>
+</div>
+<div class="clear"></div>
+
+<script type="text/javascript">
+  var tiresearch=new ddtabcontent("tireselect")
+  tiresearch.setpersist(true)
+  tiresearch.setselectedClassTarget("link") //"link" or "linkparent"
+  tiresearch.init()
+</script>

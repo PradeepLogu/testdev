@@ -1,0 +1,5 @@
+<% if @asset.new_record? %>
+	alert("Failed to upload picture: <%= j @asset.errors.full_messages.join(', ').html_safe %>");
+<% else %>
+	$("#assets").append("<%= j render(@asset) %>");
+<% end %>

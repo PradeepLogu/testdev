@@ -1,0 +1,113 @@
+		<div id="dialog-stripe-info" class="th-dialog" title="" style="display:none;">
+			<div id="edit-stripe-form">
+				<div class="fade" id="stripe-fade"></div>
+				<input type="hidden" name="tire_store_id" value="<%= @tire_store.id %>" />
+
+				<h3>Banking Information</h3>
+				<hr /><br />
+				<div id="stripe-panel" class="stripe-panel">
+					<div id="state" class="line-item">
+					    <%= label_tag 'Business Type', nil, class: "left" %>
+					    <%= select_tag "businessType", 
+					    	options_for_select({'Corporation'=>'corporation', 'Individual'=>'individual'}, 'Corporation'),
+					    	:class => "right" %>
+				    </div>
+
+					<div class="line-item">
+				    	<%= label_tag 'Legal Business Name', nil, class: "left" %>
+				    	<%= text_field_tag "businessName", 
+				    		@tire_store.nil? ? '' : @tire_store.name,
+				    		{:class => "right"} %>
+				   	</div>
+
+					<div class="line-item">
+				    	<%= label_tag 'Tax ID (EIN/SSN)', nil, class: "left" %>
+				    	<%= text_field_tag "taxID", 
+				    		'',
+				    		{:class => "right"} %>
+				    </div>
+
+				    <br /><br />
+
+					<% if @allow_debit_card %>
+						<%= radio_button_tag :data_type, "A", true, {:class => 'normal-radio'} %>
+						<span class='normal-radio-text'>&nbsp;Bank Account&nbsp;</span>
+						<%= radio_button_tag :data_type, "D", false, {:class => 'normal-radio'} %>
+						<span class='normal-radio-text'>&nbsp;Debit Card&nbsp;</span>
+
+						<script>
+							$('input#data_type_A').change(function() {
+						    	show_or_hide_bank_account_info();
+						  	});
+
+							$('input#data_type_D').change(function() {
+						    	show_or_hide_bank_account_info();
+						  	});
+							</script>
+						<% else %>
+						<input type="hidden" name="data_type" value="A" />
+						<% end %>					
+
+					<div class="line-item" id="bank-routing-info">
+		    			<%= label_tag 'Routing Number', nil, class: "left" %>
+					    <%= text_field_tag "routingNumber", 
+					    	Rails.env.development? ? '110000000' : '',
+					    	{:class => "right"} %>
+					</div>
+					<div class="line-item" id="bank-account-info">				    	
+		    			<%= label_tag 'Account Number', nil, class: "left" %>
+					    <%= text_field_tag "accountNumber", 
+					    	Rails.env.development? ? '000123456789' : '',
+					    	{:class => "right"} %>
+		    		</div>
+
+					<% if @allow_debit_card %>
+		    			<div class="hide" id="debit-card-info">
+		        			<%= label_tag 'Debit Card Number' %>
+						    <%= text_field_tag "cardNumber", 
+						    	Rails.env.development? ? '5200828282828210' : '',
+						    	{:class => "cardNumber"} %>
+
+		        			<%= label_tag 'Expiration Date' %>
+						    <%= select_tag "cardMonth", 
+						    	options_for_select(
+						    		{'January'=>'01', 
+						    			'February'=>'02',
+						    			'March'=>'03',
+						    			'April'=>'04',
+						    			'May'=>'05',
+						    			'June'=>'06',
+						    			'July'=>'07',
+						    			'August'=>'08',
+						    			'September'=>'09',
+						    			'October'=>'10',
+						    			'November'=>'11',
+						    			'December'=>'12'
+						    		}, 
+						    		'01'),
+						    	:class => "cardMonth inline-select" %>
+						    <%= select_tag "cardYear", 
+						    	options_for_select(
+						    		Hash[(Date.today.year..Date.today.year + 5).to_a.map{|a| [a.to_s, (a-2000).to_s]}], 
+						    		'01'),
+						    	:class => "cardYear inline-select" %>								    	
+		    			</div>
+		    		<% end %>
+
+		    		<hr />
+
+					<p style="margin: 5px 0 10px 15px;">
+						<input type="checkbox" id="terms_check">
+						By clicking this checkbox, you agree to the 
+						<a href="https://stripe.com/connect/account-terms" target="_blank"
+							style="color: red">
+							Terms Of Service
+						</a> for our partner Stripe.
+					</p>
+					<center>
+				    	<input value="Update" id="submit_button" 
+				    		class="btn btn-disable" disabled="disabled" />
+				    </center>
+				</div>
+			</div>
+		</div>

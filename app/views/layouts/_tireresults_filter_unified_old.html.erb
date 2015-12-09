@@ -1,0 +1,91 @@
+<%= javascript_include_tag "filter" %>
+<%= javascript_include_tag "tinysort" %>
+<%= javascript_include_tag "tabs" %>
+<%= javascript_include_tag "filter_listings" %>
+<%= javascript_include_tag "build_listing_row" %>
+<%= stylesheet_link_tag "tire-listings" %>
+
+<script>
+    function initSettings() {
+        return {
+            filter_criteria: {
+                treadlife: ['#treadlife_list input:checkbox .EVENT.click .SELECT.:checked .TYPE.range', 
+                            'treadlife'],
+                price: ['#price_list input:checkbox .EVENT.click .SELECT.:checked .TYPE.range', 
+                            'cost_per_tire'],
+                //treadlife: ['#treadlife_filter .EVENT.change .SELECT.:input .TYPE.range', 'treadlife'],
+                tire_manufacturers: ['#manufacturer_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'tire_manufacturer_id'],
+                tire_categories: ['#categories_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'tire_category_id'],
+                quantities: ['#quantities_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'quantity'],
+                seller_types: ['#seller_types_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'tire_store.private_seller'],
+                only_pictures: ['#pictures_required_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                        'photo1_thumbnail == null']
+
+            },
+            and_filter_on: true
+        };
+
+    }
+    function initTireListings() {
+        return <%= raw @tire_search.tirelistings.to_json(
+                            :root => true,
+                            :include => [:tire_store, :tire_manufacturer, 
+                                            :tire_model, :tire_category], 
+                            :methods => [:distance, :formatted_price, 
+                                    :photo1_thumbnail, :store_visible_name,
+                                    :logo_thumbnail, :cost_per_tire, :tire_category_id]) %>;
+    }
+</script>
+
+
+<% if not @tire_search.tirelistings.nil? %>
+    <% if @tire_search.tirelistings.count > 0 %>
+        <!-- header -->
+
+        <!-- results plus filter -->
+        <div>
+            <!-- filter box -->
+            <%= render :partial => 'layouts/listings_filter', 
+                        :locals => {:tire_listings => @tire_search.tirelistings} %>
+            <!-- results box -->
+            <div class="primary-results">
+                <div id="results-label">
+                  <div class="search-link">
+                    <%= link_to "Return to Find My Tires page", "/" %>
+                  </div>
+
+                  <div class="search-info">
+                    <%= @tire_search.search_description %>
+                  </div>
+
+                  <div class="sort">
+                      <div>Sort order:</div>
+                      <div class="manufacturer"><a onclick="$('#tirelistings_list>a').tsort('.manufacturer', {useVal:false});">Tire</a></div>
+                      <div class="quantity">
+                        <a onclick="$('#tirelistings_list>a').tsort('.quantity', {useVal:false});">Qty</a>
+                      </div>
+                      <div class="category-type"><a onclick="$('#tirelistings_list>a').tsort('.category-type', {useVal:false});">Type</a></div>
+                      <div class="treadlife"><a onclick="$('#tirelistings_list>a').tsort('.hidden-treadlife', {order:'desc', useVal:false});">Treadlife</a></div>
+                      <div class="price"><a onclick="$('#tirelistings_list>a').tsort('.price-data');">Price</a></div>
+                      <div class="store">Store</div>
+                      <div class="dist">
+                        <a onclick="$('#tirelistings_list>a').tsort('.dist', {useVal:false});">Distance</a>
+                      </div>
+                      <div class="clear"></div>
+                  </div>
+                </div><!-- display results -->
+                <div id='search_results'>
+                    <div id="tirelistings_list">
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% else %>
+        <h3>No results found.</h3>
+    <% end %>
+<% end %>
+<div class="clear"></div>

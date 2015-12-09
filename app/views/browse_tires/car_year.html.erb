@@ -1,0 +1,58 @@
+<% provide(:title, "Select Car Year") %>
+<% provide(:visfire, "true") %>
+
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="top-search-section">
+			<div id="tire-search-outer">
+				<h2>SHOP BY:</h2>
+				<%= render :partial => 'layouts/search_panel',
+						   :locals => {:id => "tire-search2"} %>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-outer">
+	<div id="search-by-car-type" class="container-inner">
+		<hr/>
+		
+		<div id="fluid-title">
+			<h1 class="orange"><%= @car_type %> Tires</h1>
+			<p>Select your vehicle's year below to find the right <%= @car_type %> tires for you.</p>
+			
+			<div id="change-params">
+				<span>CHANGE</span>
+				<a href="/car_type">CAR TYPE</a>
+				<a href="/car_type">MAKE</a>
+				<a href="/car_model/<%= @model.auto_manufacturer.id %>">MODEL</a>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<% n = (@car_years.length > 6 || @car_years.length == 4 ? 2 : 3) %>
+		<div id="results" class="row-fluid">
+			<div class="span<%= n-1 %> hide-mobile"></div>
+			<ul class="span<%= n %>">
+			
+			<%	i = 0
+				limit = ((@car_years.length + 4) / 5)
+				limit = ((@car_years.length + 3) / 4) if n == 3
+				remain = @car_years.length
+				@car_years.each do |x| %>
+					<li><a href="/car_version/<%= x.id %>"><%= x.modelyear %></a></li>
+				<%	i += 1
+					remain -= 1
+					if i == limit && remain > 0
+						i = 0 %>
+				</ul>
+				<ul class="span<%= n %>">
+				<%	end %>
+			<%	end %>
+			
+			</ul>
+		</div>
+	</div>
+</div>

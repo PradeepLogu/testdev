@@ -1,0 +1,62 @@
+<% provide(:title, 'TreadHunter.com') %>
+
+<% provide(:visfire, "true") %>
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<div id="searc-header">
+  <%= render 'layouts/header_visfire' %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+    <div id="search-main2">
+      <h2>Scrape Google for Used Tire Stores</h2>
+    </div>
+
+    <div id="edit-mid-part" class="clearfix">
+      <div id="edit-mid-part-left">
+        <%= form_for @scraper, :url => { :action => "create_tirestore_spreadsheet", :controller => "pages"},
+                :validate => true do |f| %>
+          <div class="form-part">
+            <div class="form-heading">
+              <h3>Enter Google credentials</h3>
+              <p>Enter the Google credentials, and the 'key' for an <b>existing</b> Google spreadsheet.</p>
+            </div>
+            <%= f.label "Google Username" %>
+            <%= f.text_field :email %>
+            <%= f.label "Google Password" %>
+            <%= f.password_field :password %>
+            <%= f.label "Google Spreadsheet Key" %>
+            <%= f.text_field :key %>
+			
+			<%= f.label "Search Text" %>
+            <%= f.text_field :keywords, :value => '"used tires"' %>
+
+            <%= f.label "List of cities, separated by newlines, all cities in same state" %>
+            <%= f.text_area(:cities, {:cols => 50, :rows => 10, :placeholder => "Enter cities here",
+                           :style => "margin-left: 10px;"}) %>
+            <%= f.label "State" %>
+            <div id="state">
+              <%= f.select :state, us_states, {}, {:style => "margin-left: 10px;"} %>
+            </div>
+            <div class="clear"></div>
+            <%= f.submit "Create Spreadsheet", :style => "width: 200px" %>
+            <div id="status" style="color: white"><p></p></div>
+          </div>
+        <% end %>
+      </div>
+      <div id="edit-mid-part-right">
+        <h3>Create a spreadsheet</h3>
+        <p>
+          Enter your Google credentials, and the "key" for an <b><i>existing</i></b> Google spreadsheet.
+          Note:  this process will ONLY create new worksheets on your spreadsheet, it will not touch any
+          existing data.
+        </p>
+        <p>
+          When the process is finished, you will be emailed at the email address entered.
+        </p>
+      </div>
+  </div>
+</div>

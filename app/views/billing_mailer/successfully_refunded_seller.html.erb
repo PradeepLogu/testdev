@@ -1,0 +1,33 @@
+Dear <%= @tire_store.contact_email %>,<br />
+<br />
+Order number <%= @order.id %> has been cancelled, and the money has been refunded to the consumer and removed from your account.  The reason given is: <br />
+<br />
+<%= @msg %><br />
+<br />
+Store Name: <%= @tire_store.name %><br />
+Store Address: <%= @tire_store.full_address %><br />
+<br />
+
+<br />
+A breakout of the original charges is shown below:<br />
+<br />
+
+<%= render :partial => "layouts/billing_mailer/seller_order_details_html", 
+			:locals => {:@transfer_or_refund => 'Refunded'} %>
+
+<br />
+<br />
+The originally ordered tires are:<br />
+<b><%= @tire_listing.stock_number.blank? ? "" : "Stock #: #{@tire_listing.stock_number} " %>
+	<%= @order.tire_quantity %> <%= @tire_listing.sizestr %> <%= @tire_listing.tire_manufacturer_name %> <%= @tire_listing.tire_model_name %>
+</b>
+<br />
+The buyer's info is:<br />
+Name: <%= @order.buyer_name %><br />
+Phone: <%= @order.formatted_phone %><br />
+Email: <%= @order.buyer_email %><br />
+<br />
+Thank you for letting TreadHunter find customers for your store.  Please let us know if there is any way we can make things even better for you.<br />
+<br />
+Sincerely,<br />
+The TreadHunter Team<br />

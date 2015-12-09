@@ -1,0 +1,39 @@
+<% provide(:title, @title) %>
+<table>
+	<tr>
+		<th>
+			Size
+		</th>
+		<th>
+			Qty on<br />Hand
+		</th>
+		<th>
+			Manufacturer
+		</th>
+		<th>
+			Model
+		</th>
+		<th align="right">
+			Price (ea.)
+		</th>
+	</tr>
+	<% @tire_listings.each do |l| %>
+		<tr>
+			<td>
+				<%= l.tire_size.sizestr %>
+			</td>
+			<td align="center">
+				<%= (l.quantity < 4 && l.quantity > 0 ? l.quantity : '--') %>
+			</td>
+			<td>
+				<%= l.tire_manufacturer_name %>
+			</td>
+			<td>
+				<%= l.tire_model_name %>
+			</td>
+			<td align="right">
+				<%= l.formatted_price %>
+			</td>
+		</tr>
+	<% end %>
+</table>

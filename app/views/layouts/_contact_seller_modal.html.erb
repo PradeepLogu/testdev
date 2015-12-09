@@ -1,0 +1,65 @@
+<%= javascript_include_tag :defaults, 'rails.validations' %>
+
+<script>
+  $(function() {
+    $( "#dialog-contactseller" ).dialog({
+      autoOpen: <%= params.nil? || params[:contact].blank? ? false : true %>,
+      minWidth: 400,
+      modal: true
+      //show: "blind",
+      //hide: "explode"
+    });
+  });
+</script>
+
+<style>
+  label.message {color: red; display: block;}
+  textarea#contact_seller_content {width: 210px!important;}
+  input.user {width: 210px!important;}
+</style>
+
+<div id="dialog-contactseller" class="th-dialog" title="Contact Seller" style="display: none;">
+  <%= form_for contact_seller, :validate => true, :url => '/contact_seller' do |f| %>
+    <%= f.hidden_field :tire_store_id %>
+    <% if contact_seller.errors.any? %>
+      <div id="error_explanation">
+        <h3>
+          <%= pluralize(contact_seller.errors.count, "error") %> prohibited this email from being sent:
+        </h3>
+
+        <ul>
+        <% contact_seller.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="modal-body">
+      <table>
+          <tr>
+            <td><%= f.label "Your email *" %></td>
+            <td><%= f.text_field :email, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td><%= f.label "Your name" %></td>
+            <td><%= f.text_field :sender_name, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td><%= f.label "Telephone" %></td>
+            <td><%= f.text_field :phone, :class => 'user' %></td>
+          </tr>
+          <tr>
+            <td><%= f.label "Message to Seller *" %></td>
+            <td>
+              <%= f.text_area(:content, {:cols => 10, :rows => 5, :placeholder => "Please enter your message for the seller."}) %>
+            </td>
+          </tr>
+      </table>
+    </div>
+    <center>
+      <%= show_simple_captcha %>
+    </center>
+    <hr />
+    <center><%= f.submit "Send Message", :class=>"btn" %></center>
+  <% end %>
+</div>

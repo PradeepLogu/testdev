@@ -1,0 +1,13 @@
+Thank you for using TreadHunter.com, <%= @tire_search.user.name %>
+
+Dear <%= @tire_search.user.name %>,
+
+We have found new tires that match your search criteria.<p/>
+
+New Tire Listings
+-----------------
+<% @tire_search.tirelistings.each do |l| %>
+	$<%= l.formatted_price %>
+	<%= link_to l.short_description, l %>
+	Posted: <%= l.created_at.strftime("%m/%d/%Y") %>
+<% end %>

@@ -1,0 +1,11 @@
+
+<div id="model-results">
+	<% records = 0 %>
+	<% @models.each do |m|
+		records += 1 %>
+		<%= render :partial => 'layouts/build_model_row', 
+				   :locals => {:@model => m, :index => records,
+							   :@lazy_off => (records <= 2),
+							   :@tire_search => @tire_search} %>
+	<% end %>
+</div>

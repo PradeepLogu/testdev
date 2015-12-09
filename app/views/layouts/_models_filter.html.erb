@@ -1,0 +1,188 @@
+<script>
+    var FilterQS = "<%= @cur_category_id.blank? ? '' : "tgp_category_id_filter=#{@cur_category_id}" %>";
+    function hide_siblings(el) {
+        var siblings = el.parentNode.parentNode.childNodes;
+        for (var i = 0; i < siblings.length; i++) {
+            if (siblings[i].firstChild != null && 
+                    siblings[i].firstChild.nextSibling.id != el.id) {
+                jQuery(siblings[i]).addClass('hide');
+            }
+        }
+    }
+
+    function show_siblings(el) {
+        var siblings = el.parentNode.parentNode.childNodes;
+        for (var i = 0; i < siblings.length; i++) {
+            if (siblings[i].firstChild != null && 
+                    siblings[i].firstChild.nextSibling.id != el.id) {
+                jQuery(siblings[i]).removeClass('hide');
+            }
+        }
+    }
+
+    function filter_results(filter, el) {
+        if (el.checked) {
+            hide_siblings(el);
+            FilterQS = FilterQS + "&" + filter + "_filter=" + el.value;
+        } else {
+            show_siblings(el);
+            FilterQS = removeQSParam(FilterQS, filter + "_filter");
+        };
+        reload_data();
+    };
+
+    function reload_data() {
+        $('#search-models-results').html('');
+        async_mode = false;
+        pageCount = 1;
+        $('#search-models-outer').trigger('reset.infiniteScrollHelper');
+        $('#search-models-outer').trigger('scroll.infiniteScrollHelper');
+    }
+
+    function sort_results(sort_order) {
+        FilterQS = removeQSParam(FilterQS, 'sort');
+        FilterQS = FilterQS + "&" + "sort=" + sort_order
+        reload_data();
+    }
+
+    function min_max_filter_results(filter, el, min_val, max_val) {
+        if (el.checked) {
+            hide_siblings(el);
+            FilterQS = FilterQS + "&" + filter + "_min_filter=" + min_val + '&' + filter + "_max_filter=" + max_val;
+        } else {
+            show_siblings(el);
+            FilterQS = removeQSParam(FilterQS, filter + "_min_filter");
+            FilterQS = removeQSParam(FilterQS, filter + "_max_filter");
+        }
+        reload_data();
+    };
+
+    function removeQSParam(url, param) {
+        var prefix= encodeURIComponent(param)+'=';
+        var pars= url.split(/[&;]/g);
+        for (var i=pars.length; i-- > 0;) {
+            if (pars[i].indexOf(prefix, 0)==0)
+                pars.splice(i, 1);
+        }
+        if (pars.length > 0)
+            return pars.join('&');
+        else
+            return '';
+    };
+    
+    $(function() {
+		$(".search-content-right-store-box .control").click(function (e) {
+			e.preventDefault();
+			$(this).parent().toggleClass("closed");
+		});
+		
+		$(".search-content-right-store-box .control .help").click(function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			var dialog = $("#dialog-" + $(this).attr("id"));
+			if (dialog.length)
+				dialog.dialog({ modal: true }).dialog("open");
+		});
+	});
+</script>
+
+
+<% if @wheelsizes && @wheelsizes.count > 0 %>
+<div class="search-content-right-store-box inputs closed">
+<% else %>
+<div class="search-content-right-store-box inputs hide">
+<% end %>
+    <a class="control" href="#">Size <div class="help" id="tire-size-help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+        <span class="check-options">
+            <ul id="xxwheelsizes_list">
+                <% if @wheelsizes %>
+                    <% @wheelsizes.each do |key, cnt| %>
+                        <li>
+                            <input id="wheelsize_<%= key[0] %>" type="checkbox"
+                                   value="<%= key[0] %>" onclick="filter_results('wheeldiameter', this);"/>
+                            <label for="wheelsize_<%= key[0] %>"><%= key[1] %>" (<%= cnt %>)</label>
+                        </li>
+                    <% end %>
+                <% end %>
+            </ul>
+        </span>
+    </div>
+</div>
+
+<% if @categories && @categories.count > 0 && @cur_category_id.blank? %>
+<div class="search-content-right-store-box inputs closed">
+<% else %>
+<div class="search-content-right-store-box inputs hide">
+<% end %>
+    <a class="control" href="#">Tire Type <div class="help" id="filter-type-help"></div><div class="clear"></div></a>
+    <span class="check-options">
+        <div class="filter-item">
+            <ul id="xxcategories_list">
+                <% @categories.each do |key, cnt| %>
+                    <li>
+                        <input id="tire_category_<%= key[0] %>" type="checkbox"
+                               value="<%= key[0] %>" onclick="filter_results('tire_category_id', this);"
+                               <%= @cur_category_id.to_i == key[0] ? 'checked' : '' %> />
+                        <label for="tire_category_<%= key[0] %>"><%= key[1] %> (<%= cnt %>)</label>
+                    </li>
+            	<% end %>
+            </ul>
+        </div>
+    </span>
+</div>
+
+<div class="search-content-right-store-box inputs closed">
+    <a class="control" href="#">Cost Per Tire <div class="help" id="filter-cost-help"></div><div class="clear"></div></a>
+    <div class="filter-item">
+    <span class="check-options">
+        <ul id="xxprice_list" class="check-options">
+            <li>
+                <input type="checkbox" value="below-50" id="price_1"
+                       onclick="min_max_filter_results('cost_per_tire', this, 0, 50)"/>
+                <label for="price_1">Below $50 per tire</label>
+            </li>
+            <li>
+                <input type="checkbox" value="50-100" id="price_2"
+                       onclick="min_max_filter_results('cost_per_tire', this, 50, 100)"/>
+                <label for="price_2">$50-$100 per tire</label>
+            </li>
+            <li>
+                <input type="checkbox" value="100-150" id="price_3"
+                       onclick="min_max_filter_results('cost_per_tire', this, 100, 150)"/>
+                <label for="price_3">$100-$150 per tire</label>
+            </li>
+            <li>
+                <input type="checkbox" value="150-above" id="price_4"
+                       onclick="min_max_filter_results('cost_per_tire', this, 150, 99999)"/>
+                <label for="price_4">$150+ per tire</label>
+            </li>
+        </ul>
+    </span>
+    </div>
+</div>
+
+
+
+<div id="dialog-filter-cartype-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">FILTER BY CAR TYPE</h5>
+	<p>Search by categories of the type of car that you have. Example: Car, Minivan, Crossover, CUV, SUV, Truck, Pickup</p>
+</div>
+
+<div id="dialog-filter-type-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">FILTER BY TIRE TYPE</h5>
+	<p><span class="bold">All-Terrain Tires</span> are built to help provide tough traction for on- and off-road driving.</p>
+	<p><span class="bold">Fuel-Efficient Tires</span> can help save money on gas while still offering wet and dry traction.</p>
+	<p><span class="bold">Run on Flat Tires</span> let you drive up to 50mi. on a deflating tire with top a speed of 50 mph.</p>
+	<p><span class="bold">Sports Performance Tires</span> are meant for high-performance tires that help provide handling and traction in both dry and wet conditions.</p>
+</div>
+
+<div id="dialog-filter-manufacturer-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">FILTER BY BRAND</h5>
+	<p>Search by the brand of tire you’re interested in. Example: GoodYear</p>
+</div>
+
+<div id="dialog-filter-cost-help" class="th-dialog" title="" style="display:none;">
+	<h5 class="title">FILTER BY PRICE</h5>
+	<p>This lets you select tires within a specific price range such as $75-$100.</p>
+</div>

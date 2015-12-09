@@ -1,0 +1,30 @@
+<div id='content'>
+	<h1>Helpful Information</h1><br />
+	<h3>		
+		<%= link_to "Tread Depth", 
+			{:controller => :tire_stores, :action => :show_information, :content => 2}, 
+			:remote => true, :id => 'article-2' %>
+	</h3>
+	<p>What is tread depth and how can it determine if I need new tires?</p>
+	<br /><br />
+	<h3>
+		<%= link_to "Proper Tire Inflation", 
+			{:controller => :tire_stores, :action => :show_information, :content => 1}, 
+			:remote => true, :id => 'article-1' %>
+	</h3>
+	<p>How can I check if my tires are properly inflated?</p>
+	<br /><br />
+	<h3>
+		<%= link_to "Professional Installation", 
+			{:controller => :tire_stores, :action => :show_information, :content => 3}, 
+			:remote => true, :id => 'article-3' %>
+	</h3>
+	<p>Why should I have my tires inspected and replaced by professionals?</p>
+	<br /><br />
+	<h3>
+		<%= link_to "How To Find Your Tire Size", 
+			{:controller => :tire_stores, :action => :show_information, :content => 4}, 
+			:remote => true, :id => 'article-4' %>
+	</h3>
+	<p>How do I interpret my tire's sidewall to determine the size I need?</p>
+</div>

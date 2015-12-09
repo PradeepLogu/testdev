@@ -1,0 +1,106 @@
+/*.span_2_of_2 {
+	width: 100%!important;
+}
+
+.span_1_of_2 {
+	width: 49.2%!important;
+}
+
+
+.store-search .pro-clm {
+	height: 120px!important;
+}
+
+.store-search .pro-clm div + div + div {
+	padding-top:7%!important;
+	float: right!important;
+}
+
+.store-search .pro-clm div + div {
+	width: 60%!important;
+	padding-top: 1%!important;
+}
+
+.store-search .pro-clm div + div + div {
+	width: 24%!important;
+}
+
+.store-search .pro-clm div h3 {
+	width: 470px!important;
+}
+
+.store-search .span_1_of_2 div+div p {
+	width: 400px;
+}
+
+.store-search .span_1_of_2 div+div p span {
+	float: left;
+}
+
+.store-search .span_1_of_2 div+div p + p {
+	float: left;
+}
+
+.store-search .span_1_of_2 div+div p + p + p {
+	float: left;
+	margin-left: 10px;
+}
+
+.store-search .span_1_of_2 div+div p + p + p + p {
+	float: left;
+	font-size: 12px;
+	padding-top: -5px;
+	color: green;
+}
+
+/*
+@media only screen and (max-width: 720px) {
+	.store-search .pro-clm div + div + div {
+		width: 30%!important;
+	}
+}
+* /
+
+/*  GO FULL WIDTH AT LESS THAN 1154 PIXELS * /
+@media only screen and (max-width: 1154px) {
+	.store-search .pro-clm {
+		height: 120px!important;
+	}
+	.store-search .pro-clm div + div + div {
+		padding-top:4%!important;
+	}
+	.store-search .pro-clm div h3 {
+		width: 100%!important;
+	}
+}
+	
+@media only screen and (max-width: 1000px) {
+	.span_2_of_2 {
+		width: 100%!important; 
+	}
+	.span_1_of_2 {
+		width: 100%!important; 
+	}
+	.store-search .pro-clm div + div + div a {
+		text-align: center;
+	}
+	.store-search .pro-clm div + div + div {
+		float: right!important;
+	}
+}
+
+@media only screen and (max-width: 480px) {
+	.store-search .pro-clm {
+		height: auto!important;
+	}
+	.store-search .pro-clm div + div + div {
+		float: left!important;
+	}
+	.store-search .pro-clm div + div + div {
+		width: auto!important;
+	}
+	.store-search .pro-clm div + div {
+		float: left!important;
+	}
+}
+*/

@@ -1,0 +1,14 @@
+Recently a purchase was made on TreadHunter.com for your store, but the credit card was not successfully billed.  We will attempt to bill again later, but wanted you to know so you don't end up ordering new inventory in case there is a continued problem.<br />
+<br/>
+<b><u>Order Details:</u></b><br />
+Order Date: <%= @order.created_at.to_formatted_s(:long) %><br />
+Buyer Name: <%= @order.buyer_name %><br />
+Buyer Phone: <%= @order.buyer_phone %><br />
+Buyer Email: <%= @order.buyer_email %><br />
+Tires: <%= @order.tire_listing.cc_short_description %><br />
+Total Order Cost: <%= number_to_currency @order.total_order_price %><br />
+<br />
+Failure message: <%= @msg %><br />
+<br />
+Sincerely,<br />
+TreadHunter<br />

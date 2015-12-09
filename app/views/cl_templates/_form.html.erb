@@ -1,0 +1,123 @@
+<% provide(:title, 'Edit Craigslist template') %>
+
+<% provide(:visfire, "true") %>
+<%= stylesheet_link_tag "style-wide-form" %>
+
+<script>
+  $(function() {
+    $('form').jqTransform();
+  });
+</script>
+
+<style>
+  .small-label {
+    margin-left: 50px!important;
+    margin-top: 5px!important;
+    font-size: 75%!important;
+    line-height: 75%!important;
+    width: 80%!important;
+  }
+</style>
+
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<div id="searc-header">
+  <%= render :partial =>'layouts/header_visfire', :locals => {:@error_object => @cl_template} %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+    <div id="search-main2">
+      <h2>Edit Craigslist Information</h2>
+      <ul>
+        <li style="color: black;">Home /</li>
+        <li><a href="#">Edit CL Info</a></li>
+      </ul>
+    </div>
+
+    <div id="registration-mid-part" class="clearfix">
+      <div id="heading-part">
+        <h1><span>Warning!</span></h1>
+        <h5>Please use care when editing these fields.  Mistyping any information on this page 
+            can cause the mobile application to fail when cross-posting to Craigslist.</h5>
+      </div>
+
+      <%= form_for(@cl_template, 
+              :url => '/cl_template/' + @tire_store.id.to_s + '/update') do |f| %>
+        <div id="edit-mid-part-left">
+          <div class="form-part">
+            <div class="form-heading">
+              <h3>Craigslist information</h3>
+              <p>Username/Password</p>
+            </div>
+
+            <%= f.label :cl_email, 'Craigslist Email' %>
+            <%= f.text_field :cl_email %>
+
+            <%= f.label :cl_password, 'Craigslist Password' %>
+            <%= f.text_field :cl_password %>
+            <%= f.label "Not required but allows faster processing", 
+                  :class => 'small-label' %>
+
+            <%= f.label :cl_posting_page, 'Initial Posting Page' %>
+            <%= f.text_field :cl_posting_page %>
+
+            <%= f.label :cl_subarea, 'Sub area' %>
+            <%= f.text_field :cl_subarea %>
+            <%= f.label "Exact text to use on 'Choose the area nearest you' page",
+                    :class => 'small-label' %>
+
+            <%= f.label :cl_specific_location, 'Specific Location' %>
+            <%= f.text_field :cl_specific_location %>
+            <%= f.label "Optional; enter text you would like to use as a 'Specific Location' 
+                        on the Create Posting page", :class => 'small-label' %> 
+          </div>
+        </div>
+        <div id="edit-mid-part-right">
+          <h3>Fields for data below:</h3>
+          <p style="background-color: #252a2f; color: lightyellow;">
+            <b><u>{#qty}</u></b> - Tire Quantity<br />
+            <b><u>{#mfr}</u></b> - Tire Manufacturer<br />
+            <b><u>{#model}</u></b> - Tire Model<br />
+            <b><u>{#size}</u></b> - Tire Size<br />
+            <b><u>{#store}</u></b> - Store name<br />
+            <b><u>{#address1}</u></b> - Store address<br />
+            <b><u>{#city}</u></b> - Store city<br />
+            <b><u>{#state}</u></b> - Store state<br />
+            <b><u>{#zip}</u></b> - Store zipcode<br />
+            <b><u>{#phone}</u></b> - Store phone number<br />
+            <b><u>{#treadlife}</u></b> - Tread life %<br />
+            <b><u>{#treaddepth}</u></b> - Remaining tread (in 32s of inch)<br />
+            <b><u>{#inc_mount}</u></b> - Inserts the phrase ' Price includes mounting and balancing.'<br />
+            <b><u>{#warranty}</u></b> - Inserts the phrase ' # day warranty included.'<br />
+            <b><u>{#price}</u></b> - Price<br />
+            <b><u>{#logo}</u></b> - Store logo image<br />
+          </p>
+
+          <h3>Customize Title for Used Tires</h3>
+          <p>
+            <%= f.text_area :title, :size => '25x3' %>
+          </p>
+
+          <h3>Customize Body for Used Tires</h3>
+          <p>
+            <%= f.text_area :body, :size => '25x15' %>
+          </p>
+
+          <h3>Customize Title for New Tires</h3>
+          <p>
+            <%= f.text_area :title_new_listings, :size => '25x3' %>
+          </p>
+
+          <h3>Customize Body for New Tires</h3>
+          <p>
+            <%= f.text_area :body_new_listings, :size => '25x15' %>
+          </p>
+          <%= f.submit :class => "btn btn-small btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,269 @@
+<!-- id is #, class is . -->
+<script>
+    var FilterQS = "<%= @tire_search.nil? ? '' : @tire_search.url_params('_filter') %>";
+    function hide_siblings(el) {
+        var siblings = el.parentNode.parentNode.childNodes;
+        for (var i = 0; i < siblings.length; i++) {
+            if (siblings[i].firstChild != null && siblings[i].firstChild.nextSibling.id != el.id) {
+                jQuery(siblings[i]).addClass('hidden');
+            }
+        }
+    }
+
+    function show_siblings(el) {
+        var siblings = el.parentNode.parentNode.childNodes;
+        for (var i = 0; i < siblings.length; i++) {
+            if (siblings[i].firstChild != null && siblings[i].firstChild.nextSibling.id != el.id) {
+                jQuery(siblings[i]).removeClass('hidden');
+            }
+        }
+    }
+
+    function filter_results(filter, el) {
+        if (el.checked) {
+            hide_siblings(el);
+            FilterQS = FilterQS + "&" + filter + "_filter=" + el.value;
+        } else {
+            show_siblings(el);
+            FilterQS = removeQSParam(FilterQS, filter + "_filter");
+        };
+        reload_data();
+    };
+
+    function reload_data() {
+        $('#tirelistings_list').html('');
+        async_mode = false;
+        $('#search_results').trigger('reset.infiniteScrollHelper');
+        $('#search_results').trigger('scroll.infiniteScrollHelper');
+    }
+
+    function sort_results(sort_order) {
+        FilterQS = removeQSParam(FilterQS, 'sort');
+        FilterQS = FilterQS + "&" + "sort=" + sort_order
+        reload_data();
+    }
+
+    function min_max_filter_results(filter, el, min_val, max_val) {
+        if (el.checked) {
+            hide_siblings(el);
+            FilterQS = FilterQS + "&" + filter + "_min_filter=" + min_val + '&' + filter + "_max_filter=" + max_val;
+        } else {
+            show_siblings(el);
+            FilterQS = removeQSParam(FilterQS, filter + "_min_filter");
+            FilterQS = removeQSParam(FilterQS, filter + "_max_filter");
+        }
+        reload_data();
+    };
+
+    function removeQSParam(url, param) {
+        var prefix= encodeURIComponent(param)+'=';
+        var pars= url.split(/[&;]/g);
+        for (var i=pars.length; i-- > 0;) {
+            if (pars[i].indexOf(prefix, 0)==0)
+                pars.splice(i, 1);
+        }
+        if (pars.length > 0)
+            return pars.join('&');
+        else
+            return '';
+    };
+</script>
+<div class="secondary-results">
+    <h2 class="orange-letters">Refine Your Search Results</h2>
+    <div id="search-options">
+        <% if @conditions.count > 1 %>
+        <div class="inputs">
+        <% else %>
+        <div class="inputs hidden">
+        <% end %>
+            <label for="checkboxes">Condition</label>
+            <div class="filter-item">
+                <span class="check-options">
+                    <ul id="condition-list" class="check-options">
+                        <% @conditions.each do |key, cnt| %>
+                            <li>
+                                <input id="condition_<%= key[0] %>" value="<%= key[0] %>" 
+                                        type="checkbox" onclick="filter_results('is_new', this);">
+                                <span><%= key[1] %> (<%= cnt %>)</span>
+                            </li>
+                        <% end %>
+                    </ul>
+                </span>
+            </div>
+        </div>
+        <% if @pictures && @pictures.count > 1 %>
+        <div class="inputs">
+        <% else %>
+        <div class="inputs hidden">
+        <% end %>
+            <label for="checkboxes">Listings with Pictures</label>
+            <div class="filter-item">
+                <span class="check-options">
+                    <ul id="pictures-required-list" class="check-options">
+                        <% unless @pictures.nil? %>
+                            <% @pictures.each do |t| %>
+                                <li>
+                                    <input id="pictures_<%= t[0][:val] %>" value="<%= t[0][:val] %>" 
+                                            type="checkbox" onclick="filter_results('photos', this);">
+                                    <span><%= t[0][:type] %> (<%= t[1] %>)</span>
+                                </li>
+                            <% end %>
+                        <% end %>
+                    </ul>
+                </span>
+            </div>
+        </div>
+        <% if @sellers.count > 1 %>
+        <div class="inputs">
+        <% else %>
+        <div class="inputs hidden">
+        <% end %>
+            <label for="checkboxes">Types of Sellers</label>
+            <div class="filter-item">
+                <span class="check-options">
+                    <ul id="seller-types-list">
+                        <% @sellers.each do |t| %>
+                            <li>
+                                <input id="seller_type_<%= t[0][:val] %>" value="<%= t[0][:val] %>" 
+                                type="checkbox" onclick="filter_results('seller', this);">
+                                <span><%= t[0][:type] %> (<%= t[1] %>)</span>
+                            </li>
+                        <% end %>
+                    </ul>
+                </span>
+            </div>
+        </div>
+        <% if @quantities.count > 1 %>
+        <div class="inputs">
+        <% else %>
+        <div class="inputs hidden">
+        <% end %>
+            <label for="checkboxes">Quantity</label>
+            <div class="filter-item">
+                <span class="check-options">
+                    <ul id="quantities-list">
+                        <% @quantities.each do |key, cnt| %>
+                            <li>
+                                <input id="quantity_<%= key[0] %>" value="<%= key[0] %>" 
+                                    type="checkbox" onclick="filter_results('quantity', this);">
+                                <span><%= key[1] %> (<%= cnt %>)</span>
+                            </li>
+                        <% end %>
+                    </ul>
+                </span>
+            </div>
+        </div>
+        <% if @wheelsizes && @wheelsizes.count > 1 %>
+        <div class="inputs">
+        <% else %>
+        <div class="inputs hidden">
+        <% end %>
+            <label for="checkboxes">Wheel Size</label>
+            <div class="filter-item">
+                <span class="check-options">
+                    <ul id="wheelsizes-list">
+                        <% if @wheelsizes %>
+                            <% @wheelsizes.each do |key, cnt| %>
+                                <li>
+                                    <input id="wheelsize_<%= key[0] %>" value="<%= key[0] %>" 
+                                                type="checkbox" onclick="filter_results('wheeldiameter', this);">
+                                    <span><%= key[1] %>" (<%=cnt %>)</span>
+                                </li>
+                            <% end %>
+                        <% end %>
+                    </ul>
+                </span>
+            </div>
+        </div>
+        <div class="inputs">
+            <label for="checkboxes">Manufacturers</label>
+            <div class="filter-item">
+                <span class="check-options">
+                    <ul id="manufacturer-list">
+                        <% @tire_manufacturers.each do |key, cnt| %>
+                            <li>
+                                <input id="tire_manufacturer_<%= key[0] %>" value="<%= key[0] %>" 
+                                        type="checkbox" onclick="filter_results('tire_manufacturer_id', this);">
+                                <span><%= key[1] %> (<%= cnt %>)</span>
+                            </li>
+                        <% end %>
+                    </ul>
+                </span>
+            </div>
+        </div>
+        <% if @categories.count > 1 %>
+        <div class="inputs">
+        <% else %>
+        <div class="inputs hidden">
+        <% end %>
+            <label for="checkboxes">Tire Types</label>
+            <span class="check-options">
+                <div class="filter-item">
+                    <ul id="categories-list">
+                        <% @categories.each do |key, cnt| %>
+                            <li>
+                                <input id="tire_category_<%= key[0] %>" value="<%= key[0] %>" 
+                                        type="checkbox" onclick="filter_results('tire_category_id', this);">
+                                <span><%= key[1] %> (<%= cnt %>)</span>
+                            </li>
+                        <% end %>
+                    </ul>
+                </div>
+            </span>
+        </div>
+        <label for="checkboxes">Cost Per Tire</label>
+        <div class="inputs">
+            <span class="check-options">
+                <ul id="price-list" class="check-options">
+                    <li>
+                        <input type="checkbox" value="below-50" id="price_1"
+                                onclick="min_max_filter_results('cost_per_tire', this, 0, 50)"></input>
+                        <span>Below $50 per tire</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" value="50-100" id="price_2"
+                                onclick="min_max_filter_results('cost_per_tire', this, 50, 100)"></input>
+                        <span>$50-$100 per tire</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" value="100-150" id="price_3"
+                                onclick="min_max_filter_results('cost_per_tire', this, 100, 150)"></input>
+                        <span>$100-$150 per tire</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" value="150-above" id="price_4"
+                                onclick="min_max_filter_results('cost_per_tire', this, 150, 99999)"></input>
+                        <span>$150+ per tire</span>
+                    </li>
+                </ul>
+            </span>
+        </div>
+        <label for="checkboxes" style="margin-top: 20px;">Treadlife</label>
+        <div class="inputs">
+            <span class="check-options">
+                <ul id="treadlife-list" class="check-options">
+                    <li>
+                        <input type="checkbox" value="below-25" id="treadlife_1"
+                                onclick="min_max_filter_results('treadlife', this, 0, 25)"></input>
+                        <span>Below 25%</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" value="25-50" id="treadlife_2"
+                                onclick="min_max_filter_results('treadlife', this, 25, 50)"></input>
+                        <span>25-50%</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" value="50-75" id="treadlife_3"
+                                onclick="min_max_filter_results('treadlife', this, 50, 75)"></input>
+                        <span>50-75%</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" value="75-above" id="treadlife_4"
+                                onclick="min_max_filter_results('treadlife', this, 75, 100)"></input>
+                        <span>Above 75%</span>
+                    </li>
+                </ul>
+            </span>
+        </div>
+    </div>
+</div>

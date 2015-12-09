@@ -1,0 +1,376 @@
+<% provide(:title, "Confirm Appointments") %>
+
+<%= stylesheet_link_tag "tire-listings" %>
+<%= stylesheet_link_tag "fullcalendar/fullcalendar" %>
+<%= javascript_include_tag "fullcalendar/moment.min" %>
+<%= javascript_include_tag "fullcalendar/fullcalendar" %>
+<%= javascript_include_tag "fullcalendar/hashtable" %>
+
+<script>
+	var order_id = 0;
+	var current_appt = null;
+
+	$(document).ready(function() {
+		var ht = <%= raw(@appointments) %>;
+
+		$( "#dialog-order" ).dialog({
+			autoOpen: false,
+			show: "blind",
+			// hide: "explode",
+			width: "auto"
+		});
+
+		$('#svc-calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,basicWeek,basicDay'
+			},
+			height: 480,
+			events: <%= raw(@appointments) %>,
+			eventRender: function(event, element) { 
+				element.find('.fc-title').append("<br/>" + event.buyer_name + "<br/>" + "<font color='lightgreen'>" + event.order_price + "</font>"); 
+			},
+			eventClick: function(event, jsEvent, view) {
+				$.ajax({
+					type: "GET",
+					dataType: "html",
+					url: '/appointments/ajax_appointment',
+					data: {appt_id: event.id},
+					success:function(result){
+						// alert(result);
+						appt = JSON.parse(result);
+						display_appt(appt);
+					},
+					error:function(result){
+						alert("Error loading appointment.");
+		      			$("#please-choose").show();
+		      			$("#appt-details").hide();
+					}
+				});
+
+			}
+		});
+	});
+
+	function display_appt(appt) {
+		$("#please-choose").hide();
+		$("#appt-details").show();
+
+		order_id = appt.id;
+		current_appt = appt;
+
+		$("div.appt-user-name").text(appt.buyer_name);
+		$("div.appt-user-phone").text(appt.formatted_buyer_phone);
+		$("div.appt-user-email").text(appt.buyer_email);
+		if (appt.user_id == null) {
+			$("div#registered-img").hide();
+			$("div#unregistered-img").show();
+			$("div.appt-user-type").text("Unregistered User");
+		} else {
+			$("div#registered-img").show();
+			$("div#unregistered-img").hide();
+			$("div.appt-user-type").text("Registered User");
+		}
+
+		if (appt.confirmed_flag == true) {
+			$("div#appt-confirmed-value").text(appt.confirmed_time);
+			$("div#appt-user-buttons").hide();
+			$("div#appt-unconfirmed").hide();
+			$("div#appt-confirmed").show();
+		} else {
+			$("div#appt-primary-value").text(appt.primary_request_time);
+			$("div#appt-secondary-value").text(appt.secondary_request_time);
+			$("div#appt-user-buttons").show();
+			$("div#appt-unconfirmed").show();
+			$("div#appt-confirmed").hide();
+		}
+		if (appt.order_id == null) {
+			$("div#appt-order-details").hide();
+			$("div#appt-has-no-order-details").show();	
+			$("#btn-deny-appt").show();
+		} else {
+			$("div#order-total").text(appt.order_price);
+			$("div#appt-order-details").show();
+			$("div#appt-has-no-order-details").hide();
+			$("#btn-deny-appt").hide();
+			$.ajax({
+				type: "GET",
+				dataType: "html",
+				url: '/appointments/ajax_order_details',
+				data: {order_id: appt.order_id},
+				success:function(result){
+					$("div#dialog-order").html(result);
+					$("div#appt-order-details").show();
+				},
+				error:function(result){
+					$("div#appt-order-details").hide();
+					$("#btn-deny-appt").hide();		
+				}
+			});
+		}
+	}
+
+	function replace_event(result) {
+		appt = JSON.parse(result);
+		display_appt(appt);
+
+		var newEvent = new Object();
+		newEvent.id = appt.id;
+		newEvent.title = appt.title;
+		newEvent.start = appt.start;
+		newEvent.allDay = appt.end;
+		newEvent.buyer_name = appt.buyer_name;
+		newEvent.order_price = appt.order_price;
+		newEvent.color = appt.color;
+
+		$('#svc-calendar').fullCalendar( 'removeEvents', appt.id );
+		$('#svc-calendar').fullCalendar( 'renderEvent', newEvent );		
+	}
+
+	function confirm_primary() {
+		if (confirm('Are you sure?') == true) {
+			$.ajax({
+				type: "GET",
+				dataType: "html",
+				url: '/appointments/confirm_primary',
+				data: {appt_id: current_appt.id},
+				success:function(result){
+					replace_event(result);
+				},
+				error:function(result){
+					alert("Error confirming appointment.");
+	      			$("#please-choose").show();
+	      			$("#appt-details").hide();
+				}
+			});
+		}
+	};
+
+	function confirm_secondary() {
+		if (confirm('Are you sure?') == true) {
+			$.ajax({
+				type: "GET",
+				dataType: "html",
+				url: '/appointments/confirm_secondary',
+				data: {appt_id: current_appt.id},
+				success:function(result){
+					replace_event(result);
+				},
+				error:function(result){
+					alert("Error confirming appointment.");
+	      			$("#please-choose").show();
+	      			$("#appt-details").hide();
+				}
+			});
+		}
+	};
+
+	function deny_appt() {
+		if (confirm('Are you sure?') == true) {
+			$.ajax({
+				type: "GET",
+				dataType: "html",
+				url: '/appointments/deny_appointment',
+				data: {appt_id: current_appt.id},
+				success:function(result){
+					$('#svc-calendar').fullCalendar( 'removeEvents', current_appt.id );
+	      			$("#please-choose").show();
+	      			$("#appt-details").hide();
+				},
+				error:function(result){
+					alert("Error denying appointment.");
+	      			$("#please-choose").show();
+	      			$("#appt-details").hide();
+				}
+			});
+		}
+	};	
+</script>
+
+<style>
+	.ilb {
+		display:inline-block;
+		vertical-align: top;
+		word-wrap: break-word;
+		overflow-x: auto;
+		height: auto;
+		position: justify;
+	}
+
+	#appt-primary-value, #appt-secondary-value {
+		width: 70%;
+	}
+
+	#appt-user-details {
+		margin-top: 25px;
+		margin-bottom: 25px;
+	}
+
+	.btn {
+		width: 80%;
+		margin-bottom: 5px;
+	}
+
+	.reg-img {
+		max-height:150px;
+	}
+
+	div.modal-body table tbody tr td, div.modal-body table tbody tr th {
+		padding-top: 2px;
+		padding-bottom: 3px;
+		padding-left: 3px;
+		padding-right: 3px;
+	}
+
+	.ui-dialog .ui-dialog-content {
+		padding: 0;
+	}
+
+	@media screen and (max-width: 1200px) {
+		#registration-mid-part-left, #details-mid-part-left, #edit-mid-part-left {
+			width: 27%;
+		}
+		#registration-mid-part-right, #details-mid-part-rightt, #edit-mid-part-right {
+			width: 72%;
+		}
+		#appt-primary-value, #appt-secondary-value {
+			width: 50%;
+		}
+	}
+	@media screen and (max-width: 640px) {
+		#registration-mid-part-left, #details-mid-part-left, #edit-mid-part-left {
+			width: 100%!important;
+		}		
+		#registration-mid-part-right, #edit-mid-part-right, #edit-mid-part-right-slim {
+			width: 100%!important;
+		}
+		#registered-status-img {
+			width: 25%;
+			display: inline-block;
+			vertical-align: top;
+		}
+		#appt-user-details {
+			width: 55%;
+			display: inline-block;
+			vertical-align: top;
+		}
+		#appt-user-buttons {
+			width: 15%;
+			display: inline-block;
+			vertical-align: top;
+		}
+		#appt-user-details {
+			margin-top: 0px;
+			margin-bottom: 0px;
+		}
+		#appt-primary-value, #appt-secondary-value {
+			width: 70%;
+		}
+		.reg-img {
+			max-height:100px;
+		}
+	}
+	@media screen and (max-width: 480px) {
+		#appt-primary-value, #appt-secondary-value {
+			width: 50%;
+		}
+	}
+</style>
+
+<% provide(:visfire, "true") %>
+
+
+<div id="show-order-dialog">
+	<div id="dialog-order" title="Order Details">
+	</div>
+</div>
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="search-main2">
+			<h2>My TreadHunter</h2>
+		</div>
+		<div id="edit-mid-part" class="clearfix">
+			<div id="registration-mid-part-left">
+				<div id="please-choose">
+					<h2>
+					Please select an appointment.
+					</h2>
+					<br />
+				</div>
+				<div id="appt-details" class="hide">
+					<div id="registered-status-img">
+						<center>
+							<div id="registered-img">
+								<img src="/assets/registered_user.png" class="reg-img">
+							</div>
+							<div id="unregistered-img">
+								<img src="/assets/unregistered_user.png" class="reg-img">
+							</div>
+						</center>
+					</div>
+
+					<div id="appt-user-details">
+						<div class="appt-user-name">
+							User Name
+						</div>
+						<div class="appt-user-phone">
+							770-555-1212
+						</div>
+						<div class="appt-user-email">
+							bob@bob.com
+						</div>
+						<div class="appt-user-type">
+							Registered User
+						</div>
+						<div id="appt-confirmed">
+							<div id="appt-confirmed-value">Blah</div>
+							<h3>Confirmed</h3>
+						</div>
+						<div id="appt-unconfirmed">
+							<div class="appt-primary-request">
+								<div class="ilb">Primary:</div>
+								<div class="ilb" id="appt-primary-value">Wednesday, February 17, 2015 12:00</div>
+							</div>
+							<div class="appt-secondary-request">
+								<div class="ilb">Secondary:</div>
+								<div class="ilb" id="appt-secondary-value">Thursday, February 18, 2015 10:00</div>
+							</div>
+						</div>
+						<div id="appt-order-details" style="display: none;">
+							<div class="order-total-label ilb">Order Total:</div>
+							<div id="order-total" class="ilb">$5.99</div><br />
+							<a href="#" onclick="$('#dialog-order').dialog('open');">
+								View Order Details
+							</a>
+						</div>	
+
+						<div id="appt-has-no-order-details" style="display: none;">
+							<h4>Note: this appointment request is not associated with an order,
+								so you will need to collect payment upon services rendered.</h4>
+						</div>		
+					</div>
+			
+					<div id="appt-user-buttons">
+						<a class="btn btn-primary" href="#" onclick="confirm_primary();">
+							Confirm Primary
+						</a>
+						<a class="btn btn-primary" href="#" onclick="confirm_secondary();">
+							Confirm Secondary
+						</a>
+						<a class="btn btn-primary" href="#" onclick="deny_appt();" 
+									id="btn-deny-appt">
+							Deny
+						</a>
+					</div>
+				</div>
+			</div>
+			<div id='registration-mid-part-right'>
+				<div id='calendar-container'>
+					<div id='svc-calendar'></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

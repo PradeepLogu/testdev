@@ -1,0 +1,269 @@
+// Styles for the horizontal-display search panel
+
+#tire-search-outer {
+  position: relative;
+  top: 50px;
+  width: 520px;
+  margin: 0 auto;
+  text-align: left;
+  
+  h2 {
+    color: white;
+  }
+}
+
+#tire-search2 {
+	background: #f6f6f6;
+	padding: 0 20px 0 0;
+	text-align: left;
+
+  label.error-msg {
+    clear: both;
+    margin-top: 1em;
+    color: red;
+    font-size: 14px;
+  }
+  
+  .tabcontent {
+      padding-top: 10px;
+      position: relative;
+      z-index: 9;
+      float: left;
+      width: 370px;
+      
+      .help-icon {
+        display: inline-block;
+        padding-left: 10px;
+        width: 19px;
+        height: 19px;
+      }
+      
+      form {
+      	margin: 0;
+      }
+      select {
+      	width: 100%;
+      }
+      
+      div#auto_options, div#tire_wheeldiameters {
+        display: table;
+        width: 100%;
+        vertical-align: middle;
+        margin-bottom: 9px;
+      }
+      select#auto_options, select#wheeldiameters {
+        width: calc(100% - 35px);
+        margin-bottom: 0;
+      }
+      
+      input[type="submit"], input[type="button"] {
+      	color: #fff;
+      	background-color: #F05A29;
+      	border-radius: 3px;
+      	cursor: pointer;
+      	font-size: 14px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        width: 178px;
+        margin: 20px 0 0;
+        border: none;
+      }
+  
+      #form3 #tire_search_locationstr {
+      	//width: 310px;
+      	//margin: 0 5px 0 0;
+      	width: calc(96% - 50px);    //GO btn 40px, padding+border 10px, leave 1% free just in case
+        margin: 0 3% 0 0;
+      }
+      #form3 .th-location input[type="submit"] {
+      	width: 40px;
+      	margin: 0;
+      }
+  
+      .big-or {
+      	position: relative;
+      	font-size: 24px;
+      	line-height: 24px;
+      	margin: 10px 5px;
+      	text-align: center;
+      
+        .line-left, .line-right {
+        	position: absolute;
+        	border: 1px solid;
+        	height: 0;
+        	width: 30%;
+        	top: 0.4em;
+        	z-index: 10;
+        }
+        .line-left {
+        	left: 10px;
+        }
+        .line-right {
+        	right: 10px;
+        }
+      }
+      
+      .geolocate {
+      	text-align: center;
+      }
+      #geolocate {
+      	margin: 0;
+      }
+  
+      .form-box-collapse {
+        float: left;
+        width: 40%;
+      }
+      #tire_search_locationstr {
+        width: 100%;
+      }
+      .form-box-submit {
+        float: left;
+        margin-left: 10%;
+        width: 50%;
+      
+        input[type="submit"] {
+          height: 30px;
+          line-height: 14px;
+          margin: 0;
+          width: 100%;
+        }
+      }
+  }
+  
+  .tab-box {
+    float: left;
+    padding-right: 30px;
+  
+    a {
+      display: block;
+    	background-color: #7a706f;
+    	color: #fff;
+    	font-size: 13px;
+    	line-height: 46px;
+    	width: 100px;
+    	margin: 0;
+    	padding: 0;
+    	text-align: center;
+    	text-decoration: none;
+    }
+    a.activeLink {
+    	background-color: #F05A29;
+    	border-bottom: 0 none;
+    	padding: 0;
+    	position: relative;
+    }
+    a.activeLink::after {
+    	background: url("/assets/rightarrow.png") no-repeat scroll 0 0;
+    	bottom: 0;
+    	right: -15px;
+    	content: "";
+    	display: block;
+    	height: 29px;
+    	width: 15px;
+    	position: absolute;
+    	z-index: 10;
+    }
+    a img {
+    	padding: 10px 0;
+    	text-align: center;
+    	vertical-align: middle;
+    }
+    a p {
+    	background: black;
+    	margin: 0;
+    	color: #ffffff;
+    	font-size: 13px;
+    	line-height: 26px;
+    	padding-top: 3px;
+    	width: 100%;
+    	z-index: 11;
+    }
+  }
+}
+
+
+@media screen and (max-width: 767px) {
+  #tire-search-outer {
+    width: auto;
+    padding: 0;
+    top: 0;
+    border: none;
+    float: none;
+    
+    h2 {
+      color: black;
+    }
+  }
+  
+  #tire-search2 {
+    background: transparent;
+    padding: 0;
+  
+    .tab-box {
+      float: none;
+      padding: 0;
+      display: table;
+      width: 100%;
+      
+      .wrap {
+        display: table-cell;
+        width: 33.33333%;
+        text-align: center;
+        
+        &:first-child {
+          text-align: left;
+        }
+        &:last-child {
+          text-align: right;
+        }
+      }
+      
+      a {
+        display: inline-block;
+        margin: 0 auto;
+      }
+      a.activeLink::after {
+        background: url("/assets/downarrow.png") no-repeat scroll center bottom rgba(0,0,0,0);
+        bottom: -13px;
+        right: 38px;
+        height: 14px;
+        width: 25px;
+      }
+    }
+  
+    .tabcontent {
+      float: none;
+      clear: both;
+      width: auto;
+      border: solid 1px black;
+      background: #e1e1e1;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+      padding-top: 25px;
+      padding-left: 10px;
+      padding-right: 10px;
+      
+      .field-combo {
+        text-align: center;
+      }
+      /*#form3 #tire_search_locationstr {
+        width: 250px;
+      }*/
+    }
+    #tire_search_locationstr {
+      width: 100%;
+    }
+  }
+}
+
+@media screen and (max-device-width: 320px) {
+  #tire-search2 .tab-box a {
+    width: 90px;
+    
+    &.activeLink::after {
+      right: 33px;
+    }
+  }
+}

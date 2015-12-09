@@ -1,0 +1,35 @@
+Dear <%= @tire_store.contact_email %><br />
+<br />
+Thank you for confirming the appointment for <b><%= @appointment.buyer_name %></b> at <b><%= @appointment.confirmed_time %></b>.<br />
+<br />
+
+<% if @paid_for == true %>
+	Tires: <%= @tire_listing.full_order_description(@order, @appointment) %> - PAID <br />
+	Installation: PAID <br />
+	<% if @appointment.services_list.size > 0 %>
+		Other Services Requested: <%= @appointment.services_list.join(", ") %>: *** NOT PAID *** <br />
+	<% end %>
+<% else %>
+	Tires: <%= @tire_listing.full_order_description(@order, @appointment) %> - *** NOT PAID *** <br />
+	Installation: *** NOT PAID *** <br />
+	<% if @appointment.services_list.size > 0 %>
+		Other Services Requested: <%= @appointment.services_list.join(", ") %>: *** NOT PAID *** <br />
+	<% end %>
+<% end %>
+<br />
+Store Name: <%= @tire_store.name %><br />
+Store Address: <%= @tire_store.full_address %><br />
+<br />
+Buyer Name: <%= @appointment.buyer_name %><br />
+Buyer Phone: <%= @appointment.formatted_buyer_phone %><br />
+Buyer Email: <%= @appointment.buyer_email %><br />
+Buyer Address: <%= @appointment.buyer_address_formatted %><br />
+<br />
+<br />
+Please ensure that the requested tires are in stock before the appointment time.
+<br />
+<br />
+Thank you for letting TreadHunter find customers for your store.  Please let us know if there is any way we can make things even better for you.<br />
+<br />
+Sincerely,<br />
+The TreadHunter Team<br />

@@ -1,0 +1,4 @@
+ruby-1.8.7-p249 :001 > nada
+NameError: undefined local variable or method `nada' for #<Object:0x1001d1298>
+	from (irb):1
+ruby-1.8.7-p249 :002 > ^D

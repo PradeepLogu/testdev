@@ -1,0 +1,31 @@
+<div id="auto_years">
+<select id="auto_years" 
+        name="auto_year_id" 
+        select_year_path="/ajax/update_auto_options_visfire">
+  <option value="">Year</option>
+  <% @years.each do |y| %>
+    <% if y.id == session[:auto_year_id] %>
+      <option selected="selected" value="<%= y.id %>"><%= y.modelyear %></option>
+    <% else %>
+      <option value="<%= y.id %>"><%= y.modelyear %></option>
+    <% end %>
+  <% end %>
+</select>
+<script>
+  $('select#auto_years').change(function() {
+    v = $(this).attr('value');
+    if(typeof v == 'undefined')
+      v = $('select#auto_years').val();
+    $.ajax({
+      type: "GET",
+      dataType: "html",
+      url: $(this).attr('select_year_path'),
+      data: {auto_year_id: v, c: $(this).attr('class')},
+      success:function(result){
+        $("div#auto_options").html(result);
+        fix_select('select#auto_options'); 
+      }   
+    })
+  });
+</script>
+</div>

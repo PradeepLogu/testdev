@@ -1,0 +1,72 @@
+<% provide(:title, @tire_store.visible_name + " | New & Used Tires #{@tire_store.city} #{@tire_store.state} | TreadHunter") %>
+<% provide(:metadescription, "#{@tire_store.visible_name}, Category: new and used tires, tire store, #{@tire_store.city} #{@tire_store.state} #{@tire_store.zipcode}") %>
+
+<%= stylesheet_link_tag "forms" %>
+<%= stylesheet_link_tag "storefront" %>
+<%= render 'layouts/storefront/css_overrides' %>
+
+<% if !in_storefront? %>
+  <div style="padding: 0.2em;" class="main">
+    <div>
+      <%= render 'layouts/storefront/store_information' %>
+    </div>
+  </div>
+<% end %>
+
+<style>
+  #content-container {
+    margin-top: 50px;
+  }
+
+  h3.box-title {
+    margin-top: 10px;
+  }
+
+  .ui-widget-content a {
+    color: red;
+  }
+</style>
+
+<%= render :partial => 'layouts/storefront/menu_gradient_buttonbar' %>
+
+<div class="inforow">
+  <div class="infocol-left">
+    <%= render :partial =>'layouts/storefront/carousel_widget' %>
+  </div>
+</div>
+
+<div class="inforow">
+  <div class="infocol-left">
+    <%= render :partial =>'layouts/storefront/professional_installation' %>
+  </div>
+</div>
+
+<div class="inforow">
+  <div class="infocol-left">
+    <%= render 'layouts/storefront/choose_tires_half_left' %>
+  </div>
+  <div class="infocol-right">
+    <%= render :partial =>'layouts/storefront/get_directions_half_right' %>
+  </div>
+</div>
+
+<div class="inforow">
+  <div class="infocol-left">
+    <%= render :partial =>"layouts/storefront/choose_auto" %>
+  </div>
+</div>
+
+<div class="inforow">
+  <div class="infocol-left">
+    <%= render :partial =>'layouts/storefront/carousel_widget',
+                :locals => {:@photos => @promotions} %>
+  </div>
+</div>
+
+<div class="inforow">
+  <div class="infocol-left">
+    <%= render :partial =>"layouts/storefront/admin" %>
+  </div>
+</div>
+
+<div class="clear"></div>

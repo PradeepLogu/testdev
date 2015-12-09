@@ -1,0 +1,17 @@
+Dear <%= @reservation.tire_store.contact_email %>,
+
+A reservation has been placed for a set of <%= @reservation.tire_listing.short_description %> at a price of $<%= @reservation.formatted_price %>.
+
+<% unless @reservation.tire_listing.blank? %>
+Stock #:<%= @reservation.tire_listing.stock_number %>
+<% end %>
+
+Please contact the buyer as soon as possible.  Their contact information is:
+
+<%= @reservation.name %>
+<%= @reservation.buyer_email %>
+<%= @reservation.formatted_phone %>
+<%= @reservation.address %>
+<%= @reservation.city %>, <%= @reservation.state %> <%= @reservation.zip %>
+
+Thank you for using TreadHunter.com to help connect with your customers!

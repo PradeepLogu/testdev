@@ -1,0 +1,53 @@
+
+<%= f.label "First name" %>
+<%= f.text_field :first_name %>
+
+<%= f.label "Last name" %>
+<%= f.text_field :last_name %>
+
+<%= f.label :email %>
+<%= f.text_field :email %>
+
+<%= f.label :phone %>
+<%= f.text_field :phone %>
+
+<%= f.label :password %>
+<%= f.password_field :password %>
+
+<%= f.label :password_confirmation, "Re-enter password" %>
+<%= f.password_field :password_confirmation %>
+
+<%= label_tag "Do you have a referral code?" %>
+<%= text_field_tag :referral_code %>
+
+<hr />
+<label>
+	Note: we need your physical address to do a radius search for potential buyers.
+	<b>YOUR PRIVACY IS IMPORTANT TO US.</b> We will not share your address with buyers
+	or anyone else.  Your phone number is also protected - if you check the "Hide Phone
+	From Buyers" box, we will not show your telephone number at all, you will receive
+	emails when users would like to reserve your tires or request more information
+	about them.  If you uncheck the box, we will show your phone number as a graphical
+	image so it cannot be seen by automated web bots.
+</label>
+
+<%= label_tag "Address 1" %>
+<%= f.text_field :address1 %>
+
+<%= label_tag "City" %>
+<%= f.text_field :city %>
+
+<div id="state">
+	<%= f.label :state, "State", style: 'width: initial;' %>
+	<%= f.select(:state, us_states, {}, {:style => 'display: inline; height: inherit; margin-top: 12px; margin-left: 5px;'}) %>	
+</div>
+
+<%= label_tag "Zip Code" %>
+<%= f.text_field :zipcode %>
+
+<br />
+
+<label for="hide_phone" style="width:initial;">
+	Hide your phone number from buyers?
+</label>
+<%= check_box_tag :hide_phone, 'yes', true, :style => 'display: inline; height: inherit; margin-top: 12px; margin-left: 5px;' %>

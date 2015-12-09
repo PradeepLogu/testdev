@@ -1,0 +1,24 @@
+
+<% unless tiresize.nil? %>
+  <div class="modal fade" id="vehicle_modal">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">&times;</a>
+      <h3>Cars that use size <%= tiresize.sizestr %></h3>
+    </div>
+    <div class="modal-body">
+    	<% tiresize.auto_manufacturers.each do |manu| %>
+      	 <li>
+      	  	<%= manu.name %>
+      		  (
+      		    <% tiresize.auto_models.each do |model| %>
+      			    <%= model.name if model.auto_manufacturer_id == manu.id %>
+      		    <% end %>
+      		  )
+      	 </li>
+     	<% end %>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal">Close</a>
+    </div>
+  </div>
+<% end %>

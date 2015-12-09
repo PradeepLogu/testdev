@@ -1,0 +1,36 @@
+*.rbc
+*.rb~
+*.sassc
+.sass-cache
+capybara-*.html
+.rspec
+.rvmrc
+/.bundle
+/vendor/bundle
+/log/*
+/tmp/*
+/db/*.sqlite3
+/db/yaml_data
+/public/system/*
+/coverage/
+/spec/tmp/*
+**.orig
+rerun.txt
+pickle-email-*.html
+.project
+config/initializers/secret_token.rb
+
+# ignore photos
+/public/system/tire_listings
+/public/system/phone
+/public/system/brandings
+/public/assets/**
+/public/assets/application.css
+/public/assets/application.css.gz
+/public/assets/application.js
+/public/assets/application.js.gz
+/public/assets/manifest.yml
+/public/assets/no_image.png
+
+# DS_Store
+.DS_Store

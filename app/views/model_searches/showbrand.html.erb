@@ -1,0 +1,202 @@
+<% provide(:title, "#{@brand.name} Tires") %>
+<% provide(:visfire, "true") %>
+
+<style>
+@media screen and (max-width: 767px) {
+	/* Transform from tabs to accordions */
+	#page-tabs {
+		display: none;
+	}
+	#brand-content .tabcontent-1 {
+		margin-top: 10px;
+		margin-bottom: 0;
+	}
+}
+</style>
+
+<script>
+$(function() {
+  $("#page-tabs a").click(function (e) {
+	e.preventDefault();
+	var $this = $(this);
+	var id = $this.attr("id");
+	$this.siblings().removeClass("activeLink");
+	$this.addClass("activeLink");
+	var cont = $("#"+id+"-1");
+	cont.siblings().addClass("hide");
+	cont.removeClass("hide");
+  });
+});
+
+//Restructure the DOM when switching between desktop and mobile size
+addMobileLayoutConverter(function () {
+	//Convert tabs to accordions
+	$("#brand-content").addClass("panel-group");
+	$("#page-tabs a").each(function (i) {
+		var $tab = $(this);
+		var id = $tab.attr("id");
+		var $content = $("#brand-content #"+id+"-1");
+		//This is really terrible.
+		$content.removeClass("hide").addClass("panel-body").wrap(
+			'<div class="panel panel-default"></div>'
+		)
+		.before(
+			'<div class="panel-heading">	\
+				<a class="panel-title collapsed" data-toggle="collapse" data-parent="#brand-content" href="#collapse' + (i+1) + '" id="panel' + (i+1) + '">' + $tab.text() + ' <span class="arrow"></span></a>	\
+			</div>'
+		)
+		.wrap(
+			'<div id="collapse' + (i+1) + '" class="panel-collapse collapse"></div>'
+		);
+	});
+}, function () {
+	$("#brand-content").removeClass("panel-group");
+	$("#brand-content .tabcontent-1").removeClass("panel-body").addClass("hide").unwrap().unwrap().prev().remove();
+	$("#page-tabs #cont-1").click();
+});
+</script>
+
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="brand-top-section">
+			<%= render :partial => 'layouts/search_panel',
+					   :locals => {:inner_title => "SHOP BY", :tire_manufacturer_id => @brand.id} %>
+			
+			<h1 class="name"><%= @brand.name %> Tires</h1>
+			<div class="clear"></div>
+		</div>
+	</div>
+</div>
+
+<div class="container-outer">
+	<div class="container-inner">
+
+	<div id="page-tabs" class="page-tabs tabs4 clearfix">
+	  <a href="javascript:void(0);" class="tabLink first activeLink" id="cont-1">VEHICLE TYPE</a>
+	  <a href="javascript:void(0);" class="tabLink middle" id="cont-2">BY PERFORMANCE</a>
+	  <a href="javascript:void(0);" class="tabLink middle" id="cont-3">ABOUT <%= @brand.name.upcase %></a>
+	  <a href="javascript:void(0);" class="tabLink" id="cont-4">VIDEOS</a>
+	</div>
+	
+	<div id="brand-content">
+		<div class="tabcontent-1" id="cont-1-1">
+			<% @car_types.each do |type| %>
+				<% if !type[:models].blank? %>
+					<div class="vehicle-group group row-fluid">
+						<div class="span4 car-type">
+							<% if type[:code] == "P" %>
+								<%= image_tag "vehicle-type-car.jpg", alt: "" %>
+								<h4>CAR/MINIVAN</h4>
+							<% elsif type[:code] == "LT" %>
+								<%= image_tag "vehicle-type-truck.jpg", alt: "" %>
+								<h4>TRUCK AND SUV</h4>
+							<% elsif type[:code] == "Z" %>
+								<%= image_tag "vehicle-type-sports.jpg", alt: "" %>
+								<h4>SPORTS CAR</h4>
+							<% end %>
+							<div class="clear"></div>
+						</div>
+						<% # Show two random models
+						   type[:models].sample(2).each do |m|
+							photo = m.photo1_thumbnail %>
+							<div class="span4 tire-model tire1">
+								<div class="outer-wrap">
+									<div class="inner image">
+										<%= image_tag(photo, alt: "") unless photo.blank? %>
+									</div>
+									<div class="inner text">
+										<%= link_to m.tire_model_name, show_tire_model_path(:model_id => m.id), :class => "title" %>
+										<p class="description"><%= m.description || "" %></p>
+										<% if !m.starting_cost.blank? %>
+											<p class="cost">Starting at $<%= m.starting_cost %> ea.</p>
+										<% end %>
+										<%= link_to "Learn More", show_tire_model_path(:model_id => m.id), :class => "learn-more-link underlined" %>
+									</div>
+								</div>
+							</div>
+						<% end %>
+					</div>
+			<%    end
+			   end
+			   if @car_types.empty? %>
+				<p class="no-results">No tire models found for this manufacturer.</p>
+			<% end %>
+		</div>
+		
+		<div class="tabcontent-1 hide" id="cont-2-1">
+		
+			<% @categories.each do |k, c| %>
+				<div class="perf-group group row-fluid">
+					<div class="group1 span4">
+						<div class="outer-wrap">
+							<div class="inner cat">
+								<!--<%= image_tag "", alt: "" %>-->
+								<h5><%= c[:category_name] %></h5>
+							</div>
+							<div class="inner tire">
+								<%= image_tag "all-season-tire.png", alt: "" %>
+							</div>
+						</div>
+					</div>
+					<div class="group2 span4">
+						<p>Description text description text description text description text description text.</p>
+						<a class="learn-more-link" href="#">Learn More</a>
+					</div>
+					<div class="group3 span4">
+						<div class="outer-wrap">
+							<div class="inner links">
+								<% c[:models].each do |m| %>
+									<%= link_to m[:name], show_tire_model_path(:model_id => m[:id]) %><br/>
+								<% end %>
+							</div>
+							<div class="inner browse">
+								<%= link_to "BROWSE", models_by_tire_category_path(:brand_id => @brand.id, :category_id => k), class: "btn browse-btn" %>
+							</div>
+						</div>
+					</div>
+				</div>
+			<% end
+			   if @categories.length == 0 %>
+				<p class="no-results">No performance categories found for this manufacturer.</p>
+			<% end %>
+		</div>
+		
+		
+		<div class="tabcontent-1 hide" id="cont-3-1">
+			<h1 class="name"><%= @brand.name %> Tires</h1>
+			
+			<p class="description">Lorem ipsum</p>
+			
+			<%	for mode in 1..2
+					collection = []
+					if mode == 1
+						collection = @combined_passenger_models
+						title = "#{@brand.name} Passenger/Performance Tires"
+					elsif mode == 2
+						collection = @car_types[1][:models] if !@car_types[1].nil?
+						title = "#{@brand.name} Truck/SUV Tires"
+					end
+					
+					if !collection.empty?
+						%>
+						<h5 class="models-title"><%= title %></h5>
+						<div class="all-models">
+							<ul class="two-column collapse-mobile">
+							<% collection.each do |m| %>
+								<li><%= link_to "#{@brand.name} #{m.tire_model_name}", show_tire_model_path(:model_id => m.id) %></li>
+							<%	end %>
+							</ul>
+						</div>
+				<%	end %>
+			<%	end %>
+		</div>
+	
+	
+		<div class="tabcontent-1 hide" id="cont-4-1">
+			<p>Coming Soon</p>
+		</div>
+	</div>
+
+	</div>
+</div>

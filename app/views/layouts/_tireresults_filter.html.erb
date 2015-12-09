@@ -1,0 +1,287 @@
+<script src="/assets/filter.js" type="text/javascript"></script>
+<script src="/assets/tinysort.js" type="text/javascript"></script>
+
+<style>
+    hr {
+        border-top: 1px dashed black;
+        border-bottom: 1px dashed black;
+        -webkit-margin-after: 0px;
+        -webkit-margin-before: 0px;
+    }
+    .facets ul { list-style-type: none; }
+    .facets ul {
+        padding: 10px;
+        margin: 0px;
+    }
+</style>
+
+<script>
+    var fJS;
+    function filterInit(){
+        var tirelistings = <%= raw @tire_search.tirelistings.to_json(
+                                    :root => true,
+                                    :include => [:tire_store, :tire_manufacturer, :tire_model], 
+                                    :methods => [:distance, :formatted_price, 
+                                                :visible_name, :visible_phone, :photo1_thumbnail]) %>;
+        var view = function(tirelisting){
+            teaser = this.span({'class': 'teaser'}, tirelisting.teaser);
+            tire_store_name = this.span({'class': 'tire_store_name'}, 
+                        tirelisting.tire_store.visible_name);
+            tire_manufacturer = this.div({'class': 'tire_manufacturer_name'}, 
+                                        '<img src="/assets/' + tirelisting.tire_manufacturer.name + '.gif"/>');
+            tire_model = this.div({'class': 'tire-model-info'}, tirelisting.tire_model.name);
+
+            // this needs more stuff
+            pic = this.div({'class': 'tire-pic'}, 
+                                ((tirelisting.photo1_thumbnail == null ? '' : 
+                                    '<img src="' + tirelisting.photo1_thumbnail + '">')));
+
+            tireinfo = this.div({'class': 'span2'}, [tire_manufacturer, tire_model, pic]);
+            
+            distanceinfo = this.div({'class': 'distance span2'}, 
+                                    Math.round(tirelisting.distance) +
+                                     ((Math.round(tirelisting.distance) == 1) ? " mile" : " miles"));
+
+            storeinfo = this.div({'class': 'span2 storename'}, 
+                                    ['<a href="/tire_stores/' + tirelisting.tire_store.id + '">' + tirelisting.tire_store.visible_name + '</a>']);
+
+            qtyinfo = this.div({'class': 'span1 quantity'}, tirelisting.quantity)
+
+            price = this.div({'class': 'price'}, '$' + tirelisting.formatted_price)
+
+            priceinfo = this.div({'class': 'span1'},
+                                    [price,
+                            ((tirelisting.includes_mounting) ? '' : '<font size="1"> (inc. mounting)</font> ')]);
+
+            privateinfo = this.div({'class': 'span1'},
+                                [tirelisting.tire_store.private_seller ? '<img src="/assets/check.png">' : ''])
+
+            listingdetail = this.div({'class': 'span2 listing-detail'}, 
+                            [ ((tirelisting.orig_cost == null) ? '' : ' Orig. Cost: ' + tirelisting.orig_cost + ' ea.')
+                            ]);
+
+            moreinfo = this.div({'class': 'span1 more-info', 'id': 'tl_' + tirelisting.id});
+
+            tireinfo = this.div({'class': 'span12 tireinfo'}, [tireinfo, storeinfo, distanceinfo, qtyinfo, priceinfo, privateinfo, listingdetail, moreinfo]);
+
+            row = this.div({'class': 'row-fluid'}, [tireinfo]);
+            divider = this.div({'class': 'span12'}, '<hr />');
+
+            complete_row = this.div({'class': 'fullrow'}, [divider, row]);
+
+            return this.link('/tire_listings/' + tirelisting.id,
+                {'id': tirelisting.id}, 
+                complete_row);
+        };
+
+        var settings = {
+                filter_criteria: {
+                    tire_manufacturers: ['#manufacturer_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                            'tire_manufacturer_id'],
+                    stores: ['#tire_store_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                            'tire_store_id'],
+                    quantities: ['#quantities_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                            'quantity'],
+                    seller_types: ['#seller_types_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                            'tire_store.private_seller'],
+                    only_pictures: ['#pictures_required_list input:checkbox .EVENT.click .SELECT.:checked', 
+                                            'photo1_thumbnail == null']
+
+                },
+                and_filter_on: true
+        };
+
+        return FilterJS(tirelistings, "#tirelistings_list", view, settings);
+    }
+
+    function bindLiveEvents() {
+        $("div.tireinfo").hover(
+            function () {
+                $(this).addClass('highlighted');
+            }, 
+            function () {
+                $(this).removeClass('highlighted');
+            }
+        );
+        $("div.more-info").hover(
+            function (event) {
+                $.ajax({url:"/tire_listings/ajax/" + event.target.id,success:function(result){
+                    $("#tirepreviewpane").removeClass("hidden");
+                    $("#navigator-inner").addClass("hidden");
+                    $("#tirepreviewpane").html(result);
+                }});
+            },
+            function (event) {
+                //$("#navigator").html("");
+                $("#tirepreviewpane").addClass("hidden");
+                $("#navigator-inner").removeClass("hidden");
+            }
+        );    
+        $('.listing-detail div').click(function (event) {
+            if ($(this).attr('id').substr(0, 8) == 'list_id_') {
+                var listing_id = $(this).attr('id').substr(8);
+                var path = '/tire_listings/' + listing_id;
+                window.open(path, '_self', false); 
+            };
+        });
+
+        $('#tire_manufacturer_all, #tire_store_all, #quantities_all, #seller_types_all').closest('ul').children().find(':checkbox').attr('checked', true);
+        $('#tire_manufacturer_all, #tire_store_all, #quantities_all, #seller_types_all').click(function(){
+            $(this).closest('ul').children().find(':checkbox').attr('checked', $(this).is(':checked'));
+        });
+    }
+
+    $(document).ready(function() {
+        window.scrollTo(0, 0);
+        fJS = filterInit(); 
+        bindLiveEvents(); 
+    });
+</script>
+
+<%= link_to "Return to Find My Tires page", "/" %>
+
+<div class="row-fluid">
+    <div class="span12">
+        <%= @tire_search.auto_year.modelyear unless @tire_search.auto_year.nil? %>
+        <%= @tire_search.auto_manufacturer.name unless @tire_search.auto_manufacturer.nil? %>
+        <%= @tire_search.auto_model.name unless @tire_search.auto_model.nil? %>
+        <%= @tire_search.auto_option.name unless @tire_search.auto_option.nil? %>
+        <%= '(' + @tire_search.tire_size.sizestr + ')' unless @tire_search.tire_size.nil? %>
+        for  <%= @tire_search.geo_level %>
+    </div>
+</div>
+
+<% if not @tire_search.tirelistings.nil? %>
+    <% if @tire_search.tirelistings.count > 0 %>
+        <div class="row-fluid">
+            <div class="span9">
+                <div class="span2">Tire Info</div>
+                <div class="span2">
+                    <a onclick="$('#tirelistings_list>a').tsort('.storename a');">
+                        Store<%= image_tag('/assets/arrow_sort_down.gif') %>
+                    </a>
+                </div>
+                <div class="span2">
+                    <a onclick="$('#tirelistings_list>a').tsort('.distance', {useVal:false});">
+                        Distance<%= image_tag('/assets/arrow_sort_down.gif') %>
+                    </a>
+                </div>
+                <div class="span1">Qty</div>
+                <div class="span1" style="font-size: 85%;">
+                    <a onclick="$('#tirelistings_list>a>div').tsort('.price', {useVal:false});">
+                        Price<%= image_tag('/assets/arrow_sort_down.gif') %>
+                    </a>
+                </div>
+                <div class="span1" style="font-size: 85%;">Private?</div>
+                <div class="span3">Details</div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span9">
+                <div id='search_results'>
+                    <div id="tirelistings_list">
+                    </div>
+                </div>
+            </div>
+            <div class="span3" id="navigator">
+                <div id="navigator-inner">
+                    <div id="facetbox" class="borderbox dropshadow">
+                        <div class="category">
+                            <div class="facet-title" title="Pictures Required?">
+                                Listings with Pictures
+                            </div>
+                            <div class="facets" style="display: block; overflow-y: hidden;">
+                                <ul id="pictures_required_list">
+                                    <li>
+                                        <input id="with_pictures" value="true" checked="checked" type="checkbox">
+                                        <span >Listings without pictures</span>
+                                    </li>
+                                    <li>
+                                        <input id="without_pictures" value="false" checked="checked" type="checkbox">
+                                        <span>Listings with pictures</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="facet-title" title="Seller Types">
+                                Types of Sellers
+                            </div>
+                            <div class="facets" style="display: block; overflow-y: hidden;">
+                                <ul id="seller_types_list">
+                                    <li>
+                                        <input id="seller_types_all" value="all" type="checkbox">
+                                        <span >All</span>
+                                    </li>
+                                    <li>
+                                        <input id="store_sellers" value="false" type="checkbox">
+                                        <span>Storefronts</span>
+                                    </li>
+                                    <li>
+                                        <input id="private_sellers" value="true" type="checkbox">
+                                        <span>Private sellers</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <% if @quantities.count > 1 || true %>
+                                <div class="facet-title" title="Quantity">
+                                    Quantity
+                                </div>
+                                <div class="facets" style="display: block; overflow-y: hidden;">
+                                    <ul id="quantities_list">
+                                        <li>
+                                            <input id="quantities_all" value="all" type="checkbox">
+                                            <span >All (<%= @tire_search.tirelistings.count %>)</span>
+                                        </li>
+                                        <% @quantities.each do |t| %>
+                                            <li>
+                                                <input id="quantity_<%= t[0][:qty] %>" value="<%= t[0][:qty] %>" type="checkbox">
+                                                <span><%= t[0][:qty] %> (<%= t[1] %>)</span>
+                                            </li>
+                                        <% end %>
+                                    </ul>
+                                </div>
+                            <% end %>
+                            <div class="facet-title" title="Manufacturer">
+                                Manufacturer
+                            </div>
+                            <div class="facets" style="display: block; overflow-y: hidden;">
+                                <ul id="manufacturer_list">
+                                    <li>
+                                        <input id="tire_manufacturer_all" value="all" type="checkbox">
+                                        <span >All (<%= @tire_search.tirelistings.count %>)</span>
+                                    </li>
+                                    <% @tire_manufacturers.each do |t| %>
+                                        <li>
+                                            <input id="tire_manufacturer_<%= t[0][:id] %>" value="<%= t[0][:id] %>" type="checkbox">
+                                            <span><%= t[0][:name] %> (<%= t[1] %>)</span>
+                                        </li>
+                                    <% end %>
+                                </ul>
+                            </div>
+                            <div class="facet-title" title="TireStore">
+                                Tire Store
+                            </div>
+                            <div class="facets" style="display: block; overflow-y; hidden;">
+                                <ul id="tire_store_list">
+                                    <li>
+                                        <input id="tire_store_all" value="all" type="checkbox">
+                                        <span >All (<%= @tire_search.tirelistings.count %>)</span>
+                                    </li>
+                                    <% @tire_stores.each do |t| %>
+                                        <li>
+                                            <input id="tire_store_<%= t[0][:id] %>" value="<%= t[0][:id] %>" type="checkbox">
+                                            <span><%= t[0][:name] %> (<%= t[1] %>)</span>
+                                        </li>
+                                    <% end %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tirepreviewpane" class="hidden">
+                </div>
+            </div>
+        </div>
+    <% else %>
+        <h3>No results found.</h3>
+    <% end %>
+<% end %>

@@ -1,0 +1,90 @@
+<a id="tire_listing_<%= @tire_listing.id %>" 
+	href="<%= url_for @tire_listing %>" 
+	data-fjs="true">
+	<div id="results-item" class="results-item">
+		<div class="tire-manufacturer">
+			<img src="/assets/<%= @tire_listing.tire_manufacturer_name %>.gif" border="0">
+			<span class="manu-name"><%= @tire_listing.tire_manufacturer_name %></span>
+			<div class="model-name">
+				<%= @tire_listing.tire_model.name if @tire_listing.tire_model %>
+			</div>
+			<div class="category-type">
+				<%= @tire_listing.tire_category.category_name if @tire_listing.tire_category %>
+			</div>
+		</div>
+		<div class="tire-image">
+			<div>
+				<% if @tire_listing.photo1_thumbnail %>
+					<%= image_tag(@tire_listing.photo1_thumbnail) %>
+				<% else %>
+					<img src="/assets/th_icon_128.png">
+				<% end %>
+			</div>
+		</div>
+		<div class="tire-details">
+			<div class="tire-size">Size: <%= @tire_listing.tire_size.sizestr %></div>
+			<div class="infographic" id="l_<%= @tire_listing.id %>">
+				<span>
+					<div>
+						<h3 class="orange">Loading...</h3>
+					</div>
+				</span>
+			</div>
+			<div style="bottom: 0;">
+				<div class="qty-treadlife">
+					<div class="tire-quantity">
+						Quantity: <%= @tire_listing.quantity %>
+					</div>
+					<% if @tire_listing.is_new %>
+					<div class="treadlife">
+						<div class="tire-treadlife">
+							Treadlife: 100%<img src="/assets/new_icon.png">
+						</div>
+					</div>
+					<% else %>
+						<% if @tire_listing.treadlife %>
+							<div class="tire-treadlife">
+								Treadlife: <%= @tire_listing.treadlife %>%
+							</div>
+						<% else %>
+							<div class="treadlife" style="visibility:hidden;">0</div>
+						<% end %>
+					<% end %>
+				</div>
+				<div class="tire-price">
+					<span class="price-data">$<%= @tire_listing.discounted_price %></span><%= " each" if @tire_listing.is_new %><br />
+					<% if @tire_listing.includes_mounting %>
+						<font size="1"> (inc. mounting)</font>
+					<% end %>
+					<% if @tire_listing.has_rebate && @tire_listing.has_price_break %>
+						<br />
+						<div class="promotion" id="p_<%= @tire_listing.id %>">Save even more after rebate!<br />Includes price break!<span></span>
+						</div>
+					<% elsif @tire_listing.has_rebate %>
+						<br />
+						<div class="promotion" id="p_<%= @tire_listing.id %>">Save even more after rebate!<span></span>
+						</div>
+					<% elsif @tire_listing.has_price_break %>
+						<br />
+						<div class="promotion" id="p_<%= @tire_listing.id %>">Includes price break!<span></span>
+						</div>
+					<% end %>					
+				</div>
+			</div>
+			<div class="hidden-treadlife" style="visibility: hidden; width:0px; float:left;">
+				<% if @tire_listing.is_new %>
+					100
+				<% elsif @tire_listing.treadlife %>
+					<%= @tire_listing.treadlife %>
+				<% else %>
+					0
+				<% end %>
+			</div>
+			<div class="hidden-updated" style="visibility: hidden; width:0px; float:left;">
+				<%= @tire_listing.updated_at %>
+			</div>
+		</div>
+		<div class="clear">
+		</div>
+	</div>
+</a>

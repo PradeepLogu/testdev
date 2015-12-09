@@ -1,0 +1,658 @@
+// Place all the styles related to the ModelSearches controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+// Browse tire brands page
+
+#browse-brands .tire-brand {
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: #f6f6f6;
+  box-shadow: 2px 2px 5px #c9c9c9;
+  text-align: center;
+  
+  .logo img {
+    height: 50px;
+    font-size: 18px;
+  }
+  
+  .name {
+    color: #F05A29;
+    text-transform: uppercase;
+  }
+  
+  p {
+    border-bottom: solid 1px black;
+  
+    a {
+      color: #F05A29;
+      font-weight: bold;
+    }
+  }
+  
+  .search-link a {
+    width: 120px;
+    padding-top: 8px;
+  }
+}
+
+
+// Brand page
+
+#brand-top-section {
+  height: 545px;
+  margin-top: 10px;
+  position: relative;
+  clear: both;
+  background-size: cover;
+}
+
+#brand-content {
+  .tabcontent-1 {
+    margin-bottom: 20px;
+    padding: 0 2%;
+    
+    .no-results {
+      margin-top: 20px;
+    }
+  }
+  
+  h1.name {
+    margin: 15px 0;
+  }
+
+  .group {
+    padding: 20px 0;
+    border-bottom: solid 1px #c2c2c2;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    .outer-wrap {
+      display: table;
+      width: 100%;
+    }
+    .inner {
+      display: table-cell;
+    }
+    .learn-more-link {
+      color: #f05a29;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  }
+  
+  .vehicle-group {
+    .car-type {
+      vertical-align: middle;
+      text-align: center;
+    
+      h4 {
+        margin-top: 1em;
+        text-transform: uppercase;
+      }
+    }
+    .text {
+      width: 65%;
+      vertical-align: top;
+    }
+    .image {
+      width: 35%;
+      
+      img {
+        max-width: 100px;
+      }
+    }
+    .title {
+      color: #f05a29;
+      font-size: 18px;
+      font-weight: bold;
+      line-height: 1.5;
+      text-transform: uppercase;
+      display: block;
+    }
+    .type, .cost {
+      font-weight: bold;
+    }
+  }
+  
+  .perf-group {
+    h5 {
+      margin-top: 0.5em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .group1 {
+      .inner {
+        vertical-align: middle;
+        text-align: center;
+      }
+      .cat, .tire {
+        width: 50%;
+      }
+    }
+    .group3 .links {
+      vertical-align: top;
+    }
+    .links a {
+      color: #f05a29;
+      font-weight: bold;
+    }
+    .browse {
+      text-align: right;
+    }
+  }
+  
+  h5.models-title {
+    margin-top: 25px;
+    margin-bottom: 0.5em;
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+  
+  .all-models {
+    width: 90%;
+    margin-left: 5%;
+    text-align: left;
+    
+    ul li {
+      margin-bottom: 0.25em;
+    }
+    a {
+      color: #f05a29;
+      font-size: 16px;
+    }
+  }
+}
+
+
+
+// Show tire model page
+
+#model-info {
+  margin: 20px 0;
+  
+  .logo {
+    margin-bottom: 15px;
+    img {}
+  }
+  h1 {
+    margin-bottom: 15px;
+  }
+  
+  .reviews-links {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    padding-top: 3px;
+  
+    a {
+      color: #f05a29;
+      text-decoration: underline;
+      white-space: nowrap;
+    }
+  }
+  
+  .starting-at {
+    color: #f05a29;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 0.5em;
+  }
+  .price {
+    margin: 1em 0;
+    min-height: 1px;    //add extra margin between above and below elements if price is empty
+    
+    .cost {
+      font-size: 34px;
+      font-weight: bold;
+      span {
+        font-size: 60%;
+        vertical-align: super;
+      }
+    }
+  }
+  
+  .special-links {
+    margin: 1em 0;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: underline;
+    
+    a {
+      white-space: nowrap;
+      
+      img {
+        height: 2em;      //this should center the icon
+        padding-left: 0.5em;
+      }
+    }
+  }
+  
+  #find-in-store {
+    margin-right: 15px;
+  }
+  
+  //This one occurs only on the model search results page
+  .change-brand a {
+    color: #f05a29;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  
+  .right {
+    border-left: solid 1px #acacac;
+    min-height: 200px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .photo-wrapper {
+    display: table;
+    width: 100%;
+    
+    .inner {
+      display: table-cell;
+      vertical-align: middle;
+      height: 200px;
+    }
+  }
+  #stock-photo {
+    max-width: 100%;
+    max-height: 300px;
+  }
+  #category-photo {
+    max-width: 100%;
+    max-height: 250px;
+  }
+}
+
+
+#tire-model-content {
+  border-top: solid 1px #c2c2c2;
+  padding-top: 10px;
+
+  .tabcontent-1 {
+    margin-bottom: 20px;
+    padding: 0 2%;
+  }
+  
+  #cont-1-1 h1 {
+    margin-bottom: 10px;
+  }
+  
+  h4.subtitle {
+    margin: 15px 0 5px;
+  }
+  
+  #sizes {
+    .size-row {
+      display: table;
+      width: 100%;
+      border-top: solid 1px #c2c2c2;
+      padding: 15px 0;
+    
+      &:first-child {
+        border-top: none;
+      }
+    }
+    .cell {
+      display: table-cell;
+      text-align: left;
+      vertical-align: top;
+      width: 30%;
+    }
+    
+    .heading {
+      width: 20%;
+    }
+    label.size, label.more {
+      font-size: 12px;
+      font-weight: bold;
+      color: #f05a29;
+      margin: 0;
+    }
+    .sizestr {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 5px 0;
+    }
+    
+    .tire-data ul li {
+      font-size: 14px;
+    }
+    
+    .buy-section {
+      width: 17%;
+      border-left: solid 1px #c2c2c2;
+      text-align: right;
+      
+      .price {
+        font-size: 24px;
+        font-weight: bold;
+        
+        span {
+          font-size: 60%;
+          vertical-align: super;
+        }
+      }
+      .buy-btn {
+        margin: 5px 0 10px;
+      }
+      label {
+        display: inline;
+        font-size: 12px;
+        color: #7e7e7e;
+      }
+      select.qty {
+        margin: 0;
+        padding: 0;
+      }
+    }
+  }
+  
+  
+  #cont-3-1 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  #warranty-info li {
+    font-size: 14px;
+    padding: 1em 0.5em;
+  }
+  #warranty-info li.odd {
+    background-color: #e0e0e0;
+  }
+  
+  
+  #other-reviews .title {
+    font-size: 20px;
+  }
+  #other-reviews .review .store-name {
+    text-transform: uppercase;
+  }
+}
+
+
+
+// Model search results page
+
+#search-models-outer {
+  border-top: solid 1px #c2c2c2;
+  padding-top: 20px;
+}
+
+#search-models-filters {
+  margin-bottom: 20px;
+  
+  .filter-title {
+    font-style: italic;
+  }
+}
+
+#search-models-results-header {
+  .results-count {
+    float: left;
+    margin-bottom: 0;
+    padding-top: 0.5em;
+  }
+  .sort-box {
+    float: right;
+  }
+  label, select {
+    display: inline;
+    margin: 0;
+  }
+}
+
+#model-results {
+  .model-row {
+    display: table;
+    width: 100%;
+    border-top: solid 1px #c2c2c2;
+    padding: 15px 0;
+
+    &:first-child {
+      border-top: none;
+    }
+    
+    .left {
+      display: table-cell;
+      width: 25%;
+      vertical-align: top;
+    }
+    .right {
+      display: table-cell;
+      width: auto;
+      vertical-align: top;
+    }
+  }
+  
+  
+  .model-img {
+    padding: 0 20px 0 0;
+  
+    img {
+      width: 100%;
+    }
+  }
+  
+  .model-title {
+    h4 {
+      font-weight: normal;
+    }
+  }
+  
+  .ratings {
+    float: right;
+  }
+  .reviews-count {
+    margin-left: 10px;
+  }
+
+  .properties {
+    clear: left;
+    float: left;
+    margin-top: 0.5em;
+
+    ul {
+      padding-left: 1em;
+    }
+    li {
+      color: #F05A29;
+      font-size: 14px;
+      list-style: outside disc;
+
+      span { color: black; }
+    }
+  }
+
+  .sizestr {
+    clear: left;
+    float: left;
+    padding-top: 40px;
+  }
+  
+  .rebate {
+    clear: right;
+    //float: right;
+    text-align: right;
+  
+    .promotion {
+      position: relative;
+      display: block;
+      font-size: 14px;
+      line-height: 30px;
+      height: 26px;
+      padding: 0 10px 0;
+      background-color: #e7e5e5;
+      border: solid 1px #c6c6c6;
+      border-left: none;
+    
+      &::after {
+        background: url("/assets/ribbon-end.png") no-repeat scroll 0 0;
+        height: 28px;
+        width: 21px;
+        top: -1px;
+        left: -21px;
+        z-index: 10;
+        display: block;
+        position: absolute;
+        content: "";
+      }
+    }
+  }
+  
+  .buy-form {
+    clear: right;
+    //float: right;
+    text-align: right;
+  
+    .price {
+      font-size: 30px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    
+      span {
+        font-size: 60%;
+        vertical-align: super;
+      }
+    }
+    .buy-btn {
+      display: inline;
+      margin: 0;
+    }
+    .quantity {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    label {
+      display: inline;
+      color: #7e7e7e;
+    }
+    select.qty {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+
+
+@media screen and (max-width: 767px) {
+  #brand-top-section {
+    height: auto;
+    
+    h1 {
+      margin: 15px 0;
+    }
+  }
+  
+  #brand-content {
+    .vehicle-group {
+      &:first-child {
+        padding: 0;
+      }
+      .vehicle-group > div {
+        margin: 15px 0;
+      }
+      .vehicle-group .car-type h4 {
+        float: left;
+        margin-top: 40px;
+      }
+      .vehicle-group .car-type img {
+        float: right;
+      }
+      .vehicle-group .title {
+        font-size: 20px;
+      }
+      .vehicle-group .image {
+        width: 25%;
+      }
+    }
+    
+    .perf-group {
+      .group2 {
+        margin: 1em 0;
+      }
+      .browse {
+        vertical-align: bottom;
+      }
+    }
+    
+    .all-models {
+      width: auto;
+      margin-left: 20%;
+    }
+  }
+  
+  #model-info {
+    margin: 0;
+    
+    h1 {
+      font-size: 20px;
+      line-height: 1.5;
+    }
+  
+    .right {
+      padding: 15px 0;
+      border-left: none;
+      border-top: solid 1px #c2c2c2;
+      height: auto;
+    }
+  }
+
+  #tire-model-content {
+    #cont-1-1, #cont-4-1 {
+      margin-top: 15px;
+    }
+    
+    #cont-1-1 h1 {
+      font-size: 20px;
+    }
+    h4.subtitle {
+      font-size: 19px;
+    }
+  
+    #sizes {
+      .size-row .cell {
+        display: block;
+        width: auto !important;
+      }
+      label.size, .sizestr {
+        display: inline;
+        font-size: 16px;
+      }
+      label.more {
+        display: none;
+      }
+      .tire-data ul li {
+        font-size: 16px;
+      }
+      
+      .buy-section {
+        border-left: none;
+        
+        .buy-btn {
+          float: left;
+          margin: 0;
+        }
+        .quantity {
+          float: right;
+        }
+      }
+    }
+  }
+  
+  #search-models-results-header {
+    text-align: center;
+    
+    .results-count {
+      float: none;
+      margin-bottom: 5px;
+    }
+    .sort-box {
+      float: none;
+    }
+  }
+}

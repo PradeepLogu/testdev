@@ -1,0 +1,22 @@
+<table id="users-table" class="display">
+	<thead>
+		<tr>
+			<th>Action</th>
+			<th align=left>Email</th>
+			<th align=left>Name</th>
+			<th align=left>Phone</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @users.each do |u| %>
+			<tr>
+				<td><%= link_to 'View', u %>&nbsp;|&nbsp;
+					<%= link_to 'Edit', edit_user_path(u) %></td>
+				<td><%= u.email %></td>
+				<td><%= u.name %></td>
+				<td><%= u.formatted_phone %></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+

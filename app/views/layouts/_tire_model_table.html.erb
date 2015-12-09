@@ -1,0 +1,94 @@
+<% @tire_manufacturers.each do |m| %>
+	<div style="width: 100px; display: inline-table;">
+		<%
+			if @default_manu.include?(m.id)
+				checked = 'checked = "checked"'
+			else
+				checked = ""
+			end
+		%>
+		<input <%= checked %> id="tire_manu_check_<%= m.id.to_s %>", type="checkbox",
+			value="true" onclick="hideShowManu(<%= m.id %>, $(this).attr('checked'));" %>
+		<%= m.name %>
+	</div>
+<% end %>
+
+<script>
+	function hideShowManu(manu_id, show) {
+		if (show)
+		{
+			$('.manu-' + manu_id).show();
+			$('.manu-' + manu_id).css('display', 'inline-table');
+		}
+		else
+		{
+			$('.manu-' + manu_id).hide();
+		}
+	}
+</script>
+<div style="background-color: lightgray; padding: 10px;">
+	<b>Highlighted rows indicate listings have already been created for this model, changes will update the existing values.</b>
+</div>
+<div class="tire-models">
+	<br />
+	<% colcount = 0 %>
+	<% maxcols = 1 %>
+	<% maxcols = 2 if @tire_models.count > 5 %>
+
+	<% colwidth = 900 / maxcols %>
+
+	<% (1..maxcols).each do |i| %>
+		<div style="width: <%= colwidth %>px; display: inline-table;">
+			<div style="display: inline-table; font-size: 0.8em; width: 30px;">Add?</div>
+			<div style="display: inline-table; font-size: 0.8em; width: 60px;">Qty in<br />stock</div>
+			<div style="display: inline-table; font-size: 0.8em; width: 70px;">Your price each</div>
+			<div style="display: inline-table; font-size: 0.8em;">Model</div>
+		</div>
+	<% end %>
+
+	<% @tire_models.each do |m| %>
+		<% 
+			if @default_manu.include?(m.tire_manufacturer_id) 
+				s = 'display: inline-table'
+			else
+				s = 'display: none'
+			end
+
+			@existing_listing = (@tire_listings.select {|a| a.tire_model_id == m.id && 
+				a.tire_size_id == @tire_size.id && a.is_new }).first
+			if @existing_listing.nil?
+				bg_color = ""
+				@price_color = ""
+				@price_value = (m.formatted_orig_cost != '0.00' ? m.formatted_orig_cost : '')
+			else
+				bg_color = "background-color: lightgray;"
+				@price_color = "color: red;"
+				@price_value = @existing_listing.price.to_s
+			end
+		%>
+		<div style="width: <%= colwidth %>px; <%= s %>; <%= bg_color %>" class="manu-<%= m.tire_manufacturer_id %>">
+			<div style="display: inline-table; width: 30px;">
+				<%= check_box_tag('tire_models[]', value = m.id) %>
+			</div>
+			<div style="display: inline-table; width: 60px;">
+				<%= select_tag("quantity_" + m.id.to_s, 
+						options_for_select({'1'=>'1', '2'=>'2', '3'=>'3', '4+'=>'4'}, '4'),
+						:style => "width: 50px;", 
+						:class => 'listing_info users') %>
+			</div>
+			<div style="display: inline-table; width: 70px;">
+				<%= text_field_tag("price_" + m.id.to_s, 
+						@price_value,
+						:style => "width: 50px; " + @price_color, 
+						:class => "user") %>
+			</div>
+			<div style="font-size: 0.80em; padding-top: 0px; padding-bottom: 3px; display: inline-table">
+				<%= m.tire_manufacturer.name + ' ' + m.name_and_product_code %>
+			</div>
+		</div>
+		<% colcount += 1 %>
+	<% end %>
+</div>
+<br />
+<%= submit_tag('Create Listings',
+				:class => 'btn-primary btn btn-large', :name => 'create_by_size') %>

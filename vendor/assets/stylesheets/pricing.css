@@ -1,0 +1,423 @@
+.box-sizing {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+#private,
+#silver {
+  float: left;
+  width: 23%;
+  color: #666;
+  border: 1px solid #ccc;
+  /*margin-right: 5px;*/
+  /*margin: 0 10px 0 10px;*/
+}
+
+#gold,
+#platinum {
+  width: 23%;
+  color: #666;
+  border: 1px solid #ccc;
+  margin: 0 10px 0 10px;
+}
+
+#private, #silver, #platinum {
+  height: 440px;
+}
+
+#gold {
+  height: 540px;
+}
+
+#private,
+#silver,
+#gold,
+#platinum {
+  background: #f6f6f6;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-radius: 0.5em;
+  -moz-border-radius: 0.5em;
+  -webkit-border-radius: 0.5em;
+  -o-border-radius: 0.5em;
+  margin: 1%;
+  float: left;
+  border: 1px solid #ccc;
+  position: relative;
+}
+
+#private .title,
+#silver .title,
+#gold .title,
+#platinum .title {
+  display: block;
+  text-align: center;
+  font-weight: bold;
+  font-size: 2em;
+  line-height: 1.5em;
+  border-bottom: none;
+  font-family: "Lato", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+}
+
+#private .price,
+#silver .price,
+#gold .price,
+#platinum .price {
+  display: block;
+  text-align: center;
+  font-weight: normal;
+  font-size: 1.5em;
+  font-family: "Lato", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+}
+
+#private ul,
+#silver ul,
+#gold ul,
+#platinum ul {
+  border-top: 1px solid #ccc;
+  margin: 20px 0 0 0;
+  padding: 20px 0 0 40px;
+  list-style-position: outside;
+  list-style-image: url("/assets/check.png");
+}
+
+#private ul li,
+#silver ul li,
+#gold ul li,
+#platinum ul li {
+  background: none;
+  margin: 0 5px;
+  color: #666 !important;
+  font-size: 1.25em;
+  line-height: 1.25em;
+  padding-left: 20px;
+  /*vertical-align: top; */
+}
+#private ul li {
+  font-size: 1.05em;
+}
+
+#silver ul li {
+  font-size: 1.05em;
+}
+
+#platinum ul li {
+  font-size: 1.05em;
+}
+
+#private ul li.empty,
+#silver ul li.empty,
+#gold ul li.empty,
+#platinum ul li.empty {
+  list-style: none;
+  height: 2.5em;
+}
+
+#private .signup,
+#silver .signup,
+#gold .signup,
+#platinum .signup {
+  background: none !important;
+  position:absolute; bottom:10px;
+  margin-left: 21%;
+  width: 50%;
+}
+
+#private .signup a,
+#silver .signup a,
+#gold .signup a,
+#platinum .signup a {
+  text-align: center;
+  display: block;
+  padding: 10px;
+  border: 5px solid #fbd30b;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -o-border-radius: 10px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  -o-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  /*this may not work*/
+
+  filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=1,MakeShadow=true,ShadowOpacity=0.25);
+  -ms-filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=1,MakeShadow=true,ShadowOpacity=0.25);
+  color: #af5c00;
+  text-transform: uppercase;
+  font-family: "Lato", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: #fbc711;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fbd30b), to(#fbba17));
+  background: -webkit-linear-gradient(top, #fbd30b, #fbba17);
+  background: -moz-linear-gradient(top, #fbd30b, #fbba17);
+  background: -ms-linear-gradient(top, #fbd30b, #fbba17);
+  background: -o-linear-gradient(top, #fbd30b, #fbba17);
+  /*this may not work*/
+
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fbd30b', endColorstr='#fbba17',GradientType=0);
+}
+
+#private .signup a.btn-gray,
+#silver .signup a.btn-gray,
+#gold .signup a.btn-gray,
+#platinum .signup a.btn-gray {
+  padding: 10px;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -o-border-radius: 10px;
+  border: 5px solid #ccc;
+  background: #c4c4c4;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dddddd), to(#aaaaaa));
+  background: -webkit-linear-gradient(top, #dddddd, #aaaaaa);
+  background: -moz-linear-gradient(top, #dddddd, #aaaaaa);
+  background: -ms-linear-gradient(top, #dddddd, #aaaaaa);
+  background: -o-linear-gradient(top, #dddddd, #aaaaaa);
+  /*this may not work*/
+
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dddddd', endColorstr='#aaaaaa',GradientType=0);
+  color: #666;
+}
+
+#private .signup a:hover,
+#silver .signup a:hover,
+#gold .signup a:hover,
+#platinum .signup a:hover {
+  border: 5px solid #f8edc0;
+  background: #fdd54a;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffe04d), to(#fbca47));
+  background: -webkit-linear-gradient(top, #ffe04d, #fbca47);
+  background: -moz-linear-gradient(top, #ffe04d, #fbca47);
+  background: -ms-linear-gradient(top, #ffe04d, #fbca47);
+  background: -o-linear-gradient(top, #ffe04d, #fbca47);
+  /*this may not work*/
+
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe04d', endColorstr='#fbca47',GradientType=0);
+}
+
+#private .signup a.btn-gray:hover,
+#silver .signup a.btn-gray:hover,
+#gold .signup a.btn-gray:hover,
+#platinum .signup a.btn-gray:hover {
+  border: 5px solid #ddd;
+  background: #d5d5d5;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eeeeee), to(#bbbbbb));
+  background: -webkit-linear-gradient(top, #eeeeee, #bbbbbb);
+  background: -moz-linear-gradient(top, #eeeeee, #bbbbbb);
+  background: -ms-linear-gradient(top, #eeeeee, #bbbbbb);
+  background: -o-linear-gradient(top, #eeeeee, #bbbbbb);
+  /*this may not work*/
+
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#bbbbbb',GradientType=0);
+}
+
+#private.plan-highlight-mid,
+#silver.plan-highlight-mid,
+#gold.plan-highlight-mid,
+#platinum.plan-highlight-mid {
+  /*margin: -10px 1% 0;*/
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background: #fff;
+  border: 1px solid #666;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.125);
+  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.125);
+  -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.125);
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.125);
+}
+
+#private.plan-highlight-mid .title,
+#silver.plan-highlight-mid .title,
+#gold.plan-highlight-mid .title,
+#platinum.plan-highlight-mid .title {
+  color: #333;
+}
+
+#private.plan-highlight-mid .price,
+#silver.plan-highlight-mid .price,
+#gold.plan-highlight-mid .price,
+#platinum.plan-highlight-mid .price {
+  color: #333;
+}
+
+#private.plan-highlight-mid ul,
+#silver.plan-highlight-mid ul,
+#gold.plan-highlight-mid ul,
+#platinum.plan-highlight-mid ul {
+  border-top: 1px solid #333;
+}
+
+#private.plan-highlight-mid ul li,
+#silver.plan-highlight-mid ul li,
+#gold.plan-highlight-mid ul li,
+#platinum.plan-highlight-mid ul li {
+  color: #333 !important;
+}
+
+#popular {
+  width: 100px;
+  height: 26px;
+  background: #e5eecc;
+  color: #666;
+  position: absolute;
+  right: 135px;
+  top: 32px;
+  font-size: 14px;
+  line-height: 26px;
+  text-align: center;
+  transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+#popular:before,
+#popular:after {
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: -26px;
+  top: 0;
+  border-width: 13px;
+  border-style: solid;
+  border-color: transparent #e5eecc #e5eecc transparent;
+}
+#popular:after {
+  left: 100px;
+  border-color: transparent transparent #e5eecc #e5eecc;
+}
+#pricing-table {
+  z-index: 100;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+#pricing-table table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+  font-family: "Lato", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#pricing-table table tr:nth-child(2n) td {
+  background: #e6e6e6;
+}
+#pricing-table table tr:nth-child(2n) td:nth-child(3) {
+  background: #f7f7f7;
+}
+#pricing-table table tr:nth-child(2n+1) td {
+  background: #f0f0f0;
+}
+#pricing-table table tr:nth-child(2n+1) td:nth-child(3) {
+  background: #ffffff;
+}
+#pricing-table table tr.zebra-fix td {
+  display: none;
+}
+#pricing-table table tr td {
+  width: 25%;
+  border: 1px solid #ccc;
+  text-align: center;
+  padding: 5px 10px;
+}
+#pricing-table table tr td img {
+  height: 20px;
+}
+#pricing-table table tr td:first-child {
+  border-left: none;
+  text-align: left;
+  background: none;
+}
+#pricing-table table tr td:last-child {
+  border-right: none;
+  border-left: none;
+}
+#pricing-table table tr td:nth-child(2) {
+  border-right: none;
+}
+#pricing-table table tr td:nth-child(3) {
+  border-left: 1px solid #666;
+  border-right: 1px solid #666;
+}
+#pricing-table table tr#tier .silver,
+#pricing-table table tr#tier .platinum {
+  background: #f6f6f6;
+  font-size: 1.5em;
+  line-height: 2em;
+}
+#pricing-table table tr#tier .gold {
+  /*background: #fff; */
+  border: 1px solid #666;
+  border-bottom: none;
+  font-size: 1.5em;
+  line-height: 2em;
+}
+#pricing-table table tr#price td {
+  border: none;
+  background: none;
+}
+#pricing-table table tr#price .silver,
+#pricing-table table tr#price .platinum {
+  background: #f6f6f6;
+}
+#pricing-table table tr#price .gold {
+  background: #fff;
+  border: 1px solid #666;
+  border-bottom: none;
+  border-top: none;
+}
+/******* RESPONSIVE ********/
+
+@media screen and (max-width: 1100px) { 
+  #gold {
+    height: 650px;
+  }
+  #private, #silver, #platinum {
+    height: 525px;
+  }
+  .signup {
+    margin-left: 10%!important;
+    width: 80%!important;
+  }
+}
+
+@media screen and (max-width: 850px) { 
+  #private {
+    clear: both;
+  }
+  #private, #silver, #gold, #platinum {
+    width: 48%;
+    height: 380px;
+  }
+
+  ul li {
+    font-size: 1.0em!important;
+  }
+}
+
+@media screen and (max-width: 600px) { 
+  #private, #silver, #gold, #platinum {
+    height: 470px;
+  }
+}
+
+@media screen and (max-width: 500px) { 
+  #private, #platinum, #silver {
+    clear: both;
+  }
+  #private, #silver, #gold, #platinum {
+    width: 98%;
+    height: 330px;
+  }
+}
+
+@media screen and (max-width: 500px) { 
+  #private, #silver, #gold, #platinum {
+    height: 380px;
+  }
+}

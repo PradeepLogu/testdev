@@ -1,0 +1,111 @@
+/*-----------------------------
+/* button_bar.css
+/*---------------------------*/
+
+.button_bar
+{ text-align: center; 
+	margin-left: 0; 
+	margin-top: 0.4em; 
+	padding:0;  
+}
+
+.contiguous {
+	background-color: black;
+	width: 928px;
+	height: 48px;
+}
+
+/* button bar with contiguous buttons */
+.button_bar li
+{ color: white; background-color: #000000; 
+  padding: 0.2em 1em;
+  border-width: 0px; 
+  border-style: solid; 
+  border-color: rgb(136, 17, 0); 
+  margin-top:0.5em;
+  display: inline-block; 
+}
+
+
+/* .button_bar LI:first-child  { border-left-width: 2px; }  */
+
+.spaced li { margin-left: 0.2em; margin-right: 0.2em; border-radius: 0.5em;  }
+
+.contiguous li { margin-left: -0.4em!important; }
+
+.button_bar A 
+	{ font-family: Arial, sans-serif; font-weight: normal; text-decoration: none; }
+
+.button_bar A:link    { color: red; background-color: #000000; }
+.button_bar A:visited { color: red;  background-color: #000000; }
+.button_bar A:hover   { color: white; background-color: #000000; }
+
+.button_bar li a {margin-left: 45px; margin-right: 45px;}
+
+/* 3D button bar */
+.button_bar_3d
+	{ text-align: center; margin-left: 0; margin-top: 0.4em; padding:0;  }
+
+.button_bar_3d li
+	{ color: white; background-color: rgb(240, 191, 79); 
+	  padding: 0.2em 1em;
+	  border-width: 0.4em; border-style: solid; 
+	  border-top-color: rgb(248, 223, 165); 
+	  border-left-color: rgb(248, 223, 165); 
+	  border-bottom-color: rgb(236, 173, 26); 
+	  border-right-color: rgb(236, 173, 26); 
+	  margin-top:0.5em;
+	  margin-right: 0.5em;
+      font-size: 90%;
+	  display: inline-block; }
+
+.button_bar_3d A 
+	{ font-family: Arial, sans-serif; font-weight: normal; text-decoration: none; }
+
+.button_bar_3d A:link    { color: red; }
+.button_bar_3d A:visited { color: #444;  }
+.button_bar_3d A:hover   { color: white; }
+
+.button_bar { font-size: 22px;}
+
+.gradient-buttonbar 
+{
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+	background-image:url(/assets/ex-5.png);
+	background-repeat:repeat-x;
+	width:924px;
+	height:30px;
+	padding-bottom: 20px;
+}
+ 
+.gradient-buttonbar li {
+	float:left;
+	/* width:100px; */
+	min-width: 100px;
+}
+ 
+.gradient-buttonbar li a {
+	height:30px;
+	display: block ; 
+	text-decoration: none;
+	margin: 0px;
+	text-align: center ;
+	padding: 5px 5px 0px 5px;
+	color: #FFFFFF;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	font-weight:bold;
+	font-style: italic;
+	background-image:url(/assets/ex-6.png);
+	background-repeat:no-repeat;
+	background-position:left top;
+}
+ 
+.gradient-buttonbar li a:hover, .gradient-buttonbar li a.selected {
+	color: #000000;
+	font-weight:bold;
+	background-image:url(/assets/ex-6.png);
+	background-repeat:repeat-x;
+}

@@ -1,0 +1,69 @@
+<% provide(:title, "Search by Tire Size") %>
+<% provide(:visfire, "true") %>
+
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="top-search-section">
+			<div id="tire-search-outer">
+				<h2>SHOP BY:</h2>
+				<%= render :partial => 'layouts/search_panel',
+						   :locals => {:id => "tire-search2"} %>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-outer">
+	<div id="search-by-tire-size" class="container-inner">
+		<hr/>
+		
+		<div id="fluid-title">
+			<h1 class="orange">Search by Tire Size</h1>
+			<p>The tire size can be found on the sidewall of your tires. Your sidewall should look similar to one of these two options.</p>
+			<div class="clear"></div>
+		</div>
+		
+		<div class="instructions">Select the <span class="orange">Rim Diameter</span> as highlighted below.</div>
+		<div class="clear"></div>
+		
+		<hr/>
+
+		<div id="tire-sections">
+			<div class="tire-section">
+				<div class="title">High-Flotation Tires</div>
+				<%= image_tag "rim-dia-high-flot.jpg" %>
+			</div>
+			<div id="big-or">
+				<span class="line1"></span>
+				<span class="line2"></span>
+				<div class="or">OR</div>
+			</div>
+			<div class="tire-section">
+				<div class="title">Passenger Tires</div>
+				<%= image_tag "rim-dia-passenger.jpg" %>
+			</div>
+		</div>
+		
+		<div id="results" class="row-fluid">
+			<ul class="first">
+			
+			<%	i = 0
+				limit = ((@all_diameters.length + 3) / 4)
+				remain = @all_diameters.length
+				@all_diameters.each do |x| %>
+					<li><a href="/tire_size/<%= x.wheeldiameter %>"><%= x.wheeldiameter %></a></li>
+				<%	i += 1
+					remain -= 1
+					if i == limit && remain > 0
+						i = 0 %>
+				</ul>
+				<ul class="">
+				<%	end %>
+			<%	end %>
+			
+			</ul>
+		</div>
+	</div>
+</div>

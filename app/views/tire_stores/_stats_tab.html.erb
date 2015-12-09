@@ -1,0 +1,47 @@
+
+<table class='fix'>
+  <tr>
+    <% if !@tire_stores.nil? and @tire_stores.count > 0 and @tire_stores.first.has_attribute?("distance") then %>
+      <th class='fix'>Dst</th>
+      <th width="20" />
+    <% end %>
+    <th align="left" class='fix'>Store Name</th>
+    <th align="left" class='fix'>Address</th>
+    <th align="left" class='fix'>Reservations</th>
+    <th align="left" class='fix'>Listing<br />Views</th>
+    <th align="left" class='fix'>Storefront<br />Views</th>
+  </tr>
+
+  <% @tire_stores.each do |tire_store| %>
+    <tr>
+      <% if tire_store.has_attribute?("distance") then %>
+        <td class='fix'><%= tire_store.distance.to_i %></td>
+        <td />
+      <% end %>
+      <% if tire_store.private_seller %>
+        <td class='fix'><%= link_to tire_store.name, tire_store %></td>
+        <td class='fix'><%= tire_store.address1 %> <%= tire_store.city %> <%= tire_store.state %></td>
+      <% else %>
+        <td class='fix'><%= link_to tire_store.visible_name, tire_store %></td>
+        <td class='fix'><%= tire_store.full_address %></td>
+      <% end %>
+      <% if @view == 'all7' %>
+        <td class='fix' align='right'><%= tire_store.reservations_count(7.days.ago) %></td>
+        <td class='fix' align='right'><%= tire_store.tirelistings_view_count(7.days.ago) %></td>
+        <td class='fix' align='right'><%= tire_store.tirestore_view_count(7.days.ago) %></td>
+      <% elsif @view == 'unique7' %>
+        <td class='fix' align='right'><%= tire_store.reservations_count(7.days.ago) %></td>
+        <td class='fix' align='right'><%= tire_store.tirelistings_view_count_unique(7.days.ago) %></td>
+        <td class='fix' align='right'><%= tire_store.tirestore_view_count_unique(7.days.ago) %></td>
+      <% elsif @view == 'all30' %>
+        <td class='fix' align='right'><%= tire_store.reservations_count(30.days.ago) %></td>
+        <td class='fix' align='right'><%= tire_store.tirelistings_view_count(30.days.ago) %></td>
+        <td class='fix' align='right'><%= tire_store.tirestore_view_count(30.days.ago) %></td>
+      <% elsif @view == 'unique30' %>
+        <td class='fix' align='right'><%= tire_store.reservations_count(30.days.ago) %></td>
+        <td class='fix' align='right'><%= tire_store.tirelistings_view_count_unique(30.days.ago) %></td>
+        <td class='fix' align='right'><%= tire_store.tirestore_view_count_unique(30.days.ago) %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

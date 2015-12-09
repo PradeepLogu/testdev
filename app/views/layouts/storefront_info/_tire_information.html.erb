@@ -1,0 +1,28 @@
+<div id="content">
+	<h3>How to Find Your Tire Size</h3>
+    <p><%= image_tag "read_tire_size.png" %><br /><br />
+    The size of the tire is found on the tire's outer sidewall and looks similar to the picture above.</p><br />
+	1. The first part of the tire size sequence is usually the letter P (P-metric, for passenger vehicles), 
+	LT (light-truck metric), or T (temporary spare tire).  If there is no letter, the tire may have been 
+	engineered with European metric standards.  P and LT tires are usually interchangeable but LT tires
+	usually have higher load ratings (see below).<br/>
+	2. The second part of the tire size is a 3 digit number that represents the tire's width in millimeters.<br />
+	3. The third piece is called the aspect ratio - the sidewall height divided by the width.  The higher
+	this number is, the "thicker" the tire when viewed from the side.  A tire with a low aspect
+	ratio will usually perform better in cornering but often yields a harsher ride.<br />
+	4. This is one to three letters.  R stands for radial, ZR is a Z-rated (high speed) radial, and ZRF
+	is a Z-rated run flat tire.<br />
+	5. Finally, this two digit number is the diameter of the wheel in inches.</p><br />
+	<h3>Tire Load</h3>
+	<p><%= image_tag "tire_load.png" %><br /><br />
+	Above you see the tire's maximum load (the maximum weight that tire can handle) and pressure (the maximum
+	tire pressure).  Do not mistake the maximum pressure for the proper pressure; tires should rarely if ever
+	be inflated to sidewall pressure.</p><br />
+	<h3>Tire Service</h3>
+	<p><%= image_tag "tire_service.png" %><br /><br />
+	The number and letter above define the "service description" of a tire.  The two or three digit number
+	is the load rating and is related to the max load number described above.  The higher this number, the more
+	weight the tire is rated to handle.</p><br />
+	<p>The letter represents the speed rating of a tire.  They range from L (up to 75mph) to Z, W, or Y (149/168/186 mph).</p><br />
+    <%= render :partial => 'layouts/storefront_info/return_to_index' %>
+</div>

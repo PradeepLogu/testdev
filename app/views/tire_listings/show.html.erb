@@ -1,0 +1,369 @@
+<% provide(:title, "#{@tire_listing.tire_store.visible_name} - #{@tire_listing.short_description}-#{@tire_listing.meta_description}") %>
+<% provide(:metadescription, "#{@tire_listing.short_description} (#{@tire_listing.meta_description}), Category: used tires #{@tire_listing.tire_store.city} #{@tire_listing.tire_store.state} #{@tire_listing.tire_store.zipcode}") %>
+
+<% @show_promo = true %>
+<% @show_reserve = true %>
+
+<script>
+	$(function() {
+		$( "#promotions_dialog" ).dialog({
+			autoOpen: false,
+			show: "blind",
+			hide: "explode",
+			closeOnEscape: true,
+			resizable: true,
+			maxHeight: 365,
+			height: 365
+		});
+	});
+</script>
+
+<% provide(:visfire, "true") %>
+
+<%= javascript_include_tag "ddaccordian.js" %>
+
+<script src="https://checkout.stripe.com/checkout.js"></script>
+<script>
+	var handler = StripeCheckout.configure({
+		key: 'pk_test_pNVu0KumXIQGzhcLNLmLkr37',
+		image: '/assets/logo-small.png',
+		token: function(token) {
+			// Use the token to create the charge with a server-side script.
+			// You can access the token ID with `token.id`
+		}
+	});
+
+	$(window).on('popstate', function() {
+		handler.close();
+	});
+</script>
+
+<style>
+	.button {
+		font: bold 11px Arial;
+		text-decoration: none;
+		background-color: #EEEEEE;
+		color: #333333;
+		padding: 2px 6px 2px 6px;
+		border-top: 1px solid #CCCCCC;
+		border-right: 1px solid #333333;
+		border-bottom: 1px solid #333333;
+		border-left: 1px solid #CCCCCC;
+	}
+
+	div.modal-body > p > button.jqTransformButton {
+	    margin: 0 0 25px 0;
+	}
+
+	span.button-label {
+		position:absolute;
+		margin-left: 5px;
+	}
+
+	.promo-header {
+		margin: 1px;
+		color: red;
+		padding: 3px 10px;
+		cursor: pointer;
+		font-weight: bold;
+		width: 100%;
+		/*background-color:#c30;*/
+	}
+	.content {
+		padding: 5px 10px;
+		/*background-color:#fafafa;*/
+	}
+</style>
+
+<script type="text/javascript">
+	var ddaccordionsetting = {
+		headerclass: "promo-header",
+		contentclass: "content",
+		revealtype: "click",
+		mouseoverdelay: 200,
+		collapseprev: true,
+		defaultexpanded: [1],
+		onemustopen: false,
+		animatedefault: false,
+		persiststate: true,
+		toggleclass: ["", "openheader"],
+		togglehtml: ["prefix", "", ""],
+		animatespeed: "fast",
+		oninit:function(headers, expandedindices){
+			//do nothing
+		},
+		onopenclose:function(header, index, state, isuseractivated) {
+			//do nothing
+		}
+	}
+
+	ddaccordion.init(ddaccordionsetting);	
+</script>	
+
+<!-- needed for photo carousel -->
+<%= stylesheet_link_tag "bootstrap" %>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+<%= javascript_include_tag "jquery" %>
+<%= javascript_include_tag "jquery-ui" %>
+
+<%= javascript_include_tag "https://ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js" %>
+<%= javascript_include_tag "https://js.stripe.com/v1/" %>
+
+<% if @show_promo %>
+	<div id="promotions_dialog" title="Current Promotions">
+		<div id='promotionsDiv'>
+			<%= render :partial => 'promotions/promotion' %>
+		</div>
+	</div>
+<% end %>
+
+<% if @show_reserve %>
+	<%= render :partial => 'layouts/reservation_modal', 
+			:locals => {:tirelisting => @tire_listing, 
+						:reservation => @reservation } %>
+<% end %>
+
+<%= render :partial => 'layouts/contact_seller_modal', 
+		:locals => {:contact_seller => @contact_seller } %>
+
+
+<%= render :partial => "layouts/th_maps", 
+			:locals => {:@latitude => @tire_listing.tire_store.latitude,
+						:@longitude => @tire_listing.tire_store.longitude} %>
+
+<%= render :partial => 'layouts/prompt_for_purchase_options', 
+					:locals => {:@tire_listing => @tire_listing} %>
+
+<div id="searc-header">
+	<%= render :partial =>'layouts/header_visfire', 
+				:locals => {:@show_contact_seller => true} %>
+</div>
+
+<%= stylesheet_link_tag "tire_listings_visfire" %>
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="search-main2">
+			<h2>				
+				<% if @tire_listing.tire_store.private_seller? %>
+					<%= @tire_listing.short_description %>
+				<% else %>
+					<%= link_to (@tire_listing.tire_store.visible_name),
+						url_for(@tire_listing.tire_store) + "?tire_size_id=#{@tire_listing.tire_size_id}" %>
+					- <%= @tire_listing.short_description %>
+				<% end %>
+			</h2>
+			<ul>
+				<li>Home /</li>
+				<li>Search /</li>
+				<li><a href="#">View Tire Details</a></li>
+			</ul>
+		</div>
+		<div id="details-mid-part" class="clearfix">
+    		<div id="details-mid-part-left" class="details-350">
+				<% if !@tire_listing.is_generic? %>
+					<div class="form-part">
+						<div class="form-heading">
+							<h3>Photos:</h3>
+							<div>
+								<!-- <div style="float: left; display: inline-block;"> -->
+								<%= render :partial => 'layouts/tire_photo_carousel' %>
+								<!-- </div> -->
+							</div>
+						</div>
+					</div>
+				<% else %>
+					<div>
+						<center>
+							<div><img src="/assets/generic.png"></div>
+							Wide variety of used tires available from name-brand manufacturers!
+						</center>
+					</div>
+				<% end %>
+				<div class="pricead">
+					<center>
+						Your cost: 
+						<span class="price">
+							$<%= @tire_listing.discounted_price %>
+						</span>
+						<% if @tire_listing.is_new %>
+							<span class="price-ea">ea.</span>
+						<% end %>
+						<% if @tire_listing.includes_mounting? %>
+							<div class="savings">
+								inc. mounting
+							</div>
+						<% elsif @tire_listing.is_generic? %>
+							<div class="savings">
+								Mounting: $<%= @tire_listing.generic_tire_listing.mounting_price.to_s %> ea
+							</div>
+						<% end %>
+
+						<a onclick="$('#promotions_dialog').dialog('open');">
+							<% if @tire_listing.has_rebate? %>
+								<br />
+								<span class="table-row-item" style="color:black; font-size: 0.75em;">
+									Save even more after rebate!
+								</span>
+							<% end %>
+							<% if @tire_listing.has_price_break? %>
+								<br />
+								<span class="table-row-item" style="color:black; font-size: 0.75em;">
+									Includes price break!
+								</span>
+							<% end %>
+							<% if @tire_listing.has_special_offer? %>
+								<br />
+								<span class="table-row-item" style="color:black; font-size: 0.75em;">
+									Special offer!
+								</span>
+							<% end %>
+						</a>
+				  		<% unless @tire_listing.computed_savings <= 0 %>
+							<br />
+							<span class="savings">
+								Your savings: 
+							</span>
+							<span class="price">
+								<%= @tire_listing.computed_savings %>%
+							</span>
+				  		<% end %>		  	
+					  	<br />
+
+						<% if @tire_listing.redirect_to && @tire_listing.redirect_to.is_valid_url? %>
+							<center>
+								<a class="btn btn-primary" 
+									href="<%= @tire_listing.redirect_to %>" >
+									SEE MORE INFO!
+								</a>
+							</center>
+						<% elsif @tire_listing.is_generic? %>
+							<br />
+							<center><button class="btn btn-primary">
+								Call today for info!
+							</button></center>
+							<br />
+						<% else %>
+							<%
+								if signed_in?
+									@current_user_email = current_user.email
+								else
+									@current_user_email = session[:registered_newsletter]
+								end
+								@super_user = (signed_in? && super_user?)
+								@can_do_ecomm = @tire_listing.can_do_ecomm? && super_user?
+								if @current_user_email.blank?
+									@has_already_bought_or_reserved = false
+									@needs_to_set_appointment = false
+								else
+									@has_already_bought_or_reserved = @tire_listing.has_already_bought_or_reserved(@current_user_email)
+									@needs_to_set_billing = @tire_listing.needs_to_set_billing(@current_user_email)
+									@needs_to_set_appointment = @tire_listing.needs_to_set_appointment(@current_user_email)
+									if current_user.nil?
+										@existing_reservation = nil 
+									else
+										@existing_reservation = Reservation.find_by_user_id_and_tire_listing_id(current_user.id, @tire_listing.id)
+									end
+									if current_user.nil?
+										@appointment = Appointment.find_by_buyer_email_and_tire_listing_id(current_user_email, @tire_listing.id)
+									else
+										@appointment = Appointment.find_by_user_id_and_tire_listing_id(current_user.id, @tire_listing.id)
+									end
+								end
+							%>
+							<% if @can_do_ecomm && !@has_already_bought_or_reserved %>
+								<a class="btn btn-primary" 
+									href="#" 
+									onclick="$('#get-tires-dialog').dialog('open');">
+									I want <%= @tire_listing.quantity == 1 ? 'this' : 'these' %> 
+									<%= "tire".pluralize(@tire_listing.quantity) %>!
+								</a>
+							<% elsif @needs_to_set_appointment %>
+								<a class="btn btn-warning" 
+									href="/">
+									Set Appointment
+								</a><br />
+								Warning: you purchased these tires but did not set an appointment
+								to have them installed!  Please set this appointment now.
+							<% elsif !@has_already_bought_or_reserved %>
+								<a class="btn btn-primary" 
+									href="#" 
+									onclick="$('#get-tires-dialog').dialog('open');">
+									I want <%= @tire_listing.quantity == 1 ? 'this' : 'these' %> 
+									<%= "tire".pluralize(@tire_listing.quantity) %>!
+								</a>
+							<% else %>
+								<div class="clear">
+									<% if !@existing_appointment.nil? %>
+										Already an Appointment
+									<% elsif !@existing_reservation.nil? %>
+										<img src="/assets/reserved.png")>&nbsp;You reserved 
+											<%= @tire_listing.quantity == 1 ? 'this' : 'these' %> 
+											<%= "tire".pluralize(@tire_listing.quantity) %> at
+										<%= @existing_reservation.created_at.utc.getlocal.to_s(:long) %>
+										<p />
+									<% end %>
+								</div>
+							<% end %>
+						<% end %>
+				  	</center>		
+				</div>
+    		</div>
+			<div id="details-mid-part-right">
+				<% if @tire_listing.is_generic? %>
+					<%= render :partial => 'layouts/tire_details_table_generic_visfire', 
+								:locals => {:@hide_details_links => true } %>
+				<% else %>
+					<%= render :partial => 'layouts/tire_details_table_visfire', 
+								:locals => {:@hide_details_links => true } %>
+				<% end %>
+			</div>
+		</div>
+		<% if in_storefront? %>
+			<div id="details-map" class="nosimilarbox">
+				<% if @tire_listing.tire_store.private_seller? %>
+					<div id='privateSeller'>
+						<% if @tire_listing.tire_store.hide_phone %>
+							<h3>
+								This seller has chosen not to list an address or phone number.  You will need to use TreadHunter Reservation system (click the Reserve These Tires button), and an email will be generated to the seller with your contact information.
+							</h3>
+						<% else %>
+							<h3>
+								This seller has chosen not to list an address.  You will need to use the listed telephone number to communicate with the seller, or if you use the TreadHunter Reservation system (click the Reserve These Tires button), an email will be generated to the seller with your contact information.
+							</h3>
+						<% end %>
+					</div>
+				<% else %>
+					<%= render :partial => 'layouts/driving_directions' %>
+				<% end %>
+			</div>
+		<% else %>
+			<div id="details-map">
+				<% if @tire_listing.tire_store.private_seller? %>
+					<div id='privateSeller'>
+						<% if @tire_listing.tire_store.hide_phone %>
+							<h3>
+								This seller has chosen not to list an address or phone number.  You will need to use TreadHunter Reservation system (click the Reserve These Tires button), and an email will be generated to the seller with your contact information.
+							</h3>
+						<% else %>
+							<h3>
+								This seller has chosen not to list an address.  You will need to use the listed telephone number to communicate with the seller, or if you use the TreadHunter Reservation system (click the Reserve These Tires button), an email will be generated to the seller with your contact information.
+							</h3>
+						<% end %>
+					</div>
+				<% else %>
+					<%= render :partial => 'layouts/driving_directions' %>
+				<% end %>
+			</div>
+			<div class="similarbox">
+				<%= render :partial => 'layouts/similar_tires',
+						:locals => {:showSimilarStoreListingsCount => 5,
+									:showOtherStoreListingsCount => 0,
+									:showOtherStoreSimilarListingsCount => 5} %>
+			</div>		
+		<% end %>
+	</div>
+</div>
+
+<script type="text/javascript" src="https://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&s=1">
+</script>

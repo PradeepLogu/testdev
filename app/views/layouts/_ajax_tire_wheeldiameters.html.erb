@@ -1,0 +1,12 @@
+<select class="tires" 
+        id="wheeldiameters" 
+        name="wheeldiameter">
+  <option value="">Wheel Diameter</option>
+  <% @wheeldiameters.each do |w| %>
+    <% if w.wheeldiameter == session[:wheeldiameter] %>
+      <option selected="selected" value="<%= w.wheeldiameter %>"><%= w.wheeldiameter %></option>
+    <% else %>
+      <option value="<%= w.wheeldiameter %>"><%= w.wheeldiameter %></option>
+    <% end %>
+  <% end %>
+</select>

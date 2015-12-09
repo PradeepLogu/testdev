@@ -1,0 +1,368 @@
+<% provide(:visfire, "true") %>
+<% provide(:title, "Key Performance Indicators") %>
+<%= javascript_include_tag "https://www.google.com/jsapi" %>
+<%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" %>
+
+<script type="text/javascript">
+	$(document).on('change', 'input:radio[name=time_period]', function(){
+	    $('div[id$="_text"]').hide(); // hide all divs whose id ends in _text
+	    $('#' + this.id + '_text').show();
+	});
+</script>
+
+<!--Load the AJAX API-->
+<script type="text/javascript">
+  // Load the Visualization API and the piechart package.
+  google.load('visualization', '1', {'packages':['corechart', 'table']});
+
+  // Set a callback to run when the Google Visualization API is loaded.
+  google.setOnLoadCallback(drawChart);
+
+  var bAjaxLoad = true;
+
+  var table;
+  var store_data;
+  var states_data_month;
+  var states_data_week;
+  var states_data_day;
+  var cities_data;
+
+  function loadMobileDataChart() {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: '/pages/mobile_chart_data',
+      success: function(jsondata) {
+        mobile_data = new google.visualization.arrayToDataTable(jsondata);
+        var mobile_table = new google.visualization.Table(document.getElementById('mobile_div'));
+        mobile_table.draw(mobile_data, {width: 320, height: 320, page: 'enable', sortColumn: 0,
+                sortAscending: false});
+       }
+    }); 
+  }
+
+  function loadStoreDataChart() {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: '/pages/mobile_store_data',
+      success: function(jsondata) {
+        store_data = new google.visualization.arrayToDataTable(jsondata);
+        table = new google.visualization.Table(document.getElementById('store_div'));
+        table.draw(store_data, {width: 640, height: 320, page: 'enable', sortColumn: 0,
+                  sortAscending: false});
+        google.visualization.events.addListener(table, 'select', selectStoreHandler);
+       }
+    }); 
+  }
+
+  function loadTrafficDataChart() {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: '/pages/traffic_data',
+      success: function(jsondata) {
+        var traffic_data = new google.visualization.arrayToDataTable(jsondata);
+        var traffic_line = new google.visualization.LineChart(document.getElementById('traffic_div'));
+        traffic_line.draw(traffic_data, {width: 480, height: 300, legend: {position: "top"}});
+       }
+    }); 
+  }
+
+  function loadAffiliateDataChart() {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: '/pages/affiliate_data',
+      success: function(jsondata) {
+        var affiliate_data = new google.visualization.arrayToDataTable(jsondata);
+        var aff_line = new google.visualization.LineChart(document.getElementById('aff_div'));
+        aff_line.draw(affiliate_data, {width: 480, height: 480, legend: {position: "top"}});
+      }
+    });
+  }
+
+  function loadMobileImpressionsDataChart() {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: '/pages/mobile_impressions_data',
+      success: function(jsondata) {
+        var mobile_impressions = new google.visualization.arrayToDataTable(jsondata);
+        var mobile_imp_table = new google.visualization.Table(document.getElementById('mobile_imp_div'));
+        mobile_imp_table.draw(mobile_impressions, {width: 320, height: 320, page: 'enable', sortColumn: 0,
+                    sortAscending: true});  
+      }
+    });
+  }
+
+  function loadSourcesChart() {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: '/pages/sources_data',
+      success: function(jsondata) {
+        var sources_data = new google.visualization.arrayToDataTable(jsondata); 
+        var sources = new google.visualization.Table(document.getElementById('sources_div'));
+        sources.draw(sources_data, {width: 320, height: 320, page: 'enable', sortColumn: 1,
+                  sortAscending: false});
+      }
+    });
+  }
+
+  function loadVisitsChart() {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: '/pages/visits_data',
+      success: function(jsondata) {
+        var visits_by_day_data = new google.visualization.arrayToDataTable(jsondata);
+        var visits_by_day_line = new google.visualization.LineChart(document.getElementById('visits_by_day_div'));
+        visits_by_day_line.draw(visits_by_day_data, {width: 480, height: 300, legend: {position: "top"}});
+      }
+    });
+  }
+
+  function loadMonthStatesChart() {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: '/pages/month_states_data',
+      success: function(jsondata) {
+        states_data_month = new google.visualization.arrayToDataTable(jsondata);  
+        states_month = new google.visualization.Table(document.getElementById('visits_by_state_month_div'));
+        states_month.draw(states_data_month, {width: 480, height: 300, page: 'enable', sortColumn: 1,
+                sortAscending: false});
+        google.visualization.events.addListener(states_month, 'select', selectStateMonthHandler);
+      }
+    });
+  }
+
+  function loadWeekStatesChart() {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: '/pages/week_states_data',
+      success: function(jsondata) {
+        states_data_week = new google.visualization.arrayToDataTable(jsondata);  
+        states_week = new google.visualization.Table(document.getElementById('visits_by_state_week_div'));
+        states_week.draw(states_data_week, {width: 480, height: 300, page: 'enable', sortColumn: 1,
+                    sortAscending: false});
+        google.visualization.events.addListener(states_week, 'select', selectStateWeekHandler);
+      }
+    });
+  }
+
+  function loadDayStatesChart() {
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: '/pages/day_states_data',
+      success: function(jsondata) {
+        states_data_day = new google.visualization.arrayToDataTable(jsondata);
+        states_day = new google.visualization.Table(document.getElementById('visits_by_state_day_div'));
+        states_day.draw(states_data_day, {width: 480, height: 300, page: 'enable', sortColumn: 1,
+                    sortAscending: false});
+        google.visualization.events.addListener(states_day, 'select', selectStateDayHandler);
+      }
+    });
+  }
+
+  function drawChart() {
+    var mobile_data;
+    if (bAjaxLoad) {
+      loadMobileDataChart();
+      loadStoreDataChart();
+      loadTrafficDataChart();
+      loadAffiliateDataChart();
+      loadMobileImpressionsDataChart();
+      loadSourcesChart();
+      loadVisitsChart();
+      loadMonthStatesChart();
+      loadWeekStatesChart();
+      loadDayStatesChart();
+    } else {
+      mobile_data = new google.visualization.arrayToDataTable(<%= raw(@ar_mobile_usage) %>);
+      var mobile_table = new google.visualization.Table(document.getElementById('mobile_div'));
+      mobile_table.draw(mobile_data, {width: 320, height: 320, page: 'enable', sortColumn: 0,
+                sortAscending: false});
+
+      // Instantiate and draw our chart, passing in some options.
+      store_data = new google.visualization.arrayToDataTable(<%= raw(@ar_tire_stores) %>);
+      table = new google.visualization.Table(document.getElementById('store_div'));
+      table.draw(store_data, {width: 640, height: 320, page: 'enable', sortColumn: 0,
+                sortAscending: false});
+      google.visualization.events.addListener(table, 'select', selectStoreHandler);      
+
+      var traffic_data = new google.visualization.arrayToDataTable(<%= raw(@ar_alltraffic) %>);
+      var traffic_line = new google.visualization.LineChart(document.getElementById('traffic_div'));
+      traffic_line.draw(traffic_data, {width: 480, height: 300, legend: {position: "top"}});
+
+      var affiliate_data = new google.visualization.arrayToDataTable(<%= raw(@ar_affiliates) %>);
+      var aff_line = new google.visualization.LineChart(document.getElementById('aff_div'));
+      aff_line.draw(affiliate_data, {width: 480, height: 480, legend: {position: "top"}});
+
+      var mobile_impressions = new google.visualization.arrayToDataTable(<%= raw(@ar_mobile_impressions) %>);
+      var mobile_imp_table = new google.visualization.Table(document.getElementById('mobile_imp_div'));
+      mobile_imp_table.draw(mobile_impressions, {width: 320, height: 320, page: 'enable', sortColumn: 0,
+                  sortAscending: true});  
+
+      var sources_data = new google.visualization.arrayToDataTable(<%= raw(@sources) %>); 
+      var sources = new google.visualization.Table(document.getElementById('sources_div'));
+      sources.draw(sources_data, {width: 320, height: 320, page: 'enable', sortColumn: 1,
+                  sortAscending: false});
+
+
+      var visits_by_day_data = new google.visualization.arrayToDataTable(<%= raw(@visits_by_day) %>);
+      var visits_by_day_line = new google.visualization.LineChart(document.getElementById('visits_by_day_div'));
+      visits_by_day_line.draw(visits_by_day_data, {width: 480, height: 300, legend: {position: "top"}});
+
+
+      states_data_month = new google.visualization.arrayToDataTable(<%= raw(@month_data_by_state) %>);  
+      states_month = new google.visualization.Table(document.getElementById('visits_by_state_month_div'));
+      states_month.draw(states_data_month, {width: 480, height: 300, page: 'enable', sortColumn: 1,
+                  sortAscending: false});
+      google.visualization.events.addListener(states_month, 'select', selectStateMonthHandler);
+
+      states_data_week = new google.visualization.arrayToDataTable(<%= raw(@week_data_by_state) %>);  
+      states_week = new google.visualization.Table(document.getElementById('visits_by_state_week_div'));
+      states_week.draw(states_data_week, {width: 480, height: 300, page: 'enable', sortColumn: 1,
+                  sortAscending: false});
+      google.visualization.events.addListener(states_week, 'select', selectStateWeekHandler);
+
+      states_data_day = new google.visualization.arrayToDataTable(<%= raw(@day_data_by_state) %>);
+      states_day = new google.visualization.Table(document.getElementById('visits_by_state_day_div'));
+      states_day.draw(states_data_day, {width: 480, height: 300, page: 'enable', sortColumn: 1,
+                  sortAscending: false});
+      google.visualization.events.addListener(states_day, 'select', selectStateDayHandler);
+    }
+
+    $('div#time_period_2_text').hide();
+    $('div#time_period_3_text').hide();
+  };
+
+
+  // a click handler which grabs some values then redirects the page
+  function selectStoreHandler() {
+    var selection = table.getSelection();
+    var store_id = '';
+    for (var i = 0; i < selection.length; i++) {
+      var item = selection[i];
+      if (item.row != null && item.column != null) {
+        store_id = store_data.getFormattedValue(item.row, item.column);
+      } else if (item.row != null) {
+        store_id = store_data.getFormattedValue(item.row, 0);
+      } else if (item.column != null) {
+        store_id = store_data.getFormattedValue(0, item.column);
+      }
+    }
+    if (store_id != '') {
+      window.open('http://' + window.location.host + '/tire_stores/' + store_id);
+    }
+  }     
+  
+  // a click handler which grabs some values then redirects the page
+  function selectState(state_control, states_data, city_div, time_period) {
+      var selection = state_control.getSelection();
+      var state_name = '';
+      for (var i = 0; i < selection.length; i++) {
+        var item = selection[i];
+        if (item.row != null && item.column != null) {
+          state_name = states_data.getFormattedValue(item.row, item.column);
+        } else if (item.row != null) {
+          state_name = states_data.getFormattedValue(item.row, 0);
+        } else if (item.column != null) {
+          state_name = states_data.getFormattedValue(0, item.column);
+        }
+      }
+      if (state_name != '') {
+  	    $.ajax({
+  	      type: "GET",
+  	      dataType: "html",
+  	      url: '/th_city_data',
+  	      data: {state_name: state_name, time_period: time_period},
+  	      success:function(result){
+  		  	cities_data = new google.visualization.arrayToDataTable(JSON.parse(result));
+  			cities = new google.visualization.Table(document.getElementById(city_div));
+  			cities.draw(cities_data, {width: 480, height: 320, page: 'enable', sortColumn: 1,
+  		  	 							sortAscending: false});
+  	      } 
+  	    });
+      }
+  }
+  
+  function selectStateMonthHandler() {
+	  selectState(states_month, states_data_month, 'visits_by_city_month_div', 'month');
+  }
+  
+  function selectStateWeekHandler() {
+	  selectState(states_week, states_data_week, 'visits_by_city_week_div', 'week');
+  }
+  
+  function selectStateDayHandler() {
+	  selectState(states_day, states_data_day, 'visits_by_city_day_div', 'day');
+  }
+</script>
+
+<div class="main-slideshow-2">
+  <!--banner slider-->
+</div>
+
+<div id="searc-header">
+  <%= render 'layouts/header_visfire' %>
+</div>
+
+<div id="serach-content2" class="clearfix">
+  <div id="search-content-inner2" class="clearfix">
+    <div id="search-main2">
+      <h2>TreadHunter KPI</h2>
+    </div>
+    <h2>Affiliate Referrals</h2>
+    <div id="aff_div"></div>
+    <h2>Store Metrics - Listings and Store Views</h2>
+    <div id="store_div"></div>
+    <h2>Mobile Usage</h2>
+    <div id="mobile_div"></div>
+    <h2>Mobile Impressions</h2>
+    <div id="mobile_imp_div"></div>
+    <hr />
+    <h2>All Listings and Store Views</h2>
+    <div id="traffic_div"></div>
+    <hr />
+    <h1>Google Analytics Data</h1>
+    <h2>Visits By Day</h2>
+    <div id="visits_by_day_div"></div>
+    <h2>Sources</h2>
+    <div id="sources_div"></div>
+	
+	<br/><br/>
+	<input type="radio" name="time_period" id="time_period_1" checked="checked" />Month&nbsp;
+	<input type="radio" name="time_period" id="time_period_2" />Week&nbsp;
+	<input type="radio" name="time_period" id="time_period_3" />Day&nbsp;
+	<br/><br/>
+	
+	<div id="time_period_1_text" style="display:visible;">
+	    <h2>Visits By State (Last Month)</h2>
+	    <div id="visits_by_state_month_div"></div>
+      <br />
+	    <h2>Visits By City (Last Month)</h2>
+	    <div id="visits_by_city_month_div">Select a State Above</div>
+	</div>
+	
+	<div id="time_period_2_text" style="display:visible;">
+	    <h2>Visits By State (Last Week)</h2>
+	    <div id="visits_by_state_week_div"></div>
+      <br />
+	    <h2>Visits By City (Last Week)</h2>
+	    <div id="visits_by_city_week_div">Select a State Above</div>
+	</div>
+	
+	<div id="time_period_3_text" style="display:visible;">
+	    <h2>Visits By State (Last Day)</h2>
+	    <div id="visits_by_state_day_div"></div>
+      <br />
+	    <h2>Visits By City (Last Day)</h2>
+	    <div id="visits_by_city_day_div">Select a State Above</div>
+	</div>
+  </div>
+</div>

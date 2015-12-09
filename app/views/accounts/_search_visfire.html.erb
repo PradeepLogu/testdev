@@ -1,0 +1,17 @@
+<%= form_tag("/accounts", :method => "get") do %>
+	<%= label_tag :location %>
+	<%= text_field_tag 'Location', 
+				params[:location], 
+				:id => 'location', 
+				:value => params["Location"],
+				:placeholder => "City/State, zip, or street address" %>
+	<%= select_tag 'Radius', options_for_select(TireSearch::RADIUS_CHOICES, 
+				params["Radius"].to_i > 0 ? params["Radius"] : 20) %>
+	<%= label_tag "miles" %>
+	<span style="width: 2%">&nbsp;</span>
+	<%= label_tag :keywords %>
+	<%= text_field_tag 'Keywords', params[:keywords], :id => 'keywords', 
+				:value => params["Keywords"], 
+				:placeholder => "Tire Kingz, Firestone, etc." %>
+	<%= submit_tag "Search" %> 
+<% end %> 

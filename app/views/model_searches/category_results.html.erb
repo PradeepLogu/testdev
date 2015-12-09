@@ -1,0 +1,155 @@
+<% provide(:title, "Tire Model results for #{@brand.name}") %>
+<% provide(:visfire, "true") %>
+
+
+<%= javascript_include_tag "jquery.infinite-scroll-helper.js" %>
+<%= javascript_include_tag "jquery.lazyload.min.js" %>
+
+<script>
+    function bindLiveEvents() {
+    };
+    
+    function buyFormSubmit() {
+	  	var $this = $(this);
+	  	if ($this.find("#tire_search_locationstr").val() != "") {
+	  		return true;
+	  	}
+	  	else {
+	  	  $("#dialog-zipcode").dialog({
+	        modal: true
+		  });
+		  $("#zipcode-dialog-form").submit(function (e) {
+		  	e.preventDefault();
+		  	var zip = $(this).find("#dialog-locationstr").val();
+		  	if (/^\d{5}$/.test(zip)) {
+		  	  $("#zipcode-dialog-form .error-msg").hide();
+		  	  $("#dialog-zipcode").dialog("close");
+		  	  $this.find("#tire_search_locationstr").val(zip);
+		  	  $this.submit();
+		  	} else {
+		  		$("#zipcode-dialog-form .error-msg").show();
+		  	}
+		  	return false;
+		  });
+		  return false;
+		}
+	}
+      
+    $(function() {
+      $("img.lazy").show().lazyload({effect: "fadeIn"});
+      
+      $(".buy-form").submit(buyFormSubmit);
+      
+      $("#show-filters a").click(function (e) {
+		e.preventDefault();
+		$("#show-filters").hide();
+		$("#search-filters-wrapper").show();
+      });
+
+      var pageCount;
+      var async_mode = true;
+
+      $('div#loader').infiniteScrollHelper({
+        loadMore: function(page) {
+          pageCount = page;
+          $('div#loader').html('<center><img src="/assets/loading.gif"/></center>');
+
+          ajax_url = "/ajax/load_manufacturer_models/?id=<%= @brand.id %>&" + FilterQS + "&new=1&page=" + page;
+
+          $.ajax({url: ajax_url,
+            success: function(result) {
+              $('div#loader').html('');
+              // if we didn't get anything back, we're out of data.
+              if (result.length == 0) {
+                //$('#search-models-results').infiniteScrollHelper('destroy');
+                //$('div#next-page').text('');
+              }
+              else {
+                // insert the data here
+                // Need to insert our compressible node here.
+                $('div#search-models-results').append(result);
+
+                $("img.lazy").show().lazyload({effect : "fadeIn"});
+                $(".buy-form").submit(buyFormSubmit);
+
+                bindLiveEvents();
+              }
+            }, 
+          error: function(result) {
+            $('div#loader').html('');
+          },
+          async: async_mode});
+        },
+
+        doneLoading: function(pageCount) {
+          // $('#search-models-results').infiniteScrollHelper('destroy');
+          //alert("done - " + pageCount);
+          async_mode = true;
+          return true;
+        },
+
+        bottomBuffer: 80
+      });
+    });
+</script>
+
+<%= render :partial => 'layouts/modal_tire_size_help' %>
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="model-info" class="row-fluid">
+			<div class="left span7">
+				<h1 class="orange"><%= @category_name || "Category Results" %></h1>
+				<p>Content</p>
+				<div class="change-brand">
+					<a href="/brands">CHANGE BRAND</a>
+				</div>
+			</div>
+			<div class="right span5">
+				<%= image_tag "no_image.png", id: "category-photo" %>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-outer">
+	<div class="container-inner">
+		<div id="search-models-outer" class="row-fluid">
+
+			<div id="search-models-filters" class="span3">
+				<div id="search-filters-wrapper">
+					<h2 class="filter-title">FILTER BY</h2>
+					<div class="search-content-right-store">
+						<%= render :partial => 'layouts/models_filter',
+								   :locals => {:@cur_category_id => @cur_category_id} %>
+					</div>
+				</div>
+				<div id="show-filters">
+					<a href="#" class="btn">FILTER RESULTS</a>
+				</div>
+			</div>
+			
+			<div class="span9">
+				<div id="search-models-results-header">
+					<p class="results-count">Found <%= @brand.tire_models.count %> <%= @brand.name %> Tires results</p>
+					<%= render :partial => 'layouts/models_sort' %>
+					<div class="clear"></div>
+				</div>
+				<div id="search-models-results">
+					<%= render :partial => 'layouts/paginated_model_listings',
+							   :locals => {:@models => @brand.paginated_model_listings(1), 
+										   :@brand => @brand, :@tire_search => @tire_search,
+										   :page_no => 1} %>
+				</div>
+				<div id="loader-wrap">
+					<div id="loader"></div>
+				</div>
+				<div id="next-page"></div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<%= render :partial => 'layouts/modal_enter_zipcode',
+           :locals => {:@default_locationstr => ''} %>

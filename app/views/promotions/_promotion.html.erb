@@ -1,0 +1,44 @@
+<% @promotions.each do |p| %>
+	<% @master_promotion = p.first %>
+
+	<% if !@master_promotion.nil? %>
+		<p>
+			<br />
+
+			<% if @master_promotion.promotion_type == 'R' %>
+				<h4>Rebate Offer</h4>
+			<% elsif @master_promotion.promotion_type == 'D' && !@master_promotion.dollar_amount.nil? && !@master_promotion.dollar_amount.blank? %>
+				<h4><%= @master_promotion.dollar_amount %> off</h4>
+			<% elsif @master_promotion.promotion_type == 'P' %>
+				<h4><%= @master_promotion.promo_amount_min.round %>% off</h4>
+			<% elsif @master_promotion.promotion_type == 'S' %>
+				<h4>Special price - <%= @master_promotion.dollar_amount %></h4>
+			<% end %>
+
+			<p>Begins: <%=@master_promotion.start_date %><br>Ends: <%=@master_promotion.end_date %></p>
+
+			<div class="wrapped-text" style="font-family: Arial, Helvetica, sans-serif;">
+				<%= @master_promotion.description.gsub(/\r\n/, '<br />').html_safe %>
+			</div>
+		</p>
+		<% p.each do |single_promotion| %>
+			<div style="margin-top: 10px">
+				<% if !single_promotion.tire_model_infos.blank? %>
+					<div class="promo-models">
+						<h2>Eligible Tires</h2>
+						<ul>
+							<% single_promotion.tire_model_infos_list.each do |m| %>
+								<li><%= "#{m.tire_manufacturer.name} #{m.tire_model_name}" %></li>
+							<% end %>
+						</ul>
+					</div>
+				<% end %>
+			</div>
+			<% if !single_promotion.promo_url.blank? %>
+				<div class="external-link">
+					<%= link_to('[External Link Text]', single_promotion.promo_url) %>
+				</div>
+			<% end %>
+		<% end %>
+	<% end %>
+<% end %>

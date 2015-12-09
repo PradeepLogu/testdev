@@ -1,0 +1,64 @@
+<script>
+	function select_category(e) {
+		$.ajax({
+		  type: "GET",
+		  dataType: "html",
+		  url: "/ajax/display_faq_category",
+		  data: {category_id: e},
+		  success: function(result) {
+		    $("div#topic-content").html(result);
+		  } 
+		});
+	};
+</script>
+
+<style>
+	li.category > a:link, li.category > a:visited {
+		color: #ef5a29;
+	}
+</style>
+
+<% div_is_scrollable = false %>
+
+<div id="faq" class="learning-center-page">
+	<% provide(:title, "Learning Center") %>
+	<h1>Learning Center / <span class="title">Frequently Asked Questions</span></h1>
+	<div class="learning-categories">
+		<h4 class="learning-category-title active"><a href="<%= faq_learning_center_path %>">FAQ<%= image_tag("chevron-right-orange-small.png", alt: "go", class: "chevron") %></a></h4>
+		<h4 class="learning-category-title"><a href="<%= glossary_learning_center_path %>">Glossary<%= image_tag("chevron-right-orange-small.png", alt: "go", class: "chevron") %></a></h4>
+		<h4 class="learning-category-title"><a href="<%= tire_size_learning_center_path %>">How to Find My Tire Size<%= image_tag("chevron-right-orange-small.png", alt: "go", class: "chevron") %></a></h4>
+	</div>
+	<% if div_is_scrollable %>
+		<div class="topic-container">
+			<div class="topics-list">
+				<ul>
+					<% @categories.each do |cat| %>
+						<li class="category"><a href="#<%= cat.slug %>"><%= cat.title %></a></li>
+					<% end %>
+				</ul>
+			</div>
+			<div class="topic-content" id="topic-content">
+				<% @categories.each do |cat| %>
+					<a name="<%= cat.slug %>">
+						<%= render :partial => 'faq_category_details', 
+									:locals => {:@cur_category => cat} %>
+					</a>
+				<% end %>
+			</div>
+		</div>	
+	<% else %>
+		<div class="topic-container">
+			<div class="topics-list">
+				<ul>
+					<% @categories.each do |cat| %>
+						<li class="category"><a href="#" onclick="select_category(<%= cat.id %>);"><%= cat.title %></a></li>
+					<% end %>
+				</ul>
+			</div>
+			<div class="topic-content" id="topic-content">
+				<%= render :partial => 'faq_category_details', 
+							:locals => {:@cur_category => @cur_category} %>
+			</div>
+		</div>
+	<% end %>
+</div> 

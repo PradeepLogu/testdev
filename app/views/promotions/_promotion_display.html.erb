@@ -1,0 +1,43 @@
+<!-- displays inside /deals -->
+<div class="promotion-display">
+	<a href="/promotions/<%= promotion.id %>">
+		<div class="image-container">
+			<% if promotion.promo_image_url %>
+				<img src="<%= promotion.promo_image_url %>">
+			<% end %>
+		</div>
+		
+		<% if promotion.promo_level == 'A' %> <!-- local -->
+			<% if promotion.nearest_tire_store(session[:location], 50) %>
+				<h2><%= promotion.nearest_tire_store(session[:location], 50).name %></h2>
+			<% else %>
+				<h2></h2>
+			<% end %>
+		<% end %>
+		<h3><%=promotion.promo_name %></h3>
+		<% if promotion.promotion_type == 'R' %>
+			<h4>Rebate Offer</h4>
+		<% elsif promotion.promotion_type == 'D' && !promotion.dollar_amount.nil? && !promotion.dollar_amount.blank? %>
+			<h4><%= promotion.dollar_amount %> off</h4>
+		<% elsif promotion.promotion_type == 'P' %>
+			<h4><%= promotion.promo_amount_min.round %>% off</h4>
+		<% elsif promotion.promotion_type == 'S' %>
+			<h4>Special price - <%= promotion.dollar_amount %></h4>
+		<% end %>
+
+		<p>Begins: <%=promotion.start_date %><br>Ends: <%=promotion.end_date %></p>
+
+		<div class="wrapped-text" style="font-family: Arial, Helvetica, sans-serif;">
+			<%= promotion.description.gsub(/\r\n/, '<br />').html_safe %>
+		</div>
+
+		<div style="margin-top: 10px">
+			<% if promotion.promotion_type == 'R' %>
+				<div><p><%= promotion.dollar_amount %></p></div>
+			<% end %>
+			<% if !promotion.tire_model_infos.blank? %>
+				<div class="promo-header"><p>Click to see all tires</p></div>
+			<% end %>
+		</div>
+	</a>
+</div>

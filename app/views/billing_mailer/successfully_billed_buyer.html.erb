@@ -1,0 +1,20 @@
+Dear <%= @order.buyer_name %>,<br />
+<br />
+TreadHunter has successfully charged your credit card ending in <%= @card_last_4 %> in the amount of <%= number_to_currency @order.total_order_price %>.  A breakout of the charges is shown below:<br />
+<br />
+
+<%= render :partial => "layouts/billing_mailer/buyer_order_details_html" %>
+
+<br />
+<br />
+<% if @appointment.nil? %>
+	It is important to schedule an appointment with the shop to install the tires.  If you haven't done so, you can use the link at <a href=""><%= @appt_link %></a>.<br />
+<% else %>
+	It appears you have created an appointment request with the seller to have the tires installed.  You will get a notification from the seller confirming your appointment.  At that point, just show up for your appointment and the tires will be installed.  If you have requested other services like an oil change, etc., you will need to pay for those upon arrival at the store.
+	<br />
+<% end %>
+<br />
+Thank you for letting TreadHunter find the right tires for you, and we hope the experience has been easy and convenient for you.<br />
+<br />
+Sincerely,<br />
+The TreadHunter Team<br />

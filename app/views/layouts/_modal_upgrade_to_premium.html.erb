@@ -1,0 +1,26 @@
+<div id="dialog-premium" class="th-dialog" title="" style="display:none;">
+	<h3 class="orange-premium-header">
+		Sign up for our Premium Plan to access these great features!
+	</h3>
+	<b>Our Premium Plan features include:</b>
+	<ul class="orange-premium-check-list">
+		<li>Top listing in search results, highlighted with a Premium Plan badge.</li>
+		<li>Access to a promotion in your listing and more photos and videos.</li>
+		<li>The ability to reply to positive and negative reviews.</li>
+		<li>Creating an AD listing on your competitor's pages on TreadHunter.</li>
+		<li>Links to your website and social media accounts right from your TreadHunter page!</li>
+		<li>An unlimited number of promotions.</li>
+		<li>Access to our Premium Mobile App that allows you to update inventory quantities, approve and receive notifications for new customer orders and appointment requests while on the go, plus many more benefits!</li>
+		<li>A 24/7 customer support help desk.</li>
+	</ul>
+	<center>
+		<% if false %>
+			<%= link_to 'UPGRADE NOW', {:controller => "tire_stores", 
+										:action => "upgrade_to_premium",
+										:tire_store_id => @tire_store.id},
+						class: "btn submit-btn account-btn" %>
+		<% else %>
+			<a href="#" onclick="alert('Coming soon!'); return false;" class="btn submit-btn account-btn">UPGRADE NOW</a>
+		<% end %>
+	</center>
+</div>

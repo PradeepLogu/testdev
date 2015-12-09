@@ -1,0 +1,36 @@
+<% provide(:title, "Contact Us") %>
+<% provide(:visfire, "true") %>
+<%= stylesheet_link_tag "style-wide-form" %>
+
+<script>
+//$(function() {
+//  $('form').jqTransform();
+//});
+</script>
+
+<div class="container-outer">
+  <div class="container-inner">
+    <div id="search-main2">
+      <h2>Contact Us</h2>
+    </div>
+    
+    <%= form_for(@contact_us, :url => { :action => "create" }, :html => { :method => :post }) do |f| %>  
+      <div id="edit-mid-part">
+        <div id="edit-mid-part-left">
+          <div class="form-part">
+            <%= f.label "Name" %>
+            <%= f.text_field :sender_name %>
+            <%= f.label "Email" %>
+            <%= f.text_field :email %>
+            <%= f.label "Type of Inquiry (this helps us route your request appropriately)" %>
+            <%= f.select :support_type, 
+                options_for_select(["Technical Support", "Customer Support", "Contact Sales"]) %>
+            <%= f.label "Comments" %>
+            <%= f.text_area :content, :cols => 40 %>
+            <%= f.submit "Submit" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

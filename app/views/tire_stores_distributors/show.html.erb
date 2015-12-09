@@ -1,0 +1,41 @@
+<table style="width: 600px;">
+	<tr>
+		<td style="width: 33%">
+  		<%= label_tag "Update Frequency (days):" %>
+  	</td>
+  	<td>
+  		<%= @xref_rec.frequency_days %>
+  	</td>
+</tr>
+<tr>
+	<td>
+		<%= label_tag "Username" %>
+	</td>
+	<td>
+		<%= @xref_rec.username %>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<label>Manufacturers To Import:</label>
+	</td>
+</tr>
+<% @xref_rec.tire_manufacturers_list.each do |manu| %>
+	<tr>
+		<td colspan="3">
+			<%= manu.name %>
+		</td>
+	</tr>
+<% end %>
+<tr>
+	<td colspan="3">
+		&nbsp;
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<%= link_to 'Return to edit tire store page', edit_tire_store_path(@tire_store) %>
+	</td>
+</tr>
+
+</table>

@@ -1,0 +1,29 @@
+<div id="dialog-confirm-appt" class="th-dialog" title="" style="display:none;">
+	<div class="fade" id="confirm-appt-fade"></div>
+	<div id="confirm-appt-panel" class="confirm-appt-panel">
+		<input type="hidden" id="confirm_appt_id" value="" />
+
+		<h3>Confirm Appointment</h3>
+		<hr />
+		<p>
+			Primary request time: <br />
+			<b><span id="primary-request-time">July 14, 2014</span></b><br />
+	    	<input class="btn submit-btn" id="btn-confirm-primary" type="submit" 
+	    		onclick="confirm_primary_without_confirmation($('#confirm_appt_id').val());" 
+	    		value="CONFIRM PRIMARY" />
+	    </p>
+	    <hr />
+	    <p>
+			Secondary request time: <br />
+			<b><span id="secondary-request-time">July 14, 2014</span></b><br />
+	    	<input class="btn submit-btn" id="btn-confirm-secondary" type="submit" 
+	    		onclick="confirm_secondary_without_confirmation($('#confirm_appt_id').val());" 
+	    		value="CONFIRM SECONDARY" />
+		</p>
+
+	    <hr />
+
+	    <input class="btn submit-btn" id="btn-close" type="submit" 
+	    			value="CLOSE" onclick="$('#dialog-confirm-appt').dialog('close');" />
+	</div>
+</div>

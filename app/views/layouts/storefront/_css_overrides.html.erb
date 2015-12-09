@@ -1,0 +1,48 @@
+
+<style>
+	.infobox-full
+	{
+		border: 1px solid <%= @tire_store.infobox_border_color %>;
+		background-color: <%= @tire_store.infobox_background_color %>; 
+	}
+
+	.ui-widget-content {
+		color: <%= @tire_store.body_text_color %>;
+	}
+
+	body {
+		color: <%= @tire_store.body_text_color %>;
+	}
+
+	.infobox-half
+	{
+		border: 1px solid <%= @tire_store.infobox_border_color %>; 
+		background-color: <%= @tire_store.infobox_background_color %>;
+	}
+
+	.first-letter{
+		color: <%= @tire_store.storename_header_color %>;
+	}
+
+	.rest-of-word {
+		color: <%= @tire_store.storename_header_color %>;
+	}
+
+	.logo-banner
+	{
+		color: <%= @tire_store.storeaddress_header_color %>;
+	}
+
+	div.footer, a.footer-link {
+		color: <%= @tire_store.footer_text_color %>;
+	}
+
+	body, .main {
+		background-color: <%= @tire_store.body_background_color %>;
+	}
+
+	h3.box-title {
+		font-size: <%= @tire_store.box_title_size %>;
+		color: <%= @tire_store.box_title_color %>;
+	}
+</style>
